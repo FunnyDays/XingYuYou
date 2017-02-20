@@ -2,4 +2,163 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+
+
+    <dimen name="textSize_title">20sp</dimen>
+    <dimen name="textSize_normal">16sp</dimen>
+    <dimen name="textSize_small">14sp</dimen>
+
+    <!--下载按钮-->
+    <dimen name="corner_radius">8dp</dimen>
+    <dimen name="layer_padding">0dp</dimen>
+    <!--锤子的dimens-->
+    <dimen name="smartlist_marginright">50.0px</dimen>
+    <dimen name="smartlist_marginleft">36.0px</dimen>
+    <dimen name="checkbok_marginleft">16.0px</dimen>
+    <dimen name="tab_padding_top_bottom">15.0dip</dimen>
+    <dimen name="tab_padding_left_right">40.0dip</dimen>
+    <dimen name="bottom_action_bar_height">48.0dip</dimen>
+    <dimen name="bottom_action_bar_item_width">56.0dip</dimen>
+    <dimen name="bottom_action_bar_item_padding_left_right">12.0dip</dimen>
+    <dimen name="bottom_action_bar_album_art_width_height">30.0dip</dimen>
+    <dimen name="bottom_action_bar_divider_height">2.0dip</dimen>
+    <dimen name="bottom_action_bar_info_padding_left">5.0dip</dimen>
+    <dimen name="viewpager_margin_stroke_width">0.5dip</dimen>
+    <dimen name="fast_scroll_padding_right">32.0dip</dimen>
+    <dimen name="list_separator_padding_left_right">8.0dip</dimen>
+    <dimen name="list_separator_min_height">32.0dip</dimen>
+    <dimen name="list_separator_container_padding_left">16.0dip</dimen>
+    <dimen name="list_separator_new_height">87.0px</dimen>
+    <dimen name="palylist_textvie_width">400.0px</dimen>
+    <dimen name="palylist_textvie_width1">500.0px</dimen>
+    <dimen name="album_track_item_padding_right">20.0px</dimen>
+    <dimen name="album_track_item_padding_left">32.0px</dimen>
+    <dimen name="album_track_item_padding_top">30.0px</dimen>
+    <dimen name="album_image_padding_left">11.0px</dimen>
+    <dimen name="album_image_margin_left">30.0px</dimen>
+    <dimen name="album_image_margin_top">13.0px</dimen>
+    <dimen name="album_image_padding_top">5.0px</dimen>
+    <dimen name="album_image_padding_right">1.0dip</dimen>
+    <dimen name="album_listview_item_height">70.0dip</dimen>
+    <dimen name="album_listview_item_margintop">60.0px</dimen>
+    <dimen name="album_listview_item_actionbat_width">196.0px</dimen>
+    <dimen name="album_listview_item_actionbar_img">96.0px</dimen>
+    <dimen name="listview_item_image_width">62.0dip</dimen>
+    <dimen name="listview_item_image_height">60.0dip</dimen>
+    <dimen name="listview_items_header_height">65.0dip</dimen>
+    <dimen name="listview_items_header_width">265.0dip</dimen>
+    <dimen name="listview_item_padding_left">35.0sp</dimen>
+    <dimen name="listview_item_padding_top">20.0dip</dimen>
+    <dimen name="listview_items_padding_left_top">0.0dip</dimen>
+    <dimen name="listview_items_padding_left_left">40.0px</dimen>
+    <dimen name="listview_items_padding_left_left1">42.0px</dimen>
+    <dimen name="listview_items_padding_top">40.0px</dimen>
+    <dimen name="listview_items_margin_top">25.0px</dimen>
+    <dimen name="listview_items_padding_right">85.0dip</dimen>
+    <dimen name="listview_peak_meter_one_padding_right">80.0dip</dimen>
+    <dimen name="listview_peak_meter_two_padding_right">70.0dip</dimen>
+    <dimen name="listview_album_art">64.0dip</dimen>
+    <dimen name="listview_dividerHeight">2.0px</dimen>
+    <dimen name="listview_item_line_two_paddingtop">6.0px</dimen>
+    <dimen name="quick_context_padding_right">4.0dip</dimen>
+    <dimen name="quick_context_line_height">30.0dip</dimen>
+    <dimen name="quick_context_line_width">1.0dip</dimen>
+    <dimen name="quick_context_margin_right">5.0dip</dimen>
+    <dimen name="status_bar_button_width_height">48.0dip</dimen>
+    <dimen name="status_bar_album_art">64.0dip</dimen>
+    <dimen name="status_bar_button_info_container_padding_left">5.0dip</dimen>
+    <dimen name="colorstrip_height">4.0dip</dimen>
+    <dimen name="half_and_half_text_padding">5.0dip</dimen>
+    <dimen name="half_and_half_image_height">150.0dip</dimen>
+    <dimen name="half_and_half_container_padding">3.0dip</dimen>
+    <dimen name="header_text_padding">5.0dip</dimen>
+    <dimen name="header_text_padding_left">15.0dip</dimen>
+    <dimen name="gridview_image_width">115.0dip</dimen>
+    <dimen name="gridview_image_height">115.0dip</dimen>
+    <dimen name="gridview_image_padding_left">2.0dip</dimen>
+    <dimen name="gridview_image_padding_top">5.0dip</dimen>
+    <dimen name="gridview_image_padding_right">2.0dip</dimen>
+    <dimen name="gridview_image_padding_bottom">5.0dip</dimen>
+    <dimen name="gridview_item_ccontainer_height">64.0dip</dimen>
+    <dimen name="gridview_item_ccontainer_padding_left">8.0dip</dimen>
+    <dimen name="gridview_item_ccontainer_padding_right">8.0dip</dimen>
+    <dimen name="peak_meter_one_padding_right">15.0dip</dimen>
+    <dimen name="peak_meter_two_padding_right">5.0dip</dimen>
+    <dimen name="peak_meter_padding_bottom">10.0dip</dimen>
+    <dimen name="peak_meter_padding_top">8.0dip</dimen>
+    <dimen name="audio_player_info_container_padding">16.0dip</dimen>
+    <dimen name="audio_player_artwork_padding">20.0dip</dimen>
+    <dimen name="audio_player_controls_height">56.0dip</dimen>
+    <dimen name="audio_player_seek_bar_padding">10.0dip</dimen>
+    <dimen name="audio_player_button_container_padding">2.0dip</dimen>
+    <dimen name="status_bar_recents_thumbnail_left_margin">20.0dip</dimen>
+    <dimen name="status_bar_recents_app_label_width">88.0dip</dimen>
+    <dimen name="status_bar_recents_app_label_left_margin">0.0dip</dimen>
+    <dimen name="status_bar_recents_item_padding">0.0dip</dimen>
+    <dimen name="status_bar_recents_app_icon_left_margin">0.0dip</dimen>
+    <dimen name="status_bar_recents_app_icon_top_margin">8.0dip</dimen>
+    <dimen name="status_bar_recents_app_icon_max_width">48.0dip</dimen>
+    <dimen name="status_bar_recents_app_icon_max_height">48.0dip</dimen>
+    <dimen name="status_bar_recents_thumbnail_width">164.0dip</dimen>
+    <dimen name="status_bar_recents_thumbnail_height">145.0dip</dimen>
+    <dimen name="status_bar_recents_app_label_text_size">14.0dip</dimen>
+    <dimen name="status_bar_recents_app_description_text_size">14.0dip</dimen>
+    <dimen name="status_bar_recents_fading_edge_length">20.0dip</dimen>
+    <dimen name="one_by_one_height">62.0dip</dimen>
+    <dimen name="one_by_one_width">72.0dip</dimen>
+    <dimen name="four_by_one_album_art_width">90.0dip</dimen>
+    <dimen name="four_by_two_height">180.0dip</dimen>
+    <dimen name="four_by_two_control_height">55.0dip</dimen>
+    <dimen name="four_by_two_album_art_width">135.0dip</dimen>
+    <dimen name="title_height">50.0dip</dimen>
+    <dimen name="quickbar_width">435.0px</dimen>
+    <dimen name="quickbar_starting_x">645.0px</dimen>
+    <dimen name="smartlist_devider_height">1.0px</dimen>
+    <item name="menuFromDegrees" type="dimen">-7.0</item>
+    <item name="menuToDegrees" type="dimen">97.0</item>
+    <dimen name="menuChildSize">60.0dip</dimen>
+    <item name="APKTOOL_DUMMY_00c8" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00c9" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00ca" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00cb" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00cc" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00cd" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00ce" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00cf" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00d0" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00d1" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00d2" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00d3" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00d4" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00d5" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00d6" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00d7" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00d8" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00d9" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00da" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00db" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00dc" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00dd" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00de" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00df" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00e0" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00e1" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00e2" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00e3" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00e4" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00e5" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00e6" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00e7" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00e8" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00e9" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00ea" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00eb" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00ec" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00ed" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00ee" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00ef" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00f0" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00f1" type="dimen">false</item>
+    <item name="APKTOOL_DUMMY_00f2" type="dimen">false</item>
 </resources>

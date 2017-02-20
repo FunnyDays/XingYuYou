@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="mytitleText" format="string"/>
+    <attr name="mytitleTextColor" format="color"/>
+    <attr name="mytitleTextSize" format="dimension"/>
+
+    <declare-styleable name="CustomTitleView">
+        <attr name="mytitleText"/>
+        <attr name="mytitleTextColor"/>
+        <attr name="mytitleTextSize"/>
+    </declare-styleable>
+    <!--loading-->
+    <declare-styleable name="LoadingLayout">
+
+        <attr name="isFirstVisible" format="boolean"></attr>
+
+    </declare-styleable>
+
+    <!--下载按钮-->
+    <declare-styleable name="progressbutton">
+        <attr name="progressColor" format="color" />
+        <attr name="progressBgColor" format="color" />
+        <attr name="buttonNormalColor" format="color" />
+        <attr name="buttonPressedColor" format="color" />
+        <attr name="buttonCornerRadius" format="dimension"/>
+        <attr name="showProgressNum" format="boolean"/>
+    </declare-styleable>
+
+    <!--自定义progressbar-->
+    <declare-styleable name="HorizontalProgressBarWithTextProgress">
+        <attr name="progress_unreach_color" format="color"></attr>
+        <attr name="progress_unreach_height" format="dimension"></attr>
+        <attr name="progress_reach_color" format="color"></attr>
+        <attr name="progress_reach_height" format="dimension"></attr>
+        <attr name="progress_text_color" format="color"></attr>
+        <attr name="progress_text_size" format="dimension"></attr>
+        <attr name="progress_text_offset" format="dimension"></attr>
+    </declare-styleable>
+</resources>

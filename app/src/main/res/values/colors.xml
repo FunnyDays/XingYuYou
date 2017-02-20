@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="lightColorPrimary">#552196F3</color>
+    <color name="colorPrimaryDark">#882196F3</color>
+    <color name="colorPrimaryDarkTranslate">#55303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="colorControlNormal">#FFFFFF</color>
+
+    <color name="teal">#00796B</color>
+    <color name="brown">#8D6E63</color>
+    <color name="blue">#2196F3</color>
+    <color name="grey">#607D8B</color>
+    <color name="orange">#F57C00</color>
+    <color name="color_item_press">#787777</color>
+    <color name="color_item_normal">#457733</color>
+
+
+    <!--loading-->
+    <color name="base_text_color_light">#909090</color>
+    <color name="base_loading_background">#f7f7f7</color>
+    <!--下载按钮-->
+    <color name="progress_bg">#fff2c0</color>
+    <color name="blue_pressed">#7cb342</color>
+    <color name="blue_normal">#ffffbb33</color>
+    <color name="purple_progress">#03a9f4</color>
 </resources>
