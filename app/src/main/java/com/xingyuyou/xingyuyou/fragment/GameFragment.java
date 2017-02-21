@@ -31,7 +31,6 @@ public class GameFragment extends BaseFragment {
     boolean isLoading = false;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout refreshLayout;
-
     private static final int STATE_REFRESH = 0;// 下拉刷新
     private static final int STATE_MORE = 1;// 加载更多
     private int action = STATE_REFRESH;        // 每页的数据是10条
@@ -66,6 +65,7 @@ public class GameFragment extends BaseFragment {
                 if (msg.what == 1) {
                     if (mAdapter!=null)
                     mAdapter.notifyDataSetChanged();
+                    if (refreshLayout != null)
                     refreshLayout.setRefreshing(false);
                     if (!NetUtils.checkNetWorkIsAvailable(mActivity)) {
                         mLoadingLayout.setStatus(LoadingLayout.No_Network);//无网络

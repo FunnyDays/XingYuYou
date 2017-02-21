@@ -18,6 +18,8 @@
     <color name="color_item_normal">#457733</color>
 
 
+    <color name="stroke">#b4b4b4</color>
+
     <!--loading-->
     <color name="base_text_color_light">#909090</color>
     <color name="base_loading_background">#f7f7f7</color>

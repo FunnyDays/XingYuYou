@@ -1,0 +1,46 @@
+package com.xingyuyou.xingyuyou.fragment;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+
+import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.base.BaseFragment;
+
+/**
+ * Created by Administrator on 2016/6/28.
+ */
+public class UserFragment extends BaseFragment {
+
+    private ImageView mSetting;
+
+    public static UserFragment newInstance(String content) {
+        Bundle args = new Bundle();
+        args.putString("ARGS", content);
+        UserFragment fragment = new UserFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+    /**
+     * 初始化数据
+     */
+    @Override
+    public void initData() {
+
+    }
+    @Override
+    protected View initView() {
+        View view = View.inflate(mActivity, R.layout.fragment_user, null);
+        mSetting = (ImageView) view.findViewById(R.id.image_four);
+        mSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        return view;
+    }
+
+
+
+}
