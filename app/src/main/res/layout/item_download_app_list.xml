@@ -67,23 +67,42 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="60dp"
+                        android:layout_marginRight="90dp"
                         android:layout_marginTop="20dp"
                         android:padding="5dp"
                         app:progress_reach_color="@color/colorPrimaryDark"
                         app:progress_text_color="@color/colorAccent"
                         app:progress_unreach_color="#553F51B5"/>
-
-                    <Button
-                        android:id="@+id/bt_uninstall"
-                        android:layout_width="56dp"
-                        android:layout_height="28dp"
+                    <LinearLayout
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/app_uninstall_button_bg"
-                        android:text="下载"
-                        android:textColor="@color/colorAccent"
-                        android:visibility="visible"/>
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <Button
+                            android:layout_toLeftOf="@id/pb_progressbar"
+                            android:id="@+id/download_remove_btn"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/app_uninstall_button_bg"
+                            android:text="删"
+                            android:textColor="@color/colorAccent"
+                            android:visibility="visible"/>
+
+                        <Button
+                            android:id="@+id/bt_uninstall"
+                            android:layout_width="56dp"
+                            android:layout_height="28dp"
+
+                            android:background="@drawable/app_uninstall_button_bg"
+                            android:text="下载"
+                            android:textColor="@color/colorAccent"
+                            android:visibility="visible"/>
+                    </LinearLayout>
+
+
 
                 </RelativeLayout>
             </LinearLayout>

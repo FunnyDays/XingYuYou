@@ -1,7 +1,6 @@
 package com.xingyuyou.xingyuyou.activity;
 
 import android.animation.ObjectAnimator;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-
 import com.xingyuyou.xingyuyou.DataParserBean.DataParser;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.FileUtils;
@@ -53,7 +51,7 @@ import okhttp3.Call;
  * Created by Administrator on 2016/11/21.
  */
 
-public class Game10Activity extends BaseActivity {
+public class GameDetailActivity extends BaseActivity {
 
     private RecyclerView recyclerView;
     private ArrayList arrayList = null;
@@ -81,7 +79,7 @@ public class Game10Activity extends BaseActivity {
     private String mFirstGameUrl="";
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_detail_order);
+        setContentView(R.layout.activity_game_detail);
 
         installOpenGame();
         checkDownload();
@@ -173,7 +171,7 @@ public class Game10Activity extends BaseActivity {
     }
     private void initDownload() {
         gameEnName = (TextView) findViewById(R.id.tv_game_name_en);
-        mBtInstallGame = (ProgressButton) findViewById(R.id.bt_install_app);
+        mBtInstallGame = (ProgressButton) findViewById(R.id.bt_bottom_install);
         if (mDownloadInfo!=null){
             mViewHolder = new DownloadItemViewHolder(null,mDownloadInfo);
             mViewHolder.refresh();
@@ -381,7 +379,7 @@ public class Game10Activity extends BaseActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (msg.what == 1 && gameDetail != null) {
-                    if (!NetUtils.checkNetWorkIsAvailable(Game10Activity.this)) {
+                    if (!NetUtils.checkNetWorkIsAvailable(GameDetailActivity.this)) {
                         mLoadingLayout.setStatus(LoadingLayout.No_Network);//无网络
                         return;
                     } else {
@@ -389,10 +387,10 @@ public class Game10Activity extends BaseActivity {
                     }
                     gamePics.addAll(gameDetail.getGamePic());
                     gameDetailPicAdapter.notifyDataSetChanged();
-                    Glide.with(Game10Activity.this).load(gameDetail.getGameIcon()).into(gamePic);
-                    Glide.with(Game10Activity.this).load(gameDetail.getGameRecommendImage().get(0)).into(gamePic1);
-                    Glide.with(Game10Activity.this).load(gameDetail.getGameRecommendImage().get(1)).into(gamePic2);
-                    Glide.with(Game10Activity.this).load(gameDetail.getGameRecommendImage().get(2)).into(gamePic3);
+                    Glide.with(GameDetailActivity.this).load(gameDetail.getGameIcon()).into(gamePic);
+                    Glide.with(GameDetailActivity.this).load(gameDetail.getGameRecommendImage().get(0)).into(gamePic1);
+                    Glide.with(GameDetailActivity.this).load(gameDetail.getGameRecommendImage().get(1)).into(gamePic2);
+                    Glide.with(GameDetailActivity.this).load(gameDetail.getGameRecommendImage().get(2)).into(gamePic3);
                     gameName.setText(gameNameTitle);
                     gameEnName.setText(gameDetail.getGameEnName());
                     textView.setText("•" + gameDetail.getGameAllIntro().get(0));

@@ -16,6 +16,7 @@ import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.adapter.MainContentVPAdapter;
 import com.xingyuyou.xingyuyou.base.BaseActivity;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
+import com.xingyuyou.xingyuyou.fragment.CommunityFragment;
 import com.xingyuyou.xingyuyou.fragment.FourFragment;
 import com.xingyuyou.xingyuyou.fragment.GameFragment;
 import com.xingyuyou.xingyuyou.fragment.OneFragment;
@@ -121,7 +122,7 @@ public class MainActivity extends BaseActivity {
         fragments = new ArrayList<>();
         fragments.add(OneFragment.newInstance("榜单"));
         fragments.add(TwoFragment.newInstance("分类"));
-        fragments.add(FourFragment.newInstance("社区"));
+        fragments.add(CommunityFragment.newInstance("社区"));
         fragments.add(UserFragment.newInstance("管理"));
         adapter = new MainContentVPAdapter(supportFragmentManager, fragments);
         return fragments;

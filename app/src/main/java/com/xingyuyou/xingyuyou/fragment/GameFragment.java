@@ -15,7 +15,7 @@ import com.xingyuyou.xingyuyou.DataParserBean.DataParser;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.Loading.LoadingLayout;
 import com.xingyuyou.xingyuyou.Utils.NetUtils;
-import com.xingyuyou.xingyuyou.activity.Game10Activity;
+import com.xingyuyou.xingyuyou.activity.GameDetailActivity;
 import com.xingyuyou.xingyuyou.adapter.GameAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.Game;
@@ -157,11 +157,11 @@ public class GameFragment extends BaseFragment {
         mAdapter.setOnItemClickLitener(new GameAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(mActivity, Game10Activity.class);
+                Intent intent = new Intent(mActivity, GameDetailActivity.class);
                 intent.putExtra("gameLink", arrayList.get(position).getGameDetailLink());
                 intent.putExtra("gameStar", arrayList.get(position).getGameStar());
                 intent.putExtra("gameName", arrayList.get(position).getGameName());
-                Log.e("weiwei", arrayList.get(position).getGameDetailLink());
+                Log.e("weiwei1", arrayList.get(position).getGameDetailLink());
                 startActivity(intent);
             }
         });

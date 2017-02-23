@@ -2,19 +2,35 @@ package com.xingyuyou.xingyuyou.adapter;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.FileUtils;
+import com.xingyuyou.xingyuyou.activity.Game10Activity;
 import com.xingyuyou.xingyuyou.bean.Game;
+import com.xingyuyou.xingyuyou.download.DownloadInfo;
+import com.xingyuyou.xingyuyou.download.DownloadManager;
+import com.xingyuyou.xingyuyou.download.DownloadState;
+import com.xingyuyou.xingyuyou.download.DownloadViewHolder;
+import com.xingyuyou.xingyuyou.weight.ProgressButton;
 
+import org.xutils.DbManager;
+import org.xutils.common.Callback;
+import org.xutils.ex.DbException;
+import org.xutils.x;
+
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -22,11 +38,15 @@ import java.util.ArrayList;
  */
 
 public class GameAdapter extends RecyclerView.Adapter {
-
+    private DbManager mDb;
+    private DownloadManager downloadManager;
+    private DownloadInfo mDownloadInfo;
     private static final int TYPE_ONE = 1;
     private static final int TYPE_FOOTER = 0;
     private ArrayList<Game> arrayList;
     private Activity mActivity;
+    private String gameNameTitle;
+    private ProgressButton mGameDownLoad;
 
     public GameAdapter(Activity mActivity, ArrayList<Game> arrayList) {
         this.arrayList = arrayList;
@@ -68,9 +88,12 @@ public class GameAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+
         if (arrayList.size() == 0) {
 
         } else if (holder instanceof ItemViewHolder) {
+            gameNameTitle = arrayList.get(position).getGameName();
+            Log.e("download", "下载列表适配器里面的---->"+gameNameTitle);
             ((ItemViewHolder) holder).gameEdition.setText(arrayList.get(position).getGameEdition());
             ((ItemViewHolder) holder).gameIntro.setText(arrayList.get(position).getGameIntro());
             ((ItemViewHolder) holder).gameName.setText(arrayList.get(position).getGameName());
@@ -97,6 +120,7 @@ public class GameAdapter extends RecyclerView.Adapter {
         }
 
     }
+
 
     @Override
     public int getItemViewType(int position) {
@@ -129,6 +153,7 @@ public class GameAdapter extends RecyclerView.Adapter {
         private final TextView gameSize;
         private final ImageView gamePic;
         private final RatingBar gameRatingBar;
+        private final ProgressButton gameDownLoad;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -138,6 +163,7 @@ public class GameAdapter extends RecyclerView.Adapter {
             gameSize = (TextView) itemView.findViewById(R.id.game_size);
             gamePic = (ImageView) itemView.findViewById(R.id.game_pic);
             gameRatingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
+            gameDownLoad = (ProgressButton) itemView.findViewById(R.id.bt_uninstall);
         }
     }
 }

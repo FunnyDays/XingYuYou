@@ -173,7 +173,7 @@ public class DownLoadActivity extends AppCompatActivity {
             }
         }
 
-       /* @Event(R.id.download_remove_btn)
+        @Event(R.id.download_remove_btn)
         private void removeEvent(View view) {
             try {
                 downloadManager.removeDownload(downloadInfo);
@@ -181,7 +181,7 @@ public class DownLoadActivity extends AppCompatActivity {
             } catch (DbException e) {
                 Toast.makeText(x.app(), "移除任务失败", Toast.LENGTH_LONG).show();
             }
-        }*/
+        }
 
         @Override
         public void update(DownloadInfo downloadInfo) {

@@ -7,21 +7,25 @@
     app:isFirstVisible="true"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:orientation="vertical">
+
         <include
             layout="@layout/toolbar" />
+
         <ScrollView
-            android:layout_marginTop="56dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:weightSum="1">
+
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -75,7 +79,6 @@
                     </RelativeLayout>
                 </RelativeLayout>
                 <com.xingyuyou.xingyuyou.weight.ProgressButton
-                    android:visibility="gone"
                     android:id="@+id/bt_install_app"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
@@ -199,7 +202,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="30dp"
-                        />
+                         />
                 </RelativeLayout>
 
 
@@ -324,33 +327,8 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </ScrollView>
-        <LinearLayout
-           android:paddingBottom="10dp"
-           android:paddingTop="10dp"
-            android:background="@android:color/white"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <com.xingyuyou.xingyuyou.weight.ProgressButton
-               android:gravity="center"
-                android:id="@+id/bt_bottom_install"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/ripple_bg_button"
-                android:clickable="true"
-                android:text="下载"
-                app:progressColor="@color/colorAccent"
-                app:progressBgColor="@color/colorPrimary"
-                app:buttonNormalColor="@color/colorPrimaryDark"
-                app:buttonPressedColor="@color/colorPrimary"
-                app:buttonCornerRadius="0dp"
-                app:showProgressNum="true"
-                android:textColor="#ffffff"
-                />
-        </LinearLayout>
 
-    </RelativeLayout>
+        </ScrollView>
+
+    </LinearLayout>
 </com.xingyuyou.xingyuyou.Utils.Loading.LoadingLayout>

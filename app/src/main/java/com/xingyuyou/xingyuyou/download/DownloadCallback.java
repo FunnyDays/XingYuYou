@@ -10,7 +10,7 @@ import java.lang.ref.WeakReference;
 /**
  * Created by wyouflf on 15/11/10.
  */
-/*package*/ class DownloadCallback implements
+class DownloadCallback implements
         Callback.CommonCallback<File>,
         Callback.ProgressCallback<File>,
         Callback.Cancelable {

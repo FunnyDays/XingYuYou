@@ -2,7 +2,9 @@ package com.xingyuyou.xingyuyou;
 
 import android.app.Application;
 
+import com.lzy.okgo.OkGo;
 import com.xingyuyou.xingyuyou.Utils.Loading.LoadingLayout;
+import com.xingyuyou.xingyuyou.Utils.Utils;
 
 import org.xutils.x;
 
@@ -18,6 +20,10 @@ public class App extends Application {
         initLoadView();
         //下载初始化
         x.Ext.init(this);
+        //工具类初始化
+        Utils.init(this);
+        //第三方下载测试
+        OkGo.init(this);
     }
     private void initLoadView() {
         LoadingLayout.getConfig()

@@ -20,12 +20,14 @@ public class NetUtils {
      * @return
      */
     public static boolean checkNetWorkIsAvailable(Context context) {
-
-        ConnectivityManager cwjManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cwjManager.getActiveNetworkInfo() != null)
-            return true;
-        else
-            return false;
+        if (context != null) {
+            ConnectivityManager cwjManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (cwjManager.getActiveNetworkInfo() != null)
+                return true;
+            else
+                return false;
+        }
+        return false;
     }
 
 
