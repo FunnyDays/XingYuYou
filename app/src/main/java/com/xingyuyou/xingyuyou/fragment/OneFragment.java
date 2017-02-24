@@ -59,23 +59,7 @@ public class OneFragment extends BaseFragment {
         mAdapter.addFragment(fragments.get(2), "期待");
         viewPager.setAdapter(mAdapter);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                Log.i("tab", "onTabSelected position:" + tab.getPosition());
-                fragments.get(tab.getPosition()).initData();
-            }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                Log.i("tab", "onTabUnselected position:" + tab.getPosition());
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                Log.i("tab", "onTabReselected position:" + tab.getPosition());
-            }
-        });
         return view;
     }
     private void initToolbar() {
@@ -101,9 +85,9 @@ public class OneFragment extends BaseFragment {
 
     private ArrayList<BaseFragment> getFragments() {
         fragments = new ArrayList<>();
-        fragments.add(GameFragment.newInstance("热门"));
+        fragments.add(NewGameFragment.newInstance("热门"));
         fragments.add(GameFragment.newInstance("推荐"));
-        fragments.add(GameFragment.newInstance("期待"));
+        fragments.add(NewGameFragment.newInstance("期待"));
         mAdapter = new TabsViewPagerAdapter(((MainActivity) mActivity).getSupportFragmentManager());
         return fragments;
     }

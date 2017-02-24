@@ -152,6 +152,7 @@ public class GameDetailActivity extends BaseActivity {
      */
     private void getDownloadInfo() {
         downloadManager = DownloadManager.getInstance();
+
         DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()
                 .setDbName("download")
                 .setDbVersion(1);

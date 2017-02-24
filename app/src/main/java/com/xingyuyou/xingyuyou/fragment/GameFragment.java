@@ -19,6 +19,10 @@ import com.xingyuyou.xingyuyou.activity.GameDetailActivity;
 import com.xingyuyou.xingyuyou.adapter.GameAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.Game;
+import com.xingyuyou.xingyuyou.download.DownloadInfo;
+import com.xingyuyou.xingyuyou.download.DownloadManager;
+
+import org.xutils.DbManager;
 
 import java.util.ArrayList;
 
@@ -42,8 +46,11 @@ public class GameFragment extends BaseFragment {
     private GameAdapter mAdapter;
     private boolean queryDone;
     private LoadingLayout mLoadingLayout;
-
+    private DbManager mDb;
+    private DownloadManager downloadManager;
+    private DownloadInfo mDownloadInfo;
     public static GameFragment newInstance(String content) {
+
         Bundle args = new Bundle();
         args.putString("ARGS", content);
         GameFragment fragment = new GameFragment();
@@ -57,7 +64,6 @@ public class GameFragment extends BaseFragment {
      */
     @Override
     public void initData() {
-        Log.e("zifragment","initdata");
         final Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -72,6 +78,7 @@ public class GameFragment extends BaseFragment {
                     } else {
                         mLoadingLayout.setStatus(LoadingLayout.Success);//成功
                     }
+
                 }
             }
         };
@@ -86,6 +93,7 @@ public class GameFragment extends BaseFragment {
                 }
             }
         }.start();
+
     }
 
     private Boolean ParserHtml(int page, int action) {
@@ -107,6 +115,7 @@ public class GameFragment extends BaseFragment {
 
     @Override
     protected View initView() {
+        initData();
         View view = View.inflate(mActivity, R.layout.fragment_game, null);
         mLoadingLayout = (LoadingLayout) view.findViewById(R.id.empty_view_game);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.SwipeRefreshLayout);

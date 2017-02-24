@@ -319,10 +319,7 @@ public class Game10Activity extends BaseActivity {
         }
 
         public void refresh() {
-           // game.setText(downloadInfo.getLabel());
-           // state.setText(downloadInfo.getState().toString());
             gameEnName.setText(downloadInfo.getLabel()+"---"+downloadInfo.getState().toString()+"---"+downloadInfo.getProgress());
-            //mProgressBar.setProgress(downloadInfo.getProgress());
             mBtInstallGame.setProgress(downloadInfo.getProgress());
             mBtInstallGame.setVisibility(View.VISIBLE);
             mBtInstallGame.setText(x.app().getString(R.string.stop));

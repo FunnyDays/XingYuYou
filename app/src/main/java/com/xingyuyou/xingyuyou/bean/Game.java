@@ -14,6 +14,28 @@ public class Game  {
     private String gameSize;
     private String gameIntro;
     private String gameDetailLink;
+    private String gameDownState;
+    private String gameDownloadUrl;
+
+    public String getGameDownloadUrl() {
+        return gameDownloadUrl;
+    }
+
+    public void setGameDownloadUrl(String gameDownloadUrl) {
+        this.gameDownloadUrl = gameDownloadUrl;
+    }
+
+
+
+    public String getGameDownState() {
+        return gameDownState;
+    }
+
+    public void setGameDownState(String gameDownState) {
+        this.gameDownState = gameDownState;
+    }
+
+
     public String getGameDetailLink() {
         return gameDetailLink;
     }

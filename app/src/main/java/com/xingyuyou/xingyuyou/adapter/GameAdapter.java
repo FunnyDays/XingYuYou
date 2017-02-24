@@ -51,22 +51,20 @@ public class GameAdapter extends RecyclerView.Adapter {
     public GameAdapter(Activity mActivity, ArrayList<Game> arrayList) {
         this.arrayList = arrayList;
         this.mActivity = mActivity;
+        // 获取下载信息
+        //getDownloadInfo();
     }
 
     /**
      * ItemClick的回调接口
-     * @author zhy
-     *
      */
-    public interface OnItemClickLitener
-    {
+    public interface OnItemClickLitener {
         void onItemClick(View view, int position);
     }
 
     private OnItemClickLitener mOnItemClickLitener;
 
-    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener)
-    {
+    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener) {
         this.mOnItemClickLitener = mOnItemClickLitener;
     }
 
@@ -86,33 +84,66 @@ public class GameAdapter extends RecyclerView.Adapter {
         return null;
     }
 
+    /**
+     * 获取下载信息状态
+     */
+    private void getDownloadInfo() {
+        downloadManager = DownloadManager.getInstance();
+        for (int i = 0; i < downloadManager.getDownloadListCount(); i++) {
+            for (int j = 0; j < arrayList.size(); j++) {
+                if (downloadManager.getDownloadInfo(i).getLabel().equals(arrayList.get(j).getGameName())){
+                    arrayList.get(j).setGameDownState(String.valueOf(downloadManager.getDownloadInfo(i).getState().value()));
+                }
+            }
+        }
+    }
+
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-
+        holder.setIsRecyclable(false);
+        Log.e("recycle", "position:" + position);
         if (arrayList.size() == 0) {
 
         } else if (holder instanceof ItemViewHolder) {
             gameNameTitle = arrayList.get(position).getGameName();
-            Log.e("download", "下载列表适配器里面的---->"+gameNameTitle);
+            Log.e("download", "下载列表适配器里面的---->" + gameNameTitle);
             ((ItemViewHolder) holder).gameEdition.setText(arrayList.get(position).getGameEdition());
             ((ItemViewHolder) holder).gameIntro.setText(arrayList.get(position).getGameIntro());
             ((ItemViewHolder) holder).gameName.setText(arrayList.get(position).getGameName());
             ((ItemViewHolder) holder).gameSize.setText(arrayList.get(position).getGameSize());
             ((ItemViewHolder) holder).gameRatingBar.setRating(arrayList.get(position).getGameStar());
+            ((ItemViewHolder) holder).gameDownLoad.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((ItemViewHolder) holder).gameDownLoad.setText("已加入");
+                   //notifyItemChanged(position);
+                  /*  try {
+                        downloadManager.startDownload(
+                                "http://download.apk8.com/d2/soft/meilijia.apk",
+                                arrayList.get(position).getGamePic(),
+                                arrayList.get(position).getGameName(),
+                                FileUtils.fileSavePath+gameNameTitle+".apk",
+                                true,
+                                false,
+                                null);
+                    } catch (DbException e) {
+                        e.printStackTrace();
+                    }*/
+                }
+            });
             Glide.with(mActivity)
                     .load(arrayList.get(position).getGamePic())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(((ItemViewHolder) holder).gamePic);
 
         }
+
+
         //如果设置了回调，则设置点击事件
-        if (mOnItemClickLitener != null)
-        {
-            holder.itemView.setOnClickListener(new View.OnClickListener()
-            {
+        if (mOnItemClickLitener != null) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     mOnItemClickLitener.onItemClick(holder.itemView, position);
                 }
             });
@@ -157,6 +188,7 @@ public class GameAdapter extends RecyclerView.Adapter {
 
         public ItemViewHolder(View itemView) {
             super(itemView);
+            Log.e("recycle", "此位置positionviewholder被创建");
             gameEdition = (TextView) itemView.findViewById(R.id.game_edition);
             gameIntro = (TextView) itemView.findViewById(R.id.game_intro);
             gameName = (TextView) itemView.findViewById(R.id.game_name);

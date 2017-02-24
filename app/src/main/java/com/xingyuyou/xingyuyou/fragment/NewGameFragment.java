@@ -1,24 +1,53 @@
 package com.xingyuyou.xingyuyou.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.lzy.okserver.download.DownloadManager;
-import com.lzy.okserver.download.DownloadService;
+import com.bumptech.glide.Glide;
+
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.FileUtils;
+import com.xingyuyou.xingyuyou.activity.DownLoadActivity;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.ApkModel;
+import com.xingyuyou.xingyuyou.bean.Game;
+import com.xingyuyou.xingyuyou.download.DownloadInfo;
+import com.xingyuyou.xingyuyou.download.DownloadManager;
+import com.xingyuyou.xingyuyou.download.DownloadState;
+import com.xingyuyou.xingyuyou.download.DownloadViewHolder;
+import com.xingyuyou.xingyuyou.weight.HorizontalProgressBarWithTextProgress;
 
+import org.xutils.common.Callback;
+import org.xutils.ex.DbException;
+import org.xutils.view.annotation.Event;
+import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
+
+import java.io.File;
 import java.util.ArrayList;
 
 /**
  * Created by Administrator on 2016/6/28.
  */
 public class NewGameFragment extends BaseFragment {
-    private ArrayList<ApkModel> apks;
-    private DownloadManager mDownloadManager;
+
+
+    private ListView mListView;
+    private DownloadManager downloadManager;
+    private DownloadListAdapter downloadListAdapter;
+    private ArrayList<Game> mGameArrayList;
 
     public static NewGameFragment newInstance(String content) {
         Bundle args = new Bundle();
@@ -34,69 +63,229 @@ public class NewGameFragment extends BaseFragment {
      */
     @Override
     public void initData() {
-        apks = new ArrayList<>();
-        ApkModel apkInfo1 = new ApkModel();
-        apkInfo1.setName("美丽加");
-        apkInfo1.setIconUrl("http://pic3.apk8.com/small2/14325422596306671.png");
-        apkInfo1.setUrl("http://download.apk8.com/d2/soft/meilijia.apk");
-        apks.add(apkInfo1);
-        ApkModel apkInfo2 = new ApkModel();
-        apkInfo2.setName("果然方便");
-        apkInfo2.setIconUrl("http://pic3.apk8.com/small2/14313175771828369.png");
-        apkInfo2.setUrl("http://download.apk8.com/d2/soft/guoranfangbian.apk");
-        apks.add(apkInfo2);
-        ApkModel apkInfo3 = new ApkModel();
-        apkInfo3.setName("薄荷");
-        apkInfo3.setIconUrl("http://pic3.apk8.com/small2/14308183888151824.png");
-        apkInfo3.setUrl("http://download.apk8.com/d2/soft/bohe.apk");
-        apks.add(apkInfo3);
-        ApkModel apkInfo4 = new ApkModel();
-        apkInfo4.setName("GG助手");
-        apkInfo4.setIconUrl("http://pic3.apk8.com/small2/14302008166714263.png");
-        apkInfo4.setUrl("http://download.apk8.com/d2/soft/GGzhushou.apk");
-        apks.add(apkInfo4);
-        ApkModel apkInfo5 = new ApkModel();
-        apkInfo5.setName("红包惠锁屏");
-        apkInfo5.setIconUrl("http://pic3.apk8.com/small2/14307106593913848.png");
-        apkInfo5.setUrl("http://download.apk8.com/d2/soft/hongbaohuisuoping.apk");
-        apks.add(apkInfo5);
-        ApkModel apkInfo6 = new ApkModel();
-        apkInfo6.setName("快的打车");
-        apkInfo6.setIconUrl("http://up.apk8.com/small1/1439955061264.png");
-        apkInfo6.setUrl("http://download.apk8.com/soft/2015/%E5%BF%AB%E7%9A%84%E6%89%93%E8%BD%A6.apk");
-        apks.add(apkInfo6);
-        ApkModel apkInfo7 = new ApkModel();
-        apkInfo7.setName("叮当快药");
-        apkInfo7.setIconUrl("http://pic3.apk8.com/small2/14315954626414886.png");
-        apkInfo7.setUrl("http://d2.apk8.com:8020/soft/dingdangkuaiyao.apk");
-        apks.add(apkInfo7);
-        ApkModel apkInfo8 = new ApkModel();
-        apkInfo8.setName("悦跑圈");
-        apkInfo8.setIconUrl("http://pic3.apk8.com/small2/14298490191525146.jpg");
-        apkInfo8.setUrl("http://d2.apk8.com:8020/soft/yuepaoquan.apk");
-        apks.add(apkInfo8);
-        ApkModel apkInfo9 = new ApkModel();
-        apkInfo9.setName("悠悠导航");
-        apkInfo9.setIconUrl("http://pic3.apk8.com/small2/14152456988840667.png");
-        apkInfo9.setUrl("http://d2.apk8.com:8020/soft/%E6%82%A0%E6%82%A0%E5%AF%BC%E8%88%AA2.3.32.1.apk");
-        apks.add(apkInfo9);
-        ApkModel apkInfo10 = new ApkModel();
-        apkInfo10.setName("虎牙直播");
-        apkInfo10.setIconUrl("http://up.apk8.com/small1/1439892235841.jpg");
-        apkInfo10.setUrl("http://download.apk8.com/down4/soft/hyzb.apk");
-        apks.add(apkInfo10);
+        Log.e("Zifragment", "11第一次初始化数据");
+        mGameArrayList = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
+            Game game = new Game();
+            game.setGamePic("http://pic3.apk8.com/small2/14325422596306671.png");
+            game.setGameName("美丽加"+i);
+            game.setGameDownloadUrl("http://download.apk8.com/d2/soft/meilijia.apk");
+            mGameArrayList.add(game);
+        }
     }
     @Override
     protected View initView() {
+        initData();
         View view = View.inflate(mActivity, R.layout.fragment_new_game, null);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mDownloadManager = DownloadService.getDownloadManager();
-        mDownloadManager.setTargetFolder(Environment.getExternalStorageDirectory().getAbsolutePath()+"XingYuDownload");
-        //设置同时下载数量
-        mDownloadManager.getThreadPool().setCorePoolSize(4);
+        mListView = (ListView) view.findViewById(R.id.lv_download);
+        downloadManager = DownloadManager.getInstance();
+        downloadListAdapter = new DownloadListAdapter();
+        mListView.setAdapter(downloadListAdapter);
+    }
+
+    private class DownloadListAdapter extends BaseAdapter {
+
+        private Context mContext;
+        private final LayoutInflater mInflater;
+
+        private DownloadListAdapter() {
+            mContext = mActivity;
+            mInflater = LayoutInflater.from(mContext);
+        }
+
+        @Override
+        public int getCount() {
+            return mGameArrayList.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return mGameArrayList.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+           DownloadItemViewHolder holder = null;
+            DownloadInfo downloadInfo=null;
+            downloadInfo=new DownloadInfo();
+            downloadInfo.setUrl(mGameArrayList.get(i).getGameDownloadUrl());
+            downloadInfo.setGamePicUrl( mGameArrayList.get(i).getGamePic());
+            downloadInfo.setLabel( mGameArrayList.get(i).getGameName());
+            downloadInfo.setFileSavePath(FileUtils.fileSavePath+mGameArrayList.get(i).getGameName()+".apk");
+            downloadInfo.setAutoResume(true);
+            downloadInfo.setAutoRename(false);
+            for (int j = 0; j < downloadManager.getDownloadListCount(); j++) {
+                if (downloadManager.getDownloadInfo(j).getLabel().equals(mGameArrayList.get(i).getGameName())) {
+                    downloadInfo=downloadManager.getDownloadInfo(j);
+                }else {
+
+                }
+
+            }
+
+            if (view == null) {
+                view = mInflater.inflate(R.layout.item_new_game_view, null);
+                holder = new DownloadItemViewHolder(view, downloadInfo);
+                view.setTag(holder);
+                holder.refresh();
+            } else {
+                holder = (DownloadItemViewHolder) view.getTag();
+                holder.update(downloadInfo);
+            }
+
+            if (downloadInfo.getState().value() < DownloadState.FINISHED.value()) {
+                try {
+                    downloadManager.startDownload(
+                            downloadInfo.getUrl(),
+                            downloadInfo.getGamePicUrl(),
+                            downloadInfo.getLabel(),
+                            downloadInfo.getFileSavePath(),
+                            downloadInfo.isAutoResume(),
+                            downloadInfo.isAutoRename(),
+                            holder);
+                } catch (DbException ex) {
+                    Toast.makeText(x.app(), "添加下载失败", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            return view;
+        }
+    }
+    public class DownloadItemViewHolder extends DownloadViewHolder {
+        @ViewInject(R.id.game_name)
+        TextView label;
+        @ViewInject(R.id.game_pic)
+        ImageView gamePic;
+        @ViewInject(R.id.download_state)
+        TextView state;
+        @ViewInject(R.id.pb_progressbar)
+        HorizontalProgressBarWithTextProgress progressBar;
+        @ViewInject(R.id.bt_uninstall)
+        Button stopBtn;
+
+        public DownloadItemViewHolder(View view, DownloadInfo downloadInfo) {
+            super(view, downloadInfo);
+            refresh();
+        }
+
+        @Event(R.id.bt_uninstall)
+        private void toggleEvent(View view) {
+            DownloadState state = downloadInfo.getState();
+            switch (state) {
+                case WAITING:
+                case STARTED:
+                    downloadManager.stopDownload(downloadInfo);
+                    break;
+                case ERROR:
+                case STOPPED:
+                    try {
+                        downloadManager.startDownload(
+                                downloadInfo.getUrl(),
+                                downloadInfo.getGamePicUrl(),
+                                downloadInfo.getLabel(),
+                                downloadInfo.getFileSavePath(),
+                                downloadInfo.isAutoResume(),
+                                downloadInfo.isAutoRename(),
+                                this);
+                    } catch (DbException ex) {
+                        Toast.makeText(x.app(), "添加下载失败", Toast.LENGTH_LONG).show();
+                    }
+                    break;
+                case FINISHED:
+                    Toast.makeText(x.app(), "已经下载完成", Toast.LENGTH_LONG).show();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        @Event(R.id.download_remove_btn)
+        private void removeEvent(View view) {
+            try {
+                downloadManager.removeDownload(downloadInfo);
+                downloadListAdapter.notifyDataSetChanged();
+            } catch (DbException e) {
+                Toast.makeText(x.app(), "移除任务失败", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        public void update(DownloadInfo downloadInfo) {
+            super.update(downloadInfo);
+            Log.e("wei", "update");
+            refresh();
+        }
+
+        @Override
+        public void onWaiting() {
+            Log.e("wei", "onWaiting");
+            refresh();
+        }
+
+        @Override
+        public void onStarted() {
+            Log.e("wei", "onStarted");
+            refresh();
+        }
+
+        @Override
+        public void onLoading(long total, long current) {
+            Log.e("wei", "onLoading" + "total:" + total + "current" + current);
+            refresh();
+        }
+
+        @Override
+        public void onSuccess(File result) {
+            Log.e("wei", "onSuccess");
+            refresh();
+        }
+
+        @Override
+        public void onError(Throwable ex, boolean isOnCallback) {
+            Log.e("wei", "onError");
+            refresh();
+        }
+
+        @Override
+        public void onCancelled(Callback.CancelledException cex) {
+            Log.e("wei", "onCancelled");
+            refresh();
+        }
+
+        public void refresh() {
+            label.setText(downloadInfo.getLabel());
+            state.setText(downloadInfo.getState().toString());
+            Glide.with(mActivity).load(downloadInfo.getGamePicUrl()).into(gamePic);
+            progressBar.setProgress(downloadInfo.getProgress());
+            stopBtn.setVisibility(View.VISIBLE);
+            stopBtn.setText(x.app().getString(R.string.stop));
+            DownloadState state = downloadInfo.getState();
+            switch (state) {
+                case WAITING:
+                case STARTED:
+                    stopBtn.setText(x.app().getString(R.string.stop));
+                    break;
+                case ERROR:
+                case STOPPED:
+                    stopBtn.setText(x.app().getString(R.string.start));
+                    break;
+                case FINISHED:
+                    stopBtn.setText("完成");
+                    break;
+                default:
+                    stopBtn.setText(x.app().getString(R.string.start));
+                    break;
+            }
+        }
     }
 }

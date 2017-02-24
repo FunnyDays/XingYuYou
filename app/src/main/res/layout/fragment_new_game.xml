@@ -6,19 +6,10 @@
     android:layout_height="match_parent"
     app:isFirstVisible="true"
     android:orientation="vertical">
-    <LinearLayout
-        android:orientation="vertical"
+    <ListView
+        android:id="@+id/lv_download"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <TextView
-            android:gravity="center"
-            android:textSize="33sp"
-            android:layout_gravity="center"
-            android:text="第四个界面"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </LinearLayout>
+    </ListView>
 
 </com.xingyuyou.xingyuyou.Utils.Loading.LoadingLayout>
