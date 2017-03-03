@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/XingYuYou.iml" filepath="$PROJECT_DIR$/XingYuYou.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lrlibrary/lrlibrary.iml" filepath="$PROJECT_DIR$/lrlibrary/lrlibrary.iml" />
     </modules>
   </component>
 </project>

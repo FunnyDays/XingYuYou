@@ -136,6 +136,7 @@ public class ManagerAppActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, int position) {
                 mPackageName = appsInfo.get(position).getPackageName();
+                Log.e("mPackageName",mPackageName+"::1111");
                 mRemovePos = position;
                 AppUtils.uninstallApp(ManagerAppActivity.this,appsInfo.get(position).getPackageName(),1);
             }

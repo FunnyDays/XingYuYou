@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.AppUtils;
 import com.xingyuyou.xingyuyou.download.DownloadInfo;
 import com.xingyuyou.xingyuyou.download.DownloadManager;
 import com.xingyuyou.xingyuyou.download.DownloadState;
@@ -167,6 +168,13 @@ public class DownLoadActivity extends AppCompatActivity {
                     break;
                 case FINISHED:
                     Toast.makeText(x.app(), "已经下载完成", Toast.LENGTH_LONG).show();
+                    if (AppUtils.isInstallApp(getBaseContext(),"cn.mljia.o2o")){
+                        stopBtn.setText("打开");
+                        AppUtils.launchApp(getBaseContext(),"cn.mljia.o2o");
+                    }else {
+                        stopBtn.setText("安装");
+                        AppUtils.installApp(getBaseContext(),downloadInfo.getFileSavePath());
+                    }
                     break;
                 default:
                     break;
@@ -245,6 +253,13 @@ public class DownLoadActivity extends AppCompatActivity {
                     break;
                 case FINISHED:
                     stopBtn.setText("完成");
+                    if (AppUtils.isInstallApp(getBaseContext(),"cn.mljia.o2o")){
+                        stopBtn.setText("打开");
+                        //AppUtils.launchApp(mActivity,"cn.mljia.o2o");
+                    }else {
+                        stopBtn.setText("安装");
+                        //AppUtils.installApp(mActivity,downloadInfo.getFileSavePath());
+                    }
                     break;
                 default:
                     stopBtn.setText(x.app().getString(R.string.start));
