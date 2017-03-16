@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
-              android:clickable="true"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
               android:background="@drawable/ripple_bg"
+              android:clickable="true"
               android:orientation="vertical">
 
     <RelativeLayout
@@ -17,82 +17,91 @@
         android:layout_marginTop="10dp">
 
         <ImageView
-            android:layout_centerVertical="true"
             android:id="@+id/game_pic"
             android:layout_width="60dp"
-            android:layout_height="60dp" />
+            android:layout_height="60dp"
+            android:layout_centerVertical="true"/>
 
         <RelativeLayout
-            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
-            android:layout_toRightOf="@id/game_pic"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/game_pic">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-
                 android:orientation="vertical">
-
-                <TextView
-                    tools:text="地铁跑酷"
-                    android:id="@+id/game_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:lines="1"
-                    android:layout_marginRight="56dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center">
 
+                    <TextView
+                        android:id="@+id/game_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="56dp"
+                        android:lines="1"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp"
+                        tools:text="地铁跑酷"/>
+                    <TextView
+                        android:layout_below="@id/game_name"
+                        android:id="@+id/game_intro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="70dp"
+                        android:maxEms="10"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp"
+                        tools:text="游戏介绍"/>
+
                     <com.xingyuyou.xingyuyou.weight.HorizontalProgressBarWithTextProgress
+                        android:visibility="invisible"
                         android:id="@+id/pb_progressbar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_marginRight="90dp"
-                        android:layout_marginTop="20dp"
-                        android:padding="5dp"
                         app:progress_reach_color="@color/colorPrimaryDark"
                         app:progress_text_color="@color/colorAccent"
-                        app:progress_unreach_color="#553F51B5"/>
+                        app:progress_unreach_color="#553F51B5"
+                        android:layout_below="@id/game_name"/>
 
-
-                    <TextView
-                        tools:text="默认文字"
-                        android:id="@+id/download_state"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignRight="@+id/pb_progressbar"
-                        android:layout_alignEnd="@+id/pb_progressbar"/>
+                    <!--  <TextView
+                          tools:text="默认文字"
+                          android:id="@+id/download_state"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textSize="12sp"
+                          android:layout_alignParentTop="true"
+                          android:layout_alignRight="@+id/pb_progressbar"
+                          android:layout_alignEnd="@+id/pb_progressbar"/>-->
                 </RelativeLayout>
 
                 <TextView
-                    tools:text="休闲益智"
                     android:id="@+id/game_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="休闲益智"
                     android:textColor="@android:color/black"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
 
                 <TextView
-                    tools:text="76M"
                     android:id="@+id/game_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:lines="1"
                     android:layout_marginRight="56dp"
+                    android:lines="1"
                     android:textColor="@android:color/black"
-                    android:textSize="10sp" />
+                    android:textSize="10sp"
+                    tools:text="76M"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -101,22 +110,23 @@
 
                 </View>
             </LinearLayout>
+
             <com.xingyuyou.xingyuyou.weight.ProgressButton
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
                 android:id="@+id/bt_uninstall"
                 android:layout_width="56dp"
                 android:layout_height="28dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:background="@drawable/ripple_bg_button"
                 android:clickable="true"
                 android:text="下载"
-                app:progressColor="@color/colorAccent"
-                app:progressBgColor="@color/colorPrimary"
+                android:textColor="#ffffff"
+                app:buttonCornerRadius="0dp"
                 app:buttonNormalColor="@color/colorPrimaryDark"
                 app:buttonPressedColor="@color/colorPrimary"
-                app:buttonCornerRadius="0dp"
+                app:progressBgColor="@color/colorPrimary"
+                app:progressColor="@color/colorAccent"
                 app:showProgressNum="true"
-                android:textColor="#ffffff"
                 />
 
         </RelativeLayout>

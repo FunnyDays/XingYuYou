@@ -134,7 +134,6 @@ public class HorizontalProgressBarWithTextProgress extends ProgressBar {
         int result = 0;
         int mode = MeasureSpec.getMode(heightMeasureSpec);
         int size = MeasureSpec.getSize(heightMeasureSpec);
-
         if (mode == MeasureSpec.EXACTLY) {
             result = size;
         } else {

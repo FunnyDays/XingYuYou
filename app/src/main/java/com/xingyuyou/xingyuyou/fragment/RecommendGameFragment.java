@@ -62,13 +62,13 @@ import okhttp3.Call;
  */
 public class RecommendGameFragment extends BaseFragment {
 
-
+    private Banner mBanner;
     private ListView mListView;
     private DownloadManager downloadManager;
     private DownloadListAdapter downloadListAdapter;
     private ArrayList<Game> mGameArrayList;
     private List<HotGameBean> mHotGameList=new ArrayList<>();
-    private List mHotBannerGameList;
+    private List<HotBannerBean> mHotBannerGameList;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -84,10 +84,6 @@ public class RecommendGameFragment extends BaseFragment {
                     mHotGameList = gson.fromJson(ja.toString(),
                             new TypeToken<List<HotGameBean>>() {
                             }.getType());
-
-                    for (int i = 0; i < mHotGameList.size(); i++) {
-                        Log.e("hot", "解析数据：" + mHotGameList.get(i).toString());
-                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -108,14 +104,19 @@ public class RecommendGameFragment extends BaseFragment {
                     mHotBannerGameList = gson.fromJson(ja.toString(),
                             new TypeToken<List<HotBannerBean>>() {
                             }.getType());
-                    mBanner.setImages(mHotBannerGameList).setImageLoader(new GlideImageLoader()).start();
+                    List<String> imageList = new ArrayList<>();
+                    for (int i = 0; i < mHotBannerGameList.size(); i++) {
+                        Log.e("lunbo",mHotBannerGameList.get(i).getData());
+                        imageList.add(mHotBannerGameList.get(i).getData());
+                    }
+                    mBanner.setImages(imageList).setImageLoader(new GlideImageLoader()).start();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         }
     };
-    private Banner mBanner;
+
 
 
     public static RecommendGameFragment newInstance(String content) {
@@ -282,7 +283,8 @@ public class RecommendGameFragment extends BaseFragment {
             DownloadInfo downloadInfo = null;
             downloadInfo = new DownloadInfo();
             downloadInfo.setUrl(mHotGameList.get(i).getAnd_dow_address());
-            Log.e("xiazai",mHotGameList.get(i).getAnd_dow_address()+"");
+            downloadInfo.setGameSize(mHotGameList.get(i).getGame_size());
+            downloadInfo.setGameIntro(mHotGameList.get(i).getIntroduction());
             downloadInfo.setGamePicUrl(mHotGameList.get(i).getIcon());
             downloadInfo.setLabel(mHotGameList.get(i).getGame_name());
             downloadInfo.setFileSavePath(FileUtils.fileSavePath + mHotGameList.get(i).getGame_name() + ".apk");
@@ -310,6 +312,8 @@ public class RecommendGameFragment extends BaseFragment {
                             downloadInfo.getUrl(),
                             downloadInfo.getGamePicUrl(),
                             downloadInfo.getLabel(),
+                            downloadInfo.getGameSize(),
+                            downloadInfo.getGameIntro(),
                             downloadInfo.getFileSavePath(),
                             downloadInfo.isAutoResume(),
                             downloadInfo.isAutoRename(),
@@ -357,6 +361,8 @@ public class RecommendGameFragment extends BaseFragment {
                                 downloadInfo.getUrl(),
                                 downloadInfo.getGamePicUrl(),
                                 downloadInfo.getLabel(),
+                                downloadInfo.getGameSize(),
+                                downloadInfo.getGameIntro(),
                                 downloadInfo.getFileSavePath(),
                                 downloadInfo.isAutoResume(),
                                 downloadInfo.isAutoRename(),
@@ -434,9 +440,9 @@ public class RecommendGameFragment extends BaseFragment {
         }
 
         public void refresh() {
-            gameSize.setText("");
+            gameSize.setText(downloadInfo.getGameSize());
             label.setText(downloadInfo.getLabel());
-            state.setText(downloadInfo.getState().toString());
+            //state.setText(downloadInfo.getState().toString());
             Glide.with(mActivity).load(downloadInfo.getGamePicUrl()).into(gamePic);
             progressBar.setProgress(downloadInfo.getProgress());
             stopBtn.setVisibility(View.VISIBLE);

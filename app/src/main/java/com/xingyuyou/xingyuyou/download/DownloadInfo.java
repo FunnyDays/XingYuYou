@@ -23,6 +23,12 @@ public class DownloadInfo {
     @Column(name = "url")
     private String url;
 
+    @Column(name = "gameSize")
+    private String gameSize;
+
+    @Column(name = "gameIntro")
+    private String gameIntro;
+
     @Column(name = "gamePicUrl")
     private String gamePicUrl;
 
@@ -59,7 +65,13 @@ public class DownloadInfo {
     public void setState(DownloadState state) {
         this.state = state;
     }
+    public String getGameSize() {
+        return gameSize;
+    }
 
+    public void setGameSize(String gameSize) {
+        this.gameSize = gameSize;
+    }
     public String getUrl() {
         return url;
     }
@@ -85,7 +97,13 @@ public class DownloadInfo {
     public String getFileSavePath() {
         return fileSavePath;
     }
+    public String getGameIntro() {
+        return gameIntro;
+    }
 
+    public void setGameIntro(String gameIntro) {
+        this.gameIntro = gameIntro;
+    }
     public void setFileSavePath(String fileSavePath) {
         this.fileSavePath = fileSavePath;
     }
@@ -124,14 +142,16 @@ public class DownloadInfo {
 
     @Override
     public String toString() {
-
-        return "FileInfo{" +
+        return "DownloadInfo{" +
                 "id=" + id +
+                ", state=" + state +
                 ", url='" + url + '\'' +
-                ", state='" + state + '\'' +
-                ", label=" + label +
+                ", gameSize='" + gameSize + '\'' +
+                ", gameIntro='" + gameIntro + '\'' +
+                ", gamePicUrl='" + gamePicUrl + '\'' +
+                ", label='" + label + '\'' +
+                ", fileSavePath='" + fileSavePath + '\'' +
                 ", progress=" + progress +
-                ", fileSavePath=" + fileSavePath +
                 ", fileLength=" + fileLength +
                 ", autoResume=" + autoResume +
                 ", autoRename=" + autoRename +

@@ -72,7 +72,7 @@ public class HotGameFragment extends BaseFragment {
     private DownloadListAdapter downloadListAdapter;
     private ArrayList<Game> mGameArrayList;
     private List<HotGameBean> mHotGameList=new ArrayList<>();
-    private List mHotBannerGameList;
+    private List<HotBannerBean> mHotBannerGameList;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -88,10 +88,6 @@ public class HotGameFragment extends BaseFragment {
                     mHotGameList = gson.fromJson(ja.toString(),
                             new TypeToken<List<HotGameBean>>() {
                             }.getType());
-
-                    for (int i = 0; i < mHotGameList.size(); i++) {
-                        Log.e("hot", "解析数据：" + mHotGameList.get(i).toString());
-                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -99,9 +95,8 @@ public class HotGameFragment extends BaseFragment {
                 if (downloadListAdapter != null) {
                     downloadListAdapter.notifyDataSetChanged();
                 }
-
-
-            }if (msg.what == 2) {
+            }
+            if (msg.what == 2) {
                 String response = (String) msg.obj;
                 JSONObject jo = null;
                 try {
@@ -112,7 +107,12 @@ public class HotGameFragment extends BaseFragment {
                     mHotBannerGameList = gson.fromJson(ja.toString(),
                             new TypeToken<List<HotBannerBean>>() {
                             }.getType());
-                    mBanner.setImages(mHotBannerGameList).setImageLoader(new GlideImageLoader()).start();
+                    List<String> imageList = new ArrayList<>();
+                    for (int i = 0; i < mHotBannerGameList.size(); i++) {
+                        Log.e("lunbo",mHotBannerGameList.get(i).getData());
+                        imageList.add(mHotBannerGameList.get(i).getData());
+                    }
+                    mBanner.setImages(imageList).setImageLoader(new GlideImageLoader()).start();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -217,17 +217,7 @@ public class HotGameFragment extends BaseFragment {
                 Toast.makeText(mActivity, "第四个引导", Toast.LENGTH_SHORT).show();
             }
         });
-        //轮播图数据
-        ArrayList<Object> imageList = new ArrayList<>();
-        imageList.add("1");
-        imageList.add("2");
-        imageList.add("3");
-        ArrayList<String> titlesList = new ArrayList<>();
-        titlesList.add("标题1");
-        titlesList.add("标题2");
-        titlesList.add("标题3");
-        //Banner
-        //Banner banner = new Banner(mActivity);
+       //轮播图设置
         mBanner = (Banner) headerViewOne.findViewById(R.id.banner);
         mBanner.setOnBannerListener(new OnBannerListener() {
             @Override
@@ -285,10 +275,11 @@ public class HotGameFragment extends BaseFragment {
             DownloadItemViewHolder holder = null;
             DownloadInfo downloadInfo = null;
             downloadInfo = new DownloadInfo();
-            downloadInfo.setUrl(mHotGameList.get(i).getAnd_dow_address());
-            Log.e("xiazai",mHotGameList.get(i).getAnd_dow_address()+"");
+            downloadInfo.setUrl("http://demo.vlcms.com./Uploads/SourcePack/20170309100302_150.apk");
+            downloadInfo.setGameSize(mHotGameList.get(i).getGame_size());
             downloadInfo.setGamePicUrl(mHotGameList.get(i).getIcon());
             downloadInfo.setLabel(mHotGameList.get(i).getGame_name());
+            downloadInfo.setGameIntro(mHotGameList.get(i).getIntroduction());
             downloadInfo.setFileSavePath(FileUtils.fileSavePath + mHotGameList.get(i).getGame_name() + ".apk");
             downloadInfo.setAutoResume(true);
             downloadInfo.setAutoRename(false);
@@ -314,12 +305,14 @@ public class HotGameFragment extends BaseFragment {
                             downloadInfo.getUrl(),
                             downloadInfo.getGamePicUrl(),
                             downloadInfo.getLabel(),
+                            downloadInfo.getGameSize(),
+                            downloadInfo.getGameIntro(),
                             downloadInfo.getFileSavePath(),
                             downloadInfo.isAutoResume(),
                             downloadInfo.isAutoRename(),
                             holder);
                 } catch (DbException ex) {
-                    Toast.makeText(x.app(), "添加下载失败", Toast.LENGTH_LONG).show();
+                    Toast.makeText(x.app(), "1添加下载失败", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -334,6 +327,8 @@ public class HotGameFragment extends BaseFragment {
         ImageView gamePic;
         @ViewInject(R.id.game_size)
         TextView gameSize;
+        @ViewInject(R.id.game_intro)
+        TextView gameIntro;
         @ViewInject(R.id.download_state)
         TextView state;
         @ViewInject(R.id.pb_progressbar)
@@ -361,6 +356,8 @@ public class HotGameFragment extends BaseFragment {
                                 downloadInfo.getUrl(),
                                 downloadInfo.getGamePicUrl(),
                                 downloadInfo.getLabel(),
+                                downloadInfo.getGameSize(),
+                                downloadInfo.getGameIntro(),
                                 downloadInfo.getFileSavePath(),
                                 downloadInfo.isAutoResume(),
                                 downloadInfo.isAutoRename(),
@@ -438,9 +435,10 @@ public class HotGameFragment extends BaseFragment {
         }
 
         public void refresh() {
-            gameSize.setText("");
             label.setText(downloadInfo.getLabel());
-            state.setText(downloadInfo.getState().toString());
+            gameSize.setText(downloadInfo.getGameSize());
+            gameIntro.setText(downloadInfo.getGameIntro());
+            //state.setText(downloadInfo.getState().toString());
             Glide.with(mActivity).load(downloadInfo.getGamePicUrl()).into(gamePic);
             progressBar.setProgress(downloadInfo.getProgress());
             stopBtn.setVisibility(View.VISIBLE);
