@@ -60,7 +60,7 @@ import okhttp3.Call;
 /**
  * Created by Administrator on 2016/6/28.
  */
-public class NewGameFragment extends BaseFragment {
+public class RecommendGameFragment extends BaseFragment {
 
 
     private ListView mListView;
@@ -118,10 +118,10 @@ public class NewGameFragment extends BaseFragment {
     private Banner mBanner;
 
 
-    public static NewGameFragment newInstance(String content) {
+    public static RecommendGameFragment newInstance(String content) {
         Bundle args = new Bundle();
         args.putString("ARGS", content);
-        NewGameFragment fragment = new NewGameFragment();
+        RecommendGameFragment fragment = new RecommendGameFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -135,7 +135,7 @@ public class NewGameFragment extends BaseFragment {
         Log.e("hot", "121第一次初始化数据");
        // mGameArrayList = new ArrayList<>();
         OkHttpUtils.post()//
-                .url(XingYuInterface.GET_GAME_LIST + "/type/new")
+                .url(XingYuInterface.GET_GAME_LIST + "/type/tui")
                 .tag(this)//
                 .build()//
                 .execute(new StringCallback() {
@@ -172,7 +172,7 @@ public class NewGameFragment extends BaseFragment {
     @Override
     protected View initView() {
         initData();
-        View view = View.inflate(mActivity, R.layout.fragment_new_game, null);
+        View view = View.inflate(mActivity, R.layout.fragment_recom_game, null);
         return view;
     }
 

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_about"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.xingyuyou.xingyuyou.activity.AboutActivity">
+
+    <include layout="@layout/toolbar"></include>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <TextView
+                android:id="@+id/tv_about_xingyu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:text="      星宇游（www.xingyuyou.com）隶属于北京星宇互娱科技有限公司。北京星宇互娱科技有限公司是一家主要从事互联网移动单机娱乐，社交娱乐及手游联运发行的新兴科技类企业。公司成立于2016年，自成立之日起便秉城以用户体验至上为理念，倾力打造一款以社交、移动娱乐为主体的综合移动应用平台。
+
+  此外星宇游针对市场特性，开发出易于用户体验更加全面的后台，其扁平化的产品结构，为广大合作伙伴提供更加精准的用户需求。
+
+\n     自星宇游上线以来，其优质的合作资源及人性化的设计理念广受玩家用户的喜爱，随着产品不断更迭换代，产品数量及质量有着显著提升，并致力于向着更加垂直化的方向发展。目前星宇游平均日活跃在10000+，每日新增活跃用户2500+。
+\n
+\n
+
+
+    \n联系电话：18501284627
+    \n工作时间：9:00-6:00
+    \n客服QQ：946551863
+    \n客服邮箱:946551863@qq.com
+    \n投诉邮箱:946551863@qq.com
+
+\n
+\n
+\n
+\n
+\n
+\n
+
+  "/>
+
+            <TextView
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="北京星宇互娱科技有限公司"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

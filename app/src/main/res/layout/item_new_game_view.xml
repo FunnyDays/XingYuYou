@@ -3,6 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
               android:clickable="true"
               android:background="@drawable/ripple_bg"
               android:orientation="vertical">
@@ -36,6 +37,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    tools:text="地铁跑酷"
                     android:id="@+id/game_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -63,22 +65,27 @@
 
 
                     <TextView
+                        tools:text="默认文字"
                         android:id="@+id/download_state"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/ratingBar"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignRight="@+id/pb_progressbar"
+                        android:layout_alignEnd="@+id/pb_progressbar"/>
                 </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/game_size"
+                    tools:text="休闲益智"
+                    android:id="@+id/game_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/game_intro"
+                    tools:text="76M"
+                    android:id="@+id/game_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"

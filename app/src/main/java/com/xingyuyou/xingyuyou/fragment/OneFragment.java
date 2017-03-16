@@ -56,14 +56,14 @@ public class OneFragment extends BaseFragment {
         getFragments();
         mAdapter.addFragment(fragments.get(0), "热门");
         mAdapter.addFragment(fragments.get(1), "推荐");
-        mAdapter.addFragment(fragments.get(2), "期待");
+        mAdapter.addFragment(fragments.get(2), "最新");
         viewPager.setAdapter(mAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
         return view;
     }
     private void initToolbar() {
-        mToolbar.setTitle("星宇助手");
+        mToolbar.setTitle("星宇游");
         mToolbar.inflateMenu(R.menu.all_tab_fragment_menu);
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -85,9 +85,9 @@ public class OneFragment extends BaseFragment {
 
     private ArrayList<BaseFragment> getFragments() {
         fragments = new ArrayList<>();
-        fragments.add(NewGameFragment.newInstance("热门"));
-        fragments.add(GameFragment.newInstance("推荐"));
-        fragments.add(NewGameFragment.newInstance("期待"));
+        fragments.add(HotGameFragment.newInstance("热门"));
+        fragments.add(RecommendGameFragment.newInstance("推荐"));
+        fragments.add(NewGameFragment.newInstance("最新"));
         mAdapter = new TabsViewPagerAdapter(((MainActivity) mActivity).getSupportFragmentManager());
         return fragments;
     }

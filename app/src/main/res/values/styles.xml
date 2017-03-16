@@ -3,20 +3,19 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-    <!--recyclerView获取的系统分割线-->
-    <!-- <item name="android:listDivider">@drawable/divider_bg</item>-->
-    <!-- Customize your theme here. -->
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    <item name="colorAccent">@color/colorAccent</item>
-    <item name="android:textColorPrimary">@color/textColorPrimary</item>
-    <item name="colorControlNormal">@color/colorControlNormal</item>
-    <!--itemBackground设置menu菜单背景色-->
-    <item name="android:itemBackground">#3F51B5</item>
-    <item name="overlapAnchor">false</item>
-
-    <!-- <item name="actionOverflowMenuStyle">@style/MenuStyle</item>-->
-</style>
+        <!--recyclerView获取的系统分割线-->
+        <!-- <item name="android:listDivider">@drawable/divider_bg</item>-->
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="colorControlNormal">@color/colorControlNormal</item>
+        <!--itemBackground设置menu菜单背景色-->
+        <item name="android:itemBackground">#3F51B5</item>
+        <item name="overlapAnchor">false</item>
+        <!-- <item name="actionOverflowMenuStyle">@style/MenuStyle</item>-->
+    </style>
 
     <style name="bottom_tab_style">
         <item name="android:layout_width">0dip</item>
@@ -47,6 +46,7 @@
         <item name="android:textColor">@color/grey</item>
         <item name="android:textSize">@dimen/textSize_small</item>
     </style>
+
     <style name="MyButton" parent="Theme.AppCompat.Light">
 
         <item name="colorControlHighlight">@color/colorPrimaryDark</item>
@@ -57,7 +57,7 @@
     <style name="style_progressbar" parent="Widget.AppCompat.ProgressBar">
         <item name="android:indeterminateDrawable">@drawable/progressbar</item>
     </style>
-<!--popwindow-->
+    <!--popwindow-->
     <style name="animatorUP" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/translucent_up_in</item>
         <item name="android:windowExitAnimation">@anim/translucent_up_out</item>
@@ -68,6 +68,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:scaleType">centerCrop</item>
     </style>
+
     <style name="Name" parent="@style/TextLabel">
         <item name="android:maxLines">2</item>
         <item name="android:textStyle">bold</item>
@@ -83,6 +84,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">?android:textColorSecondary</item>
     </style>
+
     <style name="SubTitle" parent="@style/TextLabel">
         <item name="android:textSize">16sp</item>
         <item name="android:paddingLeft">30dp</item>
@@ -97,6 +99,7 @@
         <item name="android:paddingRight">30dp</item>
         <item name="android:paddingBottom">15dp</item>
     </style>
+
     <style name="Card">
         <item name="cardCornerRadius">@dimen/card_radius</item>
         <item name="cardElevation">@dimen/card_elevation</item>

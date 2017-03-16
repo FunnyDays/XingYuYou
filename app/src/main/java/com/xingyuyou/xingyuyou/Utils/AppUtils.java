@@ -15,6 +15,7 @@ import android.os.RemoteException;
 import android.text.format.Formatter;
 import android.util.Log;
 
+
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -722,13 +723,13 @@ public class AppUtils {
         }
     }
 
-    /**
-     * 得到AppInfo的Bean
-     *
-     * @param pm 包的管理
-     * @param pi 包的信息
-     * @return AppInfo类
-     */
+        /**
+         * 得到AppInfo的Bean
+         *
+         * @param pm 包的管理
+         * @param pi 包的信息
+         * @return AppInfo类
+         */
     private static AppInfo getBean(PackageManager pm, PackageInfo pi) {
         if (pm == null || pi == null) return null;
         ApplicationInfo ai = pi.applicationInfo;

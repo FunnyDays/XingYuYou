@@ -1,12 +1,14 @@
 package com.xingyuyou.xingyuyou;
 
 import android.app.Application;
-
-import com.lzy.okgo.OkGo;
 import com.xingyuyou.xingyuyou.Utils.Loading.LoadingLayout;
 import com.xingyuyou.xingyuyou.Utils.Utils;
+import com.zhy.http.okhttp.OkHttpUtils;
 
 import org.xutils.x;
+
+import java.util.concurrent.TimeUnit;
+import okhttp3.OkHttpClient;
 
 /**
  * Created by Administrator on 2017/2/20.
@@ -22,8 +24,21 @@ public class App extends Application {
         x.Ext.init(this);
         //工具类初始化
         Utils.init(this);
-        //第三方下载测试
-        OkGo.init(this);
+        //网络初始化
+        initOkhttp();
+    }
+
+    /**
+     * 配置网络请求
+     */
+    private void initOkhttp() {
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+//                .addInterceptor(new LoggerInterceptor("TAG"))
+                .connectTimeout(30000L, TimeUnit.MILLISECONDS)
+                .readTimeout(30000L, TimeUnit.MILLISECONDS)
+                //其他配置
+                .build();
+        OkHttpUtils.initClient(okHttpClient);
     }
     private void initLoadView() {
         LoadingLayout.getConfig()
