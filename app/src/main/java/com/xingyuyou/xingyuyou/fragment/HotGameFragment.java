@@ -1,6 +1,7 @@
 package com.xingyuyou.xingyuyou.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,7 +31,9 @@ import com.xingyuyou.xingyuyou.Utils.AppUtils;
 import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
 import com.xingyuyou.xingyuyou.Utils.FileUtils;
 import com.xingyuyou.xingyuyou.Utils.GlideImageLoader;
+import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.activity.HotGameDetailActivity;
 import com.xingyuyou.xingyuyou.activity.LoginActivity;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.Game;
@@ -137,7 +141,6 @@ public class HotGameFragment extends BaseFragment {
     @Override
     public void initData() {
         Log.e("hot", "121第一次初始化数据");
-       // mGameArrayList = new ArrayList<>();
         OkHttpUtils.post()//
                 .url(XingYuInterface.GET_GAME_LIST + "/type/top")
                 .tag(this)//
@@ -147,10 +150,8 @@ public class HotGameFragment extends BaseFragment {
                     public void onError(Call call, Exception e, int id) {
                         Log.e("hot", e.toString() + ":e");
                     }
-
                     @Override
                     public void onResponse(String response, int id) {
-                        //Log.e("hot", response + "");
                         handler.obtainMessage(1, response).sendToTarget();
                     }
                 });
@@ -163,7 +164,6 @@ public class HotGameFragment extends BaseFragment {
                     public void onError(Call call, Exception e, int id) {
                         Log.e("hot", e.toString() + ":e");
                     }
-
                     @Override
                     public void onResponse(String response, int id) {
                         Log.e("lunbo", response + "");
@@ -243,6 +243,16 @@ public class HotGameFragment extends BaseFragment {
         downloadManager = DownloadManager.getInstance();
         downloadListAdapter = new DownloadListAdapter();
         mListView.setAdapter(downloadListAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(mActivity,HotGameDetailActivity.class);
+                intent.putExtra("game_id",mHotGameList.get(i-2).getId());
+                intent.putExtra("game_name",mHotGameList.get(i-2).getGame_name());
+                Log.e("game_id",mHotGameList.get(i-2).getId());
+                startActivity(intent);
+            }
+        });
     }
 
     private class DownloadListAdapter extends BaseAdapter {
@@ -275,7 +285,7 @@ public class HotGameFragment extends BaseFragment {
             DownloadItemViewHolder holder = null;
             DownloadInfo downloadInfo = null;
             downloadInfo = new DownloadInfo();
-            downloadInfo.setUrl("http://demo.vlcms.com./Uploads/SourcePack/20170309100302_150.apk");
+            downloadInfo.setUrl(mHotGameList.get(i).getAnd_dow_address());
             downloadInfo.setGameSize(mHotGameList.get(i).getGame_size());
             downloadInfo.setGamePicUrl(mHotGameList.get(i).getIcon());
             downloadInfo.setLabel(mHotGameList.get(i).getGame_name());
@@ -469,5 +479,11 @@ public class HotGameFragment extends BaseFragment {
                     break;
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        OkHttpUtils.getInstance().cancelTag(mActivity);
     }
 }

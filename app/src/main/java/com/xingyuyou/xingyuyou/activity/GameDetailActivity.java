@@ -152,7 +152,6 @@ public class GameDetailActivity extends BaseActivity {
      */
     private void getDownloadInfo() {
         downloadManager = DownloadManager.getInstance();
-
         DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()
                 .setDbName("download")
                 .setDbVersion(1);
@@ -467,21 +466,7 @@ public class GameDetailActivity extends BaseActivity {
     private void initToolBar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(gameNameTitle);
-       /* toolbar.inflateMenu(R.menu.game_detail_menu);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.menu_share:
-                        new ShareAction(Game10Activity.this).withText("hello")
-                                .setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA.QQ,
-                                        SHARE_MEDIA.WEIXIN, SHARE_MEDIA.EMAIL, SHARE_MEDIA.SMS)
-                                .setCallback(umShareListener).open();
-                        break;
-                }
-                return false;
-            }
-        });*/
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

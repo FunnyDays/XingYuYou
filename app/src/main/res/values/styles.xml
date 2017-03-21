@@ -111,4 +111,9 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:clickable">true</item>
     </style>
+    <style name="FourIconGame">
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>
