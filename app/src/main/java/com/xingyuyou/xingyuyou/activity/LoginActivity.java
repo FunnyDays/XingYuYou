@@ -2,6 +2,7 @@ package com.xingyuyou.xingyuyou.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.Base64;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.Base64Util;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.RequestParamUtil;
@@ -39,14 +41,24 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPassword;
     private Button mRegister;
     private HttpUtils mHttp;
+    private Button mButtonRegister;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        initToolBar();
         mUserName = (EditText) findViewById(R.id.et_username);
         mPassword = (EditText) findViewById(R.id.et_password);
         mRegister = (Button) findViewById(R.id.bt_register_in_button);
+        mButtonRegister = (Button) findViewById(R.id.bt_register);
+        mButtonRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentUtils.startActivity(LoginActivity.this,RegisterActivity.class);
+            }
+        });
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,7 +66,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
+    private void initToolBar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("登录");
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
     public void getUserInfo() {
         String usernameText = mUserName.getText().toString().trim();
         String passwordText = mPassword.getText().toString().trim();
@@ -71,9 +92,18 @@ public class LoginActivity extends AppCompatActivity {
             String param = RequestParamUtil.getRequestParamString(params);
 
             //溪谷注册方式
-            //toXiGuRegister(param);
+            JSONObject jsonObject = new JSONObject();
+
+            try {
+                jsonObject.put("phone", String.valueOf(usernameText));
+                jsonObject.put("demand", String.valueOf(1));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            toXiGuRegister(jsonObject.toString());
             //登录测试
-            toLogin(params);
+            //toLogin(params);
         } else {
             Toast.makeText(this, "请输入完成信息", Toast.LENGTH_SHORT).show();
         }
@@ -82,12 +112,12 @@ public class LoginActivity extends AppCompatActivity {
     private void toXiGuRegister(String param) {
         RequestParams params = new RequestParams();
         try {
-            params.setBodyEntity(new StringEntity(param.toString()));
+            params.setBodyEntity(new StringEntity(android.util.Base64.encodeToString(param.getBytes(),0)));
         } catch (UnsupportedEncodingException e) {
             params = null;
         }
         mHttp = new HttpUtils();
-        mHttp.send(HttpRequest.HttpMethod.POST, XingYuInterface.USER_LOGIN, params, new RequestCallBack<String>() {
+        mHttp.send(HttpRequest.HttpMethod.POST, XingYuInterface.SEND_SMS, params, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Toast.makeText(LoginActivity.this, "注册者成功", Toast.LENGTH_SHORT).show();
