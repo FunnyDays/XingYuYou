@@ -17,11 +17,14 @@
         android:visibility="gone"/>
 
     <ScrollView
+        android:paddingTop="20dp"
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,6 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="登录"
+                android:background="@drawable/ripple_bg_button"
                 android:textStyle="bold"/>
             <Button
                 android:id="@+id/bt_register"
@@ -79,6 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="还没账号，点击注册"
+                android:background="@android:color/transparent"
                 android:textStyle="bold"/>
 
         </LinearLayout>
