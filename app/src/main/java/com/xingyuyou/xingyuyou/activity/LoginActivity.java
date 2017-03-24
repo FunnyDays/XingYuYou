@@ -1,5 +1,8 @@
 package com.xingyuyou.xingyuyou.activity;
 
+import android.animation.ValueAnimator;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,40 +13,57 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.lidroid.xutils.HttpUtils;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.lidroid.xutils.http.client.HttpRequest;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
-import com.xingyuyou.xingyuyou.Utils.MCUtils.Base64;
-import com.xingyuyou.xingyuyou.Utils.MCUtils.Base64Util;
-import com.xingyuyou.xingyuyou.Utils.MCUtils.RequestParamUtil;
+import com.xingyuyou.xingyuyou.Utils.SPUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
+import com.xingyuyou.xingyuyou.weight.dialog.LoadingDialog;
 
-import org.apache.http.entity.StringEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
-
-import okhttp3.Call;
+import org.xutils.common.Callback;
+import org.xutils.x;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText mUserName;
     private EditText mPassword;
-    private Button mRegister;
+    private Button mLogin;
     private HttpUtils mHttp;
     private Button mButtonRegister;
     private Toolbar mToolbar;
-
+    private Button mForgetPassword;
+    private LoadingDialog mLoadingDialog;
+    Handler mHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what==0){
+                mLoadingDialog.dismissDialog();
+                String result = (String) msg.obj;
+                JSONObject jsonObject = null;
+                try {
+                    Log.e("value", result.toString());
+                    jsonObject = new JSONObject(result);
+                    Toast.makeText(LoginActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
+                    if (!jsonObject.getString("status").equals("1"))
+                        return;
+                    JSONObject list = jsonObject.getJSONObject("list");
+                    String id = list.getString("id");
+                    String account = list.getString("account");
+                    String nickname = list.getString("nickname");
+                    SPUtils user_data = new SPUtils("user_data");
+                    user_data.putString("id",id);
+                    user_data.putString("account",account);
+                    user_data.putString("nickname",nickname);
+                    mLoadingDialog.CancelDialog();
+                    finish();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,21 +71,31 @@ public class LoginActivity extends AppCompatActivity {
         initToolBar();
         mUserName = (EditText) findViewById(R.id.et_username);
         mPassword = (EditText) findViewById(R.id.et_password);
-        mRegister = (Button) findViewById(R.id.bt_register_in_button);
-        mButtonRegister = (Button) findViewById(R.id.bt_register);
-        mButtonRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                IntentUtils.startActivity(LoginActivity.this,RegisterActivity.class);
-            }
-        });
-        mRegister.setOnClickListener(new View.OnClickListener() {
+        mLogin = (Button) findViewById(R.id.bt_login_button);
+        mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getUserInfo();
             }
         });
+        mForgetPassword = (Button) findViewById(R.id.bt_forgetPassword);
+        mForgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentUtils.startActivity(LoginActivity.this, ForgetPasswordActivity.class);
+            }
+        });
+
+        mButtonRegister = (Button) findViewById(R.id.bt_register);
+        mButtonRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentUtils.startActivity(LoginActivity.this, RegisterActivity.class);
+            }
+        });
+
     }
+
     private void initToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("登录");
@@ -76,128 +106,70 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     public void getUserInfo() {
         String usernameText = mUserName.getText().toString().trim();
         String passwordText = mPassword.getText().toString().trim();
         if ((!StringUtils.isEmpty(usernameText)) && (!StringUtils.isEmpty(passwordText))) {
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("account", String.valueOf(usernameText));
-            params.put("password", String.valueOf(passwordText));
-          /*  params.put("promote_id", String.valueOf("7"));
-            params.put("promote_account", String.valueOf("安卓客户端注册"));
-            params.put("game_id", String.valueOf("32"));
-            params.put("game_name", String.valueOf("星宇游"));
-            params.put("game_appid", String.valueOf("E32CF36D312E548A5"));*/
-            Log.e("zhuce", usernameText + "-------------" + passwordText);
-            String param = RequestParamUtil.getRequestParamString(params);
-
-            //溪谷注册方式
             JSONObject jsonObject = new JSONObject();
-
             try {
-                jsonObject.put("phone", String.valueOf(usernameText));
-                jsonObject.put("demand", String.valueOf(1));
+                jsonObject.put("account", String.valueOf(usernameText));
+                jsonObject.put("password", String.valueOf(passwordText));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            toXiGuRegister(jsonObject.toString());
-            //登录测试
-            //toLogin(params);
+            Log.e("login", usernameText + "-------------" + passwordText);
+            //账号登录
+            toLoginPOST(0,XingYuInterface.USER_LOGIN,jsonObject.toString());
         } else {
-            Toast.makeText(this, "请输入完成信息", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请输入完整登录信息", Toast.LENGTH_SHORT).show();
         }
     }
-
-    private void toXiGuRegister(String param) {
-        RequestParams params = new RequestParams();
-        try {
-            params.setBodyEntity(new StringEntity(android.util.Base64.encodeToString(param.getBytes(),0)));
-        } catch (UnsupportedEncodingException e) {
-            params = null;
-        }
-        mHttp = new HttpUtils();
-        mHttp.send(HttpRequest.HttpMethod.POST, XingYuInterface.SEND_SMS, params, new RequestCallBack<String>() {
+    public void toLoginPOST(final int code, String url, String body) {
+        mLoadingDialog = new LoadingDialog(this);
+        mLoadingDialog.showDialog();
+        org.xutils.http.RequestParams params = new org.xutils.http.RequestParams(url);
+        String encodeToString = android.util.Base64.encodeToString(body.toString().getBytes(), android.util.Base64.DEFAULT);
+        params.setBodyContent(encodeToString);
+        x.http().post(params, new Callback.CacheCallback<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Toast.makeText(LoginActivity.this, "注册者成功", Toast.LENGTH_SHORT).show();
-                Log.e("zhuce", getResponse(responseInfo).toString() + ":e");
+            public void onCancelled(CancelledException arg0) {
+
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
-                Toast.makeText(LoginActivity.this, "注册出错", Toast.LENGTH_SHORT).show();
-                Log.e("zhuce", msg.toString() + ":e");
+            public void onError(Throwable arg0, boolean arg1) {
+                Log.e("POST错误信息", arg0.toString());
+            }
+
+            @Override
+            public void onFinished() {
+                Log.e("POST错误信息","onFinished" );
+            }
+
+            @Override
+            public void onSuccess(String json) {
+                try {
+                    Log.e("加密返回的json", json);
+                    String result = new String(android.util.Base64.decode(json, android.util.Base64.DEFAULT), "utf-8");
+                    Log.e("login",result);
+                    if (code==0){
+                        mHandler.obtainMessage(0, result).sendToTarget();
+                    }
+                } catch (Exception e) {
+                    Log.e("login+json成功回调出错：", e.toString());
+                }
+            }
+            @Override
+            public boolean onCache(String json) {
+                return true;
             }
         });
-    }
-
-    private void toRegister(Map<String, String> params) {
-
-        OkHttpUtils.post()//
-                .url(XingYuInterface.USER_REGISTER)
-                .tag(this)//
-                .params(params)//
-                .build()//
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-
-                        Toast.makeText(LoginActivity.this, "注册出错", Toast.LENGTH_SHORT).show();
-                        Log.e("zhuce", e.toString() + ":e");
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        Toast.makeText(LoginActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
-                        Log.e("zhuce", response + "");
-                    }
-                });
-    }
-
-    private void toLogin(Map<String, String> params) {
-        OkHttpUtils.post()//
-                .url(XingYuInterface.USER_LOGIN)
-                .tag(this)//
-                .params(params)//
-                .build()//
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-
-                        Toast.makeText(LoginActivity.this, "注册出错", Toast.LENGTH_SHORT).show();
-                        Log.e("zhuce", e.toString() + ":e");
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        Toast.makeText(LoginActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
-                        Log.e("zhuce", response + "");
-                    }
-                });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        OkHttpUtils.getInstance().cancelTag(this);//取消以Activity.this作为tag的请求
     }
 
-    public static String getResponse(final ResponseInfo<String> responseInfo) {
-        String response = null;
-//				responseInfo.result.trim().replaceAll(" ", "");
-        try {
-            response = new String(Base64.decode(responseInfo.result.trim()), "utf-8");
-        } catch (Exception e2) {
-            Log.e("zhuce", "第一次base64解码出错了");
-            try {
-                response = Base64Util.getDecodeStr(response);
-            } catch (Exception e) {
-                Log.e("zhuce", "第二次base64解码出错了");
-            }
-        } finally {
-            Log.e("zhuce" + "==" + "ReautestUtil", "onSuccess:" + response);
-        }
-        return response;
-    }
 }

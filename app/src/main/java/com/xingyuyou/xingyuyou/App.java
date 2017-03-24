@@ -1,6 +1,8 @@
 package com.xingyuyou.xingyuyou;
 
 import android.app.Application;
+import android.content.Context;
+
 import com.xingyuyou.xingyuyou.Utils.Loading.LoadingLayout;
 import com.xingyuyou.xingyuyou.Utils.Utils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -15,9 +17,11 @@ import okhttp3.OkHttpClient;
  */
 
 public class App extends Application {
+    public static Context mContext;
     @Override
     public void onCreate() {
         super.onCreate();
+        mContext=this;
         //空布局初始化
         initLoadView();
         //下载初始化

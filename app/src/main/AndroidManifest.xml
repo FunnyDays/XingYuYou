@@ -87,6 +87,8 @@
         </activity>
         <activity android:name=".activity.RegisterActivity">
         </activity>
+        <activity android:name=".activity.ForgetPasswordActivity">
+        </activity>
     </application>
 
 </manifest>
