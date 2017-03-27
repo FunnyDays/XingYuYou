@@ -15,6 +15,7 @@ public class XingYuInterface {
     public static final String GET_GAME_LIST=Host+"Server/get_game_list";
     public static final String GAME_CATEGORY=Host+"Server/game_category";
     public static final String ROTATION_IMG=Host+"Server/rotation_img";
+    public static final String GET_GIFT_LIST=Host+"Server/get_gift_list";
 
 
 }

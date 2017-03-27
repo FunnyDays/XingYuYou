@@ -49,29 +49,20 @@
                         android:textColor="@android:color/black"
                         android:textSize="14sp"
                         tools:text="地铁跑酷"/>
+
                     <TextView
-                        android:layout_below="@id/game_name"
                         android:id="@+id/game_intro"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/game_name"
                         android:layout_marginRight="70dp"
+                        android:ellipsize="end"
                         android:maxEms="10"
                         android:maxLines="1"
-                        android:ellipsize="end"
                         android:textColor="@android:color/black"
                         android:textSize="14sp"
                         tools:text="游戏介绍"/>
 
-                    <com.xingyuyou.xingyuyou.weight.HorizontalProgressBarWithTextProgress
-                        android:visibility="invisible"
-                        android:id="@+id/pb_progressbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="90dp"
-                        app:progress_reach_color="@color/colorPrimaryDark"
-                        app:progress_text_color="@color/colorAccent"
-                        app:progress_unreach_color="#553F51B5"
-                        android:layout_below="@id/game_name"/>
 
                     <!--  <TextView
                           tools:text="默认文字"
@@ -110,19 +101,6 @@
 
                 </View>
             </LinearLayout>
-
-            <Button
-                android:id="@+id/bt_uninstall"
-                android:layout_width="56dp"
-                android:layout_height="28dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/ripple_bg_button"
-                android:clickable="true"
-                android:text="领取"
-                android:textColor="#ffffff"
-                />
-
         </RelativeLayout>
 
     </RelativeLayout>

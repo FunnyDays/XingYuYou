@@ -106,14 +106,12 @@ public class HotGameFragment extends BaseFragment {
                 try {
                     jo = new JSONObject(response);
                     JSONArray ja = jo.getJSONArray("data");
-                    // Log.e("hot", "解析数据："+  ja.toString());
                     Gson gson = new Gson();
                     mHotBannerGameList = gson.fromJson(ja.toString(),
                             new TypeToken<List<HotBannerBean>>() {
                             }.getType());
                     List<String> imageList = new ArrayList<>();
                     for (int i = 0; i < mHotBannerGameList.size(); i++) {
-                        Log.e("lunbo",mHotBannerGameList.get(i).getData());
                         imageList.add(mHotBannerGameList.get(i).getData());
                     }
                     mBanner.setImages(imageList).setImageLoader(new GlideImageLoader()).start();
