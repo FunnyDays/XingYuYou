@@ -21,7 +21,7 @@
         android:paddingRight="3dp">
 
         <com.xingyuyou.xingyuyou.weight.CircleImageView
-            android:id="@+id/photo"
+            android:id="@+id/user_photo"
             android:layout_width="@dimen/profile_picture_size"
             android:layout_height="@dimen/profile_picture_size"
             android:layout_gravity="center_horizontal"
@@ -29,13 +29,13 @@
             android:src="@mipmap/profile_picture"/>
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/user_account_name"
             style="@style/Name"
             android:paddingTop="10dp"
             android:text="黄金玩家"/>
 
         <TextView
-            android:id="@+id/sub_title"
+            android:id="@+id/user_nickname"
             style="@style/SubTitle"
             android:text="等级:10级"/>
 
@@ -67,12 +67,6 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
-                        <ImageView
-                            android:id="@+id/image_one"
-                            android:layout_width="match_parent"
-                            android:layout_height="80dp"
-                            android:src="@drawable/ic_launcher"/>
-
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="20dp"
@@ -80,6 +74,16 @@
                             android:gravity="center"
                             android:text="游戏更新"
                             />
+
+                        <ImageView
+                            android:padding="25dp"
+                            android:id="@+id/image_one"
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:src="@mipmap/gameupdate"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"/>
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -88,10 +92,11 @@
                         android:layout_weight="1">
 
                         <ImageView
+                            android:padding="25dp"
                             android:id="@+id/image_two"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:src="@drawable/ic_launcher"/>
+                            android:src="@mipmap/gamepojie"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -108,10 +113,11 @@
                         android:layout_weight="1">
 
                         <ImageView
+                            android:padding="25dp"
                             android:id="@+id/image_three"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:src="@drawable/ic_launcher"/>
+                            android:src="@mipmap/xiezai"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -135,10 +141,11 @@
                         android:layout_weight="1">
 
                         <ImageView
+                            android:padding="25dp"
                             android:id="@+id/image_four"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:src="@drawable/ic_launcher"/>
+                            android:src="@mipmap/gameshezhi"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -155,10 +162,11 @@
                         android:layout_weight="1">
 
                         <ImageView
+                            android:padding="25dp"
                             android:id="@+id/image_five"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:src="@drawable/ic_launcher"/>
+                            android:src="@mipmap/fankui"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -175,10 +183,11 @@
                         android:layout_weight="1">
 
                         <ImageView
+                            android:padding="25dp"
                             android:id="@+id/image_six"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:src="@drawable/ic_launcher"/>
+                            android:src="@mipmap/fenxaing"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -203,10 +212,11 @@
                         android:layout_weight="1">
 
                         <ImageView
+                            android:padding="25dp"
                             android:id="@+id/image_seven"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:src="@drawable/ic_launcher"/>
+                            android:src="@mipmap/guanyu"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -223,10 +233,11 @@
                         android:layout_weight="1">
 
                         <ImageView
+                            android:padding="25dp"
                             android:id="@+id/image_eight"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:src="@drawable/ic_launcher"/>
+                            android:src="@mipmap/xiazai"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -243,17 +254,18 @@
                         android:layout_weight="1">
 
                         <ImageView
+                            android:padding="25dp"
                             android:id="@+id/image_nine"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:src="@drawable/ic_launcher"/>
+                            android:src="@mipmap/libao"/>
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="20dp"
                             android:layout_below="@id/image_nine"
                             android:gravity="center"
-                            android:text="实用工具"
+                            android:text="我的礼包"
                             />
                     </RelativeLayout>
 

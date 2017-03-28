@@ -7,6 +7,7 @@ public class XingYuInterface {
     public static final String Host="http://xingyuyou.com/app.php/";
     public static final String USER_REGISTER=Host+"User/user_phone_register";
     public static final String USER_LOGIN=Host+"User/user_login";
+    public static final String USER_INFO=Host+"User/user_info";
     public static final String USER_UPDATE_DATA=Host+"User/user_update_data";
     public static final String FORGET_PASSWORD=Host+"User/forget_password";
     public static final String SEND_SMS=Host+"User/send_sms";

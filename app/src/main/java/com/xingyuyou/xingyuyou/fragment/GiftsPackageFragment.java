@@ -1,5 +1,6 @@
 package com.xingyuyou.xingyuyou.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,20 +10,26 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
 import com.xingyuyou.xingyuyou.Utils.GlideImageLoader;
+import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.HttpUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.activity.HotGameDetailActivity;
+import com.xingyuyou.xingyuyou.activity.LoginActivity;
 import com.xingyuyou.xingyuyou.adapter.DividerItemDecoration;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.GameGift;
-import com.xingyuyou.xingyuyou.bean.hotgame.GameDetailBean;
 import com.youth.banner.Banner;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -45,16 +52,16 @@ public class GiftsPackageFragment extends BaseFragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
-    private List<String> mDatas = new ArrayList<>();
-    private CommonAdapter<String> mAdapter;
+    private List<GameGift> mDatas = new ArrayList<>();
+    private CommonAdapter<GameGift> mAdapter;
     private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
-    private List<GameGift> mGameGiftList =null;
+    private List<GameGift> mGameGiftList = new ArrayList<>();
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            Log.e("search",msg.obj.toString());
+            if (msg.obj == null)return;
+            Log.e("search", msg.obj.toString());
             JSONObject jo = null;
-            mGameGiftList =new ArrayList<>();
             try {
                 jo = new JSONObject(msg.obj.toString());
                 JSONArray ja = jo.getJSONArray("list");
@@ -74,11 +81,13 @@ public class GiftsPackageFragment extends BaseFragment {
      * 展示数据
      */
     private void setValues() {
-        if (mGameGiftList==null)
+        if (mGameGiftList == null)
             return;
-        for (GameGift gameGift : mGameGiftList) {
+       /* for (GameGift gameGift : mGameGiftList) {
             Log.e("gameGift",gameGift.toString());
-        }
+        }*/
+        mDatas.addAll(mGameGiftList);
+        mAdapter.notifyDataSetChanged();
     }
 
     public static GiftsPackageFragment newInstance(String content) {
@@ -101,36 +110,58 @@ public class GiftsPackageFragment extends BaseFragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        HttpUtils.POST(handler, XingYuInterface.GET_GIFT_LIST,jsonObject.toString(),false);
+        HttpUtils.POST(handler, XingYuInterface.GET_GIFT_LIST, jsonObject.toString(), false);
 
     }
+
     @Override
     protected View initView() {
         initData();
         View view = View.inflate(mActivity, R.layout.fragment_gift, null);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.SwipeRefreshLayout);
         initSwipeRefreshLayout();
-        mRecyclerView = (RecyclerView)view.findViewById(R.id.id_recyclerview);
 
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.id_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
 
-        mAdapter = new CommonAdapter<String>(mActivity, R.layout.item_list, mDatas)
-        {
+        mAdapter = new CommonAdapter<GameGift>(mActivity, R.layout.item_gift_list, mDatas) {
             @Override
-            protected void convert(ViewHolder holder, String s, int position)
-            {
-                holder.setText(R.id.game_name, s + "宣传视频 : " + holder.getAdapterPosition() + " , " + holder.getLayoutPosition());
+            protected void convert(ViewHolder holder, GameGift gameGift, int position) {
+                Glide.with(mActivity).load(gameGift.getIcon()).into((ImageView) holder.getView(R.id.game_pic));
+                holder.setText(R.id.game_name, gameGift.getGame_name());
+                holder.setText(R.id.game_intro, gameGift.getDesribe());
+                holder.setText(R.id.game_type, gameGift.getGiftbag_name());
+                holder.setText(R.id.game_size, gameGift.getGame_size());
+                holder.setText(R.id.tv_gift_number, "剩余数量：" + gameGift.getNovice());
+                Log.e("gameGift", gameGift.toString());
+            }
+
+            @Override
+            public void onViewHolderCreated(ViewHolder holder, View itemView) {
+                super.onViewHolderCreated(holder, itemView);
+                Button button = (Button) holder.getView(R.id.bt_uninstall);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (UserUtils.logined()) {
+                            Toast.makeText(mActivity, "领取成功，请到个人中心查看详情 ", Toast.LENGTH_SHORT).show();
+                        }else {
+                            IntentUtils.startActivity(mActivity, LoginActivity.class);
+                        }
+                    }
+                });
             }
         };
-        initHeaderAndFooter();
-        mRecyclerView.setAdapter(mHeaderAndFooterWrapper);
+        mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Toast.makeText(mActivity, "pos = " + position+ConvertUtils.dp2px(200), Toast.LENGTH_SHORT).show();
-
+                Intent intent = new Intent(mActivity, HotGameDetailActivity.class);
+                intent.putExtra("game_id", mDatas.get(position).getGame_id());
+                intent.putExtra("game_name", mDatas.get(position).getGame_name());
+                startActivity(intent);
             }
 
             @Override
@@ -141,8 +172,7 @@ public class GiftsPackageFragment extends BaseFragment {
         return view;
     }
 
-    private void initHeaderAndFooter()
-    {
+    private void initHeaderAndFooter() {
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mAdapter);
 
         Banner banner = new Banner(mActivity);
@@ -152,6 +182,7 @@ public class GiftsPackageFragment extends BaseFragment {
         mHeaderAndFooterWrapper.addHeaderView(banner);
 
     }
+
     private void initSwipeRefreshLayout() {
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mSwipeRefreshLayout.post(new Runnable() {

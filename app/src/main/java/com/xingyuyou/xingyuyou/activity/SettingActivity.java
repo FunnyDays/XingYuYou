@@ -5,16 +5,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 
 public class SettingActivity extends AppCompatActivity {
 
     private RelativeLayout mUpdate;
     private Toolbar mToolbar;
+    private Button mBtLoginOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +37,21 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+        //检查更新
         mUpdate = (RelativeLayout) findViewById(R.id.rl_check_update);
         mUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
               Toast.makeText(SettingActivity.this, "已经是最新版本", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //退出登录
+        mBtLoginOut = (Button) findViewById(R.id.bt_login_out);
+        mBtLoginOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserUtils.LoginOut();
+                Toast.makeText(SettingActivity.this, "已经退出登录", Toast.LENGTH_SHORT).show();
             }
         });
 

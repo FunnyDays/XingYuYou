@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.lidroid.xutils.HttpUtils;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.SPUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
@@ -49,13 +50,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (!jsonObject.getString("status").equals("1"))
                         return;
                     JSONObject list = jsonObject.getJSONObject("list");
-                    String id = list.getString("id");
-                    String account = list.getString("account");
-                    String nickname = list.getString("nickname");
-                    SPUtils user_data = new SPUtils("user_data");
-                    user_data.putString("id",id);
-                    user_data.putString("account",account);
-                    user_data.putString("nickname",nickname);
+                    UserUtils.Login(list.getString("id"),list.getString("account"),list.getString("nickname"));
                     mLoadingDialog.CancelDialog();
                     finish();
                 } catch (JSONException e) {

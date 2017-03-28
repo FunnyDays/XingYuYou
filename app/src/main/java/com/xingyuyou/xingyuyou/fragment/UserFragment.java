@@ -1,12 +1,19 @@
 package com.xingyuyou.xingyuyou.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.HttpUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
+import com.xingyuyou.xingyuyou.Utils.SPUtils;
+import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.activity.AboutActivity;
 import com.xingyuyou.xingyuyou.activity.DownLoadActivity;
 import com.xingyuyou.xingyuyou.activity.FeedBackActivity;
@@ -14,7 +21,11 @@ import com.xingyuyou.xingyuyou.activity.LoginActivity;
 import com.xingyuyou.xingyuyou.activity.TestActivity;
 import com.xingyuyou.xingyuyou.activity.UninstallAppActivity;
 import com.xingyuyou.xingyuyou.activity.SettingActivity;
+import com.xingyuyou.xingyuyou.activity.UserInfoActivity;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Administrator on 2016/6/28.
@@ -31,6 +42,8 @@ public class UserFragment extends BaseFragment {
     private ImageView mGameDownload;
     private ImageView mAppShare;
     private ImageView mAboutXingYu;
+    private TextView mTvAccountName;
+    private TextView mTvUserName;
 
     public static UserFragment newInstance(String content) {
         Bundle args = new Bundle();
@@ -51,12 +64,28 @@ public class UserFragment extends BaseFragment {
     @Override
     protected View initView() {
         View view = View.inflate(mActivity, R.layout.fragment_user, null);
+        //显示用户信息
+        if (UserUtils.logined()) {
+            SPUtils user_data = new SPUtils("user_data");
+            String id = user_data.getString("id");
+            String account = user_data.getString("account");
+            String nickname = user_data.getString("nickname");
+            TextView tvUserAccountName = (TextView) view.findViewById(R.id.user_account_name);
+            TextView tvNickName = (TextView) view.findViewById(R.id.user_nickname);
+            tvUserAccountName.setText(account);
+            tvNickName.setText(nickname);
+        }
+
         //登录
-        mUserPhoto = (ImageView) view.findViewById(R.id.photo);
+        mUserPhoto = (ImageView) view.findViewById(R.id.user_photo);
         mUserPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(mActivity, LoginActivity.class);
+                if (UserUtils.logined()) {
+                    IntentUtils.startActivity(mActivity, UserInfoActivity.class);
+                } else {
+                    IntentUtils.startActivity(mActivity, LoginActivity.class);
+                }
             }
         });
         //游戏更新
