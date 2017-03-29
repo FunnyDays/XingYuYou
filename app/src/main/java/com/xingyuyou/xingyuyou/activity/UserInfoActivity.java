@@ -19,12 +19,16 @@ import android.widget.Toast;
 
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.HttpUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.SPUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 public class UserInfoActivity extends AppCompatActivity {
 
@@ -45,6 +49,7 @@ public class UserInfoActivity extends AppCompatActivity {
         }
     };
     private String mUserId;
+    private Button mBtLoginOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +79,8 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     private void initView() {
+
+
         mTvNickname = (TextView) findViewById(R.id.tv_nick_name);
         mTvNickname.setText(mNicknameText);
 
@@ -88,7 +95,8 @@ public class UserInfoActivity extends AppCompatActivity {
         mRlNickName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAlertDialog.show();
+                Toast.makeText(UserInfoActivity.this, "该功能暂未开放", Toast.LENGTH_SHORT).show();
+                //mAlertDialog.show();
             }
         });
         mRlUserSex = (RelativeLayout) findViewById(R.id.rl_user_sex);
@@ -96,6 +104,17 @@ public class UserInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(UserInfoActivity.this, "该功能暂未开放", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //退出登录
+        mBtLoginOut = (Button) findViewById(R.id.bt_login_out);
+        mBtLoginOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserUtils.LoginOut();
+                finish();
+                Toast.makeText(UserInfoActivity.this, "已经退出登录", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -118,16 +137,17 @@ public class UserInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mAlertDialog.dismiss();
-                Editable editTextText = editText.getText();
+                String editTextText = editText.getText().toString().trim();
                 mTvNickname.setText(editTextText);
 
                 JSONObject jsonObject = new JSONObject();
                 try {
                     jsonObject.put("user_id", String.valueOf(mUserId));
-                   // jsonObject.put("code", String.valueOf(2));
+                    jsonObject.put("code", String.valueOf(2));
                     jsonObject.put("nickname", String.valueOf(editTextText));
-                   // jsonObject.put("password_again", String.valueOf("qqqqqq"));
-                    Log.e("login",mUserId+editTextText);
+                    jsonObject.put("phone", "18291910677");
+                    jsonObject.put("password_again", String.valueOf("qqqqqq"));
+                    Log.e("login",mUserId+"----"+editTextText);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -135,10 +155,6 @@ public class UserInfoActivity extends AppCompatActivity {
                 HttpUtils.POST(mHandler, XingYuInterface.USER_UPDATE_DATA,jsonObject.toString(),true);
             }
         });
-
-
-
-
     }
 
 

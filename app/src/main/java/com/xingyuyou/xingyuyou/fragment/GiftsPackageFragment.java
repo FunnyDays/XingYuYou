@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
+import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,11 +54,14 @@ public class GiftsPackageFragment extends BaseFragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
+    private Toolbar mToolbar;
     private List<GameGift> mDatas = new ArrayList<>();
     private CommonAdapter<GameGift> mAdapter;
     private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
     private List<GameGift> mGameGiftList = new ArrayList<>();
-    Handler handler = new Handler() {
+    private LoadMoreWrapper mLoadMoreWrapper;
+
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.obj == null)return;
@@ -77,6 +82,7 @@ public class GiftsPackageFragment extends BaseFragment {
         }
     };
 
+
     /**
      * 展示数据
      */
@@ -86,7 +92,7 @@ public class GiftsPackageFragment extends BaseFragment {
        /* for (GameGift gameGift : mGameGiftList) {
             Log.e("gameGift",gameGift.toString());
         }*/
-        mDatas.addAll(mGameGiftList);
+        //mDatas.addAll(mGameGiftList);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -104,6 +110,12 @@ public class GiftsPackageFragment extends BaseFragment {
      */
     @Override
     public void initData() {
+        for (int i = 0; i < 9; i++)
+        {
+            GameGift gameGift = new GameGift();
+            gameGift.setGame_name(i+":id游戏");
+            mDatas.add(gameGift);
+        }
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("file_type", String.valueOf(1));
@@ -118,12 +130,14 @@ public class GiftsPackageFragment extends BaseFragment {
     protected View initView() {
         initData();
         View view = View.inflate(mActivity, R.layout.fragment_gift, null);
+        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        mToolbar.setTitle("领取礼包");
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.SwipeRefreshLayout);
         initSwipeRefreshLayout();
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.id_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
+        //mRecyclerView.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
 
         mAdapter = new CommonAdapter<GameGift>(mActivity, R.layout.item_gift_list, mDatas) {
             @Override
@@ -153,7 +167,6 @@ public class GiftsPackageFragment extends BaseFragment {
                 });
             }
         };
-        mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
@@ -169,7 +182,44 @@ public class GiftsPackageFragment extends BaseFragment {
                 return false;
             }
         });
+        //加载更多
+        LoadMore();
         return view;
+    }
+
+    private void LoadMore() {
+        mLoadMoreWrapper = new LoadMoreWrapper(mAdapter);
+        mLoadMoreWrapper.setLoadMoreView(R.layout.default_loading);
+        mLoadMoreWrapper.setOnLoadMoreListener(new LoadMoreWrapper.OnLoadMoreListener()
+        {
+            @Override
+            public void onLoadMoreRequested()
+            {
+                for (int i = 0; i < 9; i++)
+                {
+                    GameGift gameGift = new GameGift();
+                    gameGift.setGame_name(i+":id游戏");
+                    mDatas.add(gameGift);
+                }
+                new Handler().postDelayed(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        for (int i = 0; i < 9; i++)
+                        {
+                            GameGift gameGift = new GameGift();
+                            gameGift.setGame_name(i+":id游戏");
+                            mDatas.add(gameGift);
+                        }
+                        mLoadMoreWrapper.notifyDataSetChanged();
+
+                    }
+                }, 3000);
+                Toast.makeText(mActivity, "加载更多", Toast.LENGTH_SHORT).show();
+            }
+        });
+        mRecyclerView.setAdapter(mLoadMoreWrapper);
     }
 
     private void initHeaderAndFooter() {

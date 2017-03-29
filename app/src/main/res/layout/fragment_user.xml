@@ -32,12 +32,12 @@
             android:id="@+id/user_account_name"
             style="@style/Name"
             android:paddingTop="10dp"
-            android:text="黄金玩家"/>
+            android:text="账号"/>
 
         <TextView
             android:id="@+id/user_nickname"
             style="@style/SubTitle"
-            android:text="等级:10级"/>
+            android:text="昵称"/>
 
         <ScrollView
             android:paddingBottom="58dp"

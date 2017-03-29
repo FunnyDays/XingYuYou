@@ -91,6 +91,8 @@
         </activity>
         <activity android:name=".activity.UserInfoActivity">
         </activity>
+        <activity android:name=".activity.MyGiftActivity">
+        </activity>
     </application>
 
 </manifest>

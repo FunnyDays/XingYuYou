@@ -91,5 +91,12 @@
             android:layout_centerVertical="true"
            android:text="男"/>
     </RelativeLayout>
-
+    <Button
+        android:layout_margin="10dp"
+        android:text="退出登录"
+        android:padding="10dp"
+        android:background="@android:color/holo_red_light"
+        android:id="@+id/bt_login_out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

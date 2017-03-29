@@ -45,15 +45,7 @@ public class SettingActivity extends AppCompatActivity {
               Toast.makeText(SettingActivity.this, "已经是最新版本", Toast.LENGTH_SHORT).show();
             }
         });
-        //退出登录
-        mBtLoginOut = (Button) findViewById(R.id.bt_login_out);
-        mBtLoginOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                UserUtils.LoginOut();
-                Toast.makeText(SettingActivity.this, "已经退出登录", Toast.LENGTH_SHORT).show();
-            }
-        });
+
 
     }
 

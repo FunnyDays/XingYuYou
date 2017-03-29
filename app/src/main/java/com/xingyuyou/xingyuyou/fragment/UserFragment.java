@@ -18,6 +18,7 @@ import com.xingyuyou.xingyuyou.activity.AboutActivity;
 import com.xingyuyou.xingyuyou.activity.DownLoadActivity;
 import com.xingyuyou.xingyuyou.activity.FeedBackActivity;
 import com.xingyuyou.xingyuyou.activity.LoginActivity;
+import com.xingyuyou.xingyuyou.activity.MyGiftActivity;
 import com.xingyuyou.xingyuyou.activity.TestActivity;
 import com.xingyuyou.xingyuyou.activity.UninstallAppActivity;
 import com.xingyuyou.xingyuyou.activity.SettingActivity;
@@ -153,13 +154,16 @@ public class UserFragment extends BaseFragment {
                 IntentUtils.startActivity(mActivity, DownLoadActivity.class);
             }
         });
-        //实用工具
+        //我的礼包
         mTool = (ImageView) view.findViewById(R.id.image_nine);
         mTool.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mActivity, "测试", Toast.LENGTH_SHORT).show();
-                IntentUtils.startActivity(mActivity, TestActivity.class);
+                if (!UserUtils.logined()) {
+                    IntentUtils.startActivity(mActivity, LoginActivity.class);
+                } else {
+                    IntentUtils.startActivity(mActivity, MyGiftActivity.class);
+                }
             }
         });
 
