@@ -32,4 +32,20 @@ public class UserUtils {
         user_data.putString("account",account);
         user_data.putString("nickname",nickname);
     }
+    public static String getUserId(){
+        if (logined()){
+            user_data = new SPUtils("user_data");
+            String id = user_data.getString("id");
+            return id;
+        }
+        return "没有登录";
+    }
+    public static String getUserAccount(){
+        if (logined()){
+            user_data = new SPUtils("user_data");
+            String account = user_data.getString("account");
+            return account;
+        }
+        return "没有登录";
+    }
 }

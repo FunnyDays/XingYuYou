@@ -135,10 +135,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onError(Throwable arg0, boolean arg1) {
                 Log.e("POST错误信息", arg0.toString());
+                mLoadingDialog.dismissDialog();
             }
 
             @Override
             public void onFinished() {
+
                 Log.e("POST错误信息","onFinished" );
             }
 

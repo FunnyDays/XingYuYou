@@ -8,15 +8,17 @@ public class HotGameBean {
     public HotGameBean() {
     }
 
-    public HotGameBean(String id, String game_name, String icon, String game_size, String game_type_id, String dow_num, String introduction, String and_dow_address, String recommend_status) {
+    public HotGameBean(String id, String game_name, String icon, String game_size, String game_type_id, String dow_num, String features, String introduction, String and_dow_address, String add_game_address, String recommend_status) {
         this.id = id;
         this.game_name = game_name;
         this.icon = icon;
         this.game_size = game_size;
         this.game_type_id = game_type_id;
         this.dow_num = dow_num;
+        this.features = features;
         this.introduction = introduction;
         this.and_dow_address = and_dow_address;
+        this.add_game_address = add_game_address;
         this.recommend_status = recommend_status;
     }
 
@@ -29,6 +31,7 @@ public class HotGameBean {
      * dow_num : 0
      * introduction : 地铁跑酷是一款超炫酷的3D竖版跑酷手游，总注册用户高达2.4亿，游戏画面绚丽精致，色彩丰富让人感觉舒服，操作上非常流畅，本次版本更新来到南半球非洲国度马达加斯加，一起来畅游这自然风光美美的非洲大岛吧！破解的游戏版本是无限金币和无限钥匙，叫上小伙伴来下载随意玩吧。
      * and_dow_address : http://xingyuyou.com./Uploads/SourcePack/20170308144303_918.apk
+     * add_game_address : http://xingyuyou.com./Uploads/SourcePack/20170308144303_918.apk
      * recommend_status : 2
      */
 
@@ -38,8 +41,10 @@ public class HotGameBean {
     private String game_size;
     private String game_type_id;
     private String dow_num;
+    private String features;
     private String introduction;
     private String and_dow_address;
+    private String add_game_address;
     private String recommend_status;
 
     public String getId() {
@@ -54,8 +59,24 @@ public class HotGameBean {
         return game_name;
     }
 
+    public String getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(String features) {
+        this.features = features;
+    }
+
     public void setGame_name(String game_name) {
         this.game_name = game_name;
+    }
+
+    public String getAdd_game_address() {
+        return add_game_address;
+    }
+
+    public void setAdd_game_address(String add_game_address) {
+        this.add_game_address = add_game_address;
     }
 
     public String getIcon() {
@@ -123,8 +144,10 @@ public class HotGameBean {
                 ", game_size='" + game_size + '\'' +
                 ", game_type_id='" + game_type_id + '\'' +
                 ", dow_num='" + dow_num + '\'' +
+                ", features='" + features + '\'' +
                 ", introduction='" + introduction + '\'' +
                 ", and_dow_address='" + and_dow_address + '\'' +
+                ", add_game_address='" + add_game_address + '\'' +
                 ", recommend_status='" + recommend_status + '\'' +
                 '}';
     }

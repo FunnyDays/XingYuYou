@@ -1,16 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_my_gift"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.xingyuyou.xingyuyou.activity.MyGiftActivity">
+
     <include
         layout="@layout/toolbar"/>
-<TextView
-    android:gravity="center"
 
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"/>
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/SwipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/id_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
+        <TextView
+            android:id="@+id/tv_libao"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:drawablePadding="20dp"
+            android:drawableTint="@color/colorPrimary"
+            android:drawableTop="@mipmap/wulibao"
+            android:gravity="center"
+            android:text="暂时没有礼包"/>
+    </RelativeLayout>
+</LinearLayout>

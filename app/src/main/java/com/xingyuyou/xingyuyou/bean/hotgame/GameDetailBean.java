@@ -18,6 +18,7 @@ public class GameDetailBean {
      * game_size : 61.95MB
      * dow_num : 0
      * and_dow_address : http://xingyuyou.com./Uploads/SourcePack/20170308144303_918.apk
+     * add_game_address : http://xingyuyou.com./Uploads/SourcePack/20170308144303_918.apk
      * introduction : 地铁跑酷是一款超炫酷的3D竖版跑酷手游，总注册用户高达2.4亿，游戏画面绚丽精致，色彩丰富让人感觉舒服，操作上非常流畅，本次版本更新来到南半球非洲国度马达加斯加，一起来畅游这自然风光美美的非洲大岛吧！破解的游戏版本是无限金币和无限钥匙，叫上小伙伴来下载随意玩吧。
      * recommend_status : 2
      * open_name : null
@@ -31,6 +32,7 @@ public class GameDetailBean {
     private String game_size;
     private String dow_num;
     private String and_dow_address;
+    private String add_game_address;
     private String introduction;
     private String recommend_status;
     private Object open_name;
@@ -51,7 +53,13 @@ public class GameDetailBean {
     public void setGame_name(String game_name) {
         this.game_name = game_name;
     }
+    public String getAdd_game_address() {
+        return add_game_address;
+    }
 
+    public void setAdd_game_address(String add_game_address) {
+        this.add_game_address = add_game_address;
+    }
     public String getVersion() {
         return version;
     }
@@ -143,6 +151,7 @@ public class GameDetailBean {
                 ", game_size='" + game_size + '\'' +
                 ", dow_num='" + dow_num + '\'' +
                 ", and_dow_address='" + and_dow_address + '\'' +
+                ", add_game_address='" + add_game_address + '\'' +
                 ", introduction='" + introduction + '\'' +
                 ", recommend_status='" + recommend_status + '\'' +
                 ", open_name=" + open_name +

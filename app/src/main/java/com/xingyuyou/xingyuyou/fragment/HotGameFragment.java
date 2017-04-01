@@ -122,6 +122,7 @@ public class HotGameFragment extends BaseFragment {
         }
     };
     private Banner mBanner;
+    private int lastItem;
 
 
     public static HotGameFragment newInstance(String content) {
@@ -251,6 +252,20 @@ public class HotGameFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+       /* mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+                lastItem = firstVisibleItem + visibleItemCount - 1 ;
+                // TODO Auto-generated method stub
+            }
+            public void onScrollStateChanged(AbsListView view,
+                                             int scrollState) {
+                if (lastItem == downloadListAdapter.getCount() && scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+
+                    downloadListAdapter.notifyDataSetChanged();
+                }
+            }
+        });*/
     }
 
     private class DownloadListAdapter extends BaseAdapter {
@@ -283,11 +298,11 @@ public class HotGameFragment extends BaseFragment {
             DownloadItemViewHolder holder = null;
             DownloadInfo downloadInfo = null;
             downloadInfo = new DownloadInfo();
-            downloadInfo.setUrl(mHotGameList.get(i).getAnd_dow_address());
+            downloadInfo.setUrl(mHotGameList.get(i).getAdd_game_address());
             downloadInfo.setGameSize(mHotGameList.get(i).getGame_size());
             downloadInfo.setGamePicUrl(mHotGameList.get(i).getIcon());
             downloadInfo.setLabel(mHotGameList.get(i).getGame_name());
-            downloadInfo.setGameIntro(mHotGameList.get(i).getIntroduction());
+            downloadInfo.setGameIntro(mHotGameList.get(i).getFeatures());
             downloadInfo.setFileSavePath(FileUtils.fileSavePath + mHotGameList.get(i).getGame_name() + ".apk");
             downloadInfo.setAutoResume(true);
             downloadInfo.setAutoRename(false);

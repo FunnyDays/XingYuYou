@@ -135,7 +135,7 @@ public class UserFragment extends BaseFragment {
         mAppShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(mActivity, FeedBackActivity.class);
+                IntentUtils.startActivity(mActivity, TestActivity.class);
             }
         });
         //关于星宇

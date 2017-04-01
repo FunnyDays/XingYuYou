@@ -72,7 +72,7 @@
                             android:layout_height="20dp"
                             android:layout_below="@id/image_one"
                             android:gravity="center"
-                            android:text="游戏更新"
+                            android:text="游戏工具"
                             />
 
                         <ImageView
@@ -80,7 +80,7 @@
                             android:id="@+id/image_one"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:src="@mipmap/gameupdate"
+                            android:src="@mipmap/gongju"
                             android:layout_alignParentTop="true"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"/>
@@ -166,7 +166,7 @@
                             android:id="@+id/image_five"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:src="@mipmap/fankui"/>
+                            android:src="@mipmap/fenxaing"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -187,7 +187,8 @@
                             android:id="@+id/image_six"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:src="@mipmap/fenxaing"/>
+                            android:src="@mipmap/fankui"
+                            />
 
                         <TextView
                             android:layout_width="match_parent"

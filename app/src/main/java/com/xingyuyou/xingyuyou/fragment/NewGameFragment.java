@@ -286,9 +286,9 @@ public class NewGameFragment extends BaseFragment {
             DownloadItemViewHolder holder = null;
             DownloadInfo downloadInfo = null;
             downloadInfo = new DownloadInfo();
-            downloadInfo.setUrl(mHotGameList.get(i).getAnd_dow_address());
+            downloadInfo.setUrl(mHotGameList.get(i).getAdd_game_address());
             downloadInfo.setGameSize(mHotGameList.get(i).getGame_size());
-            downloadInfo.setGameIntro(mHotGameList.get(i).getIntroduction());
+            downloadInfo.setGameIntro(mHotGameList.get(i).getFeatures());
             downloadInfo.setGamePicUrl(mHotGameList.get(i).getIcon());
             downloadInfo.setLabel(mHotGameList.get(i).getGame_name());
             downloadInfo.setFileSavePath(FileUtils.fileSavePath + mHotGameList.get(i).getGame_name() + ".apk");

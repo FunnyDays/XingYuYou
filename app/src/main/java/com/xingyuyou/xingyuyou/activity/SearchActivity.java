@@ -132,7 +132,7 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return 4;
+            return 0;
         }
 
         class ItemViewHolder extends RecyclerView.ViewHolder {

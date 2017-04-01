@@ -16,6 +16,8 @@ import android.text.format.Formatter;
 import android.util.Log;
 
 
+import org.json.JSONException;
+
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -54,7 +56,12 @@ public class AppUtils {
      * @param filePath 文件路径
      */
     public static void installApp(Context context, String filePath) {
-        installApp(context, FileUtils.getFileByPath(filePath));
+        try {
+            installApp(context, FileUtils.getFileByPath(filePath));
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**

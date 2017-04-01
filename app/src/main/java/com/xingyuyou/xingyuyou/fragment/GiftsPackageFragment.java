@@ -10,9 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -20,30 +18,35 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
-import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
-import com.xingyuyou.xingyuyou.Utils.GlideImageLoader;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.HttpUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.activity.HotGameDetailActivity;
 import com.xingyuyou.xingyuyou.activity.LoginActivity;
-import com.xingyuyou.xingyuyou.adapter.DividerItemDecoration;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.GameGift;
+import com.xingyuyou.xingyuyou.bean.HotBannerBean;
 import com.youth.banner.Banner;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
 
 
 /**
@@ -60,24 +63,44 @@ public class GiftsPackageFragment extends BaseFragment {
     private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
     private List<GameGift> mGameGiftList = new ArrayList<>();
     private LoadMoreWrapper mLoadMoreWrapper;
-
+    private int mPageNumber = 1;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.obj == null)return;
-            Log.e("search", msg.obj.toString());
-            JSONObject jo = null;
-            try {
-                jo = new JSONObject(msg.obj.toString());
-                JSONArray ja = jo.getJSONArray("list");
-                // Log.e("hot", "解析数据："+  ja.toString());
-                Gson gson = new Gson();
-                mGameGiftList = gson.fromJson(ja.toString(),
-                        new TypeToken<List<GameGift>>() {
-                        }.getType());
-                setValues();
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if (msg.obj == null) return;
+            if (msg.what==2){
+                JSONObject jo = null;
+                try {
+                    jo = new JSONObject(msg.obj.toString());
+                    if (jo.getString("status").equals("1")) {
+                        Toast.makeText(mActivity, "领取成功，请到个人中心查看详情 ", Toast.LENGTH_SHORT).show();
+                    }
+                    if (jo.getString("status").equals("2")) {
+                        Toast.makeText(mActivity, "您已经领取过这个礼包，请到个人中心查看详情 ", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            if (msg.what==1){
+                if (msg.obj.toString().contains("{\"list\":null}")) {
+                    Toast.makeText(mActivity, "已经没有更多数据", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Log.e("gift2", msg.obj.toString());
+                JSONObject jo = null;
+                try {
+                    jo = new JSONObject(msg.obj.toString());
+                    JSONArray ja = jo.getJSONArray("list");
+                    Gson gson = new Gson();
+                    mGameGiftList = gson.fromJson(ja.toString(),
+                            new TypeToken<List<GameGift>>() {
+                            }.getType());
+                    setValues();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
     };
@@ -87,13 +110,23 @@ public class GiftsPackageFragment extends BaseFragment {
      * 展示数据
      */
     private void setValues() {
-        if (mGameGiftList == null)
+        if (mPageNumber == 1) {
+            mPageNumber++;
+            mDatas.clear();
+        }
+        if (mGameGiftList == null || mGameGiftList.size() == 0)
             return;
        /* for (GameGift gameGift : mGameGiftList) {
             Log.e("gameGift",gameGift.toString());
         }*/
-        //mDatas.addAll(mGameGiftList);
-        mAdapter.notifyDataSetChanged();
+        mDatas.addAll(mGameGiftList);
+        if (mDatas.size() <= 10) {
+            mLoadMoreWrapper.notifyDataSetChanged();
+
+        } else {
+            mLoadMoreWrapper.notifyDataSetChanged();
+
+        }
     }
 
     public static GiftsPackageFragment newInstance(String content) {
@@ -110,25 +143,25 @@ public class GiftsPackageFragment extends BaseFragment {
      */
     @Override
     public void initData() {
-        for (int i = 0; i < 9; i++)
-        {
-            GameGift gameGift = new GameGift();
-            gameGift.setGame_name(i+":id游戏");
-            mDatas.add(gameGift);
-        }
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("file_type", String.valueOf(1));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        HttpUtils.POST(handler, XingYuInterface.GET_GIFT_LIST, jsonObject.toString(), false);
-
+        OkHttpUtils.post()//
+                .url(XingYuInterface.ROTATION_IMG)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Log.e("hot", e.toString() + ":e");
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.e("lunbo", response + "");
+                        handler.obtainMessage(2, response).sendToTarget();
+                    }
+                });
     }
 
     @Override
     protected View initView() {
-        initData();
         View view = View.inflate(mActivity, R.layout.fragment_gift, null);
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         mToolbar.setTitle("领取礼包");
@@ -141,7 +174,7 @@ public class GiftsPackageFragment extends BaseFragment {
 
         mAdapter = new CommonAdapter<GameGift>(mActivity, R.layout.item_gift_list, mDatas) {
             @Override
-            protected void convert(ViewHolder holder, GameGift gameGift, int position) {
+            protected void convert(ViewHolder holder, final GameGift gameGift, final int position) {
                 Glide.with(mActivity).load(gameGift.getIcon()).into((ImageView) holder.getView(R.id.game_pic));
                 holder.setText(R.id.game_name, gameGift.getGame_name());
                 holder.setText(R.id.game_intro, gameGift.getDesribe());
@@ -149,22 +182,23 @@ public class GiftsPackageFragment extends BaseFragment {
                 holder.setText(R.id.game_size, gameGift.getGame_size());
                 holder.setText(R.id.tv_gift_number, "剩余数量：" + gameGift.getNovice());
                 Log.e("gameGift", gameGift.toString());
-            }
-
-            @Override
-            public void onViewHolderCreated(ViewHolder holder, View itemView) {
-                super.onViewHolderCreated(holder, itemView);
                 Button button = (Button) holder.getView(R.id.bt_uninstall);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (UserUtils.logined()) {
-                            Toast.makeText(mActivity, "领取成功，请到个人中心查看详情 ", Toast.LENGTH_SHORT).show();
-                        }else {
+                            getData(2,gameGift.getGiftid());
+                        } else {
                             IntentUtils.startActivity(mActivity, LoginActivity.class);
                         }
                     }
                 });
+            }
+
+            @Override
+            public void onViewHolderCreated(ViewHolder holder, View itemView) {
+                super.onViewHolderCreated(holder, itemView);
+
             }
         };
 
@@ -182,41 +216,35 @@ public class GiftsPackageFragment extends BaseFragment {
                 return false;
             }
         });
+        //头布局
+       // initHeaderAndFooter();
         //加载更多
         LoadMore();
         return view;
     }
 
+    /**
+     * 领取礼包 GET_GIFT_LIST
+     */
+    private void getGift(String params) {
+        HttpUtils.POST(handler,XingYuInterface.GET_GIFT_LIST,params,false);
+    }
+
     private void LoadMore() {
         mLoadMoreWrapper = new LoadMoreWrapper(mAdapter);
         mLoadMoreWrapper.setLoadMoreView(R.layout.default_loading);
-        mLoadMoreWrapper.setOnLoadMoreListener(new LoadMoreWrapper.OnLoadMoreListener()
-        {
+        mLoadMoreWrapper.setOnLoadMoreListener(new LoadMoreWrapper.OnLoadMoreListener() {
             @Override
-            public void onLoadMoreRequested()
-            {
-                for (int i = 0; i < 9; i++)
-                {
-                    GameGift gameGift = new GameGift();
-                    gameGift.setGame_name(i+":id游戏");
-                    mDatas.add(gameGift);
-                }
-                new Handler().postDelayed(new Runnable()
-                {
+            public void onLoadMoreRequested() {
+                getData(1,null);
+                mPageNumber++;
+                new Handler().postDelayed(new Runnable() {
                     @Override
-                    public void run()
-                    {
-                        for (int i = 0; i < 9; i++)
-                        {
-                            GameGift gameGift = new GameGift();
-                            gameGift.setGame_name(i+":id游戏");
-                            mDatas.add(gameGift);
-                        }
-                        mLoadMoreWrapper.notifyDataSetChanged();
-
+                    public void run() {
+                        //mLoadMoreWrapper.notifyDataSetChanged();
                     }
                 }, 3000);
-                Toast.makeText(mActivity, "加载更多", Toast.LENGTH_SHORT).show();
+
             }
         });
         mRecyclerView.setAdapter(mLoadMoreWrapper);
@@ -224,12 +252,8 @@ public class GiftsPackageFragment extends BaseFragment {
 
     private void initHeaderAndFooter() {
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mAdapter);
-
-        Banner banner = new Banner(mActivity);
-        FrameLayout.LayoutParams layoutParams = new Banner.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ConvertUtils.dp2px(200));
-        banner.setLayoutParams(layoutParams);
-        banner.setImages(mDatas).setImageLoader(new GlideImageLoader()).start();
-        mHeaderAndFooterWrapper.addHeaderView(banner);
+        //轮播图设置
+        mHeaderAndFooterWrapper.addHeaderView(null);
 
     }
 
@@ -249,10 +273,10 @@ public class GiftsPackageFragment extends BaseFragment {
         });
         //下拉刷新
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
             @Override
             public void onRefresh() {
-
+                mPageNumber = 1;
+                getData(1,null);
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -264,5 +288,42 @@ public class GiftsPackageFragment extends BaseFragment {
 
     }
 
+    private void getData(final int type, String giftid) {
+        RequestParams params=null;
+        if (type==2){
+            params = new RequestParams(XingYuInterface.RCEIVE_GIFT);
+            params.addParameter("mid", UserUtils.getUserId());
+            params.addParameter("giftid", giftid);
+        }else {
+            params = new RequestParams(XingYuInterface.GET_GIFT_LIST);
+            params.addParameter("limit", mPageNumber);
+        }
+        x.http().post(params, new Callback.CacheCallback<String>() {
+            @Override
+            public void onCancelled(CancelledException arg0) {
+            }
+
+            @Override
+            public void onError(Throwable arg0, boolean arg1) {
+                Log.e("gift", arg0.toString());
+
+            }
+
+            @Override
+            public void onFinished() {
+            }
+
+            @Override
+            public void onSuccess(String json) {
+                Log.e("gift", json);
+                handler.obtainMessage(type, json).sendToTarget();
+            }
+
+            @Override
+            public boolean onCache(String json) {
+                return true;
+            }
+        });
+    }
 
 }

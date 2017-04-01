@@ -282,9 +282,9 @@ public class RecommendGameFragment extends BaseFragment {
             DownloadItemViewHolder holder = null;
             DownloadInfo downloadInfo = null;
             downloadInfo = new DownloadInfo();
-            downloadInfo.setUrl(mHotGameList.get(i).getAnd_dow_address());
+            downloadInfo.setUrl(mHotGameList.get(i).getAdd_game_address());
             downloadInfo.setGameSize(mHotGameList.get(i).getGame_size());
-            downloadInfo.setGameIntro(mHotGameList.get(i).getIntroduction());
+            downloadInfo.setGameIntro(mHotGameList.get(i).getFeatures());
             downloadInfo.setGamePicUrl(mHotGameList.get(i).getIcon());
             downloadInfo.setLabel(mHotGameList.get(i).getGame_name());
             downloadInfo.setFileSavePath(FileUtils.fileSavePath + mHotGameList.get(i).getGame_name() + ".apk");
@@ -334,6 +334,8 @@ public class RecommendGameFragment extends BaseFragment {
         ImageView gamePic;
         @ViewInject(R.id.game_size)
         TextView gameSize;
+        @ViewInject(R.id.game_intro)
+        TextView gameIntro;
         @ViewInject(R.id.download_state)
         TextView state;
         @ViewInject(R.id.pb_progressbar)
@@ -442,6 +444,7 @@ public class RecommendGameFragment extends BaseFragment {
         public void refresh() {
             gameSize.setText(downloadInfo.getGameSize());
             label.setText(downloadInfo.getLabel());
+            gameIntro.setText(downloadInfo.getGameIntro());
             //state.setText(downloadInfo.getState().toString());
             Glide.with(mActivity).load(downloadInfo.getGamePicUrl()).into(gamePic);
             progressBar.setProgress(downloadInfo.getProgress());

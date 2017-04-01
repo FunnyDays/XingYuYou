@@ -18,6 +18,8 @@ public class XingYuInterface {
     public static final String ROTATION_IMG=Host+"Server/rotation_img";
     public static final String GET_GIFT_LIST=Host+"Server/get_gift_list";
     public static final String MY_GIFT=Host+"Server/my_gift";
+    public static final String RCEIVE_GIFT=Host+"Server/receive_gift";
+    public static final String ABOUT_US=Host+"Server/about_us";
 
 
 }

@@ -1,10 +1,10 @@
 package com.xingyuyou.xingyuyou.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,7 +20,6 @@ import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.GameDetailPicAdapter;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameDetailBean;
-import com.xingyuyou.xingyuyou.bean.hotgame.HotGameBean;
 import com.xingyuyou.xingyuyou.weight.ProgressButton;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
