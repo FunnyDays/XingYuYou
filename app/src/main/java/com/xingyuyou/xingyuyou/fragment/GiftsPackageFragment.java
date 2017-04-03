@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -85,6 +87,8 @@ public class GiftsPackageFragment extends BaseFragment {
             }
             if (msg.what==1){
                 if (msg.obj.toString().contains("{\"list\":null}")) {
+                    mLoadingText.setText("没有更多数据");
+                    mPbLoading.setVisibility(View.GONE);
                     Toast.makeText(mActivity, "已经没有更多数据", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -104,6 +108,9 @@ public class GiftsPackageFragment extends BaseFragment {
             }
         }
     };
+    private View mLoading;
+    private TextView mLoadingText;
+    private ProgressBar mPbLoading;
 
 
     /**
@@ -232,7 +239,11 @@ public class GiftsPackageFragment extends BaseFragment {
 
     private void LoadMore() {
         mLoadMoreWrapper = new LoadMoreWrapper(mAdapter);
-        mLoadMoreWrapper.setLoadMoreView(R.layout.default_loading);
+        mLoading = View.inflate(mActivity, R.layout.default_loading, null);
+        //设置底部布局
+        mLoadingText = (TextView) mLoading.findViewById(R.id.loading_text);
+        mPbLoading = (ProgressBar) mLoading.findViewById(R.id.pb_loading);
+        mLoadMoreWrapper.setLoadMoreView(mLoading);
         mLoadMoreWrapper.setOnLoadMoreListener(new LoadMoreWrapper.OnLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {

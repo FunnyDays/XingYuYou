@@ -17,6 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,12 +77,27 @@ public class HotGameFragment extends BaseFragment {
     private DownloadListAdapter downloadListAdapter;
     private ArrayList<Game> mGameArrayList;
     private List<HotGameBean> mHotGameList=new ArrayList<>();
+    private List<HotGameBean> mGameListAdapter=new ArrayList<>();
     private List<HotBannerBean> mHotBannerGameList;
+    private Banner mBanner;
+    private int lastItem;
+    private int  MLOADINGMORE_FLAG = 0;
+    private int  PAGENUMBER = 1;
+    private View mLoading;
+    private TextView mLoadingText;
+    private ProgressBar mPbLoading;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1) {
+                if (msg.obj.toString().contains("{\"list\":null}")) {
+                    Toast.makeText(mActivity, "已经没有更多数据", Toast.LENGTH_SHORT).show();
+                    View noData = View.inflate(mActivity, R.layout.default_no_data, null);
+                    mLoadingText.setText("没有更多数据");
+                    mPbLoading.setVisibility(View.GONE);
+                    return;
+                }
                 String response = (String) msg.obj;
                 JSONObject jo = null;
                 try {
@@ -92,6 +108,9 @@ public class HotGameFragment extends BaseFragment {
                     mHotGameList = gson.fromJson(ja.toString(),
                             new TypeToken<List<HotGameBean>>() {
                             }.getType());
+                    mGameListAdapter.addAll(mHotGameList);
+                    //如果还有数据把加载更多值为0
+                    MLOADINGMORE_FLAG=0;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -121,9 +140,6 @@ public class HotGameFragment extends BaseFragment {
             }
         }
     };
-    private Banner mBanner;
-    private int lastItem;
-
 
     public static HotGameFragment newInstance(String content) {
         Bundle args = new Bundle();
@@ -132,15 +148,21 @@ public class HotGameFragment extends BaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
-
+    @Override
+    protected View initView() {
+        initBannerData();
+        initData(PAGENUMBER);
+        View view = View.inflate(mActivity, R.layout.fragment_hot_game, null);
+        return view;
+    }
 
     /**
      * 初始化数据
      */
-    @Override
-    public void initData() {
-        Log.e("hot", "121第一次初始化数据");
+
+    public void initData(int PAGENUMBER) {
         OkHttpUtils.post()//
+                .addParams("limit",String.valueOf(PAGENUMBER))
                 .url(XingYuInterface.GET_GAME_LIST + "/type/top")
                 .tag(this)//
                 .build()//
@@ -154,6 +176,9 @@ public class HotGameFragment extends BaseFragment {
                         handler.obtainMessage(1, response).sendToTarget();
                     }
                 });
+    }
+
+    private void initBannerData() {
         OkHttpUtils.post()//
                 .url(XingYuInterface.ROTATION_IMG)
                 .tag(this)//
@@ -169,14 +194,6 @@ public class HotGameFragment extends BaseFragment {
                         handler.obtainMessage(2, response).sendToTarget();
                     }
                 });
-
-    }
-
-    @Override
-    protected View initView() {
-        initData();
-        View view = View.inflate(mActivity, R.layout.fragment_hot_game, null);
-        return view;
     }
 
     @Override
@@ -238,6 +255,11 @@ public class HotGameFragment extends BaseFragment {
         //添加头布局
         mListView.addHeaderView(mBanner);
         mListView.addHeaderView(headerViewTwo);
+        //设置底部布局
+        mLoading = View.inflate(mActivity, R.layout.default_loading, null);
+        mLoadingText = (TextView) mLoading.findViewById(R.id.loading_text);
+        mPbLoading = (ProgressBar) mLoading.findViewById(R.id.pb_loading);
+        mListView.addFooterView(mLoading);
         mListView.setDividerHeight(0);
         downloadManager = DownloadManager.getInstance();
         downloadListAdapter = new DownloadListAdapter();
@@ -246,26 +268,28 @@ public class HotGameFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(mActivity,HotGameDetailActivity.class);
-                intent.putExtra("game_id",mHotGameList.get(i-2).getId());
-                intent.putExtra("game_name",mHotGameList.get(i-2).getGame_name());
-                Log.e("game_id",mHotGameList.get(i-2).getId());
+                intent.putExtra("game_id",mGameListAdapter.get(i-2).getId());
+                intent.putExtra("game_name",mGameListAdapter.get(i-2).getGame_name());
+                Log.e("game_id",mGameListAdapter.get(i-2).getId());
                 startActivity(intent);
             }
         });
-       /* mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             public void onScroll(AbsListView view, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
-                lastItem = firstVisibleItem + visibleItemCount - 1 ;
+                lastItem = firstVisibleItem + visibleItemCount + 1 ;
+
+                if (lastItem==totalItemCount&&MLOADINGMORE_FLAG==0){
+                    MLOADINGMORE_FLAG++;
+                    PAGENUMBER++;
+                    initData(PAGENUMBER);
+                }
+                Log.e("listview","firstVisibleItem:"+firstVisibleItem+"visibleItemCount"+visibleItemCount+"totalItemCount"+totalItemCount);
                 // TODO Auto-generated method stub
             }
-            public void onScrollStateChanged(AbsListView view,
-                                             int scrollState) {
-                if (lastItem == downloadListAdapter.getCount() && scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-
-                    downloadListAdapter.notifyDataSetChanged();
-                }
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
             }
-        });*/
+        });
     }
 
     private class DownloadListAdapter extends BaseAdapter {
@@ -280,12 +304,12 @@ public class HotGameFragment extends BaseFragment {
 
         @Override
         public int getCount() {
-            return mHotGameList.size();
+            return mGameListAdapter.size();
         }
 
         @Override
         public Object getItem(int i) {
-            return mHotGameList.get(i);
+            return mGameListAdapter.get(i);
         }
 
         @Override
@@ -298,16 +322,16 @@ public class HotGameFragment extends BaseFragment {
             DownloadItemViewHolder holder = null;
             DownloadInfo downloadInfo = null;
             downloadInfo = new DownloadInfo();
-            downloadInfo.setUrl(mHotGameList.get(i).getAdd_game_address());
-            downloadInfo.setGameSize(mHotGameList.get(i).getGame_size());
-            downloadInfo.setGamePicUrl(mHotGameList.get(i).getIcon());
-            downloadInfo.setLabel(mHotGameList.get(i).getGame_name());
-            downloadInfo.setGameIntro(mHotGameList.get(i).getFeatures());
-            downloadInfo.setFileSavePath(FileUtils.fileSavePath + mHotGameList.get(i).getGame_name() + ".apk");
+            downloadInfo.setUrl(mGameListAdapter.get(i).getAdd_game_address());
+            downloadInfo.setGameSize(mGameListAdapter.get(i).getGame_size());
+            downloadInfo.setGamePicUrl(mGameListAdapter.get(i).getIcon());
+            downloadInfo.setLabel(mGameListAdapter.get(i).getGame_name());
+            downloadInfo.setGameIntro(mGameListAdapter.get(i).getFeatures());
+            downloadInfo.setFileSavePath(FileUtils.fileSavePath + mGameListAdapter.get(i).getGame_name() + ".apk");
             downloadInfo.setAutoResume(true);
             downloadInfo.setAutoRename(false);
             for (int j = 0; j < downloadManager.getDownloadListCount(); j++) {
-                if (downloadManager.getDownloadInfo(j).getLabel().equals(mHotGameList.get(i).getGame_name())) {
+                if (downloadManager.getDownloadInfo(j).getLabel().equals(mGameListAdapter.get(i).getGame_name())) {
                     downloadInfo = downloadManager.getDownloadInfo(j);
                 }
             }
@@ -335,7 +359,7 @@ public class HotGameFragment extends BaseFragment {
                             downloadInfo.isAutoRename(),
                             holder);
                 } catch (DbException ex) {
-                    Toast.makeText(x.app(), "1添加下载失败", Toast.LENGTH_LONG).show();
+                    Toast.makeText(x.app(), "添加下载失败", Toast.LENGTH_LONG).show();
                 }
             }
 
