@@ -12,14 +12,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.FileUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.GameDetailPicAdapter;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameDetailBean;
+import com.xingyuyou.xingyuyou.download.DownloadInfo;
+import com.xingyuyou.xingyuyou.download.DownloadManager;
+import com.xingyuyou.xingyuyou.download.DownloadState;
+import com.xingyuyou.xingyuyou.download.DownloadViewHolder;
 import com.xingyuyou.xingyuyou.weight.ProgressButton;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -27,7 +33,12 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.DbManager;
+import org.xutils.common.Callback;
+import org.xutils.ex.DbException;
+import org.xutils.x;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,21 +54,21 @@ public class HotGameDetailActivity extends AppCompatActivity {
     private TextView mGameVersion;
     private TextView mGameSize;
     private TextView mGameIntro;
-    private List<GameDetailBean> mGameDetailList=null;
-    ArrayList<String> gamePics=new ArrayList<>();
+    private List<GameDetailBean> mGameDetailList = null;
+    ArrayList<String> gamePics = new ArrayList<>();
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 1) {
                 String response = (String) msg.obj;
                 JSONObject jo = null;
-                mGameDetailList=new ArrayList<>();
+                mGameDetailList = new ArrayList<>();
                 try {
                     jo = new JSONObject(response);
                     JSONArray ja = jo.getJSONArray("list");
                     // Log.e("hot", "解析数据："+  ja.toString());
                     Gson gson = new Gson();
-                    mGameDetailList= gson.fromJson(ja.toString(),
+                    mGameDetailList = gson.fromJson(ja.toString(),
                             new TypeToken<List<GameDetailBean>>() {
                             }.getType());
                     setValues();
@@ -69,6 +80,12 @@ public class HotGameDetailActivity extends AppCompatActivity {
     };
     private RecyclerView mRecyclerView;
     private GameDetailPicAdapter mGameDetailPicAdapter;
+    private ProgressButton mBtInstallGame;
+    private DownloadInfo mDownloadInfo;
+    private DbManager mDb;
+    private String mGameNameTitle;
+    private DownloadItemViewHolder mViewHolder;
+    private DownloadManager mDownloadManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +93,12 @@ public class HotGameDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_hot_game_detail);
         mIntent = getIntent();
         initToolBar();
-        initView();
         initData();
+        initView();
+        getDownloadInfo();
+        initDownload();
+        initButtonDownload();
+
     }
 
     private void initToolBar() {
@@ -92,6 +113,7 @@ public class HotGameDetailActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        mGameNameTitle = getIntent().getStringExtra("game_name");
         OkHttpUtils.post()//
                 .url(XingYuInterface.GET_GAME_DETAILS)
                 .tag(this)//
@@ -135,8 +157,10 @@ public class HotGameDetailActivity extends AppCompatActivity {
         });
         mRecyclerView.setAdapter(mGameDetailPicAdapter);
         //下载按钮
-        ProgressButton progressButton = (ProgressButton) findViewById(R.id.bt_bottom_install);
+        mBtInstallGame = (ProgressButton) findViewById(R.id.bt_bottom_install);
+
     }
+
     private void setValues() {
         Glide.with(this).load(mGameDetailList.get(0).getIcon()).into(mGameIcon);
         mGameName.setText(mGameDetailList.get(0).getGame_name());
@@ -150,6 +174,182 @@ public class HotGameDetailActivity extends AppCompatActivity {
         gamePics.addAll(mGameDetailList.get(0).getScreenshot());
         mGameDetailPicAdapter.notifyDataSetChanged();
     }
+
+    /**
+     * 获取下载信息状态
+     */
+    private void getDownloadInfo() {
+        mDownloadManager = DownloadManager.getInstance();
+        DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()
+                .setDbName("download")
+                .setDbVersion(1);
+        mDb = x.getDb(daoConfig);
+        try {
+            mDownloadInfo = mDb.selector(DownloadInfo.class)
+                    .where("label", "=", mGameNameTitle)
+                    .and("fileSavePath", "=", FileUtils.fileSavePath+mGameNameTitle+".apk")
+                    .findFirst();
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+        if (mDownloadInfo != null) {
+            Log.e("download", "详情里面的"+mDownloadInfo.toString()+"---------");
+        }
+
+    }
+    private void initDownload() {
+        if (mDownloadInfo!=null){
+            mViewHolder = new DownloadItemViewHolder(null,mDownloadInfo);
+            mViewHolder.refresh();
+            if (mDownloadInfo.getState().value() < DownloadState.FINISHED.value()){
+                try {
+                    mDownloadManager.startDownload(
+                            mDownloadInfo.getUrl(), mDownloadInfo.getGamePicUrl(), mDownloadInfo.getLabel(),  mDownloadInfo.getGameSize(),mDownloadInfo.getGameIntro(),
+                            mDownloadInfo.getFileSavePath(), mDownloadInfo.isAutoResume(), mDownloadInfo.isAutoRename(), mViewHolder);
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
+            }
+            mBtInstallGame.setTag(1);
+        }else{
+            mBtInstallGame.setTag(0);
+        }
+    }
+    private void initButtonDownload() {
+        mBtInstallGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 防止开启多个异步线程
+                if ((Integer) mBtInstallGame.getTag() == 0) {
+                    DownloadInfo downloadInfo = new DownloadInfo();
+                    downloadInfo.setUrl(mGameDetailList.get(0).getAdd_game_address());
+                    downloadInfo.setGamePicUrl(mGameDetailList.get(0).getIcon());
+                    Log.e("wei", "gameDetail.getGameIcon()" );
+                    downloadInfo.setAutoResume(true);
+                    downloadInfo.setAutoRename(false);
+                    downloadInfo.setLabel(mGameDetailList.get(0).getGame_name());
+                    downloadInfo.setFileSavePath(FileUtils.fileSavePath + mGameNameTitle + ".apk");
+                    mViewHolder = new DownloadItemViewHolder(null, downloadInfo);
+                    mViewHolder.toggleEvent(null);
+                    mBtInstallGame.setTag(1);
+                } else {
+                    mViewHolder.toggleEvent(null);
+                }
+            }
+        });
+    }
+
+    public class DownloadItemViewHolder extends DownloadViewHolder {
+
+
+        public DownloadItemViewHolder(View view, DownloadInfo downloadInfo) {
+            super(view, downloadInfo);
+            refresh();
+        }
+
+
+        private void toggleEvent(View view) {
+            DownloadState state = downloadInfo.getState();
+            switch (state) {
+                case WAITING:
+                case STARTED:
+                    mDownloadManager.stopDownload(downloadInfo);
+                    break;
+                case ERROR:
+                case STOPPED:
+                    try {
+                        mDownloadManager.startDownload(
+                                downloadInfo.getUrl(),
+                                downloadInfo.getGamePicUrl(),
+                                downloadInfo.getLabel(),
+                                downloadInfo.getGameSize(),
+                                downloadInfo.getGameIntro(),
+                                downloadInfo.getFileSavePath(),
+                                downloadInfo.isAutoResume(),
+                                downloadInfo.isAutoRename(),
+                                this);
+                    } catch (DbException ex) {
+                        Toast.makeText(x.app(), "添加下载失败", Toast.LENGTH_LONG).show();
+                    }
+                    break;
+                case FINISHED:
+                    Toast.makeText(x.app(), "已经下载完成", Toast.LENGTH_LONG).show();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        @Override
+        public void update(DownloadInfo downloadInfo) {
+            super.update(downloadInfo);
+            Log.e("wei", "update");
+            refresh();
+        }
+
+        @Override
+        public void onWaiting() {
+            Log.e("wei", "onWaiting");
+            refresh();
+
+        }
+
+        @Override
+        public void onStarted() {
+            Log.e("wei", "onStarted");
+            refresh();
+        }
+
+        @Override
+        public void onLoading(long total, long current) {
+            Log.e("wei", "onLoading" + "total:" + total + "current" + current);
+            refresh();
+        }
+
+        @Override
+        public void onSuccess(File result) {
+            Log.e("wei", "onSuccess");
+            refresh();
+        }
+
+        @Override
+        public void onError(Throwable ex, boolean isOnCallback) {
+            Log.e("wei", "onError");
+            refresh();
+        }
+
+        @Override
+        public void onCancelled(Callback.CancelledException cex) {
+            Log.e("wei", "onCancelled");
+            refresh();
+        }
+
+        public void refresh() {
+            //gameEnName.setText(downloadInfo.getLabel()+"---"+downloadInfo.getState().toString()+"---"+downloadInfo.getProgress());
+            mBtInstallGame.setProgress(downloadInfo.getProgress());
+            mBtInstallGame.setVisibility(View.VISIBLE);
+            mBtInstallGame.setText(x.app().getString(R.string.stop));
+            DownloadState state = downloadInfo.getState();
+            switch (state) {
+                case WAITING:
+                case STARTED:
+                    mBtInstallGame.setText(x.app().getString(R.string.stop));
+                    break;
+                case ERROR:
+                case STOPPED:
+                    mBtInstallGame.setText(x.app().getString(R.string.start));
+                    break;
+                case FINISHED:
+                    mBtInstallGame.setText("下载完成");
+                    break;
+                default:
+                    mBtInstallGame.setText(x.app().getString(R.string.start));
+                    break;
+            }
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

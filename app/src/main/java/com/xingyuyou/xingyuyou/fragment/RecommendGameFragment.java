@@ -40,6 +40,7 @@ import com.xingyuyou.xingyuyou.download.DownloadManager;
 import com.xingyuyou.xingyuyou.download.DownloadState;
 import com.xingyuyou.xingyuyou.download.DownloadViewHolder;
 import com.xingyuyou.xingyuyou.weight.HorizontalProgressBarWithTextProgress;
+import com.xingyuyou.xingyuyou.weight.ProgressButton;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerListener;
@@ -153,6 +154,12 @@ public class RecommendGameFragment extends BaseFragment {
         initData(PAGENUMBER);
         View view = View.inflate(mActivity, R.layout.fragment_recom_game, null);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        downloadListAdapter.notifyDataSetChanged();
     }
     /**
      * 初始化数据
@@ -390,7 +397,7 @@ public class RecommendGameFragment extends BaseFragment {
         @ViewInject(R.id.pb_progressbar)
         HorizontalProgressBarWithTextProgress progressBar;
         @ViewInject(R.id.bt_uninstall)
-        Button stopBtn;
+        ProgressButton stopBtn;
 
         public DownloadItemViewHolder(View view, DownloadInfo downloadInfo) {
             super(view, downloadInfo);
@@ -494,11 +501,8 @@ public class RecommendGameFragment extends BaseFragment {
             gameSize.setText(downloadInfo.getGameSize());
             label.setText(downloadInfo.getLabel());
             gameIntro.setText(downloadInfo.getGameIntro());
-            //state.setText(downloadInfo.getState().toString());
             Glide.with(mActivity).load(downloadInfo.getGamePicUrl()).into(gamePic);
-            progressBar.setProgress(downloadInfo.getProgress());
-            stopBtn.setVisibility(View.VISIBLE);
-            stopBtn.setText(x.app().getString(R.string.stop));
+            stopBtn.setProgress(downloadInfo.getProgress());
             DownloadState state = downloadInfo.getState();
             switch (state) {
                 case WAITING:

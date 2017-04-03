@@ -45,6 +45,7 @@ import com.xingyuyou.xingyuyou.download.DownloadManager;
 import com.xingyuyou.xingyuyou.download.DownloadState;
 import com.xingyuyou.xingyuyou.download.DownloadViewHolder;
 import com.xingyuyou.xingyuyou.weight.HorizontalProgressBarWithTextProgress;
+import com.xingyuyou.xingyuyou.weight.ProgressButton;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerListener;
@@ -292,6 +293,12 @@ public class HotGameFragment extends BaseFragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        downloadListAdapter.notifyDataSetChanged();
+    }
+
     private class DownloadListAdapter extends BaseAdapter {
 
         private Context mContext;
@@ -381,7 +388,7 @@ public class HotGameFragment extends BaseFragment {
         @ViewInject(R.id.pb_progressbar)
         HorizontalProgressBarWithTextProgress progressBar;
         @ViewInject(R.id.bt_uninstall)
-        Button stopBtn;
+        ProgressButton stopBtn;
 
         public DownloadItemViewHolder(View view, DownloadInfo downloadInfo) {
             super(view, downloadInfo);
@@ -460,6 +467,7 @@ public class HotGameFragment extends BaseFragment {
         @Override
         public void onLoading(long total, long current) {
             Log.e("wei", "onLoading" + "total:" + total + "current" + current);
+           // stopBtn.setProgress((int)((current*100)/total));
             refresh();
         }
 
@@ -485,11 +493,8 @@ public class HotGameFragment extends BaseFragment {
             label.setText(downloadInfo.getLabel());
             gameSize.setText(downloadInfo.getGameSize());
             gameIntro.setText(downloadInfo.getGameIntro());
-            //state.setText(downloadInfo.getState().toString());
             Glide.with(mActivity).load(downloadInfo.getGamePicUrl()).into(gamePic);
-            progressBar.setProgress(downloadInfo.getProgress());
-            stopBtn.setVisibility(View.VISIBLE);
-            stopBtn.setText(x.app().getString(R.string.stop));
+            stopBtn.setProgress(downloadInfo.getProgress());
             DownloadState state = downloadInfo.getState();
             switch (state) {
                 case WAITING:
@@ -501,7 +506,6 @@ public class HotGameFragment extends BaseFragment {
                     stopBtn.setText(x.app().getString(R.string.start));
                     break;
                 case FINISHED:
-                    //cn.mljia.o2o
                     stopBtn.setText("完成");
                     if (AppUtils.isInstallApp(mActivity, "cn.mljia.o2o")) {
                         stopBtn.setText("打开");
