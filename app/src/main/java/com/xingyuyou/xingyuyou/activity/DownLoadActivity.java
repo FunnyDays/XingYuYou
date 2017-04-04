@@ -113,6 +113,7 @@ public class DownLoadActivity extends AppCompatActivity {
                     downloadManager.startDownload(
                             downloadInfo.getUrl(),
                             downloadInfo.getGamePicUrl(),
+                            downloadInfo.getPackageName(),
                             downloadInfo.getLabel(),
                             downloadInfo.getGameSize(),
                             downloadInfo.getGameIntro(),
@@ -159,6 +160,7 @@ public class DownLoadActivity extends AppCompatActivity {
                         downloadManager.startDownload(
                                 downloadInfo.getUrl(),
                                 downloadInfo.getGamePicUrl(),
+                                downloadInfo.getPackageName(),
                                 downloadInfo.getLabel(),
                                 downloadInfo.getGameSize(),
                                 downloadInfo.getGameIntro(),

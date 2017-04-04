@@ -342,6 +342,7 @@ public class RecommendGameFragment extends BaseFragment {
             downloadInfo.setGameSize(mGameListAdapter.get(i).getGame_size());
             downloadInfo.setGameIntro(mGameListAdapter.get(i).getFeatures());
             downloadInfo.setGamePicUrl(mGameListAdapter.get(i).getIcon());
+            downloadInfo.setPackageName(mGameListAdapter.get(i).getGame_baoming());
             downloadInfo.setLabel(mGameListAdapter.get(i).getGame_name());
             downloadInfo.setFileSavePath(FileUtils.fileSavePath + mGameListAdapter.get(i).getGame_name() + ".apk");
             downloadInfo.setAutoResume(true);
@@ -367,6 +368,7 @@ public class RecommendGameFragment extends BaseFragment {
                     downloadManager.startDownload(
                             downloadInfo.getUrl(),
                             downloadInfo.getGamePicUrl(),
+                            downloadInfo.getPackageName(),
                             downloadInfo.getLabel(),
                             downloadInfo.getGameSize(),
                             downloadInfo.getGameIntro(),
@@ -418,6 +420,7 @@ public class RecommendGameFragment extends BaseFragment {
                         downloadManager.startDownload(
                                 downloadInfo.getUrl(),
                                 downloadInfo.getGamePicUrl(),
+                                downloadInfo.getPackageName(),
                                 downloadInfo.getLabel(),
                                 downloadInfo.getGameSize(),
                                 downloadInfo.getGameIntro(),
@@ -430,10 +433,9 @@ public class RecommendGameFragment extends BaseFragment {
                     }
                     break;
                 case FINISHED:
-                    Toast.makeText(x.app(), "已经下载完成", Toast.LENGTH_LONG).show();
-                    if (AppUtils.isInstallApp(mActivity, "cn.mljia.o2o")) {
+                    if (AppUtils.isInstallApp(mActivity,downloadInfo.getPackageName())) {
                         stopBtn.setText("打开");
-                        AppUtils.launchApp(mActivity, "cn.mljia.o2o");
+                        AppUtils.launchApp(mActivity, downloadInfo.getPackageName());
                     } else {
                         stopBtn.setText("安装");
                         AppUtils.installApp(mActivity, downloadInfo.getFileSavePath());
@@ -514,14 +516,10 @@ public class RecommendGameFragment extends BaseFragment {
                     stopBtn.setText(x.app().getString(R.string.start));
                     break;
                 case FINISHED:
-                    //cn.mljia.o2o
-                    stopBtn.setText("完成");
-                    if (AppUtils.isInstallApp(mActivity, "cn.mljia.o2o")) {
+                    if (AppUtils.isInstallApp(mActivity,downloadInfo.getPackageName())) {
                         stopBtn.setText("打开");
-                        //AppUtils.launchApp(mActivity,"cn.mljia.o2o");
                     } else {
                         stopBtn.setText("安装");
-                        //AppUtils.installApp(mActivity,downloadInfo.getFileSavePath());
                     }
                     break;
                 default:

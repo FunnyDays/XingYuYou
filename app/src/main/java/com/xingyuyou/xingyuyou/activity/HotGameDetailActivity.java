@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.AppUtils;
 import com.xingyuyou.xingyuyou.Utils.FileUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.GameDetailPicAdapter;
@@ -204,7 +205,7 @@ public class HotGameDetailActivity extends AppCompatActivity {
             if (mDownloadInfo.getState().value() < DownloadState.FINISHED.value()){
                 try {
                     mDownloadManager.startDownload(
-                            mDownloadInfo.getUrl(), mDownloadInfo.getGamePicUrl(), mDownloadInfo.getLabel(),  mDownloadInfo.getGameSize(),mDownloadInfo.getGameIntro(),
+                            mDownloadInfo.getUrl(), mDownloadInfo.getGamePicUrl(), mDownloadInfo.getPackageName(), mDownloadInfo.getLabel(),  mDownloadInfo.getGameSize(),mDownloadInfo.getGameIntro(),
                             mDownloadInfo.getFileSavePath(), mDownloadInfo.isAutoResume(), mDownloadInfo.isAutoRename(), mViewHolder);
                 } catch (DbException e) {
                     e.printStackTrace();
@@ -224,7 +225,7 @@ public class HotGameDetailActivity extends AppCompatActivity {
                     DownloadInfo downloadInfo = new DownloadInfo();
                     downloadInfo.setUrl(mGameDetailList.get(0).getAdd_game_address());
                     downloadInfo.setGamePicUrl(mGameDetailList.get(0).getIcon());
-                    Log.e("wei", "gameDetail.getGameIcon()" );
+                    //downloadInfo.setPackageName(mGameDetailList.get(0).getGame_baoming());
                     downloadInfo.setAutoResume(true);
                     downloadInfo.setAutoRename(false);
                     downloadInfo.setLabel(mGameDetailList.get(0).getGame_name());
@@ -261,6 +262,7 @@ public class HotGameDetailActivity extends AppCompatActivity {
                         mDownloadManager.startDownload(
                                 downloadInfo.getUrl(),
                                 downloadInfo.getGamePicUrl(),
+                                downloadInfo.getPackageName(),
                                 downloadInfo.getLabel(),
                                 downloadInfo.getGameSize(),
                                 downloadInfo.getGameIntro(),
@@ -273,7 +275,13 @@ public class HotGameDetailActivity extends AppCompatActivity {
                     }
                     break;
                 case FINISHED:
-                    Toast.makeText(x.app(), "已经下载完成", Toast.LENGTH_LONG).show();
+                    if (AppUtils.isInstallApp(HotGameDetailActivity.this,downloadInfo.getPackageName())) {
+                        mBtInstallGame.setText("打开");
+                        AppUtils.launchApp(HotGameDetailActivity.this, downloadInfo.getPackageName());
+                    } else {
+                        mBtInstallGame.setText("安装");
+                        AppUtils.installApp(HotGameDetailActivity.this, downloadInfo.getFileSavePath());
+                    }
                     break;
                 default:
                     break;
@@ -342,6 +350,13 @@ public class HotGameDetailActivity extends AppCompatActivity {
                     break;
                 case FINISHED:
                     mBtInstallGame.setText("下载完成");
+                    if (AppUtils.isInstallApp(HotGameDetailActivity.this,downloadInfo.getPackageName())) {
+                        mBtInstallGame.setText("打开");
+                       // AppUtils.launchApp(HotGameDetailActivity.this, downloadInfo.getPackageName());
+                    } else {
+                        mBtInstallGame.setText("安装");
+                       // AppUtils.installApp(HotGameDetailActivity.this, downloadInfo.getFileSavePath());
+                    }
                     break;
                 default:
                     mBtInstallGame.setText(x.app().getString(R.string.start));

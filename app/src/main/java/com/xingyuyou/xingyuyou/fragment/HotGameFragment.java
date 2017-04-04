@@ -109,6 +109,9 @@ public class HotGameFragment extends BaseFragment {
                     mHotGameList = gson.fromJson(ja.toString(),
                             new TypeToken<List<HotGameBean>>() {
                             }.getType());
+                    for (int i = 0; i < mHotGameList.size(); i++) {
+                        Log.e("hotgame", "解析数据："+ mHotGameList.toString());
+                    }
                     mGameListAdapter.addAll(mHotGameList);
                     //如果还有数据把加载更多值为0
                     MLOADINGMORE_FLAG=0;
@@ -285,8 +288,6 @@ public class HotGameFragment extends BaseFragment {
                     PAGENUMBER++;
                     initData(PAGENUMBER);
                 }
-                Log.e("listview","firstVisibleItem:"+firstVisibleItem+"visibleItemCount"+visibleItemCount+"totalItemCount"+totalItemCount);
-                // TODO Auto-generated method stub
             }
             public void onScrollStateChanged(AbsListView view, int scrollState) {
             }
@@ -332,6 +333,7 @@ public class HotGameFragment extends BaseFragment {
             downloadInfo.setUrl(mGameListAdapter.get(i).getAdd_game_address());
             downloadInfo.setGameSize(mGameListAdapter.get(i).getGame_size());
             downloadInfo.setGamePicUrl(mGameListAdapter.get(i).getIcon());
+            downloadInfo.setPackageName(mGameListAdapter.get(i).getGame_baoming());
             downloadInfo.setLabel(mGameListAdapter.get(i).getGame_name());
             downloadInfo.setGameIntro(mGameListAdapter.get(i).getFeatures());
             downloadInfo.setFileSavePath(FileUtils.fileSavePath + mGameListAdapter.get(i).getGame_name() + ".apk");
@@ -358,6 +360,7 @@ public class HotGameFragment extends BaseFragment {
                     downloadManager.startDownload(
                             downloadInfo.getUrl(),
                             downloadInfo.getGamePicUrl(),
+                            downloadInfo.getPackageName(),
                             downloadInfo.getLabel(),
                             downloadInfo.getGameSize(),
                             downloadInfo.getGameIntro(),
@@ -409,6 +412,7 @@ public class HotGameFragment extends BaseFragment {
                         downloadManager.startDownload(
                                 downloadInfo.getUrl(),
                                 downloadInfo.getGamePicUrl(),
+                                downloadInfo.getPackageName(),
                                 downloadInfo.getLabel(),
                                 downloadInfo.getGameSize(),
                                 downloadInfo.getGameIntro(),
@@ -421,10 +425,10 @@ public class HotGameFragment extends BaseFragment {
                     }
                     break;
                 case FINISHED:
-                    Toast.makeText(x.app(), "已经下载完成", Toast.LENGTH_LONG).show();
-                    if (AppUtils.isInstallApp(mActivity, "cn.mljia.o2o")) {
+                    //Toast.makeText(mActivity, "下载完成", Toast.LENGTH_SHORT).show();
+                    if (AppUtils.isInstallApp(mActivity,downloadInfo.getPackageName())) {
                         stopBtn.setText("打开");
-                        AppUtils.launchApp(mActivity, "cn.mljia.o2o");
+                        AppUtils.launchApp(mActivity, downloadInfo.getPackageName());
                     } else {
                         stopBtn.setText("安装");
                         AppUtils.installApp(mActivity, downloadInfo.getFileSavePath());
@@ -506,13 +510,12 @@ public class HotGameFragment extends BaseFragment {
                     stopBtn.setText(x.app().getString(R.string.start));
                     break;
                 case FINISHED:
-                    stopBtn.setText("完成");
-                    if (AppUtils.isInstallApp(mActivity, "cn.mljia.o2o")) {
+                    if (AppUtils.isInstallApp(mActivity,downloadInfo.getPackageName())) {
                         stopBtn.setText("打开");
-                        //AppUtils.launchApp(mActivity,"cn.mljia.o2o");
+                       // AppUtils.launchApp(mActivity, downloadInfo.getPackageName());
                     } else {
                         stopBtn.setText("安装");
-                        //AppUtils.installApp(mActivity,downloadInfo.getFileSavePath());
+                        //AppUtils.installApp(mActivity, downloadInfo.getFileSavePath());
                     }
                     break;
                 default:

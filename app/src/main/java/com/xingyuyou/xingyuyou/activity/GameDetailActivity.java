@@ -178,7 +178,7 @@ public class GameDetailActivity extends BaseActivity {
             if (mDownloadInfo.getState().value() < DownloadState.FINISHED.value()){
                 try {
                     downloadManager.startDownload(
-                            mDownloadInfo.getUrl(), mDownloadInfo.getGamePicUrl(), mDownloadInfo.getLabel(),mDownloadInfo.getGameSize(), mDownloadInfo.getGameIntro(),
+                            mDownloadInfo.getUrl(), mDownloadInfo.getGamePicUrl(),mDownloadInfo.getPackageName(), mDownloadInfo.getLabel(),mDownloadInfo.getGameSize(), mDownloadInfo.getGameIntro(),
                             mDownloadInfo.getFileSavePath(), mDownloadInfo.isAutoResume(), mDownloadInfo.isAutoRename(), mViewHolder);
                 } catch (DbException e) {
                     e.printStackTrace();
@@ -254,6 +254,7 @@ public class GameDetailActivity extends BaseActivity {
                         downloadManager.startDownload(
                                 downloadInfo.getUrl(),
                                 downloadInfo.getGamePicUrl(),
+                                downloadInfo.getPackageName(),
                                 downloadInfo.getLabel(),
                                 downloadInfo.getGameSize(),
                                 downloadInfo.getGameIntro(),

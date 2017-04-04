@@ -81,7 +81,7 @@ public final class DownloadManager {
         return downloadInfoList.get(index);
     }
 
-    public synchronized void startDownload(String url, String gamePicUrl, String label,String gameSize,String gameIntro, String savePath,
+    public synchronized void startDownload(String url, String gamePicUrl,String packageName, String label,String gameSize,String gameIntro, String savePath,
                                            boolean autoResume, boolean autoRename,
                                            DownloadViewHolder viewHolder) throws DbException {
 
@@ -109,6 +109,7 @@ public final class DownloadManager {
             downloadInfo = new DownloadInfo();
             downloadInfo.setUrl(url);
             downloadInfo.setGamePicUrl(gamePicUrl);
+            downloadInfo.setPackageName(packageName);
             downloadInfo.setAutoRename(autoRename);
             downloadInfo.setAutoResume(autoResume);
             downloadInfo.setLabel(label);

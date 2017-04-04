@@ -32,6 +32,9 @@ public class DownloadInfo {
     @Column(name = "gamePicUrl")
     private String gamePicUrl;
 
+    @Column(name = "packageName")
+    private String packageName;
+
     @Column(name = "label")
     private String label;
 
@@ -132,6 +135,14 @@ public class DownloadInfo {
         this.autoResume = autoResume;
     }
 
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
     public boolean isAutoRename() {
         return autoRename;
     }
@@ -148,6 +159,7 @@ public class DownloadInfo {
                 ", url='" + url + '\'' +
                 ", gameSize='" + gameSize + '\'' +
                 ", gameIntro='" + gameIntro + '\'' +
+                ", packageName='" + packageName + '\'' +
                 ", gamePicUrl='" + gamePicUrl + '\'' +
                 ", label='" + label + '\'' +
                 ", fileSavePath='" + fileSavePath + '\'' +
