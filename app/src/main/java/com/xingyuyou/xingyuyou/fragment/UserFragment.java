@@ -1,5 +1,7 @@
 package com.xingyuyou.xingyuyou.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -98,12 +100,12 @@ public class UserFragment extends BaseFragment {
                 Toast.makeText(mActivity, "功能暂未开放", Toast.LENGTH_SHORT).show();
             }
         });
-        //游戏破解
+        //加入官群
         mPoJie = (ImageView) view.findViewById(R.id.image_two);
         mPoJie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mActivity, "功能暂未开放", Toast.LENGTH_SHORT).show();
+                joinQQGroup("YzjlZwrRfUeZN0jnoSF47Kfuz_f2pDXp");
             }
         });
         //游戏卸载
@@ -168,6 +170,26 @@ public class UserFragment extends BaseFragment {
         });
 
         return view;
+    }
+    /****************
+     *
+     * 发起添加群流程。群号：官方游戏交流群(614848840) 的 key 为： YzjlZwrRfUeZN0jnoSF47Kfuz_f2pDXp
+     * 调用 joinQQGroup(YzjlZwrRfUeZN0jnoSF47Kfuz_f2pDXp) 即可发起手Q客户端申请加群 官方游戏交流群(614848840)
+     *
+     * @param key 由官网生成的key
+     * @return 返回true表示呼起手Q成功，返回fals表示呼起失败
+     ******************/
+    public boolean joinQQGroup(String key) {
+        Intent intent = new Intent();
+        intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + key));
+        // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        try {
+            startActivity(intent);
+            return true;
+        } catch (Exception e) {
+            // 未安装手Q或安装的版本不支持
+            return false;
+        }
     }
 
 

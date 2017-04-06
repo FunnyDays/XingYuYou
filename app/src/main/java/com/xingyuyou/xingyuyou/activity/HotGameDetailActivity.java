@@ -23,6 +23,7 @@ import com.xingyuyou.xingyuyou.Utils.FileUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.GameDetailPicAdapter;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameDetailBean;
+import com.xingyuyou.xingyuyou.download.DownloadHelper;
 import com.xingyuyou.xingyuyou.download.DownloadInfo;
 import com.xingyuyou.xingyuyou.download.DownloadManager;
 import com.xingyuyou.xingyuyou.download.DownloadState;
@@ -166,8 +167,8 @@ public class HotGameDetailActivity extends AppCompatActivity {
         Glide.with(this).load(mGameDetailList.get(0).getIcon()).into(mGameIcon);
         mGameName.setText(mGameDetailList.get(0).getGame_name());
         mGameType.setText(mGameDetailList.get(0).getGame_type_id());
-        mGameVersion.setText(mGameDetailList.get(0).getVersion());
-        mGameSize.setText(mGameDetailList.get(0).getGame_size());
+        mGameVersion.setText("版本："+mGameDetailList.get(0).getVersion());
+        mGameSize.setText("大小："+mGameDetailList.get(0).getGame_size());
         mGameIntro.setText(mGameDetailList.get(0).getIntroduction());
 
         //游戏介绍图
@@ -222,6 +223,9 @@ public class HotGameDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // 防止开启多个异步线程
                 if ((Integer) mBtInstallGame.getTag() == 0) {
+                    //向服务器传输下载数据
+                    DownloadHelper.updataDown(mIntent.getStringExtra("game_id"));
+                    //初始化下载信息
                     DownloadInfo downloadInfo = new DownloadInfo();
                     downloadInfo.setUrl(mGameDetailList.get(0).getAdd_game_address());
                     downloadInfo.setGamePicUrl(mGameDetailList.get(0).getIcon());

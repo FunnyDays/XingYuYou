@@ -35,6 +35,7 @@ import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.Game;
 import com.xingyuyou.xingyuyou.bean.HotBannerBean;
 import com.xingyuyou.xingyuyou.bean.hotgame.HotGameBean;
+import com.xingyuyou.xingyuyou.download.DownloadHelper;
 import com.xingyuyou.xingyuyou.download.DownloadInfo;
 import com.xingyuyou.xingyuyou.download.DownloadManager;
 import com.xingyuyou.xingyuyou.download.DownloadState;
@@ -167,6 +168,7 @@ public class NewGameFragment extends BaseFragment {
     public void initData(int PAGENUMBER) {
         OkHttpUtils.post()//
                 .addParams("limit",String.valueOf(PAGENUMBER))
+                .addParams("file_type",String.valueOf("1"))
                 .url(XingYuInterface.GET_GAME_LIST + "/type/new")
                 .tag(this)//
                 .build()//

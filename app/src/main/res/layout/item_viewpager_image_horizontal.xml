@@ -4,12 +4,12 @@
     android:layout_height="wrap_content">
 <ImageView
     android:clickable="true"
-    android:background="@drawable/ripple_bg"
     android:id="@+id/image"
     android:layout_marginTop="30dp"
     android:layout_marginBottom="30dp"
     android:layout_marginRight="5dp"
     android:layout_marginLeft="5dp"
+    android:scaleType="fitXY"
     android:layout_width="320dp"
     android:layout_height="180dp"
    />

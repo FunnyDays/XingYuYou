@@ -16,6 +16,7 @@ import com.xingyuyou.xingyuyou.Utils.MCUtils.HttpUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.bean.GameGift;
+import com.xingyuyou.xingyuyou.download.DownloadHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,11 +49,19 @@ public class TestActivity extends AppCompatActivity {
         mOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //getGift();
-                getData();
+                DownloadHelper.updataDown("139");
             }
         });
+    }
+
+    private void updataDown() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("game_id", String.valueOf(146));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        HttpUtils.POST(handler,XingYuInterface.UPDATA_DOWN,jsonObject.toString(),true);
     }
 
     private void getGift() {

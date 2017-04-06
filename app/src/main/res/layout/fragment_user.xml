@@ -96,14 +96,14 @@
                             android:id="@+id/image_two"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:src="@mipmap/gamepojie"/>
+                            android:src="@mipmap/gamegroup"/>
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="20dp"
                             android:layout_below="@id/image_two"
                             android:gravity="center"
-                            android:text="游戏破解"
+                            android:text="加入官群"
                             />
                     </RelativeLayout>
 
