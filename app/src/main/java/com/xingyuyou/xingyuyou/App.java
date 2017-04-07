@@ -3,6 +3,8 @@ package com.xingyuyou.xingyuyou;
 import android.app.Application;
 import android.content.Context;
 
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 import com.xingyuyou.xingyuyou.Utils.Loading.LoadingLayout;
 import com.xingyuyou.xingyuyou.Utils.Utils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -30,6 +32,15 @@ public class App extends Application {
         Utils.init(this);
         //网络初始化
         initOkhttp();
+        //友盟分享
+        youmeng();
+    }
+
+    private void youmeng() {
+        UMShareAPI.get(this);
+        PlatformConfig.setWeixin("","");
+        PlatformConfig.setQQZone("1106012303","hgqXkjzu7Mq1USGL");
+        PlatformConfig.setSinaWeibo("3073251384 ","8304b645771ea95644c209ed5e6b9558","http://www.xingyuyou.com");
     }
 
     /**
