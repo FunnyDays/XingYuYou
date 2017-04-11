@@ -45,7 +45,7 @@ public class GameDetailPicAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        final int[] type = new int[1];
+        final int[] type = new int[]{1};
         if (arrayList.size() > 1) {
             Glide.with(mActivity).load(arrayList.get(0)).asBitmap().into(new SimpleTarget<Bitmap>() {
                 @Override
@@ -60,7 +60,6 @@ public class GameDetailPicAdapter extends RecyclerView.Adapter {
                 }
             });
         }
-
         return type[0];
     }
 

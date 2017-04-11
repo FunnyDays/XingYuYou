@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.AppUtils;
 import com.xingyuyou.xingyuyou.Utils.FileUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.GameDetailPicAdapter;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameDetailBean;
@@ -47,6 +49,37 @@ import java.util.List;
 import okhttp3.Call;
 
 public class HotGameDetailActivity extends AppCompatActivity {
+
+
+    /*
+    * {
+    "status": 1,
+    "game": {
+        "game_id": "34",
+        "game_name": "钢铁雄狮(安卓版)",
+        "gift_count": 1,
+        "game_size": "186.3MB",
+        "game_icon": "http://xingyuyou.com/Uploads/Picture/2017-03-23/58d39094bcc44.png"
+    },
+    "msg": [{
+        "gift_id": "14",
+        "game_id": "34",
+        "giftbag_type": null,
+        "game_name": "钢铁雄狮(安卓版)",
+        "giftbag_name": "新手礼包",
+        "desribe": "金币*10000 普通技能书*20 普通军牌*4 ",
+        "novice": 999,
+        "icon": "http://xingyuyou.com/Uploads/Picture/2017-03-23/58d39094bcc44.png",
+        "game_size": "186.3MB"
+    }]
+}
+
+
+{
+    "status": -1,
+    "msg": "没有数据"
+}*/
+
 
     private Toolbar mToolbar;
     private Intent mIntent;
@@ -78,6 +111,30 @@ public class HotGameDetailActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+            if (msg.what == 2) {
+                final String response = (String) msg.obj;
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("status").equals("-1")) {
+                        mBtPackage.setBackgroundResource(R.drawable.button_gray_bg);
+                        mBtPackage.setTextColor(getResources().getColor(R.color.darker_gray));
+                        mBtPackage.setEnabled(false);
+                    } else if (jsonObject.getString("status").equals("1")) {
+                        mBtPackage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(HotGameDetailActivity.this, GetGamePackageActivity.class);
+                                intent.putExtra("gameDetail", response);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     };
     private RecyclerView mRecyclerView;
@@ -88,6 +145,8 @@ public class HotGameDetailActivity extends AppCompatActivity {
     private String mGameNameTitle;
     private DownloadItemViewHolder mViewHolder;
     private DownloadManager mDownloadManager;
+    private TextView mDownNumber;
+    private Button mBtPackage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +192,24 @@ public class HotGameDetailActivity extends AppCompatActivity {
                         mHandler.obtainMessage(1, response).sendToTarget();
                     }
                 });
+        //礼包详情
+        OkHttpUtils.post()//
+                .url(XingYuInterface.GAME_GIFT_LIST)
+                .tag(this)//
+                .addParams("game_id", mIntent.getStringExtra("game_id"))
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Log.e("detail", e.toString() + ":e");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.e("game_id", response + "");
+                        mHandler.obtainMessage(2, response).sendToTarget();
+                    }
+                });
     }
 
     private void initView() {
@@ -142,6 +219,7 @@ public class HotGameDetailActivity extends AppCompatActivity {
         mGameVersion = (TextView) findViewById(R.id.tv_game_version);
         mGameSize = (TextView) findViewById(R.id.tv_game_size);
         mGameIntro = (TextView) findViewById(R.id.tv_content);
+        mDownNumber = (TextView) findViewById(R.id.tv_down_number);
 
         //游戏介绍图片
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -160,19 +238,20 @@ public class HotGameDetailActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mGameDetailPicAdapter);
         //下载按钮
         mBtInstallGame = (ProgressButton) findViewById(R.id.bt_bottom_install);
-
+        //礼包按钮
+        mBtPackage = (Button) findViewById(R.id.bt_get_package);
     }
 
     private void setValues() {
         Glide.with(this).load(mGameDetailList.get(0).getIcon()).into(mGameIcon);
         mGameName.setText(mGameDetailList.get(0).getGame_name());
         mGameType.setText(mGameDetailList.get(0).getGame_type_id());
-        mGameVersion.setText("版本："+mGameDetailList.get(0).getVersion());
-        mGameSize.setText("大小："+mGameDetailList.get(0).getGame_size());
+        mGameVersion.setText("版本：" + mGameDetailList.get(0).getVersion());
+        mGameSize.setText("大小：" + mGameDetailList.get(0).getGame_size());
         mGameIntro.setText(mGameDetailList.get(0).getIntroduction());
+        mDownNumber.setText("下载次数：" + mGameDetailList.get(0).getDow_num());
 
         //游戏介绍图
-
         gamePics.addAll(mGameDetailList.get(0).getScreenshot());
         mGameDetailPicAdapter.notifyDataSetChanged();
     }
@@ -189,34 +268,36 @@ public class HotGameDetailActivity extends AppCompatActivity {
         try {
             mDownloadInfo = mDb.selector(DownloadInfo.class)
                     .where("label", "=", mGameNameTitle)
-                    .and("fileSavePath", "=", FileUtils.fileSavePath+mGameNameTitle+".apk")
+                    .and("fileSavePath", "=", FileUtils.fileSavePath + mGameNameTitle + ".apk")
                     .findFirst();
         } catch (DbException e) {
             e.printStackTrace();
         }
         if (mDownloadInfo != null) {
-            Log.e("download", "详情里面的"+mDownloadInfo.toString()+"---------");
+            Log.e("download", "详情里面的" + mDownloadInfo.toString() + "---------");
         }
 
     }
+
     private void initDownload() {
-        if (mDownloadInfo!=null){
-            mViewHolder = new DownloadItemViewHolder(null,mDownloadInfo);
+        if (mDownloadInfo != null) {
+            mViewHolder = new DownloadItemViewHolder(null, mDownloadInfo);
             mViewHolder.refresh();
-            if (mDownloadInfo.getState().value() < DownloadState.FINISHED.value()){
+            if (mDownloadInfo.getState().value() < DownloadState.FINISHED.value()) {
                 try {
                     mDownloadManager.startDownload(
-                            mDownloadInfo.getUrl(), mDownloadInfo.getGamePicUrl(), mDownloadInfo.getPackageName(), mDownloadInfo.getLabel(),  mDownloadInfo.getGameSize(),mDownloadInfo.getGameIntro(),
+                            mDownloadInfo.getUrl(), mDownloadInfo.getGamePicUrl(), mDownloadInfo.getPackageName(), mDownloadInfo.getLabel(), mDownloadInfo.getGameSize(), mDownloadInfo.getGameIntro(),
                             mDownloadInfo.getFileSavePath(), mDownloadInfo.isAutoResume(), mDownloadInfo.isAutoRename(), mViewHolder);
                 } catch (DbException e) {
                     e.printStackTrace();
                 }
             }
             mBtInstallGame.setTag(1);
-        }else{
+        } else {
             mBtInstallGame.setTag(0);
         }
     }
+
     private void initButtonDownload() {
         mBtInstallGame.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -279,7 +360,7 @@ public class HotGameDetailActivity extends AppCompatActivity {
                     }
                     break;
                 case FINISHED:
-                    if (AppUtils.isInstallApp(HotGameDetailActivity.this,downloadInfo.getPackageName())) {
+                    if (AppUtils.isInstallApp(HotGameDetailActivity.this, downloadInfo.getPackageName())) {
                         mBtInstallGame.setText("打开");
                         AppUtils.launchApp(HotGameDetailActivity.this, downloadInfo.getPackageName());
                     } else {
@@ -354,12 +435,12 @@ public class HotGameDetailActivity extends AppCompatActivity {
                     break;
                 case FINISHED:
                     mBtInstallGame.setText("下载完成");
-                    if (AppUtils.isInstallApp(HotGameDetailActivity.this,downloadInfo.getPackageName())) {
+                    if (AppUtils.isInstallApp(HotGameDetailActivity.this, downloadInfo.getPackageName())) {
                         mBtInstallGame.setText("打开");
-                       // AppUtils.launchApp(HotGameDetailActivity.this, downloadInfo.getPackageName());
+                        // AppUtils.launchApp(HotGameDetailActivity.this, downloadInfo.getPackageName());
                     } else {
                         mBtInstallGame.setText("安装");
-                       // AppUtils.installApp(HotGameDetailActivity.this, downloadInfo.getFileSavePath());
+                        // AppUtils.installApp(HotGameDetailActivity.this, downloadInfo.getFileSavePath());
                     }
                     break;
                 default:

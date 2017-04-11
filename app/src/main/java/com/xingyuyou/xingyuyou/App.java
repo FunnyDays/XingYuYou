@@ -38,9 +38,9 @@ public class App extends Application {
 
     private void youmeng() {
         UMShareAPI.get(this);
-        PlatformConfig.setWeixin("","");
+        PlatformConfig.setWeixin("wxadf9a4cba53e3385","c3d35ec95f73765f6453336d923f3041");
         PlatformConfig.setQQZone("1106012303","hgqXkjzu7Mq1USGL");
-        PlatformConfig.setSinaWeibo("3073251384 ","8304b645771ea95644c209ed5e6b9558","http://www.xingyuyou.com");
+        PlatformConfig.setSinaWeibo("3073251384","8304b645771ea95644c209ed5e6b9558","http://www.xingyuyou.com");
     }
 
     /**

@@ -41,6 +41,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_centerVertical="true"
                         android:layout_height="100dp"
                         android:layout_marginLeft="20dp"
                         android:layout_toRightOf="@id/iv_game_pic"
@@ -54,7 +55,7 @@
                             android:lines="1"
                             android:text="@string/app_name"
                             android:textColor="@android:color/black"
-                            android:textSize="26sp" />
+                            android:textSize="24sp" />
 
                         <TextView
                             android:id="@+id/tv_game_type"
@@ -75,10 +76,29 @@
                             android:id="@+id/tv_game_size"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="67M"
+                            tools:text="67M"
+                            android:textColor="@android:color/black"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/tv_down_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="6744"
                             android:textColor="@android:color/black"
                             android:textSize="12sp" />
                     </LinearLayout>
+
+                    <Button
+                        android:id="@+id/bt_get_package"
+                        android:layout_width="60dp"
+                        android:layout_height="28dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/app_uninstall_button_bg"
+                        android:text="礼包"
+                        android:textColor="@color/colorAccent"
+                        android:layout_alignBottom="@+id/iv_game_pic"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"/>
                 </RelativeLayout>
 
                 <View
@@ -136,6 +156,7 @@
                     android:layout_marginTop="10dp"
                     android:ellipsize="end"
                     android:layout_marginBottom="58dp"
+                    android:paddingBottom="58dp"
                     tools:text="游戏介绍游戏介绍游戏介绍游戏介绍" />
 
                 <View
