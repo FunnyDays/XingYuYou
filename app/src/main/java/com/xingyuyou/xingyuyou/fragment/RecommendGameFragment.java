@@ -485,6 +485,7 @@ public class RecommendGameFragment extends BaseFragment {
 
         @Override
         public void onSuccess(File result) {
+            AppUtils.installApp(mActivity, downloadInfo.getFileSavePath());
             Log.e("wei", "onSuccess");
             refresh();
         }

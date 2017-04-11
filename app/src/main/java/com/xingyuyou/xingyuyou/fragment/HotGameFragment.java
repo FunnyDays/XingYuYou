@@ -427,7 +427,6 @@ public class HotGameFragment extends BaseFragment {
                     }
                     break;
                 case FINISHED:
-                    //Toast.makeText(mActivity, "下载完成", Toast.LENGTH_SHORT).show();
                     if (AppUtils.isInstallApp(mActivity,downloadInfo.getPackageName())) {
                         stopBtn.setText("打开");
                         AppUtils.launchApp(mActivity, downloadInfo.getPackageName());
@@ -480,6 +479,7 @@ public class HotGameFragment extends BaseFragment {
         @Override
         public void onSuccess(File result) {
             Log.e("wei", "onSuccess");
+            AppUtils.installApp(mActivity, downloadInfo.getFileSavePath());
             refresh();
         }
 

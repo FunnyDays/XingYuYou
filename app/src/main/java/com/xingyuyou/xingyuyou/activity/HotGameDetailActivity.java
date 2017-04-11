@@ -403,6 +403,7 @@ public class HotGameDetailActivity extends AppCompatActivity {
         @Override
         public void onSuccess(File result) {
             Log.e("wei", "onSuccess");
+            AppUtils.installApp(HotGameDetailActivity.this, downloadInfo.getFileSavePath());
             refresh();
         }
 
@@ -440,7 +441,7 @@ public class HotGameDetailActivity extends AppCompatActivity {
                         // AppUtils.launchApp(HotGameDetailActivity.this, downloadInfo.getPackageName());
                     } else {
                         mBtInstallGame.setText("安装");
-                        // AppUtils.installApp(HotGameDetailActivity.this, downloadInfo.getFileSavePath());
+                        //AppUtils.installApp(HotGameDetailActivity.this, downloadInfo.getFileSavePath());
                     }
                     break;
                 default:

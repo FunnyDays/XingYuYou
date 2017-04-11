@@ -17,6 +17,10 @@ public class Game  {
     private String gameDownState;
     private String gameDownloadUrl;
 
+    public Game(String gameName) {
+        this.gameName = gameName;
+    }
+
     public String getGameDownloadUrl() {
         return gameDownloadUrl;
     }

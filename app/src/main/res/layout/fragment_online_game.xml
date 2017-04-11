@@ -5,97 +5,30 @@
     android:id="@+id/empty_view_game"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:isFirstVisible="true"
     android:orientation="vertical">
-    <com.youth.banner.Banner
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/banner"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
+        app:tabMode="scrollable"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+
+        app:tabMinWidth="20dp"
+        app:tabMaxWidth="100dp"
+        app:tabContentStart="30dp"
+        app:tabBackground="@drawable/tab_background"
+        app:tabSelectedTextColor="@color/colorAccent"
+        app:tabTextColor="@color/darker_gray"
+        app:tabIndicatorHeight="0dp"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
-    <LinearLayout
+        android:layout_height="50dp">
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="全部"/>
+    </android.support.design.widget.TabLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal">
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/image_one"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:src="@drawable/ic_launcher"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_below="@id/image_one"
-                android:gravity="center"
-                android:text="最新网游"
-                />
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/image_two"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:src="@drawable/ic_launcher"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_below="@id/image_two"
-                android:gravity="center"
-                android:text="热门网游"
-                />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/image_three"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:src="@drawable/ic_launcher"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_below="@id/image_three"
-                android:gravity="center"
-                android:text="推荐网游"
-                />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/image_four"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:src="@drawable/ic_launcher"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_below="@id/image_four"
-                android:gravity="center"
-                android:text="即将开服"
-                />
-        </RelativeLayout>
-
-    </LinearLayout>
-
-
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>

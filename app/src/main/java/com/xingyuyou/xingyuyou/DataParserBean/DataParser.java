@@ -131,7 +131,7 @@ public class DataParser {
             Elements element = doc.select("div.list-in");
 
             for (int i = 0; i < element.size(); i++) {
-                game = new Game();
+                game = new Game("");
                 //获取游戏名称
                 String name = element.get(i).select("div.list-left").select("a").attr("title");
                 //获取游戏链接
