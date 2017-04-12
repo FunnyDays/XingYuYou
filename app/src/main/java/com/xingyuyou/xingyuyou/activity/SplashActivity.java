@@ -65,13 +65,14 @@ public class SplashActivity extends AppCompatActivity {
                         mVersion.setText(mVersionText);
                         if (Integer.valueOf(mVersionText) > mVersionCode) {
                             ToUpadte();
+
                         } else {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    IntentUtils.startActivity(SplashActivity.this, MainActivity.class);
+                                  //  IntentUtils.startActivityAndFinish(SplashActivity.this, MainActivity.class);
                                 }
-                            }, 2000);
+                            }, 1000);
                         }
                     }
                 } catch (JSONException e) {
@@ -96,6 +97,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        IntentUtils.startActivityAndFinish(SplashActivity.this, MainActivity.class);
         mVersionCode = AppUtils.getAppVersionCode(this);
         Log.e("banben", mVersionCode + "版本号");
         mText = (TextView) findViewById(R.id.text);

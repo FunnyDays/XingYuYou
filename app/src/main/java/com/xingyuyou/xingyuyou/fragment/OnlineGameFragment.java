@@ -4,8 +4,14 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.GlideImageLoader;
@@ -23,6 +29,9 @@ import java.util.ArrayList;
 public class OnlineGameFragment extends BaseFragment {
 
     private TabLayout mTabLayout;
+    private ImageView mGameTypeMore;
+    private PopupWindow mPopWindow;
+    private TextView mTextView;
 
     //赛车竞速   棋牌天地	模拟养成		卡牌对战		休闲益智		策略冒险
     //脱出		恐怖	二次元	 RPG	大型游戏	塔防游戏		动作格斗   网络游戏 飞行射击		角色扮演
@@ -64,12 +73,21 @@ public class OnlineGameFragment extends BaseFragment {
         mTabLayout.addTab(mTabLayout.newTab().setText("二次元"));
         mTabLayout.addTab(mTabLayout.newTab().setText("恐怖"));
         mTabLayout.addTab(mTabLayout.newTab().setText("脱出"));
+
         for(int i=0; i < mTabLayout.getTabCount(); i++) {
             View tab = ((ViewGroup) mTabLayout.getChildAt(0)).getChildAt(i);
             ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) tab.getLayoutParams();
             p.setMargins(0, 0, 50, 0);
             tab.requestLayout();
         }
+
+        mGameTypeMore = (ImageView) view.findViewById(R.id.iv_game_type_more);
+        mGameTypeMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow();
+            }
+        });
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
@@ -80,6 +98,25 @@ public class OnlineGameFragment extends BaseFragment {
         TestAdapter gameAdapter = new TestAdapter(mActivity, arrayList);
         recyclerView.setAdapter(gameAdapter);
         return view;
+    }
+
+    private void popupWindow() {
+        View popupView = LayoutInflater.from(mActivity).inflate(R.layout.popup_game_type_layout, null);
+        mTextView = (TextView) popupView.findViewById(R.id.tv_one);
+        mTextView.setTextColor(getResources().getColor(R.color.colorAccent));
+        mTextView.setBackgroundResource(R.drawable.tab_background_selected);
+        mTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mActivity, "view"+view.getId(), Toast.LENGTH_SHORT).show();
+                mPopWindow.dismiss();
+            }
+        });
+        mPopWindow = new PopupWindow(popupView,
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        mPopWindow.setAnimationStyle(R.style.animatorUP);  //设置加载动画
+        mPopWindow.setBackgroundDrawable(getResources().getDrawable(R.color.colorControlNormal));    //要为popWindow设置一个背景才有效
+        mPopWindow.showAsDropDown(mGameTypeMore);
     }
 
 }

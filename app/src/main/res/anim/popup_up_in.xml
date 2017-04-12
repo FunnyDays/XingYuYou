@@ -21,8 +21,8 @@
      android:interpolator="@anim/decelerate_quad">
     <translate
         android:duration="@android:integer/config_shortAnimTime"
-        android:fromYDelta="-100%"
-        android:toYDelta="0"/>
+        android:fromYDelta="-30%"
+        />
     <alpha
         android:duration="@android:integer/config_shortAnimTime"
         android:fromAlpha="0.0"
