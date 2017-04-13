@@ -126,6 +126,8 @@
         </activity>
         <activity android:name=".activity.GetGamePackageActivity">
         </activity>
+        <activity android:name=".activity.ManagementActivity">
+        </activity>
     </application>
 
 </manifest>

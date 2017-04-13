@@ -4,15 +4,16 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.activity.DownLoadActivity;
 import com.xingyuyou.xingyuyou.activity.MainActivity;
 import com.xingyuyou.xingyuyou.activity.SearchActivity;
+import com.xingyuyou.xingyuyou.activity.ManagementActivity;
 import com.xingyuyou.xingyuyou.adapter.TabsViewPagerAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 
@@ -27,6 +28,8 @@ public class OneFragment extends BaseFragment {
     private ViewPager viewPager;
     private TabsViewPagerAdapter mAdapter;
     private ArrayList<BaseFragment> fragments;
+    private ImageView mIvManage;
+
     public static OneFragment newInstance(String content) {
         Bundle args = new Bundle();
         args.putString("ARGS", content);
@@ -47,6 +50,14 @@ public class OneFragment extends BaseFragment {
     protected View initView() {
         View view = View.inflate(mActivity, R.layout.fragment_one, null);
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        mIvManage = (ImageView) view.findViewById(R.id.iv_manage);
+
+        mIvManage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    IntentUtils.startActivity(mActivity,ManagementActivity.class);
+            }
+        });
         initToolbar();
         //tablayout设置
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
@@ -63,7 +74,6 @@ public class OneFragment extends BaseFragment {
         return view;
     }
     private void initToolbar() {
-        mToolbar.setTitle("星宇游");
         mToolbar.inflateMenu(R.menu.all_tab_fragment_menu);
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
