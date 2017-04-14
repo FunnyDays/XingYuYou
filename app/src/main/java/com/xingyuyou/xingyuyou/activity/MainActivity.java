@@ -4,13 +4,17 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
@@ -30,7 +34,7 @@ import com.xingyuyou.xingyuyou.weight.CustomViewPager;
 
 import java.util.ArrayList;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
     private FragmentManager supportFragmentManager  = getSupportFragmentManager();
     private ArrayList<BaseFragment> fragments;
     public static BottomNavigationBar bottomNavigationBar;
@@ -165,5 +169,31 @@ public class MainActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
 
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.post) {
+            Toast.makeText(this, "ahhaha"+id, Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.see) {
+            Toast.makeText(this, "ahhaha"+id, Toast.LENGTH_SHORT).show();
+
+        } else if (id == R.id.collect) {
+            Toast.makeText(this, "ahhaha"+id, Toast.LENGTH_SHORT).show();
+
+        } else if (id == R.id.nav_share) {
+            Toast.makeText(this, "ahhaha"+id, Toast.LENGTH_SHORT).show();
+
+        } else if (id == R.id.nav_send) {
+            Toast.makeText(this, "ahhaha"+id, Toast.LENGTH_SHORT).show();
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

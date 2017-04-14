@@ -1,8 +1,11 @@
 package com.xingyuyou.xingyuyou.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,11 +47,9 @@ public class OneFragment extends BaseFragment {
     public void initData() {
 
     }
-
-
     @Override
     protected View initView() {
-        View view = View.inflate(mActivity, R.layout.fragment_one, null);
+        View view = View.inflate(mActivity, R.layout.fragment_one_withnva, null);
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         mIvManage = (ImageView) view.findViewById(R.id.iv_manage);
 
@@ -70,6 +71,17 @@ public class OneFragment extends BaseFragment {
         mAdapter.addFragment(fragments.get(2), "最新");
         viewPager.setAdapter(mAdapter);
         tabLayout.setupWithViewPager(viewPager);
+
+        //设置Nva
+        DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                mActivity, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+       // toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) view.findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) mActivity);
+
 
         return view;
     }
