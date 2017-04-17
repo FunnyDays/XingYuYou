@@ -107,7 +107,7 @@ public class OneFragment extends BaseFragment {
 
     private ArrayList<BaseFragment> getFragments() {
         fragments = new ArrayList<>();
-        fragments.add(HotGameFragment.newInstance("热门"));
+        fragments.add(HotGameWithCoverFragment.newInstance("热门"));
         fragments.add(RecommendGameFragment.newInstance("推荐"));
         fragments.add(NewGameFragment.newInstance("最新"));
         mAdapter = new TabsViewPagerAdapter(((MainActivity) mActivity).getSupportFragmentManager());
