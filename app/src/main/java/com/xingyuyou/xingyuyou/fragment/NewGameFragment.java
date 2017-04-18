@@ -152,11 +152,20 @@ public class NewGameFragment extends BaseFragment {
     @Override
     protected View initView() {
         initBannerData();
-        initData(PAGENUMBER);
+
         View view = View.inflate(mActivity, R.layout.fragment_new_game, null);
         return view;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            initData(PAGENUMBER);
+        } else {
+            //不可见时不执行操作
+        }
+    }
     @Override
     public void onResume() {
         super.onResume();
@@ -272,7 +281,7 @@ public class NewGameFragment extends BaseFragment {
 
         //添加头布局
         mListView.addHeaderView(mBanner);
-        mListView.addHeaderView(headerViewTwo);
+        //mListView.addHeaderView(headerViewTwo);
         //设置底部布局
         mLoading = View.inflate(mActivity, R.layout.default_loading, null);
         mLoadingText = (TextView) mLoading.findViewById(R.id.loading_text);

@@ -66,8 +66,8 @@ public class OneFragment extends BaseFragment {
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         //viewpager适配器
         getFragments();
-        mAdapter.addFragment(fragments.get(0), "热门");
-        mAdapter.addFragment(fragments.get(1), "推荐");
+        mAdapter.addFragment(fragments.get(0), "推荐");
+        mAdapter.addFragment(fragments.get(1), "精品");
         mAdapter.addFragment(fragments.get(2), "最新");
         viewPager.setAdapter(mAdapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -107,8 +107,8 @@ public class OneFragment extends BaseFragment {
 
     private ArrayList<BaseFragment> getFragments() {
         fragments = new ArrayList<>();
-        fragments.add(HotGameWithCoverFragment.newInstance("热门"));
-        fragments.add(RecommendGameFragment.newInstance("推荐"));
+        fragments.add(RecommendWithCoverFragment.newInstance("推荐"));
+        fragments.add(HotGameWithCoverFragment.newInstance("精品"));
         fragments.add(NewGameFragment.newInstance("最新"));
         mAdapter = new TabsViewPagerAdapter(((MainActivity) mActivity).getSupportFragmentManager());
         return fragments;

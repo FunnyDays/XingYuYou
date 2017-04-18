@@ -19,10 +19,8 @@ import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.GameHeaderFooterAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
-import com.xingyuyou.xingyuyou.bean.Game;
 import com.xingyuyou.xingyuyou.bean.HotBannerBean;
 import com.xingyuyou.xingyuyou.bean.hotgame.HotGameBean;
-import com.youth.banner.Banner;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -38,7 +36,7 @@ import okhttp3.Call;
 /**
  * Created by Administrator on 2016/6/28.
  */
-public class HotGameWithCoverFragment extends BaseFragment {
+public class RecommendWithCoverFragment extends BaseFragment {
 
 
     private RecyclerView mRecyclerView;
@@ -109,10 +107,10 @@ public class HotGameWithCoverFragment extends BaseFragment {
     private ProgressBar mPbNodata;
     private TextView mTvNodata;
 
-    public static HotGameWithCoverFragment newInstance(String content) {
+    public static RecommendWithCoverFragment newInstance(String content) {
         Bundle args = new Bundle();
         args.putString("ARGS", content);
-        HotGameWithCoverFragment fragment = new HotGameWithCoverFragment();
+        RecommendWithCoverFragment fragment = new RecommendWithCoverFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -132,7 +130,7 @@ public class HotGameWithCoverFragment extends BaseFragment {
         OkHttpUtils.post()//
                 .addParams("limit",String.valueOf(PAGENUMBER))
                 .addParams("file_type",String.valueOf("1"))
-                .url(XingYuInterface.GET_GAME_LIST + "/type/top")
+                .url(XingYuInterface.GET_GAME_LIST + "/type/tui")
                 .tag(this)//
                 .build()//
                 .execute(new StringCallback() {

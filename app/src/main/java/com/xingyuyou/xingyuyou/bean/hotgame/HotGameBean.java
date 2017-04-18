@@ -8,10 +8,11 @@ public class HotGameBean {
     public HotGameBean() {
     }
 
-    public HotGameBean(String id, String game_name, String icon, String game_size, String game_type_id, String game_baoming, String dow_num, String features, String introduction, String and_dow_address, String add_game_address, String recommend_status) {
+    public HotGameBean(String id, String game_name, String icon,String cover, String game_size, String game_type_id, String game_baoming, String dow_num, String features, String introduction, String and_dow_address, String add_game_address, String recommend_status) {
         this.id = id;
         this.game_name = game_name;
         this.icon = icon;
+        this.icon = cover;
         this.game_size = game_size;
         this.game_type_id = game_type_id;
         this.game_baoming = game_baoming;
@@ -39,6 +40,7 @@ public class HotGameBean {
     private String id;
     private String game_name;
     private String icon;
+    private String cover;
     private String game_size;
     private String game_type_id;
     private String game_baoming;
@@ -67,6 +69,13 @@ public class HotGameBean {
 
     public void setFeatures(String features) {
         this.features = features;
+    }
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 
     public void setGame_name(String game_name) {
@@ -149,6 +158,7 @@ public class HotGameBean {
                 "id='" + id + '\'' +
                 ", game_name='" + game_name + '\'' +
                 ", icon='" + icon + '\'' +
+                ", cover='" + cover + '\'' +
                 ", game_size='" + game_size + '\'' +
                 ", game_type_id='" + game_type_id + '\'' +
                 ", game_baoming='" + game_baoming + '\'' +

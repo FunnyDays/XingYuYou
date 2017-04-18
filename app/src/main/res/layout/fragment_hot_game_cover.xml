@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.xingyuyou.xingyuyou.Utils.Loading.LoadingLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/empty_view_game"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:isFirstVisible="true"
     android:orientation="vertical"
    >
-
 
     <android.support.v7.widget.RecyclerView
         android:paddingBottom="54dp"
@@ -14,4 +15,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
-</LinearLayout>
+</com.xingyuyou.xingyuyou.Utils.Loading.LoadingLayout>

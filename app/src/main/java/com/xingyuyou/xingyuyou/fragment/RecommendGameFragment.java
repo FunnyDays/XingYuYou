@@ -152,11 +152,19 @@ public class RecommendGameFragment extends BaseFragment {
     @Override
     protected View initView() {
         initBannerData();
-        initData(PAGENUMBER);
+
         View view = View.inflate(mActivity, R.layout.fragment_recom_game, null);
         return view;
     }
-
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            initData(PAGENUMBER);
+        } else {
+            //不可见时不执行操作
+        }
+    }
     @Override
     public void onResume() {
         super.onResume();

@@ -173,13 +173,12 @@ public class DownLoadActivity extends AppCompatActivity {
                     }
                     break;
                 case FINISHED:
-                    Toast.makeText(x.app(), "已经下载完成", Toast.LENGTH_LONG).show();
-                    if (AppUtils.isInstallApp(getBaseContext(),"cn.mljia.o2o")){
+                    if (AppUtils.isInstallApp(DownLoadActivity.this,downloadInfo.getPackageName())) {
                         stopBtn.setText("打开");
-                        AppUtils.launchApp(getBaseContext(),"cn.mljia.o2o");
-                    }else {
+                        AppUtils.launchApp(DownLoadActivity.this, downloadInfo.getPackageName());
+                    } else {
                         stopBtn.setText("安装");
-                        AppUtils.installApp(getBaseContext(),downloadInfo.getFileSavePath());
+                        AppUtils.installApp(DownLoadActivity.this, downloadInfo.getFileSavePath());
                     }
                     break;
                 default:
@@ -225,6 +224,7 @@ public class DownLoadActivity extends AppCompatActivity {
         @Override
         public void onSuccess(File result) {
             Log.e("wei", "onSuccess");
+            AppUtils.installApp(DownLoadActivity.this, downloadInfo.getFileSavePath());
             refresh();
         }
 
