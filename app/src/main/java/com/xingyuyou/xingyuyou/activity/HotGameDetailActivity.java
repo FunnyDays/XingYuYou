@@ -310,7 +310,7 @@ public class HotGameDetailActivity extends AppCompatActivity {
                     DownloadInfo downloadInfo = new DownloadInfo();
                     downloadInfo.setUrl(mGameDetailList.get(0).getAdd_game_address());
                     downloadInfo.setGamePicUrl(mGameDetailList.get(0).getIcon());
-                    //downloadInfo.setPackageName(mGameDetailList.get(0).getGame_baoming());
+                    downloadInfo.setPackageName(mGameDetailList.get(0).getGame_baoming());
                     downloadInfo.setAutoResume(true);
                     downloadInfo.setAutoRename(false);
                     downloadInfo.setLabel(mGameDetailList.get(0).getGame_name());

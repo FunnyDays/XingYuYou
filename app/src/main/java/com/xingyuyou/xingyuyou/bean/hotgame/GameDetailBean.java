@@ -28,6 +28,7 @@ public class GameDetailBean {
     private String game_name;
     private String version;
     private String icon;
+    private String game_baoming;
     private String game_type_id;
     private String game_size;
     private String dow_num;
@@ -64,6 +65,13 @@ public class GameDetailBean {
         return version;
     }
 
+    public String getGame_baoming() {
+        return game_baoming;
+    }
+
+    public void setGame_baoming(String game_baoming) {
+        this.game_baoming = game_baoming;
+    }
     public void setVersion(String version) {
         this.version = version;
     }
@@ -147,6 +155,7 @@ public class GameDetailBean {
                 ", game_name='" + game_name + '\'' +
                 ", version='" + version + '\'' +
                 ", icon='" + icon + '\'' +
+                ", game_baoming='" + game_baoming + '\'' +
                 ", game_type_id='" + game_type_id + '\'' +
                 ", game_size='" + game_size + '\'' +
                 ", dow_num='" + dow_num + '\'' +

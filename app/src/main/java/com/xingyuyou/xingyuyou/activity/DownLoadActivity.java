@@ -259,12 +259,13 @@ public class DownLoadActivity extends AppCompatActivity {
                     break;
                 case FINISHED:
                     stopBtn.setText("完成");
-                    if (AppUtils.isInstallApp(getBaseContext(),"cn.mljia.o2o")){
+                    if (AppUtils.isInstallApp(getBaseContext(),downloadInfo.getPackageName())){
                         stopBtn.setText("打开");
-                        //AppUtils.launchApp(mActivity,"cn.mljia.o2o");
+                       // AppUtils.launchApp(getBaseContext(), downloadInfo.getPackageName());
                     }else {
                         stopBtn.setText("安装");
-                        //AppUtils.installApp(mActivity,downloadInfo.getFileSavePath());
+                        //AppUtils.installApp(getBaseContext(), downloadInfo.getFileSavePath());
+
                     }
                     break;
                 default:

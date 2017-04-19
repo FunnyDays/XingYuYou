@@ -46,7 +46,7 @@
                 android:id="@+id/tv_game_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="5dp"
                 android:layout_marginBottom="5dp"
                 android:text="地铁跑酷"
                 android:textColor="@android:color/black"
