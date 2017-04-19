@@ -2,6 +2,7 @@ package com.xingyuyou.xingyuyou.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
 import com.xingyuyou.xingyuyou.Utils.GlideImageLoader;
+import com.xingyuyou.xingyuyou.Utils.IntentUtils;
+import com.xingyuyou.xingyuyou.activity.PostingActivity;
 import com.xingyuyou.xingyuyou.adapter.DividerItemDecoration;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.youth.banner.Banner;
@@ -40,6 +43,7 @@ public class CommunityFragment extends BaseFragment {
     private List<String> mDatas = new ArrayList<>();
     private CommonAdapter<String> mAdapter;
     private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
+    private FloatingActionButton mFabPost;
 
     public static CommunityFragment newInstance(String content) {
         Bundle args = new Bundle();
@@ -64,6 +68,13 @@ public class CommunityFragment extends BaseFragment {
     protected View initView() {
         initData();
         View view = View.inflate(mActivity, R.layout.fragment_community, null);
+        mFabPost = (FloatingActionButton) view.findViewById(R.id.fab_add_comment);
+        mFabPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentUtils.startActivity(mActivity, PostingActivity.class);
+            }
+        });
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.SwipeRefreshLayout);
         initSwipeRefreshLayout();
         mRecyclerView = (RecyclerView)view.findViewById(R.id.id_recyclerview);

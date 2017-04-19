@@ -43,7 +43,7 @@ public class RecommendWithCoverFragment extends BaseFragment {
     private List<HotGameBean> mHotGameList=new ArrayList<>();
     private List<HotGameBean> mGameAdapterList=new ArrayList<>();
     private List<HotBannerBean> mHotBannerGameList;
-
+    private boolean IS_FIRST_INIT_DATA=true;
     private int  MLOADINGMORE_FLAG = 0;
     private int  PAGENUMBER = 1;
     boolean isLoading = false;
@@ -55,7 +55,7 @@ public class RecommendWithCoverFragment extends BaseFragment {
             if (msg.what == 1) {
                 if (msg.obj.toString().contains("{\"list\":null}")) {
                     Toast.makeText(mActivity, "已经没有更多数据", Toast.LENGTH_SHORT).show();
-                    mPbNodata.setVisibility(View.INVISIBLE);
+                    mPbNodata.setVisibility(View.GONE);
                     mTvNodata.setText("已经没有更多数据");
                     return;
                 }
@@ -172,7 +172,10 @@ public class RecommendWithCoverFragment extends BaseFragment {
         View loadingData = View.inflate(mActivity, R.layout.default_loading, null);
         mPbNodata = (ProgressBar) loadingData.findViewById(R.id.pb_loading);
         mTvNodata = (TextView) loadingData.findViewById(R.id.loading_text);
-       // mGameHeaderFooterAdapter.setFooterView(loadingData);
+        TextView textView = new TextView(mActivity);
+        textView.setText("推荐游戏");
+        mGameHeaderFooterAdapter.setHeaderView(textView);
+        mGameHeaderFooterAdapter.setFooterView(loadingData);
         mRecyclerView.setAdapter(mGameHeaderFooterAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -231,8 +234,9 @@ public class RecommendWithCoverFragment extends BaseFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
+        if (isVisibleToUser&&IS_FIRST_INIT_DATA) {
             initData(PAGENUMBER);
+            IS_FIRST_INIT_DATA=false;
         } else {
             //不可见时不执行操作
         }

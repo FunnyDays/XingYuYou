@@ -220,36 +220,7 @@ public class NewGameFragment extends BaseFragment {
             mListView.setNestedScrollingEnabled(true);
         }
         View headerViewOne = View.inflate(mActivity, R.layout.carousel_figure_header_view, null);
-        View headerViewTwo = View.inflate(mActivity, R.layout.item_listview_header_view_four_icon, null);
-        //四个引导图标
-        ImageView imageViewOne = (ImageView) headerViewTwo.findViewById(R.id.image_one);
-        ImageView imageViewTwo = (ImageView) headerViewTwo.findViewById(R.id.image_two);
-        ImageView imageViewThree = (ImageView) headerViewTwo.findViewById(R.id.image_three);
-        ImageView imageViewFour = (ImageView) headerViewTwo.findViewById(R.id.image_four);
-        imageViewOne.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mActivity, "第一个引导", Toast.LENGTH_SHORT).show();
-            }
-        });
-        imageViewTwo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mActivity, "第二个引导", Toast.LENGTH_SHORT).show();
-            }
-        });
-        imageViewThree.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mActivity, "第三个引导", Toast.LENGTH_SHORT).show();
-            }
-        });
-        imageViewFour.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mActivity, "第四个引导", Toast.LENGTH_SHORT).show();
-            }
-        });
+
         //轮播图数据
         ArrayList<Object> imageList = new ArrayList<>();
         imageList.add("1");
@@ -281,7 +252,6 @@ public class NewGameFragment extends BaseFragment {
 
         //添加头布局
         mListView.addHeaderView(mBanner);
-        //mListView.addHeaderView(headerViewTwo);
         //设置底部布局
         mLoading = View.inflate(mActivity, R.layout.default_loading, null);
         mLoadingText = (TextView) mLoading.findViewById(R.id.loading_text);
@@ -296,9 +266,8 @@ public class NewGameFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(mActivity,HotGameDetailActivity.class);
-                intent.putExtra("game_id",mGameListAdapter.get(i-2).getId());
-                intent.putExtra("game_name",mGameListAdapter.get(i-2).getGame_name());
-                Log.e("game_id",mGameListAdapter.get(i-2).getId());
+                intent.putExtra("game_id",mGameListAdapter.get(i-1).getId());
+                intent.putExtra("game_name",mGameListAdapter.get(i-1).getGame_name());
                 startActivity(intent);
             }
         });
@@ -321,7 +290,6 @@ public class NewGameFragment extends BaseFragment {
 
         private Context mContext;
         private final LayoutInflater mInflater;
-
         private DownloadListAdapter() {
             mContext = mActivity;
             mInflater = LayoutInflater.from(mContext);

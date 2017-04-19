@@ -95,14 +95,14 @@ public class GameHeaderFooterAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if(getItemViewType(position) == TYPE_NORMAL){
             if(holder instanceof ItemViewHolder) {
-                ((ItemViewHolder) holder).mGameName.setText(mListData.get(position).getGame_name());
-                ((ItemViewHolder) holder).mGameFeature.setText(mListData.get(position).getFeatures());
+                ((ItemViewHolder) holder).mGameName.setText(mListData.get(position-1).getGame_name());
+                ((ItemViewHolder) holder).mGameFeature.setText(mListData.get(position-1).getFeatures());
                 Glide.with(mActivity)
-                        .load(mListData.get(position).getIcon())
+                        .load(mListData.get(position-1).getIcon())
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .into(((ItemViewHolder) holder).mGamePic);
                 Glide.with(mActivity)
-                        .load(mListData.get(position).getCover())
+                        .load(mListData.get(position-1).getCover())
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .into(((ItemViewHolder) holder).mGameCover);
 
@@ -110,8 +110,8 @@ public class GameHeaderFooterAdapter extends RecyclerView.Adapter {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(mActivity,HotGameDetailActivity.class);
-                        intent.putExtra("game_id",mListData.get(position).getId());
-                        intent.putExtra("game_name",mListData.get(position).getGame_name());
+                        intent.putExtra("game_id",mListData.get(position-1).getId());
+                        intent.putExtra("game_name",mListData.get(position-1).getGame_name());
                         mActivity.startActivity(intent);
                     }
                 });

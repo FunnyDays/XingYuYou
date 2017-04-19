@@ -64,7 +64,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         bottomNavigationBar
                 .addItem(new BottomNavigationItem(R.mipmap.bangdan, "榜单").setActiveColorResource(R.color.colorPrimary))
                 .addItem(new BottomNavigationItem(R.mipmap.fenlei, "分类").setActiveColorResource(R.color.colorPrimary))
-                .addItem(new BottomNavigationItem(R.mipmap.shequ, "礼包").setActiveColorResource(R.color.colorPrimary))
+                .addItem(new BottomNavigationItem(R.mipmap.shequ, "社区").setActiveColorResource(R.color.colorPrimary))
                 .addItem(new BottomNavigationItem(R.mipmap.guanli, "管理").setActiveColorResource(R.color.colorPrimary))
                 .setMode(BottomNavigationBar.MODE_FIXED)//设置底部代文字显示模式。MODE_DEFAULT默认MODE_FIXED代文字MODE_SHIFTING不带文字
                 .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)//背景模式BACKGROUND_STYLE_RIPPLE涟漪BACKGROUND_STYLE_STATIC静态
@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         fragments = new ArrayList<>();
         fragments.add(OneFragment.newInstance("榜单"));
         fragments.add(TwoFragment.newInstance("分类"));
-        fragments.add(GiftsPackageFragment.newInstance("礼包"));
+        fragments.add(CommunityFragment.newInstance("社区"));
         fragments.add(UserFragment.newInstance("管理"));
         adapter = new MainContentVPAdapter(supportFragmentManager, fragments);
         return fragments;

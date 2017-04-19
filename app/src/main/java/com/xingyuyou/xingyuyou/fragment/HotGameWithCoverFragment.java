@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.adapter.DividerItemDecoration;
 import com.xingyuyou.xingyuyou.adapter.GameHeaderFooterAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.Game;
@@ -45,7 +46,7 @@ public class HotGameWithCoverFragment extends BaseFragment {
     private List<HotGameBean> mHotGameList=new ArrayList<>();
     private List<HotGameBean> mGameAdapterList=new ArrayList<>();
     private List<HotBannerBean> mHotBannerGameList;
-
+    private boolean IS_FIRST_INIT_DATA=true;
     private int  MLOADINGMORE_FLAG = 0;
     private int  PAGENUMBER = 1;
     boolean isLoading = false;
@@ -57,7 +58,7 @@ public class HotGameWithCoverFragment extends BaseFragment {
             if (msg.what == 1) {
                 if (msg.obj.toString().contains("{\"list\":null}")) {
                     Toast.makeText(mActivity, "已经没有更多数据", Toast.LENGTH_SHORT).show();
-                    mPbNodata.setVisibility(View.INVISIBLE);
+                    mPbNodata.setVisibility(View.GONE);
                     mTvNodata.setText("已经没有更多数据");
                     return;
                 }
@@ -118,8 +119,7 @@ public class HotGameWithCoverFragment extends BaseFragment {
     }
     @Override
     protected View initView() {
-        initBannerData();
-
+        //initBannerData();
         View view = View.inflate(mActivity, R.layout.fragment_hot_game_cover, null);
         return view;
     }
@@ -174,7 +174,10 @@ public class HotGameWithCoverFragment extends BaseFragment {
         View loadingData = View.inflate(mActivity, R.layout.default_loading, null);
         mPbNodata = (ProgressBar) loadingData.findViewById(R.id.pb_loading);
         mTvNodata = (TextView) loadingData.findViewById(R.id.loading_text);
-       // mGameHeaderFooterAdapter.setFooterView(loadingData);
+        TextView textView = new TextView(mActivity);
+        textView.setText("精品游戏");
+        mGameHeaderFooterAdapter.setHeaderView(textView);
+        mGameHeaderFooterAdapter.setFooterView(loadingData);
         mRecyclerView.setAdapter(mGameHeaderFooterAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -233,8 +236,9 @@ public class HotGameWithCoverFragment extends BaseFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
+        if (isVisibleToUser&&IS_FIRST_INIT_DATA) {
             initData(PAGENUMBER);
+            IS_FIRST_INIT_DATA=false;
         } else {
             //不可见时不执行操作
         }

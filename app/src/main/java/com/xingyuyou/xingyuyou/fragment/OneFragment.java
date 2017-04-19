@@ -49,7 +49,7 @@ public class OneFragment extends BaseFragment {
     }
     @Override
     protected View initView() {
-        View view = View.inflate(mActivity, R.layout.fragment_one_withnva, null);
+        View view = View.inflate(mActivity, R.layout.fragment_one, null);
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         mIvManage = (ImageView) view.findViewById(R.id.iv_manage);
 
@@ -73,7 +73,7 @@ public class OneFragment extends BaseFragment {
         tabLayout.setupWithViewPager(viewPager);
 
         //设置Nva
-        DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+       /* DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 mActivity, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -82,7 +82,7 @@ public class OneFragment extends BaseFragment {
         NavigationView navigationView = (NavigationView) view.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) mActivity);
 
-
+*/
         return view;
     }
     private void initToolbar() {
