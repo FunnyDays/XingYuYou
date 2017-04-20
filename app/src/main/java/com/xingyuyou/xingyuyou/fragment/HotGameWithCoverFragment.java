@@ -73,7 +73,7 @@ public class HotGameWithCoverFragment extends BaseFragment {
                             new TypeToken<List<HotGameBean>>() {
                             }.getType());
                     for (int i = 0; i < mHotGameList.size(); i++) {
-                        Log.e("hotgame", "解析数据："+ mHotGameList.toString());
+                       // Log.e("hotgame", "解析数据："+ mHotGameList.toString());
                     }
                     mGameAdapterList.addAll(mHotGameList);
                     //如果还有数据把加载更多值为0
@@ -138,7 +138,7 @@ public class HotGameWithCoverFragment extends BaseFragment {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        Log.e("hot", e.toString() + ":e");
+                       // Log.e("hot", e.toString() + ":e");
                     }
                     @Override
                     public void onResponse(String response, int id) {
@@ -155,11 +155,11 @@ public class HotGameWithCoverFragment extends BaseFragment {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        Log.e("hot", e.toString() + ":e");
+                       // Log.e("hot", e.toString() + ":e");
                     }
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.e("lunbo", response + "");
+                       // Log.e("lunbo", response + "");
                         handler.obtainMessage(2, response).sendToTarget();
                     }
                 });
@@ -184,16 +184,16 @@ public class HotGameWithCoverFragment extends BaseFragment {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 switch (newState) {
                     case RecyclerView.SCROLL_STATE_SETTLING:
-                        Log.i("Main", "用户在手指离开屏幕之前，由于滑了一下，视图仍然依靠惯性继续滑动");
+                     //   Log.i("Main", "用户在手指离开屏幕之前，由于滑了一下，视图仍然依靠惯性继续滑动");
                         Glide.with(mActivity).pauseRequests();
                         //刷新
                         break;
                     case RecyclerView.SCROLL_STATE_IDLE:
-                        Log.i("Main", "视图已经停止滑动");
+                      //  Log.i("Main", "视图已经停止滑动");
                         Glide.with(mActivity).resumeRequests();
                         break;
                     case RecyclerView.SCROLL_STATE_DRAGGING:
-                        Log.i("Main", "手指没有离开屏幕，视图正在滑动");
+                      //  Log.i("Main", "手指没有离开屏幕，视图正在滑动");
                         Glide.with(mActivity).resumeRequests();
                         break;
                 }
@@ -213,14 +213,14 @@ public class HotGameWithCoverFragment extends BaseFragment {
                 } else if (dy > 0) {
                     // T.show(mActivity,"正在向下滑动");
                     if (lastVisibleItemPosition + 1 == mGameHeaderFooterAdapter.getItemCount() - 5) {
-                        Log.e("search", "loading executed");
+                      //  Log.e("search", "loading executed");
                         if (!isLoading) {
                             isLoading = true;
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
                                     PAGENUMBER++;
-                                    Log.d("search", "load more completed");
+                                   // Log.d("search", "load more completed");
                                     initData(PAGENUMBER);
                                     isLoading = false;
                                 }

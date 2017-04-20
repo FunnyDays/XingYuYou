@@ -41,6 +41,16 @@
             android:value="58c0f84475ca351dc300014e">
         </meta-data>
 
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.xingyuyou.xingyuyou.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -129,6 +139,8 @@
         <activity android:name=".activity.ManagementActivity">
         </activity>
         <activity android:name=".activity.PostingActivity">
+        </activity>
+        <activity android:name=".activity.SearchForCommActivity">
         </activity>
     </application>
 

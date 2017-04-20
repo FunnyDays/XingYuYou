@@ -8,6 +8,7 @@
     android:orientation="vertical"
     android:paddingBottom="58dp"
     >
+    <include layout="@layout/toolbar_no_nav"/>
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/SwipeRefreshLayout"
         android:layout_width="match_parent"
@@ -19,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </android.support.v4.widget.SwipeRefreshLayout>
-    <android.support.design.widget.FloatingActionButton
+   <!-- <android.support.design.widget.FloatingActionButton
         app:rippleColor="#56abe4"
         app:backgroundTint="#56abe4"
         android:id="@+id/fab_add_comment"
@@ -27,5 +28,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="10dp"
-        android:src="@drawable/image3"/>
+        android:src="@drawable/image3"/>-->
 </android.support.design.widget.CoordinatorLayout>

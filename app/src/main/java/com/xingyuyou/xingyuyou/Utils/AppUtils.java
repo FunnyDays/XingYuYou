@@ -56,12 +56,7 @@ public class AppUtils {
      * @param filePath 文件路径
      */
     public static void installApp(Context context, String filePath) {
-        try {
             installApp(context, FileUtils.getFileByPath(filePath));
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     /**

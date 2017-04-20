@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.webkit.MimeTypeMap;
 
 import java.io.File;
@@ -54,12 +55,21 @@ public class IntentUtils {
         if (file == null) return null;
         Intent intent = new Intent(Intent.ACTION_VIEW);
         String type;
+
         if (Build.VERSION.SDK_INT < 23) {
             type = "application/vnd.android.package-archive";
+            intent.setDataAndType(Uri.fromFile(file), type);
         } else {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(FileUtils.getFileExtension(file));
+            intent.setDataAndType(Uri.fromFile(file), type);
         }
-        intent.setDataAndType(Uri.fromFile(file), type);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            type = "application/vnd.android.package-archive";
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri contentUri = FileProvider.getUriForFile(Utils.getContext(), "com.xingyuyou.xingyuyou.fileprovider", file);
+            intent.setDataAndType(contentUri, type);
+        }
+
         return intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 

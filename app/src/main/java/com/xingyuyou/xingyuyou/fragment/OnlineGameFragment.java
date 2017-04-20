@@ -117,6 +117,7 @@ public class OnlineGameFragment extends BaseFragment {
         mPopWindow.setAnimationStyle(R.style.animatorUP);  //设置加载动画
         mPopWindow.setBackgroundDrawable(getResources().getDrawable(R.color.colorControlNormal));    //要为popWindow设置一个背景才有效
         mPopWindow.showAsDropDown(mGameTypeMore);
+
     }
 
 }

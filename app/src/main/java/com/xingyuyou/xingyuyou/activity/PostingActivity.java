@@ -21,6 +21,36 @@ import java.util.Date;
 import java.util.List;
 
 public class PostingActivity extends AppCompatActivity {
+
+    /*
+    * {
+    "status": 1,
+    "errorinfo": "获取社区分类列表成功",
+    "data": [
+        {
+            "id": "1",
+            "class_name": "cos",
+            "class_image": "http://xingyuyou.com/Uploads/Picture/2017-03-15/58c89b9e9ac75.png"
+        },
+        {
+            "id": "2",
+            "class_name": "美女",
+            "class_image": "http://xingyuyou.com/Uploads/Picture/2017-03-22/58d1d25c1bdf2.jpg"
+        }
+    ]
+}
+{
+    "status": 1,
+    "errorinfo": "获取社区分类列表成功",
+    "data": null
+}
+
+    * */
+
+
+
+
+
     private static final int REQUEST_CODE_PICK_IMAGE = 1023;
     private static final int REQUEST_CODE_CAPTURE_CAMEIA = 1022;
     private RichTextEditor editor;

@@ -26,4 +26,13 @@ public class Utils {
     public static void init(Context context) {
         Utils.context = context.getApplicationContext();
     }
+    /**
+     * 获取ApplicationContext
+     *
+     * @return ApplicationContext
+     */
+    public static Context getContext() {
+        if (context != null) return context;
+        throw new NullPointerException("u should init first");
+    }
 }

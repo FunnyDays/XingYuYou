@@ -8,18 +8,20 @@
                 android:gravity="center"
     >
 
+
+
     <TextView
-        android:gravity="center"
         android:id="@+id/tv_class_name"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
+        android:gravity="center"
         tools:text="CosP"/>
 
     <ImageView
-        android:layout_below="@id/tv_class_name"
         android:id="@+id/iv_class_image"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:layout_below="@id/tv_class_name"
         android:scaleType="fitXY"
         android:src="@mipmap/ic"/>
 

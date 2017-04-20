@@ -62,7 +62,7 @@ public class ManagementActivity extends AppCompatActivity {
             TextView tvUserAccountName = (TextView) findViewById(R.id.user_account_name);
             TextView tvNickName = (TextView) findViewById(R.id.user_nickname);
             tvUserAccountName.setText(account);
-            tvNickName.setText(nickname);
+            //tvNickName.setText(nickname);
         }
 
         //登录

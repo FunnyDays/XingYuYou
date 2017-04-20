@@ -2,33 +2,42 @@ package com.xingyuyou.xingyuyou.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
+import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.util.DiffUtil;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
-import com.xingyuyou.xingyuyou.Utils.GlideImageLoader;
+import com.xingyuyou.xingyuyou.Utils.DiffCallBack;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
-import com.xingyuyou.xingyuyou.activity.PostingActivity;
-import com.xingyuyou.xingyuyou.adapter.DividerItemDecoration;
+import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.activity.SearchForCommActivity;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
-import com.youth.banner.Banner;
+import com.xingyuyou.xingyuyou.bean.community.LabelClassBean;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
-import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
 
 
 /**
@@ -39,11 +48,39 @@ public class CommunityFragment extends BaseFragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
-    private Handler handler=new Handler();
-    private List<String> mDatas = new ArrayList<>();
-    private CommonAdapter<String> mAdapter;
-    private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
-    private FloatingActionButton mFabPost;
+    private List<LabelClassBean> mDatas = new ArrayList<>();
+    private CommonAdapter<LabelClassBean> mAdapter;
+    private List<LabelClassBean> mLabelClassList=new ArrayList<>();
+    private Handler mHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1) {
+                String response = (String) msg.obj;
+                JSONObject jo = null;
+                try {
+                    jo = new JSONObject(response);
+                    String string = jo.getString("status");
+                    if (string.equals("1")){
+                        JSONArray ja = jo.getJSONArray("data");
+                        //Log.e("hot", "解析数据："+  ja.toString());
+                        Gson gson = new Gson();
+                        mLabelClassList = gson.fromJson(ja.toString(),
+                                new TypeToken<List<LabelClassBean>>() {
+                                }.getType());
+                        mDatas.addAll(mLabelClassList);
+
+                        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffCallBack(mDatas, mLabelClassList), true);
+                        diffResult.dispatchUpdatesTo(mAdapter);
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
+
 
     public static CommunityFragment newInstance(String content) {
         Bundle args = new Bundle();
@@ -59,39 +96,48 @@ public class CommunityFragment extends BaseFragment {
      */
     @Override
     public void initData() {
-            for (int i = 'A'; i <= 'z'; i++)
-            {
-                mDatas.add((char) i + "");
-            }
+        OkHttpUtils.post()//
+                .url(XingYuInterface.GET_LABEL_CLASS)
+                .tag(this)//
+                .addParams("type", "2")
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                        mHandler.obtainMessage(1, response).sendToTarget();
+                    }
+                });
     }
     @Override
     protected View initView() {
-        initData();
         View view = View.inflate(mActivity, R.layout.fragment_community, null);
-        mFabPost = (FloatingActionButton) view.findViewById(R.id.fab_add_comment);
-        mFabPost.setOnClickListener(new View.OnClickListener() {
+
+        Toolbar  toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(mActivity, PostingActivity.class);
+                IntentUtils.startActivity(mActivity, SearchForCommActivity.class);
             }
         });
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.SwipeRefreshLayout);
         initSwipeRefreshLayout();
         mRecyclerView = (RecyclerView)view.findViewById(R.id.id_recyclerview);
-
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
-
-        mAdapter = new CommonAdapter<String>(mActivity, R.layout.item_list, mDatas)
+        mRecyclerView.setLayoutManager(new GridLayoutManager(mActivity,2));
+        mAdapter = new CommonAdapter<LabelClassBean>(mActivity, R.layout.item_community_list, mDatas)
         {
             @Override
-            protected void convert(ViewHolder holder, String s, int position)
+            protected void convert(ViewHolder holder, LabelClassBean classBean, int position)
             {
-                holder.setText(R.id.game_name, s + "宣传视频 : " + holder.getAdapterPosition() + " , " + holder.getLayoutPosition());
+                holder.setText(R.id.tv_class_name,classBean.getClass_name());
+                Glide.with(mActivity).load(classBean.getClass_image()).into((ImageView) holder.getView(R.id.iv_class_image));
             }
         };
-        initHeaderAndFooter();
-        mRecyclerView.setAdapter(mHeaderAndFooterWrapper);
+
+        mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
@@ -107,25 +153,23 @@ public class CommunityFragment extends BaseFragment {
         });
         return view;
     }
-
-    private void initHeaderAndFooter()
-    {
-        mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mAdapter);
-
-        Banner banner = new Banner(mActivity);
-        FrameLayout.LayoutParams layoutParams = new Banner.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ConvertUtils.dp2px(200));
-        banner.setLayoutParams(layoutParams);
-        banner.setImages(mDatas).setImageLoader(new GlideImageLoader()).start();
-        mHeaderAndFooterWrapper.addHeaderView(banner);
-
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            initData();
+        } else {
+            //不可见时不执行操作
+        }
     }
+
     private void initSwipeRefreshLayout() {
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
-                handler.postDelayed(new Runnable() {
+                mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         mSwipeRefreshLayout.setRefreshing(false);
@@ -139,7 +183,7 @@ public class CommunityFragment extends BaseFragment {
             @Override
             public void onRefresh() {
 
-                handler.postDelayed(new Runnable() {
+                mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         mSwipeRefreshLayout.setRefreshing(false);
