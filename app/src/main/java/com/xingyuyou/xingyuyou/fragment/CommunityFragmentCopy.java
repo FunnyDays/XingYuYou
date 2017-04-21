@@ -8,25 +8,18 @@ import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
-import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
 import com.xingyuyou.xingyuyou.Utils.DiffCallBack;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.activity.SearchForCommActivity;
+import com.xingyuyou.xingyuyou.adapter.CommHeaderFooterAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.community.LabelClassBean;
-import com.zhy.adapter.recyclerview.CommonAdapter;
-import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
-import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -43,13 +36,13 @@ import okhttp3.Call;
 /**
  * Created by Administrator on 2016/6/28.
  */
-public class CommunityFragment extends BaseFragment {
+public class CommunityFragmentCopy extends BaseFragment {
 
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private List<LabelClassBean> mDatas = new ArrayList<>();
-    private CommonAdapter<LabelClassBean> mAdapter;
+    private CommHeaderFooterAdapter mAdapter;
     private List<LabelClassBean> mLabelClassList=new ArrayList<>();
     private Handler mHandler=new Handler(){
         @Override
@@ -68,10 +61,12 @@ public class CommunityFragment extends BaseFragment {
                         mLabelClassList = gson.fromJson(ja.toString(),
                                 new TypeToken<List<LabelClassBean>>() {
                                 }.getType());
-                        mDatas.addAll(mLabelClassList);
+
 
                         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffCallBack(mDatas, mLabelClassList), true);
                         diffResult.dispatchUpdatesTo(mAdapter);
+                        mDatas=mLabelClassList;
+                        mAdapter.setDatas(mDatas);
 
                     }
                 } catch (JSONException e) {
@@ -82,10 +77,10 @@ public class CommunityFragment extends BaseFragment {
     };
 
 
-    public static CommunityFragment newInstance(String content) {
+    public static CommunityFragmentCopy newInstance(String content) {
         Bundle args = new Bundle();
         args.putString("ARGS", content);
-        CommunityFragment fragment = new CommunityFragment();
+        CommunityFragmentCopy fragment = new CommunityFragmentCopy();
         fragment.setArguments(args);
         return fragment;
     }
@@ -127,30 +122,9 @@ public class CommunityFragment extends BaseFragment {
         initSwipeRefreshLayout();
         mRecyclerView = (RecyclerView)view.findViewById(R.id.id_recyclerview);
         mRecyclerView.setLayoutManager(new GridLayoutManager(mActivity,2));
-        mAdapter = new CommonAdapter<LabelClassBean>(mActivity, R.layout.item_community_list, mDatas)
-        {
-            @Override
-            protected void convert(ViewHolder holder, LabelClassBean classBean, int position)
-            {
-                holder.setText(R.id.tv_class_name,classBean.getClass_name());
-                Glide.with(mActivity).load(classBean.getClass_image()).into((ImageView) holder.getView(R.id.iv_class_image));
-            }
-        };
-
+        mAdapter = new CommHeaderFooterAdapter(mActivity,mDatas);
         mRecyclerView.setAdapter(mAdapter);
 
-        mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Toast.makeText(mActivity, "pos = " + position+ConvertUtils.dp2px(200), Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
-                return false;
-            }
-        });
         return view;
     }
     @Override

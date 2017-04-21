@@ -52,7 +52,6 @@ public class OneFragment extends BaseFragment {
         View view = View.inflate(mActivity, R.layout.fragment_one, null);
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         mIvManage = (ImageView) view.findViewById(R.id.iv_manage);
-
         mIvManage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

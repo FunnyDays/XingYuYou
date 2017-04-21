@@ -48,7 +48,7 @@ public class SplashActivity extends AppCompatActivity {
      * }
      * }
      */
-    Handler mHandler = new Handler() {
+   /* Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 1) {
@@ -64,10 +64,10 @@ public class SplashActivity extends AppCompatActivity {
                         mText.setText("QQ:" + mQq + "\n" + "官网：" + mNetwork);
                         mVersion.setText(mVersionText);
                         if (Integer.valueOf(mVersionText) > mVersionCode) {
-                            ToUpadte();
+                          //  ToUpadte();
 
                         } else {
-                            new Handler().postDelayed(new Runnable() {
+                            mHandler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
                                   //  IntentUtils.startActivityAndFinish(SplashActivity.this, MainActivity.class);
@@ -80,32 +80,22 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }
         }
-    };
-    private String mQq;
-    private String mNetwork;
-    private String mAppDownload;
-    private String mVersionText;
-    private TextView mVersion;
-    private TextView mText;
-    private String mUpdateInfo;
-    private int mVersionCode;
-    private AlertDialog mAlertDialog;
-    private TextView mTvUpdateInfo;
-    private ProgressButton mBtUpdate;
+    };*/
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         IntentUtils.startActivityAndFinish(SplashActivity.this, MainActivity.class);
-        mVersionCode = AppUtils.getAppVersionCode(this);
+     /*   mVersionCode = AppUtils.getAppVersionCode(this);
         Log.e("banben", mVersionCode + "版本号");
         mText = (TextView) findViewById(R.id.text);
         mVersion = (TextView) findViewById(R.id.version);
-        checkUpdate();
+        checkUpdate();*/
     }
 
-    private void ToUpadte() {
+   /* private void ToUpadte() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_update_app, null);
         builder.setView(view);
@@ -129,9 +119,9 @@ public class SplashActivity extends AppCompatActivity {
         mAlertDialog = builder.create();
         mAlertDialog.setCancelable(false);
         mAlertDialog.show();
-    }
+    }*/
 
-    private void toDownload() {
+  /*  private void toDownload() {
         OkHttpUtils//
                 .get()//
                 .url(mAppDownload)//
@@ -162,11 +152,11 @@ public class SplashActivity extends AppCompatActivity {
                         Toast.makeText(SplashActivity.this, "下载完成", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
+    }*/
 
-    /**
+  /*  *//**
      * 检查更新 XingYuInterface.ABOUT_US
-     */
+     *//*
     private void checkUpdate() {
         OkHttpUtils.post()//
                 .url(XingYuInterface.ABOUT_US)
@@ -184,11 +174,11 @@ public class SplashActivity extends AppCompatActivity {
                         Log.e("xiazai", response + ":e");
                     }
                 });
-    }
+    }*/
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        OkHttpUtils.getInstance().cancelTag(this);
+
     }
 }

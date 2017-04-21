@@ -70,7 +70,7 @@ public class TwoFragment extends BaseFragment {
         mContent = (ViewPager) getView().findViewById(R.id.viewpager);
     }
     private void initToolbar() {
-        mToolbar.setTitle("星宇助手");
+        mToolbar.setTitle("社区");
         mToolbar.inflateMenu(R.menu.all_tab_fragment_menu);
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -93,11 +93,14 @@ public class TwoFragment extends BaseFragment {
         mFragments = new ArrayList<BaseFragment>();
         mTitles = new ArrayList<String>();
         OnlineGameFragment hf = new OnlineGameFragment();
-        AloneGameFragment hf1 = new AloneGameFragment();
+        OnlineGameFragment hf1 = new OnlineGameFragment();
+        AloneGameFragment hf2 = new AloneGameFragment();
         mFragments.add(hf);
         mFragments.add(hf1);
-        mTitles.add("网游");
-        mTitles.add("单机");
+        mFragments.add(hf2);
+        mTitles.add("热门");
+        mTitles.add("精品");
+        mTitles.add("最新");
         mContent.setAdapter(new MainVPAdapter(getChildFragmentManager(), mFragments, mTitles));
         mTab.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorControlNormal));
         mTab.setTabMode(TabLayout.MODE_FIXED);

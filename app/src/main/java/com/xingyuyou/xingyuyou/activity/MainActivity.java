@@ -3,6 +3,9 @@ package com.xingyuyou.xingyuyou.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -11,30 +14,44 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.umeng.socialize.UMShareAPI;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.AppUtils;
 import com.xingyuyou.xingyuyou.Utils.PermissionsChecker;
+import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.MainContentVPAdapter;
 import com.xingyuyou.xingyuyou.base.BaseActivity;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
-import com.xingyuyou.xingyuyou.fragment.CommunityFragment;
-import com.xingyuyou.xingyuyou.fragment.GiftsPackageFragment;
+import com.xingyuyou.xingyuyou.fragment.CommunityFragmentCopy;
 import com.xingyuyou.xingyuyou.fragment.OneFragment;
 import com.xingyuyou.xingyuyou.fragment.TwoFragment;
 import com.xingyuyou.xingyuyou.fragment.UserFragment;
 import com.xingyuyou.xingyuyou.weight.CustomViewPager;
+import com.xingyuyou.xingyuyou.weight.ProgressButton;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.FileCallBack;
+import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
 import java.util.ArrayList;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
+import okhttp3.Call;
+
+public class MainActivity extends BaseActivity {
     private FragmentManager supportFragmentManager  = getSupportFragmentManager();
     private ArrayList<BaseFragment> fragments;
     public static BottomNavigationBar bottomNavigationBar;
@@ -46,12 +63,45 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     static final String[] PERMISSIONS = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+    private String mAppDownload;
+    private String mVersionText;
+    private int mVersionCode;
+    private String mUpdateInfo;
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+                try {
+                    JSONObject jsonObject = new JSONObject(msg.obj.toString());
+                    if (jsonObject.getString("status").equals("1")) {
+                        JSONObject object = jsonObject.getJSONObject("msg");
+
+                        mAppDownload = object.getString("app_download");
+                        mVersionText = object.getString("version");
+                        mUpdateInfo = object.getString("app_name");
+                        if (Integer.valueOf(mVersionText) > mVersionCode) {
+                            ToUpadte();
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
+    private TextView mTvUpdateInfo;
+    private ProgressButton mBtUpdate;
+    private AlertDialog mAlertDialog;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mVersionCode = AppUtils.getAppVersionCode(this);
         mPermissionsChecker = new PermissionsChecker(this);
         initView();
+        checkUpdate();
     }
 
 
@@ -62,10 +112,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         customViewPager.setOffscreenPageLimit(3);//设置缓存页数，缓存所有fragment
         bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
         bottomNavigationBar
-                .addItem(new BottomNavigationItem(R.mipmap.bangdan, "榜单").setActiveColorResource(R.color.colorPrimary))
-                .addItem(new BottomNavigationItem(R.mipmap.fenlei, "分类").setActiveColorResource(R.color.colorPrimary))
-                .addItem(new BottomNavigationItem(R.mipmap.shequ, "社区").setActiveColorResource(R.color.colorPrimary))
-                .addItem(new BottomNavigationItem(R.mipmap.guanli, "管理").setActiveColorResource(R.color.colorPrimary))
+                .addItem(new BottomNavigationItem(R.mipmap.bangdan, "游戏").setActiveColorResource(R.color.colorPrimary))
+                .addItem(new BottomNavigationItem(R.mipmap.fenlei, "社区").setActiveColorResource(R.color.colorPrimary))
+                .addItem(new BottomNavigationItem(R.mipmap.shequ, "神社").setActiveColorResource(R.color.colorPrimary))
+                .addItem(new BottomNavigationItem(R.mipmap.guanli, "分类").setActiveColorResource(R.color.colorPrimary))
                 .setMode(BottomNavigationBar.MODE_FIXED)//设置底部代文字显示模式。MODE_DEFAULT默认MODE_FIXED代文字MODE_SHIFTING不带文字
                 .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)//背景模式BACKGROUND_STYLE_RIPPLE涟漪BACKGROUND_STYLE_STATIC静态
                 .initialise();
@@ -76,22 +126,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 switch (position) {
                     case 0:
                         customViewPager.setCurrentItem(0);
-
                         break;
                     case 1:
                         customViewPager.setCurrentItem(1);
-
                         break;
                     case 2:
                         customViewPager.setCurrentItem(2);
-
                         break;
                     case 3:
                         customViewPager.setCurrentItem(3);
-
                         break;
                 }
-
             }
 
             //上一个选中的tab
@@ -111,10 +156,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
     private ArrayList<BaseFragment> getFragments() {
         fragments = new ArrayList<>();
-        fragments.add(OneFragment.newInstance("榜单"));
-        fragments.add(TwoFragment.newInstance("分类"));
-        fragments.add(CommunityFragment.newInstance("社区"));
-        fragments.add(UserFragment.newInstance("管理"));
+        fragments.add(OneFragment.newInstance("游戏"));
+        fragments.add(TwoFragment.newInstance("社区"));
+        fragments.add(CommunityFragmentCopy.newInstance("神社"));
+        fragments.add(UserFragment.newInstance("分类"));
         adapter = new MainContentVPAdapter(supportFragmentManager, fragments);
         return fragments;
     }
@@ -130,7 +175,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 Toast.makeText(MainActivity.this, "您已禁止该权限，需要重新开启。", Toast.LENGTH_SHORT).show();
             }else{
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
-
             }
         }
 
@@ -168,32 +212,82 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-
     }
 
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+    private void checkUpdate() {
+        OkHttpUtils.post()//
+                .url(XingYuInterface.ABOUT_US)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Log.e("hot", e.toString() + ":e");
+                    }
 
-        if (id == R.id.post) {
-            Toast.makeText(this, "ahhaha"+id, Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.see) {
-            Toast.makeText(this, "ahhaha"+id, Toast.LENGTH_SHORT).show();
+                    @Override
+                    public void onResponse(String response, int id) {
+                        mHandler.obtainMessage(1, response).sendToTarget();
+                        Log.e("xiazai", response + ":e");
+                    }
+                });
+    }
 
-        } else if (id == R.id.collect) {
-            Toast.makeText(this, "ahhaha"+id, Toast.LENGTH_SHORT).show();
+    private void ToUpadte() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_update_app, null);
+        builder.setView(view);
+        mTvUpdateInfo = (TextView) view.findViewById(R.id.tv_update_info);
+        mTvUpdateInfo.setText(mUpdateInfo);
+        mBtUpdate = (ProgressButton) view.findViewById(R.id.bt_update);
+        mBtUpdate.setTag(0);
+        mBtUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if ((int)mBtUpdate.getTag()==0){
+                    mBtUpdate.setTag(1);
+                    toDownload();
+                    Toast.makeText(MainActivity.this, "开始下载", Toast.LENGTH_SHORT).show();
+                }else
+                {
+                    Toast.makeText(MainActivity.this, "正在下载，请稍后", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        mAlertDialog = builder.create();
+        mAlertDialog.setCancelable(false);
+        mAlertDialog.show();
+    }
+    private void toDownload() {
+        OkHttpUtils//
+                .get()//
+                .url(mAppDownload)//
+                .build()//http://xingyuhuyu1916.oss-cn-beijing.aliyuncs.com/%E5%8D%95%E6%9C%BA/Iter.apk
+                .execute(new FileCallBack(Environment.getExternalStorageDirectory().getAbsolutePath(), "xingyu.apk")//
+                {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Toast.makeText(MainActivity.this, "下载出错", Toast.LENGTH_SHORT).show();
+                    }
 
-        } else if (id == R.id.nav_share) {
-            Toast.makeText(this, "ahhaha"+id, Toast.LENGTH_SHORT).show();
+                    @Override
+                    public void inProgress(float progress, long total, int id) {
 
-        } else if (id == R.id.nav_send) {
-            Toast.makeText(this, "ahhaha"+id, Toast.LENGTH_SHORT).show();
+                        mBtUpdate.setProgress((int)(progress*100));
+                    }
 
-        }
+                    @Override
+                    public void onResponse(File response, int id) {
+                        Log.e("dizhi", "onResponse :" + response.getAbsolutePath());
+                    }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+                    @Override
+                    public void onAfter(int id) {
+                        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/xingyu.apk";
+                        Log.e("dizhi", "onResponse :" + path);
+                        AppUtils.installApp(MainActivity.this,path);
+                        Toast.makeText(MainActivity.this, "下载完成", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
