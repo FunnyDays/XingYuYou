@@ -143,6 +143,25 @@ public class PostingActivity extends BaseActivity implements View.OnClickListene
 
     }
 
+
+ PostFormBuilder post = OkHttpUtils.post();
+        for (int i = 0; i < editList.size(); i++) {
+            if (editList.get(i).imagePath==null)
+                return;
+            File file = new File(editList.get(i).imagePath);
+            Log.d("RichEditor", "commit imgePath=" + "文件名称：" + file.getName() +
+                    "-----路径：" + file.getAbsolutePath() + "-----大小：" + file.length());
+            String s = "posts_image";
+            post.addFile(s + i, file.getName(), file);
+        }
+
+
+
+
+
+
+
+
     private void toCommitBBS(String title) {
         dialog = showLoadingDialog("", "正在发送");
         Map<String, String> params = new HashMap<String, String>();

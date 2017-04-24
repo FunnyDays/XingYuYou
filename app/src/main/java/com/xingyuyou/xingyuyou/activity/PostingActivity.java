@@ -102,30 +102,30 @@ public class PostingActivity extends AppCompatActivity {
      * 负责处理编辑数据提交等事宜，请自行实现
      */
     protected void dealEditData(List<RichTextEditor.EditData> editList) {
-        for (RichTextEditor.EditData itemData : editList) {
-            if (itemData.inputStr != null) {
-                Log.d("RichEditor", "commit inputStr=" + itemData.inputStr);
-            } else if (itemData.imagePath != null) {
-                Log.d("RichEditor", "commit imgePath=" + itemData.imagePath);
-                File file = new File(editList.get(0).imagePath);
-                PostFormBuilder post = OkHttpUtils.post();
-                String s = "posts_image";
-                post.addFile(s, "test", file);
-                post.url("http://xingyuyou.com/app.php/Community/post_posts")
-                        .build()
-                        .execute(new StringCallback() {
-                            @Override
-                            public void onError(okhttp3.Call call, Exception e, int id) {
-                                Log.e("fabubbs", e.getMessage() + " 失败id:" + id);
-                            }
-                            @Override
-                            public void onResponse(String response, int id) {
-                                Log.e("fabubbs", " 成功id:" + id+response);
-                            }
-                        });
-            }
 
+        PostFormBuilder post = OkHttpUtils.post();
+        for (int i = 0; i < editList.size()-1; i++) {
+            File file = new File(editList.get(i).imagePath);
+            Log.d("RichEditor", "文件名称：" + file.getName() +
+                    "-----路径：" + file.getAbsolutePath() + "-----大小：" + file.length());
+            String s = "posts_image";
+            post.addFile(s+i, file.getName(), file);
         }
+        post.url("http://xingyuyou.com/app.php/Community/post_posts")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(okhttp3.Call call, Exception e, int id) {
+                        Log.e("fabubbs", e.getMessage() + " 失败id:" + id);
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.e("fabubbs", " 成功id:" + id + response);
+                    }
+                });
+
+
     }
 
     protected void openCamera() {
