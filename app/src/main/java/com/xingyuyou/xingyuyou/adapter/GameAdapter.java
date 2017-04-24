@@ -38,15 +38,12 @@ import java.util.ArrayList;
  */
 
 public class GameAdapter extends RecyclerView.Adapter {
-    private DbManager mDb;
     private DownloadManager downloadManager;
-    private DownloadInfo mDownloadInfo;
     private static final int TYPE_ONE = 1;
     private static final int TYPE_FOOTER = 0;
     private ArrayList<Game> arrayList;
     private Activity mActivity;
     private String gameNameTitle;
-    private ProgressButton mGameDownLoad;
 
     public GameAdapter(Activity mActivity, ArrayList<Game> arrayList) {
         this.arrayList = arrayList;
@@ -165,7 +162,6 @@ public class GameAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-
         return arrayList.size() == 0 ? 0 : arrayList.size() + 1;
     }
 

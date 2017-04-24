@@ -3,6 +3,7 @@ package com.xingyuyou.xingyuyou.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,6 +17,7 @@ import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.DiffCallBack;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.activity.PostingActivity;
 import com.xingyuyou.xingyuyou.activity.SearchForCommActivity;
 import com.xingyuyou.xingyuyou.adapter.CommHeaderFooterAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
@@ -109,7 +111,13 @@ public class CommunityFragmentCopy extends BaseFragment {
     @Override
     protected View initView() {
         View view = View.inflate(mActivity, R.layout.fragment_community, null);
-
+        FloatingActionButton floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fab_add_comment);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentUtils.startActivity(mActivity, PostingActivity.class);
+            }
+        });
         Toolbar  toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override

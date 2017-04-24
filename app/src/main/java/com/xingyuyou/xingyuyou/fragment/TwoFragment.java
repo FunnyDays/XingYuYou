@@ -3,7 +3,6 @@ package com.xingyuyou.xingyuyou.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -14,17 +13,14 @@ import android.view.ViewGroup;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.activity.DownLoadActivity;
-import com.xingyuyou.xingyuyou.activity.MainActivity;
 import com.xingyuyou.xingyuyou.activity.SearchActivity;
 import com.xingyuyou.xingyuyou.adapter.MainVPAdapter;
-import com.xingyuyou.xingyuyou.adapter.TabsViewPagerAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Administrator on 2016/6/28.
@@ -92,7 +88,7 @@ public class TwoFragment extends BaseFragment {
     private void minitData() {
         mFragments = new ArrayList<BaseFragment>();
         mTitles = new ArrayList<String>();
-        OnlineGameFragment hf = new OnlineGameFragment();
+        CommHotFragment hf = new CommHotFragment();
         OnlineGameFragment hf1 = new OnlineGameFragment();
         AloneGameFragment hf2 = new AloneGameFragment();
         mFragments.add(hf);

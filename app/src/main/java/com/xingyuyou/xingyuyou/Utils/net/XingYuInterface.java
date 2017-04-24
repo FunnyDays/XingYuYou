@@ -23,6 +23,9 @@ public class XingYuInterface {
     public static final String UPDATA_DOWN=Host+"Server/updata_down";
     public static final String GAME_GIFT_LIST=Host+"Server/game_gift_list";
     public static final String GET_LABEL_CLASS=Host+"Community/get_label_class";
+    public static final String GET_POSTS_LIST=Host+"Community/get_posts_list";
+    public static final String GET_POSTS_INFO=Host+"Community/get_posts_info";
+    public static final String GET_POSTSCLASS_LIST=Host+"Community/get_postsclass_list";
 
 
 }

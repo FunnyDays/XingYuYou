@@ -14,6 +14,11 @@ import android.view.View;
 
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.weight.RichTextEditor;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.builder.PostFormBuilder;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.xutils.common.util.FileUtil;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -48,9 +53,6 @@ public class PostingActivity extends AppCompatActivity {
     * */
 
 
-
-
-
     private static final int REQUEST_CODE_PICK_IMAGE = 1023;
     private static final int REQUEST_CODE_CAPTURE_CAMEIA = 1022;
     private RichTextEditor editor;
@@ -60,6 +62,7 @@ public class PostingActivity extends AppCompatActivity {
     private static final File PHOTO_DIR = new File(
             Environment.getExternalStorageDirectory() + "/DCIM/Camera");
     private File mCurrentPhotoFile;// 照相机拍照得到的图片
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +107,22 @@ public class PostingActivity extends AppCompatActivity {
                 Log.d("RichEditor", "commit inputStr=" + itemData.inputStr);
             } else if (itemData.imagePath != null) {
                 Log.d("RichEditor", "commit imgePath=" + itemData.imagePath);
+                File file = new File(editList.get(0).imagePath);
+                PostFormBuilder post = OkHttpUtils.post();
+                String s = "posts_image";
+                post.addFile(s, "test", file);
+                post.url("http://xingyuyou.com/app.php/Community/post_posts")
+                        .build()
+                        .execute(new StringCallback() {
+                            @Override
+                            public void onError(okhttp3.Call call, Exception e, int id) {
+                                Log.e("fabubbs", e.getMessage() + " 失败id:" + id);
+                            }
+                            @Override
+                            public void onResponse(String response, int id) {
+                                Log.e("fabubbs", " 成功id:" + id+response);
+                            }
+                        });
             }
 
         }
@@ -136,6 +155,7 @@ public class PostingActivity extends AppCompatActivity {
         return dateFormat.format(date) + ".jpg";
     }
 
+    //:http://xingyuyou.com/app.php/Community/post_posts
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK) {
@@ -175,7 +195,7 @@ public class PostingActivity extends AppCompatActivity {
             data = uri.getPath();
         } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
             Cursor cursor = getContentResolver().query(uri,
-                    new String[] { MediaStore.Images.ImageColumns.DATA }, null, null, null);
+                    new String[]{MediaStore.Images.ImageColumns.DATA}, null, null, null);
             if (null != cursor) {
                 if (cursor.moveToFirst()) {
                     int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);

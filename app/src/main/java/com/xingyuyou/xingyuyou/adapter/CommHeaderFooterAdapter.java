@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.activity.HotGameDetailActivity;
+import com.xingyuyou.xingyuyou.activity.PostClassListActivity;
+import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
 import com.xingyuyou.xingyuyou.bean.community.LabelClassBean;
 import com.xingyuyou.xingyuyou.bean.hotgame.HotGameBean;
 
@@ -51,6 +53,14 @@ public class CommHeaderFooterAdapter extends RecyclerView.Adapter {
                     .load(mListData.get(position).getClass_image())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(((ItemViewHolder) holder).mGamePic);
+            ((ItemViewHolder) holder).mGamePic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mActivity,PostClassListActivity.class);
+                    intent.putExtra("list_id",mListData.get(position).getId());
+                    mActivity.startActivity(intent);
+                }
+            });
         }
     }
 
