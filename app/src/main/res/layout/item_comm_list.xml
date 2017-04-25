@@ -8,38 +8,193 @@
     >
 
     <android.support.v7.widget.CardView
+       app:cardElevation="1dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <LinearLayout
+            android:id="@+id/LinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
             android:orientation="vertical">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                >
+
+                <com.xingyuyou.xingyuyou.weight.CircleImageView
+                    android:id="@+id/civ_user_photo"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/icon"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/civ_user_photo"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="望您啊"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_post_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="18:11"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/tv_post_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="地铁跑酷"
+                android:lines="1"
                 android:textColor="@android:color/black"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                tools:text="这是标题"/>
 
-            <ImageView
-                android:id="@+id/iv_post_cover"
+            <TextView
+                android:id="@+id/tv_post_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:lines="1"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                />
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:scaleType="fitXY"
-                android:src="@mipmap/ic"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_post_cover0"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon"/>
+
+                <ImageView
+                    android:id="@+id/iv_post_cover1"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon"/>
+
+                <ImageView
+                    android:id="@+id/iv_post_cover2"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/iv_post_collect"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/shoucang"/>
+
+                    <TextView
+                        android:id="@+id/tv_collect_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/iv_post_collect"
+                        tools:text="76566"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/iv_post_comm"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/pinglun"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_comm_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/iv_post_comm"
+                        tools:text="76566"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/iv_post_jiaonang"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/jiaonang"/>
+
+                    <TextView
+                        android:id="@+id/tv_jiaonang_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/iv_post_jiaonang"
+                        tools:text="76566"/>
+                </RelativeLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
+
     <View
-        android:background="@color/colorItemRecycle"
         android:layout_width="match_parent"
-        android:layout_height="6dp"/>
+        android:layout_height="6dp"
+        android:background="@color/colorItemRecycle"/>
 </LinearLayout>

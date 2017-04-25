@@ -12,18 +12,25 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.google.gson.JsonArray;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.weight.RichTextEditor;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.xutils.common.util.FileUtil;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PostingActivity extends AppCompatActivity {
 
@@ -66,7 +73,7 @@ public class PostingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_posting);
+        setContentView(R.layout.activity_posting_test);
         editor = (RichTextEditor) findViewById(R.id.richEditor);
         btnListener = new View.OnClickListener() {
 
@@ -103,15 +110,41 @@ public class PostingActivity extends AppCompatActivity {
      */
     protected void dealEditData(List<RichTextEditor.EditData> editList) {
 
+
+        Map<String, Object> map1 = new HashMap<String, Object>();
+        map1.put("label_name", "zhangsan");
+        map1.put("id", 24);
+        Map<String, Object> map2 = new HashMap<String, Object>();
+        map2.put("label_name", "lisi");
+        map2.put("id", 25);
+        List<Map<String, Object>> list=new ArrayList<Map<String,Object>>();
+        list.add(map1);
+        list.add(map2);
+        JSONArray array=new JSONArray(list);
+
+
+        ArrayList<String> tags = new ArrayList<>();
+        tags.add("cos");
+        tags.add("动漫");
+        tags.add("鸭子");
+        tags.add("苹果");
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("fid", "1");
+        params.put("uid", "108");
+        params.put("subject", "标题");
+        params.put("message", "内容");
+        params.put("tags", array.toString());
+        Log.e("fabubbs","test"+tags.toString());
         PostFormBuilder post = OkHttpUtils.post();
         for (int i = 0; i < editList.size()-1; i++) {
             File file = new File(editList.get(i).imagePath);
-            Log.d("RichEditor", "文件名称：" + file.getName() +
-                    "-----路径：" + file.getAbsolutePath() + "-----大小：" + file.length());
+            Log.d("fabubbs", "文件名称：" + file.getName() +
+                    "-----路径：" + file.getAbsolutePath() + "-----大小：" + file.length()+"标签："+tags.toString());
             String s = "posts_image";
             post.addFile(s+i, file.getName(), file);
         }
-        post.url("http://xingyuyou.com/app.php/Community/post_posts")
+        post.url(XingYuInterface.POST_POSTS)
+                .params(params)
                 .build()
                 .execute(new StringCallback() {
                     @Override

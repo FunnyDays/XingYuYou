@@ -15,12 +15,14 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
 
             <TextView
+                android:background="@color/colorPrimary"
                 android:id="@+id/tv_about_xingyu"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

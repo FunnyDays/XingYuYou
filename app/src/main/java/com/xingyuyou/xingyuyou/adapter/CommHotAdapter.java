@@ -8,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.activity.HotGameDetailActivity;
 import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
 import com.xingyuyou.xingyuyou.bean.community.LabelClassBean;
@@ -97,13 +99,19 @@ public class CommHotAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if(getItemViewType(position) == TYPE_NORMAL){
             if(holder instanceof ItemViewHolder) {
-                ((ItemViewHolder) holder).mPostName.setText(mListData.get(position-1).toString());
+                ((ItemViewHolder) holder).mUserName.setText(mListData.get(position-1).getNickname());
+                ((ItemViewHolder) holder).mPostTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mListData.get(position-1).getDateline()+"000")));
+                ((ItemViewHolder) holder).mPostName.setText(mListData.get(position-1).getSubject());
+                ((ItemViewHolder) holder).mPostContent.setText(mListData.get(position-1).getMessage());
+                ((ItemViewHolder) holder).mCollectNum.setText(mListData.get(position-1).getPosts_collect());
+                ((ItemViewHolder) holder).mCommNum.setText(mListData.get(position-1).getPosts_forums());
+                ((ItemViewHolder) holder).mJiaoNangNum.setText(mListData.get(position-1).getPosts_laud());
 
                 Glide.with(mActivity)
                         .load(mListData.get(position-1).getPosts_image())
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .into(((ItemViewHolder) holder).mPostCover);
-                ((ItemViewHolder) holder).mPostName.setOnClickListener(new View.OnClickListener() {
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(((ItemViewHolder) holder).mPostCover0);
+                ((ItemViewHolder) holder).mLinearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(mActivity,PostDetailActivity.class);
@@ -137,8 +145,17 @@ public class CommHotAdapter extends RecyclerView.Adapter {
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView mPostCover;
+        private ImageView mPostCover0;
+        private ImageView mPostCover1;
+        private ImageView mPostCover2;
         private TextView mPostName;
+        private TextView mCollectNum;
+        private TextView mCommNum;
+        private TextView mJiaoNangNum;
+        private TextView mPostContent;
+        private TextView mUserName;
+        private TextView mPostTime;
+        private LinearLayout mLinearLayout;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -149,8 +166,17 @@ public class CommHotAdapter extends RecyclerView.Adapter {
             if (itemView == mFooterView) {
                 return;
             }
-            mPostCover = (ImageView) itemView.findViewById(R.id.iv_post_cover);
+            mPostCover0 = (ImageView) itemView.findViewById(R.id.iv_post_cover0);
+            mPostCover1 = (ImageView) itemView.findViewById(R.id.iv_post_cover1);
+            mPostCover2 = (ImageView) itemView.findViewById(R.id.iv_post_cover2);
             mPostName = (TextView) itemView.findViewById(R.id.tv_post_name);
+            mPostContent = (TextView) itemView.findViewById(R.id.tv_post_content);
+            mUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
+            mPostTime = (TextView) itemView.findViewById(R.id.tv_post_time);
+            mCollectNum = (TextView) itemView.findViewById(R.id.tv_collect_num);
+            mCommNum = (TextView) itemView.findViewById(R.id.tv_comm_num);
+            mJiaoNangNum = (TextView) itemView.findViewById(R.id.tv_jiaonang_num);
+            mLinearLayout = (LinearLayout) itemView.findViewById(R.id.LinearLayout);
         }
     }
 }
