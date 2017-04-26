@@ -99,11 +99,15 @@ public class GameHeaderFooterAdapter extends RecyclerView.Adapter {
                 ((ItemViewHolder) holder).mGameFeature.setText(mListData.get(position-1).getFeatures());
                 Glide.with(mActivity)
                         .load(mListData.get(position-1).getIcon())
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
                         .into(((ItemViewHolder) holder).mGamePic);
                 Glide.with(mActivity)
                         .load(mListData.get(position-1).getCover())
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .placeholder(R.drawable.shape_rectangle_cover)
+
                         .into(((ItemViewHolder) holder).mGameCover);
 
                 ((ItemViewHolder) holder).mGameCover.setOnClickListener(new View.OnClickListener() {

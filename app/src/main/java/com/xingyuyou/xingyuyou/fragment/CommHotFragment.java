@@ -21,6 +21,7 @@ import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.community.PostBean;
+import com.xingyuyou.xingyuyou.bean.community.PostBeanTest;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -63,7 +64,7 @@ public class CommHotFragment extends BaseFragment {
                     Log.e("post", "解析数据："+  ja.toString());
                     Gson gson = new Gson();
                     mPostList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<PostBean>>() {
+                            new TypeToken<List<PostBeanTest>>() {
                             }.getType());
                     mPostAdapterList.addAll(mPostList);
 

@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.gson.JsonArray;
 import com.xingyuyou.xingyuyou.R;
@@ -73,7 +74,7 @@ public class PostingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_posting_test);
+        setContentView(R.layout.activity_posting);
         editor = (RichTextEditor) findViewById(R.id.richEditor);
         btnListener = new View.OnClickListener() {
 
@@ -95,7 +96,6 @@ public class PostingActivity extends AppCompatActivity {
                 }
             }
         };
-
         btn1 = findViewById(R.id.button1);
         btn2 = findViewById(R.id.button2);
         btn3 = findViewById(R.id.button3);
@@ -117,10 +117,10 @@ public class PostingActivity extends AppCompatActivity {
         Map<String, Object> map2 = new HashMap<String, Object>();
         map2.put("label_name", "lisi");
         map2.put("id", 25);
-        List<Map<String, Object>> list=new ArrayList<Map<String,Object>>();
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         list.add(map1);
         list.add(map2);
-        JSONArray array=new JSONArray(list);
+        JSONArray array = new JSONArray(list);
 
 
         ArrayList<String> tags = new ArrayList<>();
@@ -134,14 +134,14 @@ public class PostingActivity extends AppCompatActivity {
         params.put("subject", "标题");
         params.put("message", "内容");
         params.put("tags", array.toString());
-        Log.e("fabubbs","test"+tags.toString());
+        Log.e("fabubbs", "test" + tags.toString());
         PostFormBuilder post = OkHttpUtils.post();
-        for (int i = 0; i < editList.size()-1; i++) {
+        for (int i = 0; i < editList.size() - 1; i++) {
             File file = new File(editList.get(i).imagePath);
             Log.d("fabubbs", "文件名称：" + file.getName() +
-                    "-----路径：" + file.getAbsolutePath() + "-----大小：" + file.length()+"标签："+tags.toString());
+                    "-----路径：" + file.getAbsolutePath() + "-----大小：" + file.length() + "标签：" + tags.toString());
             String s = "posts_image";
-            post.addFile(s+i, file.getName(), file);
+            post.addFile(s + i, file.getName(), file);
         }
         post.url(XingYuInterface.POST_POSTS)
                 .params(params)

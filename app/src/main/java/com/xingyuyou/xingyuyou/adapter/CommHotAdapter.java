@@ -19,6 +19,7 @@ import com.xingyuyou.xingyuyou.activity.HotGameDetailActivity;
 import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
 import com.xingyuyou.xingyuyou.bean.community.LabelClassBean;
 import com.xingyuyou.xingyuyou.bean.community.PostBean;
+import com.xingyuyou.xingyuyou.bean.community.PostBeanTest;
 import com.xingyuyou.xingyuyou.bean.hotgame.HotGameBean;
 
 import java.util.List;
@@ -28,7 +29,7 @@ import java.util.List;
  */
 public class CommHotAdapter extends RecyclerView.Adapter {
     //数据
-    private List<PostBean> mListData;
+    private List<PostBeanTest> mListData;
     private Activity mActivity;
 
     public static final int TYPE_HEADER = 0;  //说明是带有Header的
@@ -39,11 +40,11 @@ public class CommHotAdapter extends RecyclerView.Adapter {
     private View mHeaderView;
     private View mFooterView;
 
-    public CommHotAdapter(Activity activity, List<PostBean> listData) {
+    public CommHotAdapter(Activity activity, List<PostBeanTest> listData) {
         mListData = listData;
         mActivity=activity;
     }
-    public void setDatas(List<PostBean> listData) {
+    public void setDatas(List<PostBeanTest> listData) {
         mListData = listData;
     }
     //HeaderView和FooterView的get和set函数
@@ -108,8 +109,9 @@ public class CommHotAdapter extends RecyclerView.Adapter {
                 ((ItemViewHolder) holder).mJiaoNangNum.setText(mListData.get(position-1).getPosts_laud());
 
                 Glide.with(mActivity)
-                        .load(mListData.get(position-1).getPosts_image())
+                        .load(mListData.get(position-1).getPosts_image().get(0))
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
                         .into(((ItemViewHolder) holder).mPostCover0);
                 ((ItemViewHolder) holder).mLinearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override

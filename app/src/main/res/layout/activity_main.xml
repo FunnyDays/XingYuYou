@@ -16,6 +16,5 @@
         android:fillViewport="true"
         android:layout_height="wrap_content"
         app:bnbAutoHideEnabled="false"
-
         android:layout_gravity="bottom" />
 </android.support.design.widget.CoordinatorLayout>

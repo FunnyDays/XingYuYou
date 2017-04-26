@@ -25,6 +25,7 @@ public class ScreenUtils {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
+
     /**
      * 获取屏幕的宽度（单位：px）
      *

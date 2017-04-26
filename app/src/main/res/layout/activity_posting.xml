@@ -2,23 +2,26 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="#66787777"
               android:orientation="vertical">
 
     <include layout="@layout/toolbar"/>
 
     <EditText
+        android:layout_marginBottom="2px"
         android:id="@+id/et_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="58dp"
+        android:background="@android:color/white"
+        android:paddingLeft="20dp"
         android:hint="标题（必填）"
         android:lines="1"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2px"
-        android:background="#44221122"/>
 
     <EditText
+        android:paddingLeft="20dp"
+        android:layout_marginBottom="2px"
+        android:background="@android:color/white"
         android:id="@+id/et_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,20 +29,43 @@
         android:lines="6"/>
 
     <android.support.v7.widget.RecyclerView
+        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="150dp">
-
     </android.support.v7.widget.RecyclerView>
 
-    <Button
-        android:id="@+id/bt_tags"
+    <RelativeLayout
+        android:background="#ffd6d7d7"
         android:layout_width="match_parent"
-        android:layout_height="58dp"/>
+        android:layout_height="58dp">
+        <ImageView
+            android:id="@+id/iv_one"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="4dp"
+            android:padding="10dp"
+            android:src="@mipmap/ic_tag"
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/iv_one"
+            android:text="选择标签"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:layout_margin="4dp"
+            android:src="@mipmap/ic_right_tag"
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/button1"
         android:layout_width="match_parent"
-        android:layout_height="58dp"/>
+        android:layout_height="58dp"
+       />
 
     <Button
         android:id="@+id/button2"
