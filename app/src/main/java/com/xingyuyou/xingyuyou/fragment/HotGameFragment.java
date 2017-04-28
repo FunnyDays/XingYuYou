@@ -33,6 +33,7 @@ import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
 import com.xingyuyou.xingyuyou.Utils.FileUtils;
 import com.xingyuyou.xingyuyou.Utils.GlideImageLoader;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
+import com.xingyuyou.xingyuyou.Utils.glide.GlideRoundTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.activity.HotGameDetailActivity;
 import com.xingyuyou.xingyuyou.activity.LoginActivity;
@@ -72,7 +73,6 @@ import okhttp3.Call;
  * Created by Administrator on 2016/6/28.
  */
 public class HotGameFragment extends BaseFragment {
-
 
     private ListView mListView;
     private DownloadManager downloadManager;
@@ -499,7 +499,7 @@ public class HotGameFragment extends BaseFragment {
             label.setText(downloadInfo.getLabel());
             gameSize.setText(downloadInfo.getGameSize());
             gameIntro.setText(downloadInfo.getGameIntro());
-            Glide.with(mActivity).load(downloadInfo.getGamePicUrl()).into(gamePic);
+            Glide.with(mActivity).load(downloadInfo.getGamePicUrl()).transform(new GlideRoundTransform(mActivity,5)).into(gamePic);
             stopBtn.setProgress(downloadInfo.getProgress());
             DownloadState state = downloadInfo.getState();
             switch (state) {

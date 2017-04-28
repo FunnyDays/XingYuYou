@@ -107,7 +107,6 @@ public class GameHeaderFooterAdapter extends RecyclerView.Adapter {
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .dontAnimate()
                         .placeholder(R.drawable.shape_rectangle_cover)
-
                         .into(((ItemViewHolder) holder).mGameCover);
 
                 ((ItemViewHolder) holder).mGameCover.setOnClickListener(new View.OnClickListener() {

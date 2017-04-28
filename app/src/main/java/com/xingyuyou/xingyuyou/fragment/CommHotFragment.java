@@ -159,9 +159,10 @@ public class CommHotFragment extends BaseFragment {
         View loadingData = View.inflate(mActivity, R.layout.default_loading, null);
         mPbNodata = (ProgressBar) loadingData.findViewById(R.id.pb_loading);
         mTvNodata = (TextView) loadingData.findViewById(R.id.loading_text);
-        TextView textView = new TextView(mActivity);
-        textView.setText("");
-        mCommHotAdapter.setHeaderView(textView);
+
+        //头布局
+        View headerView = View.inflate(mActivity, R.layout.part_comm_header, null);
+        mCommHotAdapter.setHeaderView(headerView);
         mCommHotAdapter.setFooterView(loadingData);
         mRecyclerView.setAdapter(mCommHotAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

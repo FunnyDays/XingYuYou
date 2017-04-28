@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.xingyuyou.xingyuyou.R;
 
@@ -27,7 +28,22 @@ public class LoadingDialog {
         builder.setView(view);
         mAlertDialog = builder.create();
         mAlertDialog.setCancelable(false);
+    }
 
+    /**
+     * 带标题的dialog
+     * @param context
+     * @param msg
+     */
+    public LoadingDialog(Context context,String msg) {
+        this.context = context;
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_loding, null);
+        TextView textView = (TextView) view.findViewById(R.id.text);
+        textView.setText(msg);
+        builder.setView(view);
+        mAlertDialog = builder.create();
+       // mAlertDialog.setCancelable(false);
     }
 
     public void showDialog() {

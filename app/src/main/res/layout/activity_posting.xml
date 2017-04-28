@@ -2,79 +2,103 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="#66787777"
+              android:background="#22787777"
               android:orientation="vertical">
 
     <include layout="@layout/toolbar"/>
 
     <EditText
-        android:layout_marginBottom="2px"
         android:id="@+id/et_title"
         android:layout_width="match_parent"
         android:layout_height="58dp"
+        android:layout_marginBottom="5dp"
         android:background="@android:color/white"
-        android:paddingLeft="20dp"
         android:hint="标题（必填）"
-        android:lines="1"/>
+        android:lines="1"
+        android:paddingLeft="20dp"
+        android:textColor="@android:color/black"/>
 
 
     <EditText
-        android:paddingLeft="20dp"
-        android:layout_marginBottom="2px"
-        android:background="@android:color/white"
         android:id="@+id/et_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="请输入内容"
-        android:lines="6"/>
+        android:layout_marginBottom="2px"
+        android:background="@android:color/white"
+        android:hint="请输入内容（必填）"
+        android:lines="6"
+        android:paddingLeft="20dp"
+        android:textColor="@android:color/black"/>
 
     <android.support.v7.widget.RecyclerView
-        android:background="@android:color/white"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_height="150dp"
+        android:layout_marginTop="5dp">
+
     </android.support.v7.widget.RecyclerView>
+    <!--
+        <HorizontalScrollView
+            android:background="@android:color/white"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="120dp">
+
+            <LinearLayout
+                android:id="@+id/ll_add_image"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_image"
+                    android:padding="40dp"
+                    android:background="#22787777"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/ic_action_add_image"
+                    />
+            </LinearLayout>
+
+        </HorizontalScrollView>
+    -->
+
 
     <RelativeLayout
-        android:background="#ffd6d7d7"
+        android:id="@+id/rl_tag_more"
         android:layout_width="match_parent"
-        android:layout_height="58dp">
+        android:layout_height="58dp"
+        android:layout_marginTop="5dp"
+        android:background="@android:color/white">
+
         <ImageView
             android:id="@+id/iv_one"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_margin="4dp"
             android:padding="10dp"
-            android:src="@mipmap/ic_tag"
-            android:layout_width="50dp"
-            android:layout_height="50dp"/>
+            android:src="@mipmap/ic_tag"/>
+
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/iv_one"
-            android:text="选择标签"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:text="选择标签"/>
+
         <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_margin="4dp"
+            android:padding="5dp"
             android:src="@mipmap/ic_right_tag"
-            android:layout_width="50dp"
-            android:layout_height="50dp"/>
+            android:tint="#ffd6d7d7"/>
 
     </RelativeLayout>
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="match_parent"
-        android:layout_height="58dp"
-       />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="match_parent"
-        android:layout_height="58dp"/>
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="match_parent"
-        android:layout_height="58dp"/>
 
 </LinearLayout>

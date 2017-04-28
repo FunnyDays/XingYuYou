@@ -9,12 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
+import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.activity.HotGameDetailActivity;
 import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
 import com.xingyuyou.xingyuyou.bean.community.LabelClassBean;
@@ -35,6 +38,9 @@ public class CommHotAdapter extends RecyclerView.Adapter {
     public static final int TYPE_HEADER = 0;  //说明是带有Header的
     public static final int TYPE_FOOTER = 1;  //说明是带有Footer的
     public static final int TYPE_NORMAL = 2;  //说明是不带有header和footer的
+    public static final int TYPE_ONE_PIC = 3;  //一张图
+    public static final int TYPE_TWO_PIC = 4;  //二张图
+    public static final int TYPE_THREE_PIC = 5;  //三张图
 
     //HeaderView, FooterView
     private View mHeaderView;
@@ -42,11 +48,13 @@ public class CommHotAdapter extends RecyclerView.Adapter {
 
     public CommHotAdapter(Activity activity, List<PostBeanTest> listData) {
         mListData = listData;
-        mActivity=activity;
+        mActivity = activity;
     }
+
     public void setDatas(List<PostBeanTest> listData) {
         mListData = listData;
     }
+
     //HeaderView和FooterView的get和set函数
     public View getHeaderView() {
         return mHeaderView;
@@ -67,7 +75,6 @@ public class CommHotAdapter extends RecyclerView.Adapter {
     }
 
 
-
     @Override
     public int getItemViewType(int position) {
         if (mHeaderView == null && mFooterView == null) {
@@ -81,6 +88,17 @@ public class CommHotAdapter extends RecyclerView.Adapter {
             //最后一个,应该加载Footer
             return TYPE_FOOTER;
         }
+
+        if (mListData.get(position - 1).getPosts_image().size() == 1) {
+            return TYPE_ONE_PIC;
+        }
+        if (mListData.get(position - 1).getPosts_image().size() == 2) {
+            return TYPE_TWO_PIC;
+        }
+        if (mListData.get(position - 1).getPosts_image().size() >= 3) {
+            return TYPE_THREE_PIC;
+        }
+
         return TYPE_NORMAL;
     }
 
@@ -92,41 +110,88 @@ public class CommHotAdapter extends RecyclerView.Adapter {
         if (mFooterView != null && viewType == TYPE_FOOTER) {
             return new ItemViewHolder(mFooterView);
         }
-        View layout = LayoutInflater.from(mActivity).inflate(R.layout.item_comm_list, parent, false);
-        return new ItemViewHolder(layout);
+        switch (viewType) {
+            case 3:
+                View layout = LayoutInflater.from(mActivity).inflate(R.layout.item_comm_list, parent, false);
+                return new ItemViewHolder(layout);
+            case 4:
+                View layout1 = LayoutInflater.from(mActivity).inflate(R.layout.item_comm_list1, parent, false);
+                return new ItemViewHolder(layout1);
+            case 5:
+                View layout2 = LayoutInflater.from(mActivity).inflate(R.layout.item_comm_list2, parent, false);
+                return new ItemViewHolder(layout2);
+        }
+        return null;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if(getItemViewType(position) == TYPE_NORMAL){
-            if(holder instanceof ItemViewHolder) {
-                ((ItemViewHolder) holder).mUserName.setText(mListData.get(position-1).getNickname());
-                ((ItemViewHolder) holder).mPostTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mListData.get(position-1).getDateline()+"000")));
-                ((ItemViewHolder) holder).mPostName.setText(mListData.get(position-1).getSubject());
-                ((ItemViewHolder) holder).mPostContent.setText(mListData.get(position-1).getMessage());
-                ((ItemViewHolder) holder).mCollectNum.setText(mListData.get(position-1).getPosts_collect());
-                ((ItemViewHolder) holder).mCommNum.setText(mListData.get(position-1).getPosts_forums());
-                ((ItemViewHolder) holder).mJiaoNangNum.setText(mListData.get(position-1).getPosts_laud());
 
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        if (holder instanceof ItemViewHolder && (getItemViewType(position) == TYPE_ONE_PIC
+                || getItemViewType(position) == TYPE_TWO_PIC
+                || getItemViewType(position) == TYPE_THREE_PIC)) {
+            ((ItemViewHolder) holder).mUserName.setText(mListData.get(position - 1).getNickname());
+            ((ItemViewHolder) holder).mPostTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mListData.get(position - 1).getDateline() + "000")));
+            ((ItemViewHolder) holder).mPostName.setText(mListData.get(position - 1).getSubject());
+            ((ItemViewHolder) holder).mPostContent.setText(mListData.get(position - 1).getMessage());
+            ((ItemViewHolder) holder).mCollectNum.setText(mListData.get(position - 1).getPosts_collect());
+            ((ItemViewHolder) holder).mCommNum.setText(mListData.get(position - 1).getPosts_forums());
+            ((ItemViewHolder) holder).mJiaoNangNum.setText(mListData.get(position - 1).getPosts_laud());
+            Glide.with(mActivity)
+                    .load(mListData.get(position - 1).getPosts_image().get(0))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(new GlideCircleTransform(mActivity))
+                    .dontAnimate()
+                    .into(((ItemViewHolder) holder).mUserPhoto);
+            Glide.with(mActivity)
+                    .load(mListData.get(position - 1).getPosts_image().get(0))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .dontAnimate()
+                    .into(((ItemViewHolder) holder).mPostCover0);
+            if (getItemViewType(position) == TYPE_TWO_PIC || getItemViewType(position) == TYPE_THREE_PIC) {
                 Glide.with(mActivity)
-                        .load(mListData.get(position-1).getPosts_image().get(0))
+                        .load(mListData.get(position - 1).getPosts_image().get(1))
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .dontAnimate()
-                        .into(((ItemViewHolder) holder).mPostCover0);
-                ((ItemViewHolder) holder).mLinearLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(mActivity,PostDetailActivity.class);
-                        intent.putExtra("post_id",mListData.get(position-1).getId());
-                        mActivity.startActivity(intent);
-                    }
-                });
-                return;
+                        .into(((ItemViewHolder) holder).mPostCover1);
             }
+            if (getItemViewType(position) == TYPE_THREE_PIC) {
+
+                Glide.with(mActivity)
+                        .load(mListData.get(position - 1).getPosts_image().get(2))
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .into(((ItemViewHolder) holder).mPostCover2);
+            }
+            ((ItemViewHolder) holder).mLinearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mActivity, PostDetailActivity.class);
+                    intent.putExtra("post_id", mListData.get(position - 1).getId());
+                    mActivity.startActivity(intent);
+                }
+            });
+            ((ItemViewHolder) holder).mRlCollect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(mActivity, "收藏成功", Toast.LENGTH_SHORT).show();
+                }
+            });
+            ((ItemViewHolder) holder).mRlComm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(mActivity, "haha", Toast.LENGTH_SHORT).show();
+                }
+            });
+            ((ItemViewHolder) holder).mRlJiaonang.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(mActivity, "点赞", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else if (getItemViewType(position) == TYPE_HEADER) {
             return;
-        }else if(getItemViewType(position) == TYPE_HEADER){
-            return;
-        }else{
+        } else {
             return;
         }
 
@@ -150,6 +215,7 @@ public class CommHotAdapter extends RecyclerView.Adapter {
         private ImageView mPostCover0;
         private ImageView mPostCover1;
         private ImageView mPostCover2;
+        private ImageView mUserPhoto;
         private TextView mPostName;
         private TextView mCollectNum;
         private TextView mCommNum;
@@ -158,6 +224,9 @@ public class CommHotAdapter extends RecyclerView.Adapter {
         private TextView mUserName;
         private TextView mPostTime;
         private LinearLayout mLinearLayout;
+        private RelativeLayout mRlCollect;
+        private RelativeLayout mRlComm;
+        private RelativeLayout mRlJiaonang;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -171,6 +240,7 @@ public class CommHotAdapter extends RecyclerView.Adapter {
             mPostCover0 = (ImageView) itemView.findViewById(R.id.iv_post_cover0);
             mPostCover1 = (ImageView) itemView.findViewById(R.id.iv_post_cover1);
             mPostCover2 = (ImageView) itemView.findViewById(R.id.iv_post_cover2);
+            mUserPhoto = (ImageView) itemView.findViewById(R.id.civ_user_photo);
             mPostName = (TextView) itemView.findViewById(R.id.tv_post_name);
             mPostContent = (TextView) itemView.findViewById(R.id.tv_post_content);
             mUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
@@ -179,6 +249,9 @@ public class CommHotAdapter extends RecyclerView.Adapter {
             mCommNum = (TextView) itemView.findViewById(R.id.tv_comm_num);
             mJiaoNangNum = (TextView) itemView.findViewById(R.id.tv_jiaonang_num);
             mLinearLayout = (LinearLayout) itemView.findViewById(R.id.LinearLayout);
+            mRlCollect = (RelativeLayout) itemView.findViewById(R.id.rl_collect);
+            mRlComm = (RelativeLayout) itemView.findViewById(R.id.rl_comm);
+            mRlJiaonang = (RelativeLayout) itemView.findViewById(R.id.rl_jiaonang);
         }
     }
 }

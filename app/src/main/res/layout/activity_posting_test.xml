@@ -35,7 +35,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="14dp"
-            android:background="@drawable/image3"
+            android:background="@drawable/ic_send"
             android:gravity="center_horizontal" />
     </LinearLayout>
 

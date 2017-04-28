@@ -4,12 +4,12 @@
     <item
         android:id="@+id/ab_search"
         android:icon="@mipmap/ic_action_serach"
-        android:title="action_search"
+        android:title="搜索游戏"
         app:showAsAction="always"/>
     <item
         android:id="@+id/action_download"
         android:icon="@mipmap/ic_action_download"
-        android:title="action_download"
+        android:title="下载管理"
         app:showAsAction="always"/>
 
 </menu>

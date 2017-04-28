@@ -29,6 +29,7 @@ import com.xingyuyou.xingyuyou.Utils.AppUtils;
 import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
 import com.xingyuyou.xingyuyou.Utils.FileUtils;
 import com.xingyuyou.xingyuyou.Utils.GlideImageLoader;
+import com.xingyuyou.xingyuyou.Utils.glide.GlideRoundTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.activity.HotGameDetailActivity;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
@@ -481,7 +482,7 @@ public class NewGameFragment extends BaseFragment {
             gameSize.setText(downloadInfo.getGameSize());
             label.setText(downloadInfo.getLabel());
             gameIntro.setText(downloadInfo.getGameIntro());
-            Glide.with(mActivity).load(downloadInfo.getGamePicUrl()).into(gamePic);
+            Glide.with(mActivity).load(downloadInfo.getGamePicUrl()).transform(new GlideRoundTransform(mActivity,5)).into(gamePic);
             stopBtn.setProgress(downloadInfo.getProgress());
             DownloadState state = downloadInfo.getState();
             switch (state) {

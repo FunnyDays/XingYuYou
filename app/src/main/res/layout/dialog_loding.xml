@@ -7,6 +7,7 @@
               android:background="#FFFFFFFF"
               android:orientation="vertical">
     <TextView
+        android:layout_marginTop="20dp"
         android:id="@+id/text"
         android:text="请稍后"
         android:textSize="18sp"

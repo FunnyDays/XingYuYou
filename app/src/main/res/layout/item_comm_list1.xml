@@ -59,6 +59,7 @@
 
             <TextView
                 android:id="@+id/tv_post_name"
+                android:includeFontPadding="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -86,12 +87,23 @@
                 <ImageView
                     android:id="@+id/iv_post_cover0"
                     android:layout_width="0dp"
-                    android:layout_height="120dp"
+                    android:layout_height="100dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_weight="1"
-                    android:src="@mipmap/icon"
-                    android:scaleType="centerCrop"/>
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/icon"/>
+
+                <ImageView
+                    android:id="@+id/iv_post_cover1"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/icon"/>
+
 
             </LinearLayout>
 

@@ -120,7 +120,7 @@
                 android:clickable="true"
                 android:text="下载"
                 android:textColor="#ffffff"
-                app:buttonCornerRadius="0dp"
+                app:buttonCornerRadius="5dp"
                 app:buttonNormalColor="@color/colorPrimaryDark"
                 app:buttonPressedColor="@color/colorPrimary"
                 app:progressBgColor="@color/colorPrimary"
