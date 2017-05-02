@@ -1488,4 +1488,14 @@ public class ImageUtils {
         if (recycle && !src.isRecycled()) src.recycle();
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
     }
+
+    /**
+     * 按采样大小压缩
+     *
+     * @param src        源图片
+     * @return 按采样率压缩后的图片
+     */
+    public static Bitmap compressByCustom(Bitmap src) {
+        return  null;
+    }
 }

@@ -151,7 +151,7 @@ public class UserFragment extends BaseFragment {
         mAboutXingYu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(mActivity, AboutActivity.class);
+                IntentUtils.startActivity(mActivity, TestActivity.class);
             }
         });
         //下载管理

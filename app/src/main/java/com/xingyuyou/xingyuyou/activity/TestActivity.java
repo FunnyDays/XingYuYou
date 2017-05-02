@@ -1,6 +1,8 @@
 package com.xingyuyou.xingyuyou.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -19,8 +22,11 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.FileUtils;
+import com.xingyuyou.xingyuyou.Utils.ImageUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.HttpUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
+import com.xingyuyou.xingyuyou.Utils.SDCardUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.bean.GameGift;
 import com.xingyuyou.xingyuyou.download.DownloadHelper;
@@ -32,12 +38,18 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+
+import me.nereo.multi_image_selector.MultiImageSelector;
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 public class TestActivity extends AppCompatActivity {
 
+    private static final int REQUEST_IMAGE = 11;
     private Button mOne;
     private HttpURLConnection mConnection;
     private Handler handler = new Handler() {
@@ -47,18 +59,29 @@ public class TestActivity extends AppCompatActivity {
            Log.e("test",msg.obj.toString());
         }
     };
+    private List<String> mImageList=new ArrayList<>();
+    private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         mOne = (Button) findViewById(R.id.one);
+        mImageView = (ImageView) findViewById(R.id.image);
         mOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               testUM();
+               scalImage();
             }
         });
+    }
+
+    private void scalImage() {
+        MultiImageSelector.create(TestActivity.this)
+                .showCamera(true)
+                .single()
+                .start(TestActivity.this, REQUEST_IMAGE);
+
     }
 
     private void testUM() {
@@ -74,8 +97,21 @@ public class TestActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        //UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE) {
+            if (resultCode == RESULT_OK) {
+                List<String> path = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+                //mImageList.addAll(path);
+                File file = new File(path.get(0));
+                Log.e("tupian",path.get(0)+"_____大小："+FileUtils.getFileSize(file));
+                Bitmap bitmap1 = ImageUtils.getBitmap(file);
+                Bitmap bitmap = ImageUtils.compressByQuality(ImageUtils.getBitmap(path.get(0)), (long)200*1024, false);
+                mImageView.setImageBitmap(bitmap);
 
+                Log.e("tupian","_____bitmap大小："+bitmap.getByteCount()+"-------"+FileUtils.getFileSize(FileUtils.saveFile("tutu.JPEG",bitmap)));
+                //ImageUtils.save(bitmap,  Environment.getExternalStorageDirectory().getPath()+"ga.png", Bitmap.CompressFormat.JPEG,true);
+            }
+        }
     }
 
     private UMShareListener umShareListener = new UMShareListener() {

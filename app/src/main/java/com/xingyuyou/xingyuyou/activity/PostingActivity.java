@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +23,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.JsonArray;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
+import com.xingyuyou.xingyuyou.Utils.SDCardUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.adapter.GameHeaderFooterAdapter;
 import com.xingyuyou.xingyuyou.weight.RichTextEditor;
 import com.xingyuyou.xingyuyou.weight.dialog.LoadingDialog;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -52,15 +57,16 @@ import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 public class PostingActivity extends AppCompatActivity {
-
-
+    private static final int REQUEST_IMAGE = 2;
+    private static final int TYPE_FOOTER = 21;
     private Toolbar mToolbar;
     private LoadingDialog mDialog;
     private RelativeLayout mRlTagMore;
     private EditText mStTitle;
     private EditText mEtContent;
     private RecyclerView mRecyclerView;
-
+    private ArrayList<String> mImageList = new ArrayList();
+    private ImageAdapter mImageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,16 +83,16 @@ public class PostingActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        ImageAdapter imageAdapter = new ImageAdapter();
-        mRecyclerView.setAdapter(imageAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        mImageAdapter = new ImageAdapter();
+        mRecyclerView.setAdapter(mImageAdapter);
     }
 
     /**
-     *   MultiImageSelector.create(PostingActivity.this)
-     .showCamera(true)
-     .single()
-     .start(PostingActivity.this, 11);
+     * MultiImageSelector.create(PostingActivity.this)
+     * .showCamera(true)
+     * .single()
+     * .start(PostingActivity.this, 11);
      */
 
 
@@ -94,7 +100,8 @@ public class PostingActivity extends AppCompatActivity {
         mRlTagMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(PostingActivity.this, "heheh", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PostingActivity.this, "选择标签", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
@@ -112,8 +119,7 @@ public class PostingActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.ab_send:
-                        mDialog = new LoadingDialog(PostingActivity.this, "正在上传，请稍等");
-                        mDialog.showDialog();
+                        dealEditData();
                         break;
                     default:
                         break;
@@ -126,7 +132,7 @@ public class PostingActivity extends AppCompatActivity {
     /**
      * 负责处理编辑数据提交等事宜
      */
-    protected void dealEditData(List<RichTextEditor.EditData> editList) {
+    protected void dealEditData() {
         if (StringUtils.isEmpty(mStTitle.getText().toString().trim())) {
             Toast.makeText(this, "请输入标题", Toast.LENGTH_SHORT).show();
             return;
@@ -135,6 +141,8 @@ public class PostingActivity extends AppCompatActivity {
             Toast.makeText(this, "请输入内容", Toast.LENGTH_SHORT).show();
             return;
         }
+        mDialog = new LoadingDialog(PostingActivity.this, "正在上传，请稍等");
+        mDialog.showDialog();
         Map<String, Object> map1 = new HashMap<String, Object>();
         map1.put("label_name", "zhangsan");
         map1.put("id", 24);
@@ -147,24 +155,18 @@ public class PostingActivity extends AppCompatActivity {
         JSONArray array = new JSONArray(list);
 
 
-        ArrayList<String> tags = new ArrayList<>();
-        tags.add("cos");
-        tags.add("动漫");
-        tags.add("鸭子");
-        tags.add("苹果");
         Map<String, String> params = new HashMap<String, String>();
         params.put("fid", "1");
         params.put("uid", "108");
-        params.put("subject", "标题");
-        params.put("message", "内容");
+        params.put("subject", mStTitle.getText().toString().trim());
+        params.put("message", mEtContent.getText().toString().trim());
         params.put("tags", array.toString());
-        Log.e("fabubbs", "test" + tags.toString());
+
         PostFormBuilder post = OkHttpUtils.post();
-        for (int i = 0; i < editList.size() - 1; i++) {
-            File file = new File(editList.get(i).imagePath);
-            Log.d("fabubbs", "文件名称：" + file.getName() +
-                    "-----路径：" + file.getAbsolutePath() + "-----大小：" + file.length() + "标签：" + tags.toString());
+        for (int i = 0; i < mImageList.size() ; i++) {
+            File file = new File(mImageList.get(i));
             String s = "posts_image";
+            Log.e("fabubbs", file.getName() + "图片文件" + mImageList.get(i));
             post.addFile(s + i, file.getName(), file);
         }
         post.url(XingYuInterface.POST_POSTS)
@@ -174,11 +176,13 @@ public class PostingActivity extends AppCompatActivity {
                     @Override
                     public void onError(okhttp3.Call call, Exception e, int id) {
                         Log.e("fabubbs", e.getMessage() + " 失败id:" + id);
+                        mDialog.dismissDialog();
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
                         Log.e("fabubbs", " 成功id:" + id + response);
+                        mDialog.dismissDialog();
                     }
                 });
 
@@ -187,23 +191,87 @@ public class PostingActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e("fabubbs", resultCode +"----"+ requestCode+"----"+ data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT));
+        if (requestCode == REQUEST_IMAGE) {
+            if (resultCode == RESULT_OK) {
+                List<String> path = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+                mImageList.addAll(path);
+                mImageAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     private class ImageAdapter extends RecyclerView.Adapter {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return null;
+            View layout = LayoutInflater.from(PostingActivity.this).inflate(R.layout.item_post_image, parent, false);
+            return new ItemViewHolder(layout);
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+            if (getItemViewType(position) == TYPE_FOOTER) {
+                ((ItemViewHolder) holder).mClosePic.setVisibility(View.GONE);
+                ((ItemViewHolder) holder).mPostImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (mImageList.size()>=5){
+                            Toast.makeText(PostingActivity.this, "只能发布五张图片", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        MultiImageSelector.create(PostingActivity.this)
+                                .showCamera(true)
+                                .single()
+                                .start(PostingActivity.this, REQUEST_IMAGE);
+                    }
+                });
+            }
+            if (holder instanceof ItemViewHolder) {
+                if (mImageList.size() != 0) {
+                    if (getItemViewType(position) != TYPE_FOOTER) {
+                        Glide.with(PostingActivity.this)
+                                .load(mImageList.get(position))
+                                .into(((ItemViewHolder) holder).mPostImage);
+                        ((ItemViewHolder) holder).mClosePic.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                mImageList.remove(position);
+                                notifyDataSetChanged();
+                            }
+                        });
+                    }
+                }
+            }
+        }
 
+        @Override
+        public int getItemViewType(int position) {
+            if (position == getItemCount() - 1) {
+                //最后一个,应该加载Footer
+                return TYPE_FOOTER;
+            }
+            return super.getItemViewType(position);
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return mImageList.size() == 0 ? 1 : mImageList.size() + 1;
+        }
+
+        class ItemViewHolder extends RecyclerView.ViewHolder {
+
+            private ImageView mClosePic;
+            private ImageView mPostImage;
+
+
+            public ItemViewHolder(View itemView) {
+                super(itemView);
+               /* if (itemView == mFooterView) {
+                    return;
+                }*/
+                mClosePic = (ImageView) itemView.findViewById(R.id.iv_close);
+                mPostImage = (ImageView) itemView.findViewById(R.id.iv_post_image);
+
+            }
         }
     }
 }

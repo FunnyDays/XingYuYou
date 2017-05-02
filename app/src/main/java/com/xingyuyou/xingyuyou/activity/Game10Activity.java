@@ -1,3 +1,4 @@
+/*
 package com.xingyuyou.xingyuyou.activity;
 
 import android.animation.ObjectAnimator;
@@ -49,9 +50,11 @@ import java.util.ArrayList;
 
 import okhttp3.Call;
 
+*/
 /**
  * Created by Administrator on 2016/11/21.
- */
+ *//*
+
 
 public class Game10Activity extends BaseActivity {
 
@@ -97,9 +100,11 @@ public class Game10Activity extends BaseActivity {
 
     }
 
-    /**
+    */
+/**
      * 检查app是否已经安装或者正在下载
-     */
+     *//*
+
     private void checkDownload() {
 
     }
@@ -141,17 +146,21 @@ public class Game10Activity extends BaseActivity {
         gameDetailPicAdapter.setOnItemClickLitener(new GameDetailPicAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
-               /* startActivity(new Intent(Game10Activity.this, imageDetailPagerActivity.class)
-                        .putStringArrayListExtra("gameLink", gamePics));*/
+               */
+/* startActivity(new Intent(Game10Activity.this, imageDetailPagerActivity.class)
+                        .putStringArrayListExtra("gameLink", gamePics));*//*
+
             }
         });
         recyclerView.setAdapter(gameDetailPicAdapter);
 
 
     }
-    /**
+    */
+/**
      * 获取下载信息状态
-     */
+     *//*
+
     private void getDownloadInfo() {
         downloadManager = DownloadManager.getInstance();
         DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()
@@ -189,7 +198,8 @@ public class Game10Activity extends BaseActivity {
             mBtInstallGame.setTag(1);
         }else{
             mBtInstallGame.setTag(0);
-        }/*else {
+        }*/
+/*else {
             DownloadInfo downloadInfo = new DownloadInfo();
             downloadInfo.setUrl("");
             downloadInfo.setAutoResume(true);
@@ -197,7 +207,8 @@ public class Game10Activity extends BaseActivity {
             downloadInfo.setLabel(gameNameTitle);
             downloadInfo.setFileSavePath(FileUtils.fileSavePath+gameNameTitle+".apk");
             mViewHolder = new DownloadItemViewHolder(null,downloadInfo);
-        }*/
+        }*//*
+
     }
 
     private void initButtonDownload() {
@@ -347,9 +358,11 @@ public class Game10Activity extends BaseActivity {
     }
 
 
-    /**
+    */
+/**
      * 空布局
-     */
+     *//*
+
     private void initEmptyView() {
         mLoadingLayout.setOnReloadListener(new LoadingLayout.OnReloadListener() {
 
@@ -466,7 +479,8 @@ public class Game10Activity extends BaseActivity {
     private void initToolBar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(gameNameTitle);
-       /* toolbar.inflateMenu(R.menu.game_detail_menu);
+       */
+/* toolbar.inflateMenu(R.menu.game_detail_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -480,7 +494,8 @@ public class Game10Activity extends BaseActivity {
                 }
                 return false;
             }
-        });*/
+        });*//*
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -496,9 +511,11 @@ public class Game10Activity extends BaseActivity {
 
     }
 
-    /**
+    */
+/**
      * 获取游戏下载链接
-     */
+     *//*
+
     public String getGameDownLoadLink(String link) {
         final String[] mPkgUrl = new String[1];
         final int[] lastIndexOf = {link.lastIndexOf("/")};
@@ -530,3 +547,4 @@ public class Game10Activity extends BaseActivity {
         return mPkgUrl[0];
     }
 }
+*/

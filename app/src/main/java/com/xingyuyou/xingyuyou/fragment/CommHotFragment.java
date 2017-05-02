@@ -108,8 +108,9 @@ public class CommHotFragment extends BaseFragment {
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-               /* mPageNumber = 1;
-                getData(1,null);*/
+                PAGENUMBER=1;
+                initData(PAGENUMBER);
+                mPostAdapterList.clear();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {

@@ -43,7 +43,7 @@ public class LoadingDialog {
         textView.setText(msg);
         builder.setView(view);
         mAlertDialog = builder.create();
-       // mAlertDialog.setCancelable(false);
+        mAlertDialog.setCancelable(false);
     }
 
     public void showDialog() {

@@ -1,3 +1,4 @@
+/*
 package com.xingyuyou.xingyuyou.fragment;
 
 import android.content.Intent;
@@ -26,9 +27,11 @@ import org.xutils.DbManager;
 
 import java.util.ArrayList;
 
+*/
 /**
  * Created by Administrator on 2016/6/28.
- */
+ *//*
+
 public class GameFragment extends BaseFragment {
 
     private Handler handler = new Handler();
@@ -59,9 +62,11 @@ public class GameFragment extends BaseFragment {
     }
 
 
-    /**
+    */
+/**
      * 初始化数据
-     */
+     *//*
+
     @Override
     public void initData() {
         final Handler handler = new Handler() {
@@ -126,9 +131,11 @@ public class GameFragment extends BaseFragment {
         return view;
     }
 
-    /**
+    */
+/**
      * 空布局
-     */
+     *//*
+
     private void initEmptyView() {
         mLoadingLayout.setOnReloadListener(new LoadingLayout.OnReloadListener() {
 
@@ -229,9 +236,11 @@ public class GameFragment extends BaseFragment {
         });
     }
 
-    /**
+    */
+/**
      * 加载更多
-     */
+     *//*
+
     private void loadMoreData() {
         curPage++;
         action = STATE_MORE;
@@ -239,3 +248,4 @@ public class GameFragment extends BaseFragment {
     }
 
 }
+*/

@@ -94,9 +94,6 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activity.Game10Activity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".activity.DownLoadActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -109,9 +106,6 @@
         </activity>
         <activity
             android:name=".activity.UninstallAppActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".activity.GameDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.LoginActivity"
@@ -148,8 +142,13 @@
         <activity android:name=".activity.PostClassListActivity">
         </activity>
         <activity
-            android:configChanges="orientation|screenSize"
-            android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity" />
+            android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"
+            android:configChanges="orientation|screenSize"/>
+
+        <service
+            android:name=".service.InitializeService"
+            android:exported="false">
+        </service>
     </application>
 
 </manifest>

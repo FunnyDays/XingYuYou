@@ -1,3 +1,4 @@
+/*
 package com.xingyuyou.xingyuyou.activity;
 
 import android.animation.ObjectAnimator;
@@ -47,9 +48,11 @@ import java.util.ArrayList;
 
 import okhttp3.Call;
 
+*/
 /**
  * Created by Administrator on 2016/11/21.
- */
+ *//*
+
 
 public class GameDetailActivity extends BaseActivity {
 
@@ -95,9 +98,11 @@ public class GameDetailActivity extends BaseActivity {
 
     }
 
-    /**
+    */
+/**
      * 检查app是否已经安装或者正在下载
-     */
+     *//*
+
     private void checkDownload() {
 
     }
@@ -139,17 +144,21 @@ public class GameDetailActivity extends BaseActivity {
         gameDetailPicAdapter.setOnItemClickLitener(new GameDetailPicAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
-               /* startActivity(new Intent(Game10Activity.this, imageDetailPagerActivity.class)
-                        .putStringArrayListExtra("gameLink", gamePics));*/
+               */
+/* startActivity(new Intent(Game10Activity.this, imageDetailPagerActivity.class)
+                        .putStringArrayListExtra("gameLink", gamePics));*//*
+
             }
         });
         recyclerView.setAdapter(gameDetailPicAdapter);
 
 
     }
-    /**
+    */
+/**
      * 获取下载信息状态
-     */
+     *//*
+
     private void getDownloadInfo() {
         downloadManager = DownloadManager.getInstance();
         DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()
@@ -187,7 +196,8 @@ public class GameDetailActivity extends BaseActivity {
             mBtInstallGame.setTag(1);
         }else{
             mBtInstallGame.setTag(0);
-        }/*else {
+        }*/
+/*else {
             DownloadInfo downloadInfo = new DownloadInfo();
             downloadInfo.setUrl("");
             downloadInfo.setAutoResume(true);
@@ -195,7 +205,8 @@ public class GameDetailActivity extends BaseActivity {
             downloadInfo.setLabel(gameNameTitle);
             downloadInfo.setFileSavePath(FileUtils.fileSavePath+gameNameTitle+".apk");
             mViewHolder = new DownloadItemViewHolder(null,downloadInfo);
-        }*/
+        }*//*
+
     }
 
     private void initButtonDownload() {
@@ -348,9 +359,11 @@ public class GameDetailActivity extends BaseActivity {
     }
 
 
-    /**
+    */
+/**
      * 空布局
-     */
+     *//*
+
     private void initEmptyView() {
         mLoadingLayout.setOnReloadListener(new LoadingLayout.OnReloadListener() {
 
@@ -483,9 +496,11 @@ public class GameDetailActivity extends BaseActivity {
 
     }
 
-    /**
+    */
+/**
      * 获取游戏下载链接
-     */
+     *//*
+
     public String getGameDownLoadLink(String link) {
         final String[] mPkgUrl = new String[1];
         final int[] lastIndexOf = {link.lastIndexOf("/")};
@@ -517,3 +532,4 @@ public class GameDetailActivity extends BaseActivity {
         return mPkgUrl[0];
     }
 }
+*/

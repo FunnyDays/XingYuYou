@@ -1,9 +1,15 @@
 package com.xingyuyou.xingyuyou.Utils;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Environment;
+import android.util.Log;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,9 +24,12 @@ import java.io.OutputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * <pre>
@@ -32,7 +41,59 @@ import java.util.List;
  */
 public class FileUtils {
     public static final String fileSavePath = "/sdcard/XingYuGame/";
+    /**
+     * 将Bitmap 图片保存到本地路径，并返回路径
+     * @param c
+     * @param fileName 文件名称
+     * @param bitmap 图片
+     * @return
+     */
+    public static String saveFile( String fileName, Bitmap bitmap) {
+        return saveFile("", fileName, bitmap);
+    }
 
+    public static String saveFile( String filePath, String fileName, Bitmap bitmap) {
+        byte[] bytes = bitmapToBytes(bitmap);
+        return saveFile( filePath, fileName, bytes);
+    }
+
+    public static byte[] bitmapToBytes(Bitmap bm) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        return baos.toByteArray();
+    }
+
+    public static String saveFile( String filePath, String fileName, byte[] bytes) {
+        String fileFullName = "";
+        FileOutputStream fos = null;
+        String dateFolder = new SimpleDateFormat("yyyyMMdd", Locale.CHINA)
+                .format(new Date());
+        try {
+            String suffix = "";
+            if (filePath == null || filePath.trim().length() == 0) {
+                filePath = Environment.getExternalStorageDirectory() + "/Fun/" + dateFolder + "/";
+            }
+            File file = new File(filePath);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            File fullFile = new File(filePath, fileName + suffix);
+            fileFullName = fullFile.getPath();
+            fos = new FileOutputStream(new File(filePath, fileName + suffix));
+            fos.write(bytes);
+        } catch (Exception e) {
+            fileFullName = "";
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    fileFullName = "";
+                }
+            }
+        }
+        return fileFullName;
+    }
     private FileUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }

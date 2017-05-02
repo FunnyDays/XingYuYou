@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,13 +82,28 @@ public class SplashActivity extends AppCompatActivity {
             }
         }
     };*/
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         IntentUtils.startActivityAndFinish(SplashActivity.this, MainActivity.class);
+        Button button = (Button) findViewById(R.id.button1);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
+       new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
      /*   mVersionCode = AppUtils.getAppVersionCode(this);
         Log.e("banben", mVersionCode + "版本号");
         mText = (TextView) findViewById(R.id.text);
@@ -154,7 +170,9 @@ public class SplashActivity extends AppCompatActivity {
                 });
     }*/
 
-  /*  *//**
+  /*  */
+
+    /**
      * 检查更新 XingYuInterface.ABOUT_US
      *//*
     private void checkUpdate() {
@@ -175,7 +193,6 @@ public class SplashActivity extends AppCompatActivity {
                     }
                 });
     }*/
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

@@ -6,31 +6,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.xingyuyou.xingyuyou.R;
-import com.xingyuyou.xingyuyou.Utils.FileUtils;
-import com.xingyuyou.xingyuyou.activity.Game10Activity;
 import com.xingyuyou.xingyuyou.bean.Game;
-import com.xingyuyou.xingyuyou.download.DownloadInfo;
 import com.xingyuyou.xingyuyou.download.DownloadManager;
-import com.xingyuyou.xingyuyou.download.DownloadState;
-import com.xingyuyou.xingyuyou.download.DownloadViewHolder;
 import com.xingyuyou.xingyuyou.weight.ProgressButton;
 
-import org.xutils.DbManager;
-import org.xutils.common.Callback;
-import org.xutils.ex.DbException;
-import org.xutils.x;
-
-import java.io.File;
 import java.util.ArrayList;
 
 /**

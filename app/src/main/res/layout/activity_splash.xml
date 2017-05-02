@@ -24,4 +24,9 @@
         android:textColor="@android:color/black"
         android:textSize="14sp"
         tools:text="版本 1.0"/>
+    <Button
+        android:id="@+id/button1"
+        android:text="点击进入"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>
