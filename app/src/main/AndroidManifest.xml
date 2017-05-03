@@ -149,6 +149,9 @@
             android:name=".service.InitializeService"
             android:exported="false">
         </service>
+
+        <activity android:name=".activity.SelectTagActivity">
+        </activity>
     </application>
 
 </manifest>

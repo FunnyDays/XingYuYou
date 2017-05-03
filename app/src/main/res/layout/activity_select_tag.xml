@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_select_tag"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context="com.xingyuyou.xingyuyou.activity.SelectTagActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <AutoCompleteTextView
+        android:hint="搜索标签"
+        android:paddingLeft="20dp"
+        android:lines="1"
+        android:textColor="@android:color/black"
+        android:id="@+id/et_select_tags"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rl_root_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp">
+    </android.support.v7.widget.RecyclerView>
+    <View
+        android:layout_width="match_parent"
+        android:background="#22787777"
+        android:layout_height="1dp"/>
+    <TextView
+        android:text="热门标签"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ListView>
+</LinearLayout>

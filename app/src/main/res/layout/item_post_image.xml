@@ -10,11 +10,12 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_margin="5dp"
-        android:background="@color/blue_pressed"
+        android:background="#44787777"
         android:scaleType="center"
         android:src="@drawable/ic_action_add_image"/>
 
     <ImageView
+        android:tint="@color/colorAccent"
         android:layout_margin="3dp"
         android:id="@+id/iv_close"
         android:layout_width="30dp"

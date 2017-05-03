@@ -1492,10 +1492,11 @@ public class ImageUtils {
     /**
      * 按采样大小压缩
      *
-     * @param src        源图片
+     * @param bitmap        源图片
      * @return 按采样率压缩后的图片
      */
-    public static Bitmap compressByCustom(Bitmap src) {
+    public static Bitmap compressByCustom(Bitmap bitmap) {
+
         return  null;
     }
 }

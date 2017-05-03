@@ -40,6 +40,7 @@ import java.util.Locale;
  * </pre>
  */
 public class FileUtils {
+
     public static final String fileSavePath = "/sdcard/XingYuGame/";
     /**
      * 将Bitmap 图片保存到本地路径，并返回路径

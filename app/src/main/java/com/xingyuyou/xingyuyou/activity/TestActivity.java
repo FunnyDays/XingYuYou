@@ -31,6 +31,8 @@ import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.bean.GameGift;
 import com.xingyuyou.xingyuyou.download.DownloadHelper;
 
+import net.bither.util.NativeUtil;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +41,7 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -48,7 +51,10 @@ import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 public class TestActivity extends AppCompatActivity {
-
+    /**
+     * SD卡根目录
+     */
+    private final String externalStorageDirectory = Environment.getExternalStorageDirectory().getPath()+"/Pictures/";
     private static final int REQUEST_IMAGE = 11;
     private Button mOne;
     private HttpURLConnection mConnection;
@@ -56,22 +62,27 @@ public class TestActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             if (msg.obj == null) return;
-           Log.e("test",msg.obj.toString());
+            Log.e("test", msg.obj.toString());
         }
     };
-    private List<String> mImageList=new ArrayList<>();
+    private List<String> mImageList = new ArrayList<>();
     private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //压缩后保存临时文件目录
+        File tempFile = new File(externalStorageDirectory);
+        if(!tempFile.exists()){
+            tempFile.mkdirs();
+        }
         setContentView(R.layout.activity_test);
         mOne = (Button) findViewById(R.id.one);
         mImageView = (ImageView) findViewById(R.id.image);
         mOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               scalImage();
+                scalImage();
             }
         });
     }
@@ -85,15 +96,16 @@ public class TestActivity extends AppCompatActivity {
     }
 
     private void testUM() {
-        UMImage thumb =  new UMImage(this, R.mipmap.ic_action_all_app);
+        UMImage thumb = new UMImage(this, R.mipmap.ic_action_all_app);
         UMWeb web = new UMWeb("http://www.xingyuyou.com");
         web.setTitle("This is music title");//标题
         web.setThumb(thumb);  //缩略图
         web.setDescription("my description");//描述
         new ShareAction(TestActivity.this).withMedia(web)
-                .setDisplayList(SHARE_MEDIA.SINA,SHARE_MEDIA.QQ,SHARE_MEDIA.WEIXIN)
+                .setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.WEIXIN)
                 .setCallback(umShareListener).open();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -101,15 +113,13 @@ public class TestActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE) {
             if (resultCode == RESULT_OK) {
                 List<String> path = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-                //mImageList.addAll(path);
                 File file = new File(path.get(0));
-                Log.e("tupian",path.get(0)+"_____大小："+FileUtils.getFileSize(file));
-                Bitmap bitmap1 = ImageUtils.getBitmap(file);
-                Bitmap bitmap = ImageUtils.compressByQuality(ImageUtils.getBitmap(path.get(0)), (long)200*1024, false);
-                mImageView.setImageBitmap(bitmap);
-
-                Log.e("tupian","_____bitmap大小："+bitmap.getByteCount()+"-------"+FileUtils.getFileSize(FileUtils.saveFile("tutu.JPEG",bitmap)));
-                //ImageUtils.save(bitmap,  Environment.getExternalStorageDirectory().getPath()+"ga.png", Bitmap.CompressFormat.JPEG,true);
+                if (file.exists()) {
+                    File file1 = new File(externalStorageDirectory+"tempCompress.jpg");
+                        NativeUtil.compressBitmap(path.get(0), file1.getAbsolutePath());
+                        mImageView.setImageBitmap(ImageUtils.getBitmap(file1.getAbsolutePath()));
+                        Log.e("tupian", "_____大小：" + FileUtils.getFileSize(path.get(0)) + "-------" + FileUtils.getFileSize(file1.getAbsolutePath()));
+                }
             }
         }
     }
@@ -119,9 +129,10 @@ public class TestActivity extends AppCompatActivity {
         public void onStart(SHARE_MEDIA platform) {
             //分享开始的回调
         }
+
         @Override
         public void onResult(SHARE_MEDIA platform) {
-            Log.d("plat","platform"+platform);
+            Log.d("plat", "platform" + platform);
 
             Toast.makeText(TestActivity.this, platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
 
@@ -130,14 +141,14 @@ public class TestActivity extends AppCompatActivity {
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
             //Toast.makeText(TestActivity.this,platform + " 分享失败啦", Toast.LENGTH_SHORT).show();
-            if(t!=null){
-                Log.d("throw","throw:"+t.getMessage());
+            if (t != null) {
+                Log.d("throw", "throw:" + t.getMessage());
             }
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
-            Toast.makeText(TestActivity.this,platform + " 分享取消了", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TestActivity.this, platform + " 分享取消了", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -149,7 +160,7 @@ public class TestActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        HttpUtils.POST(handler,XingYuInterface.UPDATA_DOWN,jsonObject.toString(),true);
+        HttpUtils.POST(handler, XingYuInterface.UPDATA_DOWN, jsonObject.toString(), true);
     }
 
     private void getGift() {
@@ -160,8 +171,9 @@ public class TestActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        HttpUtils.POST(handler,XingYuInterface.RCEIVE_GIFT,jsonObject.toString(),false);
+        HttpUtils.POST(handler, XingYuInterface.RCEIVE_GIFT, jsonObject.toString(), false);
     }
+
     private void getData() {
         RequestParams params = new RequestParams(XingYuInterface.RCEIVE_GIFT);
         params.addParameter("mid", String.valueOf(108));
@@ -194,21 +206,22 @@ public class TestActivity extends AppCompatActivity {
             }
         });
     }
+
     private void testDuandian() {
         try {
-            URL url=new URL("http://download.apk8.com/d2/soft/meilijia.apk");
-            HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+            URL url = new URL("http://download.apk8.com/d2/soft/meilijia.apk");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
 
             int fileLength = -1;
-            Log.e("duandian","11111");
-            if(conn.getResponseCode() == HttpURLConnection.HTTP_OK){
+            Log.e("duandian", "11111");
+            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 fileLength = conn.getContentLength();
-                Log.e("duandian","::::"+fileLength);
+                Log.e("duandian", "::::" + fileLength);
             }
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

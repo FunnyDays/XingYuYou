@@ -3,12 +3,15 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="#22787777"
+              android:focusable="true"
+              android:focusableInTouchMode="true"
               android:orientation="vertical">
 
     <include layout="@layout/toolbar"/>
 
     <EditText
         android:id="@+id/et_title"
+
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:layout_marginBottom="5dp"
@@ -21,6 +24,8 @@
 
     <EditText
         android:id="@+id/et_content"
+        android:gravity="left"
+        android:paddingTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2px"
@@ -33,39 +38,10 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="160dp"
         android:layout_marginTop="5dp">
 
     </android.support.v7.widget.RecyclerView>
-    <!--
-        <HorizontalScrollView
-            android:background="@android:color/white"
-            android:layout_marginTop="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="120dp">
-
-            <LinearLayout
-                android:id="@+id/ll_add_image"
-                android:orientation="horizontal"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                android:layout_marginLeft="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/iv_image"
-                    android:padding="40dp"
-                    android:background="#22787777"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@drawable/ic_action_add_image"
-                    />
-            </LinearLayout>
-
-        </HorizontalScrollView>
-    -->
-
 
     <RelativeLayout
         android:id="@+id/rl_tag_more"

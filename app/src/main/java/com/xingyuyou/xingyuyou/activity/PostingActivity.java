@@ -30,6 +30,8 @@ import com.bumptech.glide.Glide;
 import com.google.gson.JsonArray;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
+import com.xingyuyou.xingyuyou.Utils.FileUtils;
+import com.xingyuyou.xingyuyou.Utils.ImageUtils;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.SDCardUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
@@ -40,6 +42,8 @@ import com.xingyuyou.xingyuyou.weight.dialog.LoadingDialog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import net.bither.util.NativeUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -100,8 +104,7 @@ public class PostingActivity extends AppCompatActivity {
         mRlTagMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(PostingActivity.this, "选择标签", Toast.LENGTH_SHORT).show();
-
+                IntentUtils.startActivity(PostingActivity.this,SelectTagActivity.class);
             }
         });
     }
@@ -145,10 +148,10 @@ public class PostingActivity extends AppCompatActivity {
         mDialog.showDialog();
         Map<String, Object> map1 = new HashMap<String, Object>();
         map1.put("label_name", "zhangsan");
-        map1.put("id", 24);
+        map1.put("id", 0);
         Map<String, Object> map2 = new HashMap<String, Object>();
         map2.put("label_name", "lisi");
-        map2.put("id", 25);
+        map2.put("id", 0);
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         list.add(map1);
         list.add(map2);
@@ -165,9 +168,14 @@ public class PostingActivity extends AppCompatActivity {
         PostFormBuilder post = OkHttpUtils.post();
         for (int i = 0; i < mImageList.size() ; i++) {
             File file = new File(mImageList.get(i));
-            String s = "posts_image";
-            Log.e("fabubbs", file.getName() + "图片文件" + mImageList.get(i));
-            post.addFile(s + i, file.getName(), file);
+            if(file.exists()) {
+                File file1 = new File(getExternalCacheDir()+"tempCompress"+i+".jpg");
+                NativeUtil.compressBitmap(mImageList.get(i), file1.getAbsolutePath());
+                String s = "posts_image";
+                post.addFile(s + i, file.getName(), file1);
+                Log.e("tupian", "_____大小：" + FileUtils.getFileSize(mImageList.get(i)) + "-------" + FileUtils.getFileSize(file1.getAbsolutePath()));
+            }
+
         }
         post.url(XingYuInterface.POST_POSTS)
                 .params(params)
@@ -270,7 +278,6 @@ public class PostingActivity extends AppCompatActivity {
                 }*/
                 mClosePic = (ImageView) itemView.findViewById(R.id.iv_close);
                 mPostImage = (ImageView) itemView.findViewById(R.id.iv_post_image);
-
             }
         }
     }
