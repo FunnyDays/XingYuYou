@@ -8,7 +8,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.google.gson.Gson;
@@ -18,7 +17,6 @@ import com.xingyuyou.xingyuyou.Utils.DiffCallBack;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.activity.PostingActivity;
-import com.xingyuyou.xingyuyou.activity.SearchForCommActivity;
 import com.xingyuyou.xingyuyou.adapter.CommHeaderFooterAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.community.LabelClassBean;
@@ -38,8 +36,7 @@ import okhttp3.Call;
 /**
  * Created by Administrator on 2016/6/28.
  */
-public class CommunityFragmentCopy extends BaseFragment {
-
+public class CommunityFragment extends BaseFragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -63,8 +60,6 @@ public class CommunityFragmentCopy extends BaseFragment {
                         mLabelClassList = gson.fromJson(ja.toString(),
                                 new TypeToken<List<LabelClassBean>>() {
                                 }.getType());
-
-
                         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffCallBack(mDatas, mLabelClassList), true);
                         diffResult.dispatchUpdatesTo(mAdapter);
                         mDatas=mLabelClassList;
@@ -79,10 +74,10 @@ public class CommunityFragmentCopy extends BaseFragment {
     };
 
 
-    public static CommunityFragmentCopy newInstance(String content) {
+    public static CommunityFragment newInstance(String content) {
         Bundle args = new Bundle();
         args.putString("ARGS", content);
-        CommunityFragmentCopy fragment = new CommunityFragmentCopy();
+        CommunityFragment fragment = new CommunityFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -96,7 +91,6 @@ public class CommunityFragmentCopy extends BaseFragment {
         OkHttpUtils.post()//
                 .url(XingYuInterface.GET_LABEL_CLASS)
                 .tag(this)//
-                .addParams("type", "2")
                 .build()//
                 .execute(new StringCallback() {
                     @Override
@@ -119,14 +113,12 @@ public class CommunityFragmentCopy extends BaseFragment {
             }
         });
 
-
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.SwipeRefreshLayout);
         initSwipeRefreshLayout();
         mRecyclerView = (RecyclerView)view.findViewById(R.id.id_recyclerview);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(mActivity,2));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(mActivity,3));
         mAdapter = new CommHeaderFooterAdapter(mActivity,mDatas);
         mRecyclerView.setAdapter(mAdapter);
-
         return view;
     }
     @Override

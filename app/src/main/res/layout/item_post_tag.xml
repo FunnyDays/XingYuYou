@@ -19,6 +19,7 @@
             android:paddingLeft="5dp"
             android:paddingRight="10dp"
             tools:text="CosPqqq"
+            android:textColor="@color/colorAccent"
             android:layout_centerVertical="true"
             android:gravity="center"
             />

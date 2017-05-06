@@ -14,7 +14,13 @@
         <!--itemBackground设置menu菜单背景色-->
         <item name="android:itemBackground">#3F51B5</item>
         <item name="overlapAnchor">false</item>
+       <!-- <item name="android:actionMenuTextAppearance">@style/MenuTextStyle</item>-->
         <!-- <item name="actionOverflowMenuStyle">@style/MenuStyle</item>-->
+    </style>
+
+    <style name="MenuTextStyle" parent="@style/Theme.AppCompat.NoActionBar">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">18sp</item>
     </style>
     <style name="splashtheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_icon</item>

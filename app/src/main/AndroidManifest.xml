@@ -133,7 +133,9 @@
         </activity>
         <activity android:name=".activity.ManagementActivity">
         </activity>
-        <activity android:name=".activity.PostingActivity">
+        <activity
+            android:name=".activity.PostingActivity"
+            android:launchMode="singleTask">
         </activity>
         <activity android:name=".activity.SearchForCommActivity">
         </activity>
@@ -151,6 +153,8 @@
         </service>
 
         <activity android:name=".activity.SelectTagActivity">
+        </activity>
+        <activity android:name=".activity.SortGameListActivity">
         </activity>
     </application>
 

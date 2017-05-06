@@ -14,7 +14,7 @@
             android:minHeight="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
             app:navigationIcon="?attr/homeAsUpIndicator"
-            app:theme="@style/Theme.AppCompat.NoActionBar">
+            app:theme="@style/MenuTextStyle">
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>

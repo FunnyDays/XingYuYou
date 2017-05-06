@@ -3,7 +3,6 @@ package com.xingyuyou.xingyuyou.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +17,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
-import com.xingyuyou.xingyuyou.activity.HotGameDetailActivity;
 import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
-import com.xingyuyou.xingyuyou.bean.community.LabelClassBean;
-import com.xingyuyou.xingyuyou.bean.community.PostBean;
-import com.xingyuyou.xingyuyou.bean.community.PostBeanTest;
-import com.xingyuyou.xingyuyou.bean.hotgame.HotGameBean;
+import com.xingyuyou.xingyuyou.bean.community.PostListBean;
 
 import java.util.List;
 
@@ -32,7 +27,7 @@ import java.util.List;
  */
 public class CommHotAdapter extends RecyclerView.Adapter {
     //数据
-    private List<PostBeanTest> mListData;
+    private List<PostListBean> mListData;
     private Activity mActivity;
 
     public static final int TYPE_HEADER = 0;  //说明是带有Header的
@@ -46,12 +41,12 @@ public class CommHotAdapter extends RecyclerView.Adapter {
     private View mHeaderView;
     private View mFooterView;
 
-    public CommHotAdapter(Activity activity, List<PostBeanTest> listData) {
+    public CommHotAdapter(Activity activity, List<PostListBean> listData) {
         mListData = listData;
         mActivity = activity;
     }
 
-    public void setDatas(List<PostBeanTest> listData) {
+    public void setDatas(List<PostListBean> listData) {
         mListData = listData;
     }
 

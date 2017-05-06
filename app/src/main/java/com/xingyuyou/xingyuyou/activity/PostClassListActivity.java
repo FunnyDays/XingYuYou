@@ -24,6 +24,8 @@ import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.bean.community.PostBean;
+import com.xingyuyou.xingyuyou.bean.community.PostDetailBean;
+import com.xingyuyou.xingyuyou.bean.community.PostListBean;
 import com.xingyuyou.xingyuyou.fragment.CommHotFragment;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -63,7 +65,7 @@ public class PostClassListActivity extends AppCompatActivity {
                     Log.e("post", "解析数据："+  ja.toString());
                     Gson gson = new Gson();
                     mPostList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<PostBean>>() {
+                            new TypeToken<List<PostListBean>>() {
                             }.getType());
                     mPostAdapterList.addAll(mPostList);
 

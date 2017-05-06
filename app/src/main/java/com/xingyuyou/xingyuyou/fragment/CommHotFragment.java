@@ -20,8 +20,8 @@ import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
-import com.xingyuyou.xingyuyou.bean.community.PostBean;
-import com.xingyuyou.xingyuyou.bean.community.PostBeanTest;
+import com.xingyuyou.xingyuyou.bean.community.PostListBean;
+import com.xingyuyou.xingyuyou.weight.WrapContentLinearLayoutManager;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -39,6 +39,7 @@ import okhttp3.Call;
  */
 public class CommHotFragment extends BaseFragment {
 
+    private static boolean CLEAR_DATA = false;
     private RecyclerView mRecyclerView;
     private boolean IS_FIRST_INIT_DATA=true;
     private int  PAGENUMBER = 1;
@@ -64,8 +65,12 @@ public class CommHotFragment extends BaseFragment {
                     Log.e("post", "解析数据："+  ja.toString());
                     Gson gson = new Gson();
                     mPostList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<PostBeanTest>>() {
+                            new TypeToken<List<PostListBean>>() {
                             }.getType());
+                    if (CLEAR_DATA==true){
+                        mPostAdapterList.clear();
+                        CLEAR_DATA=false;
+                    }
                     mPostAdapterList.addAll(mPostList);
 
                 } catch (JSONException e) {
@@ -81,7 +86,7 @@ public class CommHotFragment extends BaseFragment {
     private ProgressBar mPbNodata;
     private TextView mTvNodata;
     private SwipeRefreshLayout mRefreshLayout;
-    private LinearLayoutManager mLinearLayoutManager;
+    private WrapContentLinearLayoutManager mLinearLayoutManager;
 
     public static CommHotFragment newInstance(String content) {
         Bundle args = new Bundle();
@@ -109,8 +114,8 @@ public class CommHotFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 PAGENUMBER=1;
+                CLEAR_DATA=true;
                 initData(PAGENUMBER);
-                mPostAdapterList.clear();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -154,7 +159,7 @@ public class CommHotFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        mLinearLayoutManager = new LinearLayoutManager(mActivity);
+        mLinearLayoutManager = new WrapContentLinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mCommHotAdapter = new CommHotAdapter(mActivity, mPostAdapterList);
         View loadingData = View.inflate(mActivity, R.layout.default_loading, null);

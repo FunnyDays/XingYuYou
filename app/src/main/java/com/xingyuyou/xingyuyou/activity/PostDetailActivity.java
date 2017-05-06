@@ -75,13 +75,11 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     private void setValues() {
-        mTextView.setText(mPostDetailBean.toString());
-    }
+     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
-        mTextView = (TextView) findViewById(R.id.tv_content);
         initView();
         initData();
     }

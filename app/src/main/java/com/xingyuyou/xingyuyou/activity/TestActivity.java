@@ -7,10 +7,20 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -27,8 +37,10 @@ import com.xingyuyou.xingyuyou.Utils.ImageUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.HttpUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.SDCardUtils;
+import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.bean.GameGift;
+import com.xingyuyou.xingyuyou.bean.community.TagBean;
 import com.xingyuyou.xingyuyou.download.DownloadHelper;
 
 import net.bither.util.NativeUtil;
@@ -45,6 +57,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import me.nereo.multi_image_selector.MultiImageSelector;
@@ -54,7 +67,7 @@ public class TestActivity extends AppCompatActivity {
     /**
      * SD卡根目录
      */
-    private final String externalStorageDirectory = Environment.getExternalStorageDirectory().getPath()+"/Pictures/";
+    private final String externalStorageDirectory = Environment.getExternalStorageDirectory().getPath() + "/Pictures/";
     private static final int REQUEST_IMAGE = 11;
     private Button mOne;
     private HttpURLConnection mConnection;
@@ -65,17 +78,47 @@ public class TestActivity extends AppCompatActivity {
             Log.e("test", msg.obj.toString());
         }
     };
-    private List<String> mImageList = new ArrayList<>();
+    private List<TagBean> mCopyList = new ArrayList<>();
+    private List<TagBean> mFilteredArrayList;
+    private List<TagBean> mTagListAdapter = new ArrayList<>();
     private ImageView mImageView;
+    private AutoCompleteTextView mCompleteTextView;
+    private ListView mListView;
+    private TagAdapter mTagAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //压缩后保存临时文件目录
         File tempFile = new File(externalStorageDirectory);
-        if(!tempFile.exists()){
+        if (!tempFile.exists()) {
             tempFile.mkdirs();
         }
+        for (int i = 0; i < 3; i++) {
+            TagBean tagBean = new TagBean();
+            tagBean.setId(i+"");
+            tagBean.setLabel_name("哈哈");
+            mTagListAdapter.add(tagBean);
+        }
+        for (int i = 0; i < 3; i++) {
+            TagBean tagBean = new TagBean();
+            tagBean.setId(i+"");
+            tagBean.setLabel_name("哥哥");
+            mTagListAdapter.add(tagBean);
+        }
+        for (int i = 0; i < 3; i++) {
+            TagBean tagBean = new TagBean();
+            tagBean.setId(i+"");
+            tagBean.setLabel_name("嘎嘎");
+            mTagListAdapter.add(tagBean);
+        }
+        for (int i = 0; i < 3; i++) {
+            TagBean tagBean = new TagBean();
+            tagBean.setId(i+"");
+            tagBean.setLabel_name("嘎呵");
+            mTagListAdapter.add(tagBean);
+        }
+        mCopyList.addAll(mTagListAdapter);
         setContentView(R.layout.activity_test);
         mOne = (Button) findViewById(R.id.one);
         mImageView = (ImageView) findViewById(R.id.image);
@@ -85,7 +128,127 @@ public class TestActivity extends AppCompatActivity {
                 scalImage();
             }
         });
+        mTagAdapter = new TagAdapter();
+        mCompleteTextView = (AutoCompleteTextView) findViewById(R.id.act_edittext);
+        mCompleteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.e("tag_post","搜索字符："+s.toString());
+                if (StringUtils.isEmpty(s.toString())){
+                    Log.e("tag_post","搜索字符空时："+s.toString());
+                    mTagListAdapter.clear();
+                    mTagListAdapter.addAll(mCopyList);
+                    mTagAdapter.notifyDataSetChanged();
+                }else {
+                    Log.e("tag_post","搜索字符不空时："+s.toString());
+                    inQuire(s.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        mListView = (ListView) findViewById(R.id.listview);
+        mListView.setAdapter(mTagAdapter);
     }
+
+    private void inQuire(String s) {
+        mFilteredArrayList=new ArrayList<>();
+        for (TagBean tag : mTagListAdapter) {
+            if (tag.getLabel_name().contains(s)) {
+                mFilteredArrayList.add(tag);
+                Log.e("tag_post",s+"符合name=" + tag.getLabel_name());
+            }
+        }
+        //查询完之后更新数据
+        mTagListAdapter.clear();
+        mTagListAdapter.addAll(mFilteredArrayList);
+        mTagAdapter.notifyDataSetChanged();
+    }
+
+    private class TagAdapter extends BaseAdapter{
+
+        @Override
+        public int getCount() {
+            return mTagListAdapter.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder = null;
+            if (convertView == null) {
+                holder = new ViewHolder();
+                convertView = LayoutInflater.from(TestActivity.this).inflate(R.layout.item_simple_list, null);
+                holder.title = (TextView) convertView.findViewById(R.id.tv_class_name);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            holder.title.setText(mTagListAdapter.get(position).getLabel_name());
+            return convertView;
+        }
+
+
+
+/*
+        private class ArrayFilter extends Filter {
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults filterResults = new FilterResults();
+                Log.e("tag_post",constraint.toString()+"查询时Adapter数据大小:" + mTagListAdapter.size()+mTagListAdapter.toString()+"------"+mFilteredArrayList.toString());
+                mFilteredArrayList = new ArrayList<>();
+                for (TagBean tag : mTagListAdapter) {
+                    if (tag.getLabel_name().contains(constraint.toString())) {
+                        mFilteredArrayList.add(tag);
+                        Log.e("tag_post",constraint+"符合name=" + tag.getLabel_name());
+                    }
+                }
+                filterResults.values = mFilteredArrayList;
+                filterResults.count = mFilteredArrayList.size();
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                if (results.count==0) {
+                    Log.e("tag_post","results.count==0时：");
+                    TagBean tagBean = new TagBean();
+                    tagBean.setLabel_name("创建标签");
+                    mTagListAdapter.clear();
+                    mTagListAdapter.add(tagBean);
+                }else {
+                    mTagListAdapter = (List<TagBean>) results.values;
+                    Log.e("tag_post","results.count!=0时："+results.count+"mTagListAdapter:"+mTagListAdapter.size());
+                }
+                notifyDataSetChanged();
+
+            }
+        }
+*/
+    }
+
+    public final class ViewHolder {
+        public TextView title;
+    }
+
 
     private void scalImage() {
         MultiImageSelector.create(TestActivity.this)
@@ -115,10 +278,10 @@ public class TestActivity extends AppCompatActivity {
                 List<String> path = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
                 File file = new File(path.get(0));
                 if (file.exists()) {
-                    File file1 = new File(externalStorageDirectory+"tempCompress.jpg");
-                        NativeUtil.compressBitmap(path.get(0), file1.getAbsolutePath());
-                        mImageView.setImageBitmap(ImageUtils.getBitmap(file1.getAbsolutePath()));
-                        Log.e("tupian", "_____大小：" + FileUtils.getFileSize(path.get(0)) + "-------" + FileUtils.getFileSize(file1.getAbsolutePath()));
+                    File file1 = new File(externalStorageDirectory + "tempCompress.jpg");
+                    NativeUtil.compressBitmap(path.get(0), file1.getAbsolutePath());
+                    mImageView.setImageBitmap(ImageUtils.getBitmap(file1.getAbsolutePath()));
+                    Log.e("tupian", "_____大小：" + FileUtils.getFileSize(path.get(0)) + "-------" + FileUtils.getFileSize(file1.getAbsolutePath()));
                 }
             }
         }
@@ -225,4 +388,44 @@ public class TestActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    /*
+      @Override
+        public Filter getFilter() {
+            if (mFilter == null) {
+                mFilter = new ArrayFilter();
+            }
+            return mFilter;
+        }
+        private class ArrayFilter extends Filter {
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults filterResults = new FilterResults();
+                for (Iterator<TagBean> iterator = mTagListAdapter.iterator(); iterator.hasNext();) {
+                    TagBean tagBean = iterator.next();
+                    Log.e("weiwei","---> name=" + tagBean.getLabel_name());
+                    if (tagBean.getLabel_name().contains(constraint)) {
+                        mFilteredArrayList.add(tagBean);
+                    }
+                }
+                filterResults.values = mFilteredArrayList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mTagListAdapter = (List<TagBean>) results.values;
+                if (results.count > 0) {
+                    notifyDataSetChanged();
+                } else {
+                    notifyDataSetInvalidated();
+                }
+
+            }
+        }
+
+
+
+    */
 }

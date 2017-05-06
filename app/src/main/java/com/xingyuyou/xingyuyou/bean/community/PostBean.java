@@ -1,5 +1,7 @@
 package com.xingyuyou.xingyuyou.bean.community;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2017/4/24.
  */
@@ -7,43 +9,31 @@ package com.xingyuyou.xingyuyou.bean.community;
 public class PostBean {
 
     /**
-     * id : 13
-     * subject : 2342342
-     * message : sadasdasdas
-     * posts_image : http://xingyuyou.com/Uploads/Picture/2017-03-15/58d1d25c1bdf2.jpg
-     * dateline : 1492655334
-     * posts_laud : 33
-     * posts_forums : 1056
-     * posts_collect : 33
-     * nickname : 13240412886
-     * head_image : http://xingyuyou.com/Uploads/Picture/2017-03-15/58d1d25c1bdf2.jpg
-     * posts_class : null
+     * id : 102
+     * subject : 啊饿死了
+     * message : 就几级了
+     * posts_image : ["http://xingyuyou.com/Public/app/posts_image/5909719993870.jpg"]
+     * dateline : 1493791129
+     * nickname : 1111111
+     * head_image : http://xingyuyou.com/Uploads/Picture/2017-03-15/
      */
 
     private String id;
     private String subject;
     private String message;
-    private String posts_image;
     private String dateline;
-    private String posts_laud;
-    private String posts_forums;
-    private String posts_collect;
     private String nickname;
     private String head_image;
-    private Object posts_class;
+    private List<String> posts_image;
 
-    public PostBean(String id, String subject, String message, String posts_image, String dateline, String posts_laud, String posts_forums, String posts_collect, String nickname, String head_image, Object posts_class) {
+    public PostBean(String id, String subject, String message, String dateline, String nickname, String head_image, List<String> posts_image) {
         this.id = id;
         this.subject = subject;
         this.message = message;
-        this.posts_image = posts_image;
         this.dateline = dateline;
-        this.posts_laud = posts_laud;
-        this.posts_forums = posts_forums;
-        this.posts_collect = posts_collect;
         this.nickname = nickname;
         this.head_image = head_image;
-        this.posts_class = posts_class;
+        this.posts_image = posts_image;
     }
 
     public String getId() {
@@ -70,44 +60,12 @@ public class PostBean {
         this.message = message;
     }
 
-    public String getPosts_image() {
-        return posts_image;
-    }
-
-    public void setPosts_image(String posts_image) {
-        this.posts_image = posts_image;
-    }
-
     public String getDateline() {
         return dateline;
     }
 
     public void setDateline(String dateline) {
         this.dateline = dateline;
-    }
-
-    public String getPosts_laud() {
-        return posts_laud;
-    }
-
-    public void setPosts_laud(String posts_laud) {
-        this.posts_laud = posts_laud;
-    }
-
-    public String getPosts_forums() {
-        return posts_forums;
-    }
-
-    public void setPosts_forums(String posts_forums) {
-        this.posts_forums = posts_forums;
-    }
-
-    public String getPosts_collect() {
-        return posts_collect;
-    }
-
-    public void setPosts_collect(String posts_collect) {
-        this.posts_collect = posts_collect;
     }
 
     public String getNickname() {
@@ -126,12 +84,12 @@ public class PostBean {
         this.head_image = head_image;
     }
 
-    public Object getPosts_class() {
-        return posts_class;
+    public List<String> getPosts_image() {
+        return posts_image;
     }
 
-    public void setPosts_class(Object posts_class) {
-        this.posts_class = posts_class;
+    public void setPosts_image(List<String> posts_image) {
+        this.posts_image = posts_image;
     }
 
     @Override
@@ -140,14 +98,10 @@ public class PostBean {
                 "id='" + id + '\'' +
                 ", subject='" + subject + '\'' +
                 ", message='" + message + '\'' +
-                ", posts_image='" + posts_image + '\'' +
                 ", dateline='" + dateline + '\'' +
-                ", posts_laud='" + posts_laud + '\'' +
-                ", posts_forums='" + posts_forums + '\'' +
-                ", posts_collect='" + posts_collect + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", head_image='" + head_image + '\'' +
-                ", posts_class=" + posts_class +
+                ", posts_image=" + posts_image +
                 '}';
     }
 }

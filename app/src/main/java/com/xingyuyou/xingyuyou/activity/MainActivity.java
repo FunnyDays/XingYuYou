@@ -35,6 +35,7 @@ import com.xingyuyou.xingyuyou.base.BaseActivity;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.fragment.CommunityFragmentCopy;
 import com.xingyuyou.xingyuyou.fragment.OneFragment;
+import com.xingyuyou.xingyuyou.fragment.ThreeFragment;
 import com.xingyuyou.xingyuyou.fragment.TwoFragment;
 import com.xingyuyou.xingyuyou.fragment.UserFragment;
 import com.xingyuyou.xingyuyou.weight.CustomViewPager;
@@ -159,7 +160,7 @@ public class MainActivity extends BaseActivity {
         fragments.add(OneFragment.newInstance("游戏"));
         fragments.add(TwoFragment.newInstance("社区"));
         fragments.add(CommunityFragmentCopy.newInstance("神社"));
-        fragments.add(UserFragment.newInstance("分类"));
+        fragments.add(ThreeFragment.newInstance("分类"));
         adapter = new MainContentVPAdapter(supportFragmentManager, fragments);
         return fragments;
     }

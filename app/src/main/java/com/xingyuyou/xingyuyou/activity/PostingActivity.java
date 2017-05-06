@@ -37,6 +37,7 @@ import com.xingyuyou.xingyuyou.Utils.SDCardUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.GameHeaderFooterAdapter;
+import com.xingyuyou.xingyuyou.bean.community.TagBean;
 import com.xingyuyou.xingyuyou.weight.RichTextEditor;
 import com.xingyuyou.xingyuyou.weight.dialog.LoadingDialog;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -71,6 +72,7 @@ public class PostingActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ArrayList<String> mImageList = new ArrayList();
     private ImageAdapter mImageAdapter;
+    private String mPostTags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,12 +94,6 @@ public class PostingActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mImageAdapter);
     }
 
-    /**
-     * MultiImageSelector.create(PostingActivity.this)
-     * .showCamera(true)
-     * .single()
-     * .start(PostingActivity.this, 11);
-     */
 
 
     private void initTagMore() {
@@ -132,6 +128,12 @@ public class PostingActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        mPostTags = intent.getStringExtra("PostTags");
+        Log.e("weiwei", mPostTags);
+    }
+
     /**
      * 负责处理编辑数据提交等事宜
      */
@@ -144,18 +146,12 @@ public class PostingActivity extends AppCompatActivity {
             Toast.makeText(this, "请输入内容", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (StringUtils.isEmpty(mPostTags)){
+            Toast.makeText(this, "请选择标签", Toast.LENGTH_SHORT).show();
+            return;
+        }
         mDialog = new LoadingDialog(PostingActivity.this, "正在上传，请稍等");
         mDialog.showDialog();
-        Map<String, Object> map1 = new HashMap<String, Object>();
-        map1.put("label_name", "zhangsan");
-        map1.put("id", 0);
-        Map<String, Object> map2 = new HashMap<String, Object>();
-        map2.put("label_name", "lisi");
-        map2.put("id", 0);
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-        list.add(map1);
-        list.add(map2);
-        JSONArray array = new JSONArray(list);
 
 
         Map<String, String> params = new HashMap<String, String>();
@@ -163,7 +159,7 @@ public class PostingActivity extends AppCompatActivity {
         params.put("uid", "108");
         params.put("subject", mStTitle.getText().toString().trim());
         params.put("message", mEtContent.getText().toString().trim());
-        params.put("tags", array.toString());
+        params.put("tags", mPostTags);
 
         PostFormBuilder post = OkHttpUtils.post();
         for (int i = 0; i < mImageList.size() ; i++) {
@@ -173,7 +169,6 @@ public class PostingActivity extends AppCompatActivity {
                 NativeUtil.compressBitmap(mImageList.get(i), file1.getAbsolutePath());
                 String s = "posts_image";
                 post.addFile(s + i, file.getName(), file1);
-                Log.e("tupian", "_____大小：" + FileUtils.getFileSize(mImageList.get(i)) + "-------" + FileUtils.getFileSize(file1.getAbsolutePath()));
             }
 
         }
@@ -183,13 +178,11 @@ public class PostingActivity extends AppCompatActivity {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(okhttp3.Call call, Exception e, int id) {
-                        Log.e("fabubbs", e.getMessage() + " 失败id:" + id);
                         mDialog.dismissDialog();
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.e("fabubbs", " 成功id:" + id + response);
                         mDialog.dismissDialog();
                     }
                 });
