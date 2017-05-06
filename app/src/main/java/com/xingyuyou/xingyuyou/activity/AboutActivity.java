@@ -19,7 +19,7 @@ public class AboutActivity extends AppCompatActivity {
     }
     private void initView() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle("关于星宇");
+        mToolbar.setTitle("关于星宇游");
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
