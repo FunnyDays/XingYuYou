@@ -38,6 +38,7 @@ import com.xingyuyou.xingyuyou.Utils.MCUtils.HttpUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.SDCardUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
+import com.xingyuyou.xingyuyou.Utils.ZipUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.bean.GameGift;
 import com.xingyuyou.xingyuyou.bean.community.TagBean;
@@ -89,74 +90,27 @@ public class TestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //压缩后保存临时文件目录
-        File tempFile = new File(externalStorageDirectory);
-        if (!tempFile.exists()) {
-            tempFile.mkdirs();
-        }
-        for (int i = 0; i < 3; i++) {
-            TagBean tagBean = new TagBean();
-            tagBean.setId(i+"");
-            tagBean.setLabel_name("哈哈");
-            mTagListAdapter.add(tagBean);
-        }
-        for (int i = 0; i < 3; i++) {
-            TagBean tagBean = new TagBean();
-            tagBean.setId(i+"");
-            tagBean.setLabel_name("哥哥");
-            mTagListAdapter.add(tagBean);
-        }
-        for (int i = 0; i < 3; i++) {
-            TagBean tagBean = new TagBean();
-            tagBean.setId(i+"");
-            tagBean.setLabel_name("嘎嘎");
-            mTagListAdapter.add(tagBean);
-        }
-        for (int i = 0; i < 3; i++) {
-            TagBean tagBean = new TagBean();
-            tagBean.setId(i+"");
-            tagBean.setLabel_name("嘎呵");
-            mTagListAdapter.add(tagBean);
-        }
-        mCopyList.addAll(mTagListAdapter);
+
         setContentView(R.layout.activity_test);
         mOne = (Button) findViewById(R.id.one);
         mImageView = (ImageView) findViewById(R.id.image);
         mOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                scalImage();
+                unZip();
             }
         });
-        mTagAdapter = new TagAdapter();
-        mCompleteTextView = (AutoCompleteTextView) findViewById(R.id.act_edittext);
-        mCompleteTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
+    }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.e("tag_post","搜索字符："+s.toString());
-                if (StringUtils.isEmpty(s.toString())){
-                    Log.e("tag_post","搜索字符空时："+s.toString());
-                    mTagListAdapter.clear();
-                    mTagListAdapter.addAll(mCopyList);
-                    mTagAdapter.notifyDataSetChanged();
-                }else {
-                    Log.e("tag_post","搜索字符不空时："+s.toString());
-                    inQuire(s.toString());
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        mListView = (ListView) findViewById(R.id.listview);
-        mListView.setAdapter(mTagAdapter);
+    private void unZip() {
+        try {
+            Toast.makeText(this, "开始解压", Toast.LENGTH_SHORT).show();
+            ZipUtils.unzipFile("qqq.zip","hehe");
+        } catch (IOException e) {
+            Toast.makeText(this, "解压异常", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
 
     private void inQuire(String s) {

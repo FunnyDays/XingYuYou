@@ -12,7 +12,7 @@
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="colorControlNormal">@color/colorControlNormal</item>
         <!--itemBackground设置menu菜单背景色-->
-        <item name="android:itemBackground">#3F51B5</item>
+        <item name="android:itemBackground">@color/colorPrimary</item>
         <item name="overlapAnchor">false</item>
        <!-- <item name="android:actionMenuTextAppearance">@style/MenuTextStyle</item>-->
         <!-- <item name="actionOverflowMenuStyle">@style/MenuStyle</item>-->
@@ -22,6 +22,12 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">18sp</item>
     </style>
+
+    <style name="AppTheme.PopupOverlay" parent="@style/Theme.AppCompat.NoActionBar">
+        <!-- 用于控件popmenu的宽度-->
+        <item name="android:width">50dp</item>
+    </style>
+
     <style name="splashtheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_icon</item>
         <item name="android:windowNoTitle">true</item>

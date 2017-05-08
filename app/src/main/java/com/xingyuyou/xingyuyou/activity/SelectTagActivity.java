@@ -286,11 +286,10 @@ public class SelectTagActivity extends AppCompatActivity {
                 holder.title.setTextColor(getColor(R.color.colorAccent));
             } else {
                 holder.title.setText(mTagListAdapter.get(position).getLabel_name());
-                holder.title.setTextColor(getColor(R.color.black));
+                holder.title.setTextColor(getResources().getColor(R.color.black));
             }
             return convertView;
         }
-
 
     }
 

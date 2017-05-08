@@ -139,7 +139,8 @@
         </activity>
         <activity android:name=".activity.SearchForCommActivity">
         </activity>
-        <activity android:name=".activity.PostDetailActivity">
+        <activity android:name=".activity.PostDetailActivity"
+                  android:windowSoftInputMode="stateHidden|stateAlwaysHidden">
         </activity>
         <activity android:name=".activity.PostClassListActivity">
         </activity>

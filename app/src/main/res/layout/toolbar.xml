@@ -14,6 +14,7 @@
             android:minHeight="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
             app:navigationIcon="?attr/homeAsUpIndicator"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
             app:theme="@style/MenuTextStyle">
 
         </android.support.v7.widget.Toolbar>

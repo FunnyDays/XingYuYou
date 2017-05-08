@@ -23,9 +23,12 @@ import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
+import com.xingyuyou.xingyuyou.adapter.CommSortAdapter;
 import com.xingyuyou.xingyuyou.bean.community.PostBean;
 import com.xingyuyou.xingyuyou.bean.community.PostDetailBean;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
+import com.xingyuyou.xingyuyou.bean.community.PostTopAndWellBean;
+import com.xingyuyou.xingyuyou.bean.community.SortPostListBean;
 import com.xingyuyou.xingyuyou.fragment.CommHotFragment;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -43,8 +46,9 @@ public class PostClassListActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private int  PAGENUMBER = 1;
-    private List mPostList=new ArrayList();
-    private List mPostAdapterList=new ArrayList();
+    private List<SortPostListBean> mPostList=new ArrayList();
+    private List<PostTopAndWellBean> mPostTopWellList=new ArrayList();
+    private List<SortPostListBean> mPostAdapterList=new ArrayList();
     boolean isLoading = false;
     Handler handler = new Handler() {
         @Override
@@ -62,13 +66,18 @@ public class PostClassListActivity extends AppCompatActivity {
                 try {
                     jo = new JSONObject(response);
                     JSONArray ja = jo.getJSONArray("data");
-                    Log.e("post", "解析数据："+  ja.toString());
+                 //   Log.e("post", "解析数据："+  ja.toString());
                     Gson gson = new Gson();
                     mPostList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<PostListBean>>() {
+                            new TypeToken<List<SortPostListBean>>() {
                             }.getType());
                     mPostAdapterList.addAll(mPostList);
-
+                    ja = jo.getJSONArray("top_well");
+                    gson = new Gson();
+                    mPostTopWellList = gson.fromJson(ja.toString(),
+                            new TypeToken<List<PostTopAndWellBean>>() {
+                            }.getType());
+                    Log.e("post", "解析数据："+  mPostTopWellList.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -78,7 +87,7 @@ public class PostClassListActivity extends AppCompatActivity {
             }
         }
     };
-    private CommHotAdapter mCommHotAdapter;
+    private CommSortAdapter mCommHotAdapter;
     private ProgressBar mPbNodata;
     private TextView mTvNodata;
     private SwipeRefreshLayout mRefreshLayout;
@@ -116,7 +125,7 @@ public class PostClassListActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mCommHotAdapter = new CommHotAdapter(this, mPostAdapterList);
+        mCommHotAdapter = new CommSortAdapter(this, mPostAdapterList);
         View loadingData = View.inflate(this, R.layout.default_loading, null);
         mPbNodata = (ProgressBar) loadingData.findViewById(R.id.pb_loading);
         mTvNodata = (TextView) loadingData.findViewById(R.id.loading_text);
