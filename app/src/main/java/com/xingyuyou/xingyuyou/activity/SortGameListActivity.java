@@ -120,7 +120,7 @@ public class SortGameListActivity extends AppCompatActivity {
         });
 
         initView();
-        initData(PAGENUMBER);
+       // initData(PAGENUMBER);
     }
 
     private void  initData(int PAGENUMBER){
@@ -169,8 +169,8 @@ public class SortGameListActivity extends AppCompatActivity {
                 lastItem = firstVisibleItem + visibleItemCount + 1 ;
                 if (lastItem==totalItemCount&&MLOADINGMORE_FLAG==0){
                     MLOADINGMORE_FLAG++;
-                    PAGENUMBER++;
                     initData(PAGENUMBER);
+                    PAGENUMBER++;
                 }
             }
             public void onScrollStateChanged(AbsListView view, int scrollState) {

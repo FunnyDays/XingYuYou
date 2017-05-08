@@ -6,12 +6,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -21,6 +24,8 @@ import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.SPUtils;
+import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
+import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 
 public class ManagementActivity extends AppCompatActivity {
     private RelativeLayout mSetting;
@@ -44,7 +49,24 @@ public class ManagementActivity extends AppCompatActivity {
     }
     private void initToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle("管理");
+       // mToolbar.setTitle("管理");
+        mToolbar.inflateMenu(R.menu.management_activity_menu);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.ab_setting:
+                        IntentUtils.startActivity(ManagementActivity.this, SettingActivity.class);
+                        break;
+                    case R.id.action_share:
+                        shareUM();
+                        break;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,11 +84,16 @@ public class ManagementActivity extends AppCompatActivity {
             TextView tvUserAccountName = (TextView) findViewById(R.id.user_account_name);
             TextView tvNickName = (TextView) findViewById(R.id.user_nickname);
             tvUserAccountName.setText(account);
-            //tvNickName.setText(nickname);
         }
 
         //登录
         mUserPhoto = (ImageView) findViewById(R.id.user_photo);
+        Glide.with(ManagementActivity.this)
+                .load(R.mipmap.profile_picture)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transform(new GlideCircleTransform(ManagementActivity.this))
+                .dontAnimate()
+                .into(mUserPhoto);
         mUserPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,15 +121,23 @@ public class ManagementActivity extends AppCompatActivity {
                 joinQQGroup("YzjlZwrRfUeZN0jnoSF47Kfuz_f2pDXp");
             }
         });
-        //游戏卸载
+       /* //游戏卸载
         mUnInstall = (RelativeLayout) findViewById(R.id.rl_two);
         mUnInstall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 IntentUtils.startActivity(ManagementActivity.this, UninstallAppActivity.class);
             }
+        });*/
+        //我的回帖
+        mSetting = (RelativeLayout) findViewById(R.id.rl_reply_post);
+        mSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentUtils.startActivity(ManagementActivity.this, SettingActivity.class);
+            }
         });
-        //软件设置
+        //我的收藏
         mSetting = (RelativeLayout) findViewById(R.id.rl_three);
         mSetting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,36 +145,37 @@ public class ManagementActivity extends AppCompatActivity {
                 IntentUtils.startActivity(ManagementActivity.this, SettingActivity.class);
             }
         });
-        //反馈建议
+        //我的帖子
         mFeedBack = (RelativeLayout) findViewById(R.id.rl_four);
         mFeedBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(ManagementActivity.this, FeedBackActivity.class);
+               // IntentUtils.startActivity(ManagementActivity.this, FeedBackActivity.class);
             }
         });
-        //应用分享
-        mAppShare = (RelativeLayout) findViewById(R.id.rl_five);
-        mAppShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                shareUM();
-            }
-        });
-        //关于星宇
+
+       /* //关于星宇
         mAboutXingYu = (RelativeLayout) findViewById(R.id.rl_six);
         mAboutXingYu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 IntentUtils.startActivity(ManagementActivity.this, AboutActivity.class);
             }
-        });
+        });*/
         //下载管理
         mGameDownload = (RelativeLayout) findViewById(R.id.rl_seven);
         mGameDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 IntentUtils.startActivity(ManagementActivity.this, DownLoadActivity.class);
+            }
+        });
+        //小工具
+        mGameDownload = (RelativeLayout) findViewById(R.id.rl_tools);
+        mGameDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(ManagementActivity.this, "正在开发中...", Toast.LENGTH_SHORT).show();
             }
         });
         //我的礼包

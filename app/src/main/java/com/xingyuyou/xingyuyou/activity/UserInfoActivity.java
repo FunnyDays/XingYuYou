@@ -108,7 +108,7 @@ public class UserInfoActivity extends AppCompatActivity {
         });
 
         //退出登录
-        mBtLoginOut = (Button) findViewById(R.id.bt_login_out);
+       /* mBtLoginOut = (Button) findViewById(R.id.bt_login_out);
         mBtLoginOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,7 +116,7 @@ public class UserInfoActivity extends AppCompatActivity {
                 finish();
                 Toast.makeText(UserInfoActivity.this, "已经退出登录", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
     private void initDialog() {

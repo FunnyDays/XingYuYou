@@ -73,6 +73,9 @@ public class PostingActivity extends AppCompatActivity {
     private ArrayList<String> mImageList = new ArrayList();
     private ImageAdapter mImageAdapter;
     private String mPostTags;
+    private RelativeLayout mRlCommMore;
+    private String mPostCommId;
+    private Map map=new HashMap<String,String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +83,23 @@ public class PostingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_posting);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mRlTagMore = (RelativeLayout) findViewById(R.id.rl_tag_more);
+        mRlCommMore = (RelativeLayout) findViewById(R.id.rl_comm_more);
         mStTitle = (EditText) findViewById(R.id.et_title);
         mEtContent = (EditText) findViewById(R.id.et_content);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         initRecyclerView();
         initToolbar();
         initTagMore();
+        initCommMore();
+    }
+
+    private void initCommMore() {
+        mRlCommMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentUtils.startActivity(PostingActivity.this,SelectCommTagActivity.class);
+            }
+        });
     }
 
     private void initRecyclerView() {
@@ -93,8 +107,6 @@ public class PostingActivity extends AppCompatActivity {
         mImageAdapter = new ImageAdapter();
         mRecyclerView.setAdapter(mImageAdapter);
     }
-
-
 
     private void initTagMore() {
         mRlTagMore.setOnClickListener(new View.OnClickListener() {
@@ -130,8 +142,13 @@ public class PostingActivity extends AppCompatActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        mPostTags = intent.getStringExtra("PostTags");
-        Log.e("weiwei", mPostTags);
+        if (!StringUtils.isEmpty(intent.getStringExtra("PostTags"))) {
+            map.put("PostTags",intent.getStringExtra("PostTags"));
+        }
+        if (!StringUtils.isEmpty(intent.getStringExtra("PostCommId"))) {
+            map.put("PostCommId",intent.getStringExtra("PostCommId"));
+        }
+
     }
 
     /**
@@ -146,8 +163,13 @@ public class PostingActivity extends AppCompatActivity {
             Toast.makeText(this, "请输入内容", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (StringUtils.isEmpty(mPostTags)){
+
+        if (StringUtils.isEmpty((String)map.get("PostTags"))){
             Toast.makeText(this, "请选择标签", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (StringUtils.isEmpty((String)map.get("PostCommId"))){
+            Toast.makeText(this, "请选发帖社区", Toast.LENGTH_SHORT).show();
             return;
         }
         mDialog = new LoadingDialog(PostingActivity.this, "正在上传，请稍等");
@@ -155,11 +177,11 @@ public class PostingActivity extends AppCompatActivity {
 
 
         Map<String, String> params = new HashMap<String, String>();
-        params.put("fid", "1");
+        params.put("fid", (String)map.get("PostCommId"));
         params.put("uid", "108");
         params.put("subject", mStTitle.getText().toString().trim());
         params.put("message", mEtContent.getText().toString().trim());
-        params.put("tags", mPostTags);
+        params.put("tags", (String)map.get("PostTags"));
 
         PostFormBuilder post = OkHttpUtils.post();
         for (int i = 0; i < mImageList.size() ; i++) {

@@ -20,11 +20,13 @@
             app:layout_scrollFlags="scroll|enterAlways|snap" >
             <ImageView
                 android:id="@+id/iv_manage"
-                android:src="@mipmap/ic"
+                android:src="@drawable/ic_user_defalut"
                 android:layout_width="30dp"
                 android:layout_height="30dp"/>
             <TextView
-                android:text="胶囊助手"
+                android:paddingLeft="10dp"
+                android:id="@+id/tv_user_account"
+                android:text="未登陆"
                 android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

@@ -31,5 +31,6 @@ public class XingYuInterface {
     public static final String SHARE_COMPLETE=Host+"Community/share_complete";
     public static final String POPULAR_TAGS=Host+"Community/popular_tags";
     public static final String REPLIES=Host+"Community/replies";
+    public static final String GET_FORUMS_LIST=Host+"Community/get_forums_list";
 
 }

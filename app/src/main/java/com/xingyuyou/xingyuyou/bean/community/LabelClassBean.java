@@ -6,15 +6,20 @@ package com.xingyuyou.xingyuyou.bean.community;
 
 public class LabelClassBean {
 
+
     /**
-     * id : 1
-     * class_name : cos
-     * class_image : http://xingyuyou.com/Uploads/Picture/2017-03-15/58c89b9e9ac75.png
+     * id : 2
+     * class_name : 美女
+     * class_image : http://xingyuyou.com/Uploads/Picture/2017-03-22/58d1d25c1bdf2.jpg
+     * describe : 驱蚊器好看
+     * posts_num : 0
      */
 
     private String id;
     private String class_name;
     private String class_image;
+    private String describe;
+    private String posts_num;
 
     public String getId() {
         return id;
@@ -40,12 +45,30 @@ public class LabelClassBean {
         this.class_image = class_image;
     }
 
+    public String getDescribe() {
+        return describe;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
+    public String getPosts_num() {
+        return posts_num;
+    }
+
+    public void setPosts_num(String posts_num) {
+        this.posts_num = posts_num;
+    }
+
     @Override
     public String toString() {
         return "LabelClassBean{" +
                 "id='" + id + '\'' +
                 ", class_name='" + class_name + '\'' +
                 ", class_image='" + class_image + '\'' +
+                ", describe='" + describe + '\'' +
+                ", posts_num='" + posts_num + '\'' +
                 '}';
     }
 }

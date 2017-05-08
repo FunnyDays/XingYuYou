@@ -2,79 +2,123 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="#22787777"
               android:focusable="true"
               android:focusableInTouchMode="true"
               android:orientation="vertical">
 
     <include layout="@layout/toolbar"/>
 
-    <EditText
-        android:id="@+id/et_title"
-
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:layout_marginBottom="5dp"
-        android:background="@android:color/white"
-        android:hint="标题（必填）"
-        android:lines="1"
-        android:paddingLeft="20dp"
-        android:textColor="@android:color/black"/>
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
 
-    <EditText
-        android:id="@+id/et_content"
-        android:gravity="left"
-        android:paddingTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2px"
-        android:background="@android:color/white"
-        android:hint="请输入内容（必填）"
-        android:lines="10"
-        android:paddingLeft="20dp"
-        android:textColor="@android:color/black"/>
+            <EditText
+                android:id="@+id/et_title"
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:layout_marginTop="5dp">
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_marginBottom="5dp"
+                android:background="@android:color/white"
+                android:hint="标题（必填）"
+                android:lines="1"
+                android:paddingLeft="20dp"
+                android:textColor="@android:color/black"/>
 
-    </android.support.v7.widget.RecyclerView>
 
-    <RelativeLayout
-        android:id="@+id/rl_tag_more"
-        android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:layout_marginTop="5dp"
-        android:background="@android:color/white">
+            <EditText
+                android:id="@+id/et_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2px"
+                android:background="@android:color/white"
+                android:gravity="left"
+                android:hint="请输入内容（必填）"
+                android:lines="10"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:textColor="@android:color/black"/>
 
-        <ImageView
-            android:id="@+id/iv_one"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
-            android:layout_margin="4dp"
-            android:padding="10dp"
-            android:src="@mipmap/ic_tag"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginTop="5dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/iv_one"
-            android:text="选择标签"/>
+            </android.support.v7.widget.RecyclerView>
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentRight="true"
-            android:layout_margin="4dp"
-            android:padding="5dp"
-            android:src="@mipmap/ic_right_tag"
-            android:tint="#ffd6d7d7"/>
+            <RelativeLayout
+                android:id="@+id/rl_tag_more"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/white">
 
-    </RelativeLayout>
+                <ImageView
+                    android:id="@+id/iv_one"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_margin="4dp"
+                    android:padding="10dp"
+                    android:src="@mipmap/ic_tag"/>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/iv_one"
+                    android:text="选择标签"/>
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="4dp"
+                    android:padding="5dp"
+                    android:src="@mipmap/ic_right_tag"
+                    android:tint="#ffd6d7d7"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_comm_more"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/white">
+
+                <ImageView
+                    android:id="@+id/iv_one1"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_margin="4dp"
+                    android:padding="10dp"
+                    android:src="@mipmap/ic_tag"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/iv_one1"
+                    android:text="选择社区"/>
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="4dp"
+                    android:padding="5dp"
+                    android:src="@mipmap/ic_right_tag"
+                    android:tint="#ffd6d7d7"/>
+
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

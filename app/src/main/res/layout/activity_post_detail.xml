@@ -78,8 +78,24 @@
                 android:orientation="vertical">
 
             </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rl_comm_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </ScrollView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rl_all_image"
+        android:visibility="gone"
+        android:background="@color/light_white"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_above="@+id/ll_edit_parent">
+    </android.support.v7.widget.RecyclerView>
 
     <LinearLayout
         android:id="@+id/ll_edit_parent"
@@ -89,7 +105,6 @@
 
         <EditText
             android:id="@+id/edit_text"
-            android:textColor="@color/black"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
@@ -99,15 +114,20 @@
             android:drawablePadding="10dp"
             android:hint="说点什么吧！"
             android:paddingLeft="5dp"
+            android:textColor="@color/black"
             android:textSize="14sp"/>
+
         <RelativeLayout
-            android:layout_weight="3"
             android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="3">
+
             <LinearLayout
                 android:id="@+id/ll_root_bottom"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+               >
+
                 <TextView
                     android:id="@+id/tv_collect_num"
                     android:layout_width="0dp"
@@ -139,17 +159,32 @@
                     android:gravity="center"
                     tools:text="7766"/>
             </LinearLayout>
-            <Button
-                android:id="@+id/bt_send_comm"
-                android:text="发送"
+
+            <LinearLayout
+                android:id="@+id/ll_root_bottom2"
                 android:visibility="gone"
-                android:layout_margin="10dp"
-                android:layout_centerHorizontal="true"
-                android:background="@color/colorPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
+                <Button
+                    android:id="@+id/bt_send_comm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="10dp"
+                    android:background="@color/colorPrimary"
+                    android:text="发送"/>
+
+                <ImageView
+                    android:id="@+id/bt_add_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/ic_action_add_image"
+                    android:text="发送"/>
+
+            </LinearLayout>
         </RelativeLayout>
-
     </LinearLayout>
 </RelativeLayout>

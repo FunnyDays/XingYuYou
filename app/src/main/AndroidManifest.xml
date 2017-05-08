@@ -139,8 +139,9 @@
         </activity>
         <activity android:name=".activity.SearchForCommActivity">
         </activity>
-        <activity android:name=".activity.PostDetailActivity"
-                  android:windowSoftInputMode="stateHidden|stateAlwaysHidden">
+        <activity
+            android:name=".activity.PostDetailActivity"
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden">
         </activity>
         <activity android:name=".activity.PostClassListActivity">
         </activity>
@@ -156,6 +157,8 @@
         <activity android:name=".activity.SelectTagActivity">
         </activity>
         <activity android:name=".activity.SortGameListActivity">
+        </activity>
+        <activity android:name=".activity.SelectCommTagActivity">
         </activity>
     </application>
 

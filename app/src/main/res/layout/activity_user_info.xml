@@ -14,7 +14,7 @@
         android:id="@+id/rl_user_photo"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/ripple_bg"
         android:paddingLeft="40dp"
@@ -41,8 +41,8 @@
         android:id="@+id/rl_nick_name"
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/ripple_bg"
         android:paddingLeft="40dp"
         android:paddingRight="40dp">
@@ -68,8 +68,8 @@
         android:id="@+id/rl_user_sex"
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/ripple_bg"
         android:paddingLeft="40dp"
         android:paddingRight="40dp">
@@ -91,12 +91,114 @@
             android:layout_centerVertical="true"
            android:text="男"/>
     </RelativeLayout>
-    <Button
-        android:layout_margin="10dp"
-        android:text="退出登录"
-        android:padding="10dp"
-        android:background="@android:color/holo_red_light"
-        android:id="@+id/bt_login_out"
+    <RelativeLayout
+        android:id="@+id/rl_user_age"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="58dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ripple_bg"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="年龄"
+            android:textColor="#000000"
+            android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/tv_user_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+
+            android:layout_centerVertical="true"
+           android:text="22"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_user_address"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ripple_bg"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="地区"
+            android:textColor="#000000"
+            android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/tv_user_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+           android:text="北京"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_user_benming"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ripple_bg"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="本命"
+            android:textColor="#000000"
+            android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/tv_user_benming"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+           android:text="猪"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_user_signatures"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ripple_bg"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="签名"
+            android:textColor="#000000"
+            android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/tv_user_signatures"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+           android:text="呵呵呵达"/>
+    </RelativeLayout>
+
 </LinearLayout>

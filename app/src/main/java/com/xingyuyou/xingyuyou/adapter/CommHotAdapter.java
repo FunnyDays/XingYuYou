@@ -136,18 +136,18 @@ public class CommHotAdapter extends RecyclerView.Adapter {
                     .load(mListData.get(position - 1).getPosts_image().get(0))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(new GlideCircleTransform(mActivity))
-                    .dontAnimate()
+
                     .into(((ItemViewHolder) holder).mUserPhoto);
             Glide.with(mActivity)
                     .load(mListData.get(position - 1).getPosts_image().get(0))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .dontAnimate()
+
                     .into(((ItemViewHolder) holder).mPostCover0);
             if (getItemViewType(position) == TYPE_TWO_PIC || getItemViewType(position) == TYPE_THREE_PIC) {
                 Glide.with(mActivity)
                         .load(mListData.get(position - 1).getPosts_image().get(1))
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .dontAnimate()
+
                         .into(((ItemViewHolder) holder).mPostCover1);
             }
             if (getItemViewType(position) == TYPE_THREE_PIC) {
@@ -155,7 +155,7 @@ public class CommHotAdapter extends RecyclerView.Adapter {
                 Glide.with(mActivity)
                         .load(mListData.get(position - 1).getPosts_image().get(2))
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .dontAnimate()
+
                         .into(((ItemViewHolder) holder).mPostCover2);
             }
             ((ItemViewHolder) holder).mLinearLayout.setOnClickListener(new View.OnClickListener() {
