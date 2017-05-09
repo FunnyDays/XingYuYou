@@ -160,6 +160,8 @@
         </activity>
         <activity android:name=".activity.SelectCommTagActivity">
         </activity>
+        <activity android:name=".activity.MyReplyPostActivity">
+        </activity>
     </application>
 
 </manifest>

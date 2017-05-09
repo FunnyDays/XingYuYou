@@ -3,7 +3,6 @@ package com.xingyuyou.xingyuyou.activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,21 +29,16 @@ import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
-import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.base.BaseActivity;
-import com.xingyuyou.xingyuyou.bean.community.PostBean;
 import com.xingyuyou.xingyuyou.bean.community.PostCommoBean;
 import com.xingyuyou.xingyuyou.bean.community.PostDetailBean;
-import com.xingyuyou.xingyuyou.bean.community.PostTopAndWellBean;
-import com.xingyuyou.xingyuyou.bean.community.SortPostListBean;
-import com.xingyuyou.xingyuyou.weight.dialog.LoadingDialog;
+import com.xingyuyou.xingyuyou.weight.dialog.CustomDialog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import net.bither.util.NativeUtil;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -124,7 +118,7 @@ public class PostDetailActivity extends BaseActivity {
     private static final int REQUEST_IMAGE = 2;
     private static final int TYPE_FOOTER = 21;
     private ArrayList<String> mImageList = new ArrayList();
-    private LoadingDialog mDialog;
+    private CustomDialog mDialog;
     private RecyclerView mCommoListView;
     private CommoListAdapter mCommoListAdapter;
 
@@ -329,14 +323,13 @@ public class PostDetailActivity extends BaseActivity {
      * 回帖
      */
     private void sendReply() {
-        mDialog = new LoadingDialog(PostDetailActivity.this, "正在回帖中...");
+        mDialog = new CustomDialog(PostDetailActivity.this, "正在回帖中...");
         mDialog.showDialog();
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("pid", "0");
-        params.put("uid", "108");
+        params.put("uid", "105");
         params.put("tid", mPostDetailBean.getId());
-        Log.e("mPostDetailBean", mPostDetailBean.getId());
         params.put("replies_content", mEditText.getText().toString().trim());
 
         PostFormBuilder post = OkHttpUtils.post();
@@ -457,7 +450,7 @@ public class PostDetailActivity extends BaseActivity {
     private class CommoListAdapter extends RecyclerView.Adapter{
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View layout = LayoutInflater.from(PostDetailActivity.this).inflate(R.layout.item_post_image, parent, false);
+            View layout = LayoutInflater.from(PostDetailActivity.this).inflate(R.layout.item_commo_post_list, parent, false);
             return new ItemViewHolder(layout);
         }
 

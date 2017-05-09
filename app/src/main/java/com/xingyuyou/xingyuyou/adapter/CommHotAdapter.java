@@ -133,7 +133,7 @@ public class CommHotAdapter extends RecyclerView.Adapter {
             ((ItemViewHolder) holder).mCommNum.setText(mListData.get(position - 1).getPosts_forums());
             ((ItemViewHolder) holder).mJiaoNangNum.setText(mListData.get(position - 1).getPosts_laud());
             Glide.with(mActivity)
-                    .load(mListData.get(position - 1).getPosts_image().get(0))
+                    .load(mListData.get(position - 1).getHead_image())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(new GlideCircleTransform(mActivity))
 

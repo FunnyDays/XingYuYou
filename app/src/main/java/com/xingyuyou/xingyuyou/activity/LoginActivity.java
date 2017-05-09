@@ -1,6 +1,5 @@
 package com.xingyuyou.xingyuyou.activity;
 
-import android.animation.ValueAnimator;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -16,10 +15,9 @@ import com.lidroid.xutils.HttpUtils;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
-import com.xingyuyou.xingyuyou.Utils.SPUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
-import com.xingyuyou.xingyuyou.weight.dialog.LoadingDialog;
+import com.xingyuyou.xingyuyou.weight.dialog.CustomDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button mButtonRegister;
     private Toolbar mToolbar;
     private Button mForgetPassword;
-    private LoadingDialog mLoadingDialog;
+    private CustomDialog mLoadingDialog;
     Handler mHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -121,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     public void toLoginPOST(final int code, String url, String body) {
-        mLoadingDialog = new LoadingDialog(this);
+        mLoadingDialog = new CustomDialog(this);
         mLoadingDialog.showDialog();
         org.xutils.http.RequestParams params = new org.xutils.http.RequestParams(url);
         String encodeToString = android.util.Base64.encodeToString(body.toString().getBytes(), android.util.Base64.DEFAULT);

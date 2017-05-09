@@ -73,10 +73,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="平路的对方的soils的开发"/>
-    <TextView
-        android:layout_marginLeft="50dp"
+    <LinearLayout
+        android:id="@+id/ll_more_commo_item"
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+        android:layout_height="wrap_content">
+        <View
+            android:layout_marginLeft="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+    </LinearLayout>
+
     <View
         android:background="@color/custom_gray"
         android:layout_width="match_parent"

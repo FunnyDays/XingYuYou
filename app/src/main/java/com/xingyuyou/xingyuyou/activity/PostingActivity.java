@@ -1,13 +1,6 @@
 package com.xingyuyou.xingyuyou.activity;
 
-import android.content.ActivityNotFoundException;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,42 +11,25 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.JsonArray;
 import com.xingyuyou.xingyuyou.R;
-import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
-import com.xingyuyou.xingyuyou.Utils.FileUtils;
-import com.xingyuyou.xingyuyou.Utils.ImageUtils;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
-import com.xingyuyou.xingyuyou.Utils.SDCardUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
-import com.xingyuyou.xingyuyou.adapter.GameHeaderFooterAdapter;
-import com.xingyuyou.xingyuyou.bean.community.TagBean;
-import com.xingyuyou.xingyuyou.weight.RichTextEditor;
-import com.xingyuyou.xingyuyou.weight.dialog.LoadingDialog;
+import com.xingyuyou.xingyuyou.weight.dialog.CustomDialog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import net.bither.util.NativeUtil;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.xutils.common.util.FileUtil;
-
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +41,7 @@ public class PostingActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE = 2;
     private static final int TYPE_FOOTER = 21;
     private Toolbar mToolbar;
-    private LoadingDialog mDialog;
+    private CustomDialog mDialog;
     private RelativeLayout mRlTagMore;
     private EditText mStTitle;
     private EditText mEtContent;
@@ -172,13 +148,13 @@ public class PostingActivity extends AppCompatActivity {
             Toast.makeText(this, "请选发帖社区", Toast.LENGTH_SHORT).show();
             return;
         }
-        mDialog = new LoadingDialog(PostingActivity.this, "正在上传，请稍等");
+        mDialog = new CustomDialog(PostingActivity.this, "正在上传，请稍等");
         mDialog.showDialog();
 
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("fid", (String)map.get("PostCommId"));
-        params.put("uid", "108");
+        params.put("uid", "105");
         params.put("subject", mStTitle.getText().toString().trim());
         params.put("message", mEtContent.getText().toString().trim());
         params.put("tags", (String)map.get("PostTags"));
@@ -187,10 +163,11 @@ public class PostingActivity extends AppCompatActivity {
         for (int i = 0; i < mImageList.size() ; i++) {
             File file = new File(mImageList.get(i));
             if(file.exists()) {
-                File file1 = new File(getExternalCacheDir()+"tempCompress"+i+".jpg");
+                File file1 = new File(getExternalCacheDir()+"/tempCompress"+i+".jpg");
                 NativeUtil.compressBitmap(mImageList.get(i), file1.getAbsolutePath());
                 String s = "posts_image";
-                post.addFile(s + i, file.getName(), file1);
+                Log.e("file1",file1.getAbsolutePath()+file1.getName());
+                post.addFile(s + i, file1.getName(), file1);
             }
 
         }

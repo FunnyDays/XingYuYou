@@ -134,7 +134,11 @@ public class ManagementActivity extends AppCompatActivity {
         mSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(ManagementActivity.this, SettingActivity.class);
+                if (UserUtils.logined()) {
+                    IntentUtils.startActivity(ManagementActivity.this, MyReplyPostActivity.class);
+                } else {
+                    IntentUtils.startActivity(ManagementActivity.this, LoginActivity.class);
+                }
             }
         });
         //我的收藏

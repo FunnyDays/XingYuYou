@@ -9,46 +9,44 @@
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:paddingBottom="14dp"
         android:text="请输入昵称"
         android:textColor="@android:color/black"
         android:textSize="18sp"/>
 
-    <EditText
-        android:id="@+id/et_text"
-        android:focusable="true"
-        android:textColor="@android:color/black"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
-    <LinearLayout
+    <RadioGroup
+        android:layout_marginTop="20dp"
+        android:id="@+id/radioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/bt_negative"
+        <RadioButton
+            android:id="@+id/radioMale"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:text="取消"
-            android:textColor="@android:color/black"/>
 
-        <Button
-            android:id="@+id/bt_positive"
+            android:gravity="center"
+            android:text="男"/>
+
+        <RadioButton
+            android:id="@+id/radioFemale"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:text="确认"
-            android:textColor="@android:color/black"/>
-    </LinearLayout>
+            android:gravity="center"
+            android:text="女"/>
+
+    </RadioGroup>
+
+
 
 </LinearLayout>
