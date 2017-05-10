@@ -6,8 +6,12 @@ package com.xingyuyou.xingyuyou.bean.sort;
 
 public class SortListGameBean {
 
+
     /**
      * id : 18
+     * features : 《赤月屠龙》是年度倍受瞩目的全民PK手游力作。
+     * game_baoming : com.yileweb.cytl.sf.xingyuyou
+     * add_game_address : http://xingyuhuyu1916.oss-cn-beijing.aliyuncs.com/%E8%B5%A4%E6%9C%88%E5%B1%A0%E9%BE%99.apk
      * game_name : 赤月屠龙BT(安卓版)
      * game_type_id : 18
      * category : 0
@@ -27,6 +31,9 @@ public class SortListGameBean {
      */
 
     private String id;
+    private String features;
+    private String game_baoming;
+    private String add_game_address;
     private String game_name;
     private String game_type_id;
     private String category;
@@ -50,6 +57,30 @@ public class SortListGameBean {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(String features) {
+        this.features = features;
+    }
+
+    public String getGame_baoming() {
+        return game_baoming;
+    }
+
+    public void setGame_baoming(String game_baoming) {
+        this.game_baoming = game_baoming;
+    }
+
+    public String getAdd_game_address() {
+        return add_game_address;
+    }
+
+    public void setAdd_game_address(String add_game_address) {
+        this.add_game_address = add_game_address;
     }
 
     public String getGame_name() {
@@ -178,28 +209,5 @@ public class SortListGameBean {
 
     public void setOpen_name(Object open_name) {
         this.open_name = open_name;
-    }
-
-    @Override
-    public String toString() {
-        return "SortListGameBean{" +
-                "id='" + id + '\'' +
-                ", game_name='" + game_name + '\'' +
-                ", game_type_id='" + game_type_id + '\'' +
-                ", category='" + category + '\'' +
-                ", icon='" + icon + '\'' +
-                ", cover='" + cover + '\'' +
-                ", game_size='" + game_size + '\'' +
-                ", discount='" + discount + '\'' +
-                ", and_dow_address='" + and_dow_address + '\'' +
-                ", game_address='" + game_address + '\'' +
-                ", dow_num='" + dow_num + '\'' +
-                ", game_score='" + game_score + '\'' +
-                ", recommend_status='" + recommend_status + '\'' +
-                ", introduction='" + introduction + '\'' +
-                ", money=" + money +
-                ", ratio=" + ratio +
-                ", open_name=" + open_name +
-                '}';
     }
 }

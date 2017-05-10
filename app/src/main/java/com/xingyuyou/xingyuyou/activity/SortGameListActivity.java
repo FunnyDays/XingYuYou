@@ -181,6 +181,12 @@ public class SortGameListActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        downloadListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(this);
@@ -214,11 +220,11 @@ public class SortGameListActivity extends AppCompatActivity {
             DownloadItemViewHolder holder = null;
             DownloadInfo downloadInfo = null;
             downloadInfo = new DownloadInfo();
-           // downloadInfo.setUrl(mDatas.get(i).getAdd_game_address());
+            downloadInfo.setUrl(mDatas.get(i).getAdd_game_address());
             downloadInfo.setGameSize(mDatas.get(i).getGame_size());
-           // downloadInfo.setGameIntro(mDatas.get(i).getFeatures());
+            downloadInfo.setGameIntro(mDatas.get(i).getFeatures());
             downloadInfo.setGamePicUrl(mDatas.get(i).getIcon());
-           // downloadInfo.setPackageName(mDatas.get(i).getGame_baoming());
+            downloadInfo.setPackageName(mDatas.get(i).getGame_baoming());
             downloadInfo.setLabel(mDatas.get(i).getGame_name());
             downloadInfo.setFileSavePath(FileUtils.fileSavePath + mDatas.get(i).getGame_name() + ".apk");
             downloadInfo.setAutoResume(true);
@@ -379,7 +385,7 @@ public class SortGameListActivity extends AppCompatActivity {
             gameSize.setText(downloadInfo.getGameSize());
             label.setText(downloadInfo.getLabel());
             gameIntro.setText(downloadInfo.getGameIntro());
-            Glide.with(SortGameListActivity.this).load(downloadInfo.getGamePicUrl()).transform(new GlideRoundTransform(SortGameListActivity.this,5)).into(gamePic);
+            Glide.with(getApplicationContext()).load(downloadInfo.getGamePicUrl()).transform(new GlideRoundTransform(SortGameListActivity.this,5)).into(gamePic);
             stopBtn.setProgress(downloadInfo.getProgress());
             DownloadState state = downloadInfo.getState();
             switch (state) {

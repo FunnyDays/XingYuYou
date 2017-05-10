@@ -26,12 +26,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         >
+
         <LinearLayout
-            android:paddingBottom="20dp"
-            android:orientation="vertical"
-            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical"
+            android:paddingBottom="20dp">
+
             <ImageView
                 android:id="@+id/user_photo"
                 android:layout_width="80dp"
@@ -41,17 +43,21 @@
                 android:src="@mipmap/profile_picture"/>
 
             <TextView
-                android:id="@+id/user_account_name"
-                style="@style/Name"
+                android:id="@+id/user_nickname"
+                android:textSize="16sp"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/light_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:text="点击登陆"/>
         </LinearLayout>
 
 
         <ScrollView
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
 
             <LinearLayout
                 android:id="@+id/links"
@@ -101,9 +107,10 @@
                         />
                 </RelativeLayout>-->
                 <View
-                    android:background="@color/custom_gray"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp"
+                    android:background="@color/custom_gray"/>
+
                 <RelativeLayout
                     android:id="@+id/rl_reply_post"
                     style="@style/ManageRelativeLayout"
@@ -121,10 +128,12 @@
                         android:text="我的回贴"
                         />
                 </RelativeLayout>
+
                 <View
-                    android:background="@color/custom_gray"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp"
+                    android:background="@color/custom_gray"/>
+
                 <RelativeLayout
                     android:id="@+id/rl_three"
                     style="@style/ManageRelativeLayout"
@@ -142,10 +151,12 @@
                         android:text="我的收藏"
                         />
                 </RelativeLayout>
+
                 <View
-                    android:background="@color/custom_gray"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp"
+                    android:background="@color/custom_gray"/>
+
                 <RelativeLayout
                     android:id="@+id/rl_four"
                     style="@style/ManageRelativeLayout"
@@ -163,10 +174,12 @@
                         android:text="我的帖子"
                         />
                 </RelativeLayout>
+
                 <View
-                    android:background="@color/custom_gray"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp"
+                    android:background="@color/custom_gray"/>
+
                 <RelativeLayout
                     android:id="@+id/rl_seven"
                     style="@style/ManageRelativeLayout"
@@ -184,10 +197,12 @@
                         android:text="下载管理"
                         />
                 </RelativeLayout>
+
                 <View
-                    android:background="@color/custom_gray"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp"
+                    android:background="@color/custom_gray"/>
+
                 <RelativeLayout
                     android:id="@+id/rl_tools"
                     style="@style/ManageRelativeLayout"
@@ -205,10 +220,12 @@
                         android:text="小工具"
                         />
                 </RelativeLayout>
+
                 <View
-                    android:background="@color/custom_gray"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp"
+                    android:background="@color/custom_gray"/>
+
                 <RelativeLayout
                     android:id="@+id/rl_eight"
                     style="@style/ManageRelativeLayout"
@@ -226,7 +243,7 @@
                         android:text="加入官群"
                         />
                 </RelativeLayout>
-               <!-- <View
+                <!-- <View
                     android:background="@color/custom_gray"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"/>
@@ -268,8 +285,6 @@
                         android:text="关于星宇"
                         />
                 </RelativeLayout>-->
-
-
 
 
             </LinearLayout>

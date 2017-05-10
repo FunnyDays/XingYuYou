@@ -162,6 +162,8 @@
         </activity>
         <activity android:name=".activity.MyReplyPostActivity">
         </activity>
+        <activity android:name=".activity.ExemptionActivity">
+        </activity>
     </application>
 
 </manifest>

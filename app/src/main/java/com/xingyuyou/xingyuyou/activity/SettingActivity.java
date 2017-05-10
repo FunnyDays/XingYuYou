@@ -89,7 +89,7 @@ public class SettingActivity extends AppCompatActivity {
         mUserRule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              Toast.makeText(SettingActivity.this, "用户公约", Toast.LENGTH_SHORT).show();
+                IntentUtils.startActivity(SettingActivity.this, ExemptionActivity.class);
             }
         });
         //检查更新
@@ -108,7 +108,16 @@ public class SettingActivity extends AppCompatActivity {
                 IntentUtils.startActivity(SettingActivity.this, AboutActivity.class);
             }
         });
-
+        //退出登录
+        mBtLoginOut = (Button) findViewById(R.id.bt_login_out);
+        mBtLoginOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserUtils.LoginOut();
+                finish();
+                Toast.makeText(SettingActivity.this, "退出登录成功", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

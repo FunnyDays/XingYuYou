@@ -32,6 +32,7 @@ import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.base.BaseActivity;
 import com.xingyuyou.xingyuyou.bean.community.PostCommoBean;
 import com.xingyuyou.xingyuyou.bean.community.PostDetailBean;
+import com.xingyuyou.xingyuyou.bean.community.PostListBean;
 import com.xingyuyou.xingyuyou.weight.dialog.CustomDialog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
@@ -39,6 +40,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import net.bither.util.NativeUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,8 +56,9 @@ import okhttp3.Call;
 
 public class PostDetailActivity extends BaseActivity {
 
-    private Map<String, PostCommoBean> mCommoMap;
-    private List<PostCommoBean> mCommoList=new ArrayList<>();
+
+    private List<PostCommoBean> mCommoList = new ArrayList<>();
+    private List<PostCommoBean> mCommoAdapterList = new ArrayList<>();
 
     Handler handler = new Handler() {
         @Override
@@ -67,7 +70,6 @@ public class PostDetailActivity extends BaseActivity {
                 try {
                     jo = new JSONObject(response);
                     JSONObject ja = jo.getJSONObject("data");
-                    //Log.e("post", "解析数据：" + ja.toString());
                     Gson gson = new Gson();
                     mPostDetailBean = gson.fromJson(ja.toString(), PostDetailBean.class);
                 } catch (JSONException e) {
@@ -80,17 +82,13 @@ public class PostDetailActivity extends BaseActivity {
                 JSONObject jo = null;
                 try {
                     jo = new JSONObject(response);
-                    JSONObject ja = jo.getJSONObject("data");
+                    JSONArray ja = jo.getJSONArray("data");
                     Gson gson = new Gson();
-                    mCommoMap = gson.fromJson(ja.toString(),
-                            new TypeToken<Map<String, PostCommoBean>>() {
+                    mCommoList = gson.fromJson(ja.toString(),
+                            new TypeToken<List<PostCommoBean>>() {
                             }.getType());
-                    for (String key : mCommoMap.keySet()) {
-                        mCommoList.add(mCommoMap.get(key));
-                    }
-                    for (int i = 0; i < mCommoList.size(); i++) {
-                        Log.e("postCommoBean", "解析数据："+i + mCommoList.get(i).toString());
-                    }
+                    mCommoAdapterList.addAll(mCommoList);
+                    mCommoListAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -115,6 +113,7 @@ public class PostDetailActivity extends BaseActivity {
     private LinearLayout mEditParent;
     private RecyclerView mRecyclerView;
     private ImageAdapter mImageAdapter;
+    private static final int PAGENUM = 1;
     private static final int REQUEST_IMAGE = 2;
     private static final int TYPE_FOOTER = 21;
     private ArrayList<String> mImageList = new ArrayList();
@@ -129,12 +128,12 @@ public class PostDetailActivity extends BaseActivity {
         initToolBar();
         initView();
         initData();
-        initCommoData();
+        initCommoData(PAGENUM);
     }
 
-    private void initCommoData() {
+    private void initCommoData(int PAGENUM) {
         OkHttpUtils.post()//
-                .addParams("page", String.valueOf(1))
+                .addParams("page", String.valueOf(PAGENUM))
                 .addParams("tid", getIntent().getStringExtra("post_id"))
                 .url(XingYuInterface.GET_FORUMS_LIST)
                 .tag(this)//
@@ -148,7 +147,6 @@ public class PostDetailActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         handler.obtainMessage(2, response).sendToTarget();
-                        Log.e("huifu", response);
                     }
                 });
     }
@@ -198,7 +196,12 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     private void initCommoListView() {
-        mCommoListView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setSmoothScrollbarEnabled(true);
+        linearLayoutManager.setAutoMeasureEnabled(true);
+        mCommoListView.setLayoutManager(linearLayoutManager);
+        mCommoListView.setHasFixedSize(true);
+        mCommoListView.setNestedScrollingEnabled(false);
         mCommoListAdapter = new CommoListAdapter();
         mCommoListView.setAdapter(mCommoListAdapter);
     }
@@ -291,7 +294,7 @@ public class PostDetailActivity extends BaseActivity {
         mCommNum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(PostDetailActivity.this, "评论", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(PostDetailActivity.this, "评论", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -355,6 +358,7 @@ public class PostDetailActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         mDialog.dismissDialog();
+                        initCommoData(PAGENUM);
                     }
                 });
     }
@@ -438,7 +442,6 @@ public class PostDetailActivity extends BaseActivity {
             private ImageView mClosePic;
             private ImageView mPostImage;
 
-
             public ItemViewHolder(View itemView) {
                 super(itemView);
                 mClosePic = (ImageView) itemView.findViewById(R.id.iv_close);
@@ -447,7 +450,7 @@ public class PostDetailActivity extends BaseActivity {
         }
     }
 
-    private class CommoListAdapter extends RecyclerView.Adapter{
+    private class CommoListAdapter extends RecyclerView.Adapter {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View layout = LayoutInflater.from(PostDetailActivity.this).inflate(R.layout.item_commo_post_list, parent, false);
@@ -456,23 +459,87 @@ public class PostDetailActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+            if (holder instanceof CommoListAdapter.ItemViewHolder) {
+                if (mCommoAdapterList.get(position).getImgarr().size()!=0){
+                    for (int i = 0; i < mCommoAdapterList.get(position).getImgarr().size(); i++) {
+                        ImageView imageView = new ImageView(PostDetailActivity.this);
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        lp.setMargins(ConvertUtils.dp2px(10), 0, ConvertUtils.dp2px(10), ConvertUtils.dp2px(5));
+                        imageView.setLayoutParams(lp);
+                        imageView.setAdjustViewBounds(true);
+                        Glide.with(PostDetailActivity.this)
+                                .load(mCommoAdapterList.get(position).getImgarr().get(i))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(imageView);
+                        ((CommoListAdapter.ItemViewHolder) holder).mLlRootImageItem.addView(imageView);
+                    }
+                }
+                Glide.with(PostDetailActivity.this)
+                        .load(mCommoAdapterList.get(position).getHead_image())
+                        .into(((CommoListAdapter.ItemViewHolder) holder).mUserPhoto);
+                ((CommoListAdapter.ItemViewHolder) holder).mUserName
+                        .setText(mCommoAdapterList.get(position).getNickname());
+                ((CommoListAdapter.ItemViewHolder) holder).mPostTime
+                        .setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mCommoAdapterList.get(position).getDateline() + "000")));
+                ((CommoListAdapter.ItemViewHolder) holder).mFloorNum
+                        .setText(mCommoAdapterList.get(position).getFloor_num()+"楼");
+                ((CommoListAdapter.ItemViewHolder) holder).mLoveNum
+                        .setText(mCommoAdapterList.get(position).getLaud_count());
+                ((CommoListAdapter.ItemViewHolder) holder).mCommoContent
+                        .setText(mCommoAdapterList.get(position).getReplies_content());
+                if (mCommoAdapterList.get(position).getChild()!=null&&mCommoAdapterList.get(position).getChild().size() > 0) {
+                    ((CommoListAdapter.ItemViewHolder) holder).mLlMoreCommoItem.setVisibility(View.VISIBLE);
+                    ((CommoListAdapter.ItemViewHolder) holder).mCommo2Name
+                            .setText(mCommoAdapterList.get(position).getChild().get(0).getNickname()+":");
+                    ((CommoListAdapter.ItemViewHolder) holder).mCommo2Content
+                            .setText(mCommoAdapterList.get(position).getChild().get(0).getReplies_content());
+                    ((CommoListAdapter.ItemViewHolder) holder).mCommo2Time
+                            .setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mCommoAdapterList.get(position).getChild().get(0).getDateline() + "000")));
+                }
+                ((CommoListAdapter.ItemViewHolder) holder).mLlMoreCommoItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(PostDetailActivity.this, "新评论界面", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return mCommoAdapterList.size();
         }
+
         class ItemViewHolder extends RecyclerView.ViewHolder {
 
-            private ImageView mClosePic;
-            private ImageView mPostImage;
+            private ImageView mUserPhoto;
+            private ImageView mLove;
+            private TextView mUserName;
+            private TextView mPostTime;
+            private TextView mFloorNum;
+            private TextView mLoveNum;
+            private TextView mCommoContent;
+            private TextView mCommo2Name;
+            private TextView mCommo2Content;
+            private TextView mCommo2Time;
+            private LinearLayout mLlMoreCommoItem;
+            private LinearLayout mLlRootImageItem;
 
 
             public ItemViewHolder(View itemView) {
                 super(itemView);
-                mClosePic = (ImageView) itemView.findViewById(R.id.iv_close);
-                mPostImage = (ImageView) itemView.findViewById(R.id.iv_post_image);
+                mUserPhoto = (ImageView) itemView.findViewById(R.id.iv_user_photo);
+                mLove = (ImageView) itemView.findViewById(R.id.iv_love);
+                mUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
+                mPostTime = (TextView) itemView.findViewById(R.id.tv_post_time);
+                mFloorNum = (TextView) itemView.findViewById(R.id.tv_floor_num);
+                mLoveNum = (TextView) itemView.findViewById(R.id.tv_love_num);
+                mCommoContent = (TextView) itemView.findViewById(R.id.tv_commo_content);
+                mCommo2Name = (TextView) itemView.findViewById(R.id.tv_commo2_name);
+                mCommo2Content = (TextView) itemView.findViewById(R.id.tv_commo2_content);
+                mCommo2Time = (TextView) itemView.findViewById(R.id.tv_commo2_time);
+                mLlMoreCommoItem = (LinearLayout) itemView.findViewById(R.id.ll_more_commo_item);
+                mLlRootImageItem = (LinearLayout) itemView.findViewById(R.id.ll_root_image_item);
             }
         }
     }

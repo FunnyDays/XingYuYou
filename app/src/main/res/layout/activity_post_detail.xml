@@ -78,7 +78,20 @@
                 android:orientation="vertical">
 
             </LinearLayout>
-
+            <View
+                android:background="@color/blue"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <TextView
+                android:gravity="center"
+                android:text="全部评论"
+                android:textColor="@color/blue"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"/>
+            <View
+                android:background="@color/blue"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rl_comm_list"
                 android:layout_width="match_parent"

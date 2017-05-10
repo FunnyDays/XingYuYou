@@ -2,6 +2,8 @@ package com.xingyuyou.xingyuyou.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.gson.Gson;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -25,7 +28,16 @@ import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.SPUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
+import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
+import com.xingyuyou.xingyuyou.bean.user.UserBean;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import okhttp3.Call;
 
 public class ManagementActivity extends AppCompatActivity {
     private RelativeLayout mSetting;
@@ -39,6 +51,42 @@ public class ManagementActivity extends AppCompatActivity {
     private RelativeLayout mAppShare;
     private RelativeLayout mAboutXingYu;
     private Toolbar mToolbar;
+    private UserBean mUserBean;
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.obj != null) {
+                if (msg.what == 1) {
+                    String response = (String) msg.obj;
+                    JSONObject jo = null;
+                    try {
+                        jo = new JSONObject(response);
+                        String string = jo.getString("status");
+                        if (string.equals("1")) {
+                            JSONObject ja = jo.getJSONObject("data");
+                            Gson gson = new Gson();
+                            mUserBean = gson.fromJson(ja.toString(), UserBean.class);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    setValues();
+                }
+            }
+
+        }
+    };
+    private TextView mTvNickName;
+
+    private void setValues() {
+        mTvNickName.setText(mUserBean.getNickname());
+        Glide.with(ManagementActivity.this)
+                .load(mUserBean.getHead_image())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transform(new GlideCircleTransform(ManagementActivity.this))
+                .dontAnimate()
+                .into(mUserPhoto);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +94,7 @@ public class ManagementActivity extends AppCompatActivity {
         setContentView(R.layout.activity_management);
         initToolBar();
         initData();
+        initUserData();
     }
     private void initToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -74,18 +123,38 @@ public class ManagementActivity extends AppCompatActivity {
             }
         });
     }
-    private void initData() {
-        //显示用户信息
+    //获取用户信息
+    private void initUserData() {
         if (UserUtils.logined()) {
-            SPUtils user_data = new SPUtils("user_data");
-            String id = user_data.getString("id");
-            String account = user_data.getString("account");
-            String nickname = user_data.getString("nickname");
-            TextView tvUserAccountName = (TextView) findViewById(R.id.user_account_name);
-            TextView tvNickName = (TextView) findViewById(R.id.user_nickname);
-            tvUserAccountName.setText(account);
-        }
+            OkHttpUtils.post()//
+                    .url(XingYuInterface.GET_USER_INFO)
+                    .addParams("id", UserUtils.getUserId())
+                    .tag(this)//
+                    .build()//
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+                        }
 
+                        @Override
+                        public void onResponse(String response, int id) {
+                            mHandler.obtainMessage(1, response).sendToTarget();
+                        }
+                    });
+        }
+    }
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+       /* //显示用户信息
+        if (UserUtils.logined()) {
+            TextView tvNickName = (TextView) findViewById(R.id.user_nickname);
+            tvNickName.setText(UserUtils.getNickName());
+        }*/
+    }
+
+    private void initData() {
+        mTvNickName = (TextView) findViewById(R.id.user_nickname);
         //登录
         mUserPhoto = (ImageView) findViewById(R.id.user_photo);
         Glide.with(ManagementActivity.this)

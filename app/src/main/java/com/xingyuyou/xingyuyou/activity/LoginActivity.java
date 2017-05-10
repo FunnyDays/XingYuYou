@@ -145,9 +145,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String json) {
                 try {
-                    Log.e("加密返回的json", json);
                     String result = new String(android.util.Base64.decode(json, android.util.Base64.DEFAULT), "utf-8");
-                    Log.e("login",result);
                     if (code==0){
                         mHandler.obtainMessage(0, result).sendToTarget();
                     }

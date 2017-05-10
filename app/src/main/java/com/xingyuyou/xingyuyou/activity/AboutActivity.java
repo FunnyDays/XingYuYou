@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.ZipUtils;
 
 import java.io.IOException;
@@ -21,6 +23,13 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+        TextView textView = (TextView) findViewById(R.id.text);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentUtils.startActivity(AboutActivity.this, ExemptionActivity.class);
+            }
+        });
         initView();
     }
     private void initView() {

@@ -16,7 +16,7 @@
         >
 
         <ImageView
-            android:id="@+id/civ_user_photo"
+            android:id="@+id/iv_user_photo"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/civ_user_photo"
+            android:layout_toRightOf="@id/iv_user_photo"
             android:orientation="vertical">
 
             <TextView
@@ -46,13 +46,22 @@
                 tools:text="7766"/>
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_love_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/tv_floor_num"
+            tools:text="998"/>
+
         <ImageView
             android:id="@+id/iv_love"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/tv_floor_num"
+            android:layout_toLeftOf="@+id/tv_love_num"
             android:src="@mipmap/ic_zan"/>
 
         <TextView
@@ -68,23 +77,80 @@
     </RelativeLayout>
 
     <TextView
-        android:layout_marginLeft="50dp"
         android:id="@+id/tv_commo_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="40dp"
         tools:text="平路的对方的soils的开发"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/ll_root_image_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp">
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/ll_more_commo_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
         <View
-            android:layout_marginLeft="50dp"
             android:layout_width="match_parent"
-            android:layout_height="1dp"/>
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/custom_gray"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_commo2_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/blue"
+                tools:text="ceshi:"/>
+
+            <TextView
+                android:id="@+id/tv_commo2_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_commo2_name"
+                tools:text="ceshi"/>
+
+            <TextView
+                android:id="@+id/tv_commo2_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                tools:text="18.00"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_commo2_more"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
+            android:background="@color/blue"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="更多"
+            android:textColor="@color/light_white"
+            android:textSize="12sp"/>
     </LinearLayout>
 
     <View
-        android:background="@color/custom_gray"
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+        android:layout_height="1dp"
+        android:background="@color/custom_gray"/>
 </LinearLayout>

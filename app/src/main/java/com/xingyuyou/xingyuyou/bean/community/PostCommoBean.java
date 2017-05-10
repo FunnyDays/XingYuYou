@@ -9,64 +9,34 @@ import java.util.List;
 public class PostCommoBean {
 
     /**
-     * level : 1
-     * uid : 108
-     * nickname : 99
-     * head_image : http://xingyuyou.com/Uploads/Picture/2017-03-15/
-     * id : 58
-     * tid : 102
-     * replies_content : 就几级了
-     * imgarr : ["http://xingyuyou.com/Public/app/replies_image/591031dd04fb1.png"]
-     * dateline : 1494233565
-     * floor_num : 3
-     * laud_count : 0
-     * laud_status :
+     * id : 38
+     * pid : 0
+     * uid : 206
+     * imgarr : ["http://xingyuyou.com/Public/app/replies_image/590d84ddd22bd.jpg"]
+     * replies_content : 第1条评论
+     * dateline : 1494058205
+     * tid : 103
+     * floor_num : 1
+     * nickname : 刘若男
+     * head_image : http://xingyuyou.com/Uploads/Picture/2017-03-15/59118bd5e18c4.jpg
+     * laud_count : 4
+     * laud_status : 1
+     * child : [{"id":"39","pid":"38","uid":"206","imgarr":"","replies_content":"第1条评论回复","dateline":"1494058219","tid":"103","floor_num":"0","nickname":"刘若男"},{"id":"43","pid":"38","uid":"206","imgarr":"","replies_content":"第4条评论回复","dateline":"1494210080","tid":"103","floor_num":"0","nickname":"刘若男"}]
      */
 
-    private int level;
-    private String uid;
-    private String nickname;
-    private String head_image;
     private String id;
-    private String tid;
+    private String pid;
+    private String uid;
     private String replies_content;
     private String dateline;
+    private String tid;
     private String floor_num;
+    private String nickname;
+    private String head_image;
     private String laud_count;
     private String laud_status;
     private List<String> imgarr;
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getHead_image() {
-        return head_image;
-    }
-
-    public void setHead_image(String head_image) {
-        this.head_image = head_image;
-    }
+    private List<ChildBean> child;
 
     public String getId() {
         return id;
@@ -76,12 +46,20 @@ public class PostCommoBean {
         this.id = id;
     }
 
-    public String getTid() {
-        return tid;
+    public String getPid() {
+        return pid;
     }
 
-    public void setTid(String tid) {
-        this.tid = tid;
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getReplies_content() {
@@ -100,12 +78,36 @@ public class PostCommoBean {
         this.dateline = dateline;
     }
 
+    public String getTid() {
+        return tid;
+    }
+
+    public void setTid(String tid) {
+        this.tid = tid;
+    }
+
     public String getFloor_num() {
         return floor_num;
     }
 
     public void setFloor_num(String floor_num) {
         this.floor_num = floor_num;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getHead_image() {
+        return head_image;
+    }
+
+    public void setHead_image(String head_image) {
+        this.head_image = head_image;
     }
 
     public String getLaud_count() {
@@ -132,21 +134,107 @@ public class PostCommoBean {
         this.imgarr = imgarr;
     }
 
-    @Override
-    public String toString() {
-        return "PostCommoBean{" +
-                "level=" + level +
-                ", uid='" + uid + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", head_image='" + head_image + '\'' +
-                ", id='" + id + '\'' +
-                ", tid='" + tid + '\'' +
-                ", replies_content='" + replies_content + '\'' +
-                ", dateline='" + dateline + '\'' +
-                ", floor_num='" + floor_num + '\'' +
-                ", laud_count='" + laud_count + '\'' +
-                ", laud_status='" + laud_status + '\'' +
-                ", imgarr=" + imgarr +
-                '}';
+    public List<ChildBean> getChild() {
+        return child;
+    }
+
+    public void setChild(List<ChildBean> child) {
+        this.child = child;
+    }
+
+    public static class ChildBean {
+        /**
+         * id : 39
+         * pid : 38
+         * uid : 206
+         * imgarr :
+         * replies_content : 第1条评论回复
+         * dateline : 1494058219
+         * tid : 103
+         * floor_num : 0
+         * nickname : 刘若男
+         */
+
+        private String id;
+        private String pid;
+        private String uid;
+        private String imgarr;
+        private String replies_content;
+        private String dateline;
+        private String tid;
+        private String floor_num;
+        private String nickname;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getPid() {
+            return pid;
+        }
+
+        public void setPid(String pid) {
+            this.pid = pid;
+        }
+
+        public String getUid() {
+            return uid;
+        }
+
+        public void setUid(String uid) {
+            this.uid = uid;
+        }
+
+        public String getImgarr() {
+            return imgarr;
+        }
+
+        public void setImgarr(String imgarr) {
+            this.imgarr = imgarr;
+        }
+
+        public String getReplies_content() {
+            return replies_content;
+        }
+
+        public void setReplies_content(String replies_content) {
+            this.replies_content = replies_content;
+        }
+
+        public String getDateline() {
+            return dateline;
+        }
+
+        public void setDateline(String dateline) {
+            this.dateline = dateline;
+        }
+
+        public String getTid() {
+            return tid;
+        }
+
+        public void setTid(String tid) {
+            this.tid = tid;
+        }
+
+        public String getFloor_num() {
+            return floor_num;
+        }
+
+        public void setFloor_num(String floor_num) {
+            this.floor_num = floor_num;
+        }
+
+        public String getNickname() {
+            return nickname;
+        }
+
+        public void setNickname(String nickname) {
+            this.nickname = nickname;
+        }
     }
 }

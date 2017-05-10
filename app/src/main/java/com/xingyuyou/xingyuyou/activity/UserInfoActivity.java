@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.SPUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
@@ -394,16 +395,7 @@ public class UserInfoActivity extends AppCompatActivity {
             }
         });
 
-        //退出登录
-       /* mBtLoginOut = (Button) findViewById(R.id.bt_login_out);
-        mBtLoginOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                UserUtils.LoginOut();
-                finish();
-                Toast.makeText(UserInfoActivity.this, "已经退出登录", Toast.LENGTH_SHORT).show();
-            }
-        });*/
+
     }
 
 
