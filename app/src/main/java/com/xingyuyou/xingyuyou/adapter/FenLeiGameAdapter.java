@@ -42,7 +42,6 @@ public class FenLeiGameAdapter extends RecyclerView.Adapter {
     public FenLeiGameAdapter(Activity activity, List<GameSortBean> listData) {
         mListData = listData;
         mActivity=activity;
-        Log.e("test111",mListData.toString());
     }
 
     //HeaderView和FooterView的get和set函数

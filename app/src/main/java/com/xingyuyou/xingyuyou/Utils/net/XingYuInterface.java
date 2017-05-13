@@ -38,8 +38,10 @@ public class XingYuInterface {
 
     public static final String UPDATE_INFORMATION=Host+"UserCenter/update_information";
     public static final String GET_USER_INFO=Host+"UserCenter/get_user_info";
-    public static final String OWN_POST_LIST=Host+"UserCenter/own_post_list";
+    public static final String OWN_POST_LIST=Host+"UserCenter/own_post_list";//我的帖子
+    public static final String GET_MYNEWS_LIST=Host+"UserCenter/get_mynews_list";//我的消息
     public static final String USER_FEEDBACK=Host+"UserCenter/user_feedback";
-    public static final String COLLECT_LIST=Host+"UserCenter/collect_list";
+    public static final String COLLECT_LIST=Host+"UserCenter/collect_list";//帖子收藏
+    public static final String MY_REPLIES_LIST=Host+"UserCenter/my_replies_list";//我的评论
 
 }
