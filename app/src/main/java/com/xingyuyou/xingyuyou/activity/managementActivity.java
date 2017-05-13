@@ -79,6 +79,8 @@ public class ManagementActivity extends AppCompatActivity {
     private TextView mTvNickName;
 
     private void setValues() {
+        UserUtils.setNickName(mUserBean.getNickname());
+        UserUtils.setUserPhoto(mUserBean.getHead_image());
         mTvNickName.setText(mUserBean.getNickname());
         Glide.with(ManagementActivity.this)
                 .load(mUserBean.getHead_image())
@@ -215,7 +217,7 @@ public class ManagementActivity extends AppCompatActivity {
         mSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(ManagementActivity.this, SettingActivity.class);
+                IntentUtils.startActivity(ManagementActivity.this, CollectListActivity.class);
             }
         });
         //我的帖子
@@ -315,5 +317,9 @@ public class ManagementActivity extends AppCompatActivity {
             Toast.makeText(ManagementActivity.this,platform + " 分享取消了", Toast.LENGTH_SHORT).show();
         }
     };
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
 
 }

@@ -148,6 +148,10 @@ public class PostingActivity extends AppCompatActivity {
             Toast.makeText(this, "请选发帖社区", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (mImageList.size()==0){
+            Toast.makeText(this, "请至少选择一张图片", Toast.LENGTH_SHORT).show();
+            return;
+        }
         mDialog = new CustomDialog(PostingActivity.this, "正在上传，请稍等");
         mDialog.showDialog();
 

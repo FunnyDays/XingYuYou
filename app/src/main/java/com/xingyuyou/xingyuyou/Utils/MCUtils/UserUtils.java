@@ -53,13 +53,19 @@ public class UserUtils {
         return "未登录";
     }
 
+    public static void setNickName(String nickName) {
+        if (logined()) {
+            user_data = new SPUtils("user_data");
+            user_data.putString("nickname", nickName);
+        }
+    }
     public static String getNickName() {
         if (logined()) {
             user_data = new SPUtils("user_data");
             String nickname = user_data.getString("nickname");
             return nickname;
         }
-        return "未登录";
+        return "请在个人信息中设置";
     }
 
     public static void setUserPhoto(String userPhoto) {

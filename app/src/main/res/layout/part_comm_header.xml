@@ -14,11 +14,11 @@
             android:id="@+id/iv_one"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
-            android:src="@drawable/shape_rectangle_cover"/>
+            android:src="@drawable/shape_rectangle_cover"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <ImageView
+         <!--   <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_collect_fill"
@@ -65,7 +65,7 @@
                 android:id="@+id/tv_comm_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="3223"/>
+                tools:text="3223"/>-->
         </LinearLayout>
     </RelativeLayout>
 
@@ -86,6 +86,7 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
+                    android:id="@+id/iv_two"
                     android:scaleType="fitXY"
                     android:layout_marginLeft="5dp"
                     android:layout_width="150dp"
@@ -112,6 +113,7 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
+                    android:id="@+id/iv_three"
                     android:scaleType="fitXY"
                     android:layout_marginLeft="5dp"
                     android:layout_width="150dp"
@@ -138,11 +140,14 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
+                    android:id="@+id/iv_four"
                     android:scaleType="fitXY"
-                    android:layout_marginLeft="5dp"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/shape_rectangle_cover"/>
+                    android:src="@drawable/shape_rectangle_cover"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"/>
 
                 <TextView
                     android:layout_width="wrap_content"

@@ -229,6 +229,8 @@ public class UserInfoActivity extends AppCompatActivity {
         mDialog = new CustomDialog(UserInfoActivity.this, "正在上传，请稍等");
         mDialog.showDialog();
 
+        UserUtils.setNickName(mTvNickname.getText().toString().trim());
+
         Map<String, String> params = new HashMap<String, String>();
         params.put("user_id", mUserId);
         params.put("sex",(mTvUserSex.getText().toString().trim().equals("男")?"0":"1"));

@@ -3,6 +3,7 @@ package com.xingyuyou.xingyuyou.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,19 +16,28 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.IntentUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
+import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.activity.LoginActivity;
 import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
+import com.xingyuyou.xingyuyou.bean.community.SortPostListBean;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.List;
+
+import okhttp3.Call;
 
 /**
  * Created by Administrator on 2017/4/21.
  */
 public class CommHotAdapter extends RecyclerView.Adapter {
     //数据
-    private List<PostListBean> mListData;
+    private List<SortPostListBean> mListData;
     private Activity mActivity;
 
     public static final int TYPE_HEADER = 0;  //说明是带有Header的
@@ -41,12 +51,12 @@ public class CommHotAdapter extends RecyclerView.Adapter {
     private View mHeaderView;
     private View mFooterView;
 
-    public CommHotAdapter(Activity activity, List<PostListBean> listData) {
+    public CommHotAdapter(Activity activity, List<SortPostListBean> listData) {
         mListData = listData;
         mActivity = activity;
     }
 
-    public void setDatas(List<PostListBean> listData) {
+    public void setDatas(List<SortPostListBean> listData) {
         mListData = listData;
     }
 
@@ -121,10 +131,21 @@ public class CommHotAdapter extends RecyclerView.Adapter {
 
     @Override
 
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ItemViewHolder && (getItemViewType(position) == TYPE_ONE_PIC
                 || getItemViewType(position) == TYPE_TWO_PIC
                 || getItemViewType(position) == TYPE_THREE_PIC)) {
+
+            if (mListData.get(position - 1).getCollect_status()==1){
+                ((ItemViewHolder) holder).mPostCollect.setImageResource(R.mipmap.ic_collect_fill);
+            }else {
+                ((ItemViewHolder) holder).mPostCollect.setImageResource(R.mipmap.shoucang);
+            }
+            if (mListData.get(position - 1).getLaud_status()==1){
+                ((ItemViewHolder) holder).mPostLuad.setImageResource(R.mipmap.ic_zan_fill);
+            }else {
+                ((ItemViewHolder) holder).mPostLuad.setImageResource(R.mipmap.ic_zan);
+            }
             ((ItemViewHolder) holder).mUserName.setText(mListData.get(position - 1).getNickname());
             ((ItemViewHolder) holder).mPostTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mListData.get(position - 1).getDateline() + "000")));
             ((ItemViewHolder) holder).mPostName.setText(mListData.get(position - 1).getSubject());
@@ -169,19 +190,57 @@ public class CommHotAdapter extends RecyclerView.Adapter {
             ((ItemViewHolder) holder).mRlCollect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(mActivity, "收藏成功", Toast.LENGTH_SHORT).show();
+                    if (!UserUtils.logined()){
+                        IntentUtils.startActivity(mActivity, LoginActivity.class);
+                        return;
+                    }
+                    getCollect(mListData.get(position - 1).getId());
+                    if (mListData.get(position - 1).getCollect_status()==1){
+                        ((ItemViewHolder) holder).mCollectNum.setText(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_collect())-1)));
+                        mListData.get(position - 1).setPosts_collect(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_collect())-1)));
+                        mListData.get(position - 1).setCollect_status(0);
+                        Toast.makeText(mActivity, "取消收藏", Toast.LENGTH_SHORT).show();
+                        ((ItemViewHolder) holder).mPostCollect.setImageResource(R.mipmap.shoucang);
+                    }else {
+                        ((ItemViewHolder) holder).mCollectNum.setText(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_collect())+1)));
+                        mListData.get(position - 1).setPosts_collect(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_collect())+1)));
+                        mListData.get(position - 1).setCollect_status(1);
+                        Toast.makeText(mActivity, "收藏成功", Toast.LENGTH_SHORT).show();
+                        ((ItemViewHolder) holder).mPostCollect.setImageResource(R.mipmap.ic_collect_fill);
+
+                    }
                 }
             });
             ((ItemViewHolder) holder).mRlComm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(mActivity, "haha", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(mActivity, PostDetailActivity.class);
+                    intent.putExtra("post_id", mListData.get(position - 1).getId());
+                    mActivity.startActivity(intent);
                 }
             });
             ((ItemViewHolder) holder).mRlJiaonang.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(mActivity, "点赞", Toast.LENGTH_SHORT).show();
+                    if (!UserUtils.logined()){
+                        IntentUtils.startActivity(mActivity, LoginActivity.class);
+                        return;
+                    }
+                    getLaud(mListData.get(position - 1).getId());
+                    if (mListData.get(position - 1).getLaud_status()==1){
+                        ((ItemViewHolder) holder).mJiaoNangNum.setText(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_laud())-1)));
+                        mListData.get(position - 1).setPosts_laud(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_laud())-1)));
+                        mListData.get(position - 1).setLaud_status(0);
+                        Toast.makeText(mActivity, "取消点赞", Toast.LENGTH_SHORT).show();
+                        ((ItemViewHolder) holder).mPostLuad.setImageResource(R.mipmap.ic_zan);
+                    }else {
+                        ((ItemViewHolder) holder).mJiaoNangNum.setText(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_laud())+1)));
+                        mListData.get(position - 1).setPosts_laud(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_laud())+1)));
+                        mListData.get(position - 1).setLaud_status(1);
+                        Toast.makeText(mActivity, "点赞成功", Toast.LENGTH_SHORT).show();
+                        ((ItemViewHolder) holder).mPostLuad.setImageResource(R.mipmap.ic_zan_fill);
+
+                    }
                 }
             });
         } else if (getItemViewType(position) == TYPE_HEADER) {
@@ -191,7 +250,43 @@ public class CommHotAdapter extends RecyclerView.Adapter {
         }
 
     }
+    public void getCollect(final String tid) {
+        OkHttpUtils.post()//
+                .addParams("tid",tid)
+                .addParams("uid",UserUtils.getUserId())
+                .url(XingYuInterface.GET_COLLECT)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        // Log.e("hot", e.toString() + ":e");
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.e("weiwei","hahah"+UserUtils.getUserId()+tid+response);
+                    }
+                });
 
+    }
+    public void getLaud( String tid) {
+        OkHttpUtils.post()//
+                .addParams("tid",tid)
+                .addParams("uid",UserUtils.getUserId())
+                .url(XingYuInterface.GET_LAUD)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Log.e("hot", e.toString() + ":e");
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                    }
+                });
+
+    }
     @Override
     public int getItemCount() {
         if (mHeaderView == null && mFooterView == null) {
@@ -210,6 +305,9 @@ public class CommHotAdapter extends RecyclerView.Adapter {
         private ImageView mPostCover0;
         private ImageView mPostCover1;
         private ImageView mPostCover2;
+        private ImageView mPostCollect;
+        private ImageView mPostCommo;
+        private ImageView mPostLuad;
         private ImageView mUserPhoto;
         private TextView mPostName;
         private TextView mCollectNum;
@@ -235,6 +333,9 @@ public class CommHotAdapter extends RecyclerView.Adapter {
             mPostCover0 = (ImageView) itemView.findViewById(R.id.iv_post_cover0);
             mPostCover1 = (ImageView) itemView.findViewById(R.id.iv_post_cover1);
             mPostCover2 = (ImageView) itemView.findViewById(R.id.iv_post_cover2);
+            mPostCollect = (ImageView) itemView.findViewById(R.id.iv_post_collect);
+            mPostCommo = (ImageView) itemView.findViewById(R.id.iv_post_comm);
+            mPostLuad = (ImageView) itemView.findViewById(R.id.iv_post_jiaonang);
             mUserPhoto = (ImageView) itemView.findViewById(R.id.civ_user_photo);
             mPostName = (TextView) itemView.findViewById(R.id.tv_post_name);
             mPostContent = (TextView) itemView.findViewById(R.id.tv_post_content);

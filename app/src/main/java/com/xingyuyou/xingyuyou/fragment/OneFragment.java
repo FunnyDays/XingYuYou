@@ -10,9 +10,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
+import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.activity.DownLoadActivity;
 import com.xingyuyou.xingyuyou.activity.MainActivity;
 import com.xingyuyou.xingyuyou.activity.SearchActivity;
@@ -32,6 +37,7 @@ public class OneFragment extends BaseFragment {
     private TabsViewPagerAdapter mAdapter;
     private ArrayList<BaseFragment> fragments;
     private ImageView mIvManage;
+    private TextView mTvUserAccount;
 
     public static OneFragment newInstance(String content) {
         Bundle args = new Bundle();
@@ -56,6 +62,7 @@ public class OneFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                     IntentUtils.startActivity(mActivity,ManagementActivity.class);
+                mActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
         initToolbar();
@@ -70,6 +77,9 @@ public class OneFragment extends BaseFragment {
         mAdapter.addFragment(fragments.get(2), "最新");
         viewPager.setAdapter(mAdapter);
         tabLayout.setupWithViewPager(viewPager);
+
+        //登陆账号设置
+        mTvUserAccount = (TextView) view.findViewById(R.id.tv_user_account);
 
         //设置Nva
        /* DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
@@ -113,4 +123,17 @@ public class OneFragment extends BaseFragment {
         return fragments;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (UserUtils.logined()){
+            mTvUserAccount.setText(UserUtils.getNickName());
+            Glide.with(mActivity)
+                    .load(UserUtils.getUserPhoto())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(new GlideCircleTransform(mActivity))
+                    .dontAnimate()
+                    .into(mIvManage);
+        }
+    }
 }

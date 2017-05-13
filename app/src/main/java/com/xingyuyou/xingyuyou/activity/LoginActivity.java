@@ -111,7 +111,6 @@ public class LoginActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            Log.e("login", usernameText + "-------------" + passwordText);
             //账号登录
             toLoginPOST(0,XingYuInterface.USER_LOGIN,jsonObject.toString());
         } else {

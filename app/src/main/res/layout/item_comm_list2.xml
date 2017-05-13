@@ -92,7 +92,7 @@
                     android:src="@mipmap/icon"
                     android:adjustViewBounds="false"
                     android:cropToPadding="false"
-                    android:layout_marginLeft="2dp"
+                    android:layout_marginLeft="4dp"
                     android:layout_marginRight="2dp"/>
 
                 <ImageView
@@ -114,7 +114,7 @@
                     android:src="@mipmap/icon"
                     android:scaleType="centerCrop"
                     android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp"/>
+                    android:layout_marginRight="4dp"/>
             </LinearLayout>
 
             <LinearLayout

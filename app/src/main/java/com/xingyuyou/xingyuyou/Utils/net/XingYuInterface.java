@@ -32,9 +32,14 @@ public class XingYuInterface {
     public static final String POPULAR_TAGS=Host+"Community/popular_tags";
     public static final String REPLIES=Host+"Community/replies";
     public static final String GET_FORUMS_LIST=Host+"Community/get_forums_list";
+    public static final String GET_LAUD=Host+"Community/get_laud";
+    public static final String GET_COLLECT=Host+"Community/get_collect";
+    public static final String GET_RECOMMEND=Host+"Community/get_recommend";
+
     public static final String UPDATE_INFORMATION=Host+"UserCenter/update_information";
     public static final String GET_USER_INFO=Host+"UserCenter/get_user_info";
     public static final String OWN_POST_LIST=Host+"UserCenter/own_post_list";
     public static final String USER_FEEDBACK=Host+"UserCenter/user_feedback";
+    public static final String COLLECT_LIST=Host+"UserCenter/collect_list";
 
 }

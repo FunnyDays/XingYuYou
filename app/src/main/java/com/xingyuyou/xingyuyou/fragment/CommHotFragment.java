@@ -1,5 +1,6 @@
 package com.xingyuyou.xingyuyou.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,9 +20,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
-import com.xingyuyou.xingyuyou.bean.community.PostListBean;
+import com.xingyuyou.xingyuyou.bean.community.SortPostListBean;
+import com.xingyuyou.xingyuyou.bean.community.TopViewRecommBean;
 import com.xingyuyou.xingyuyou.weight.WrapContentLinearLayoutManager;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -41,11 +45,13 @@ public class CommHotFragment extends BaseFragment {
 
     private static boolean CLEAR_DATA = false;
     private RecyclerView mRecyclerView;
-    private boolean IS_FIRST_INIT_DATA=true;
-    private int  PAGENUMBER = 1;
-    private List mPostList=new ArrayList();
-    private List mPostAdapterList=new ArrayList();
+    private boolean IS_FIRST_INIT_DATA = true;
+    private int PAGENUMBER = 1;
+    private List mPostList = new ArrayList();
+    private List mPostAdapterList = new ArrayList();
     boolean isLoading = false;
+    private List<TopViewRecommBean> mRecommList;
+    private List<TopViewRecommBean> mRecommAdapterList = new ArrayList<>();
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -62,14 +68,14 @@ public class CommHotFragment extends BaseFragment {
                 try {
                     jo = new JSONObject(response);
                     JSONArray ja = jo.getJSONArray("data");
-                    Log.e("post", "解析数据："+  ja.toString());
+                    Log.e("post", "解析数据：" + ja.toString());
                     Gson gson = new Gson();
                     mPostList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<PostListBean>>() {
+                            new TypeToken<List<SortPostListBean>>() {
                             }.getType());
-                    if (CLEAR_DATA==true){
+                    if (CLEAR_DATA == true) {
                         mPostAdapterList.clear();
-                        CLEAR_DATA=false;
+                        CLEAR_DATA = false;
                     }
                     mPostAdapterList.addAll(mPostList);
 
@@ -80,13 +86,35 @@ public class CommHotFragment extends BaseFragment {
                 if (mCommHotAdapter != null)
                     mCommHotAdapter.notifyDataSetChanged();
             }
+            if (msg.what == 3) {
+                String response = (String) msg.obj;
+                JSONObject jo = null;
+                try {
+                    jo = new JSONObject(response);
+                    JSONArray ja = jo.getJSONArray("data");
+                    Gson gson = new Gson();
+                    mRecommList = gson.fromJson(ja.toString(),
+                            new TypeToken<List<TopViewRecommBean>>() {
+                            }.getType());
+                    mRecommAdapterList.addAll(mRecommList);
+                    setValues();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     };
+
+
     private CommHotAdapter mCommHotAdapter;
     private ProgressBar mPbNodata;
     private TextView mTvNodata;
     private SwipeRefreshLayout mRefreshLayout;
     private WrapContentLinearLayoutManager mLinearLayoutManager;
+    private ImageView mIvOne;
+    private ImageView mIvTwo;
+    private ImageView mIvThree;
+    private ImageView mIvFour;
 
     public static CommHotFragment newInstance(String content) {
         Bundle args = new Bundle();
@@ -95,6 +123,7 @@ public class CommHotFragment extends BaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     private void initSwipeRefreshLayout() {
         mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mRefreshLayout.post(new Runnable() {
@@ -113,8 +142,8 @@ public class CommHotFragment extends BaseFragment {
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                PAGENUMBER=1;
-                CLEAR_DATA=true;
+                PAGENUMBER = 1;
+                CLEAR_DATA = true;
                 initData(PAGENUMBER);
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -126,13 +155,14 @@ public class CommHotFragment extends BaseFragment {
         });
 
     }
+
     /**
      * 初始化数据
      */
     public void initData(int PAGENUMBER) {
         OkHttpUtils.post()//
-                .addParams("page",String.valueOf(PAGENUMBER))
-                .addParams("type",String.valueOf("1"))
+                .addParams("page", String.valueOf(PAGENUMBER))
+                .addParams("type", String.valueOf("1"))
                 .url(XingYuInterface.GET_POSTS_LIST)
                 .tag(this)//
                 .build()//
@@ -141,12 +171,70 @@ public class CommHotFragment extends BaseFragment {
                     public void onError(Call call, Exception e, int id) {
                         // Log.e("hot", e.toString() + ":e");
                     }
+
                     @Override
                     public void onResponse(String response, int id) {
                         handler.obtainMessage(1, response).sendToTarget();
                     }
                 });
+
+        OkHttpUtils.post()//
+                .addParams("type", String.valueOf(1))
+                .url(XingYuInterface.GET_RECOMMEND)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        // Log.e("hot", e.toString() + ":e");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        handler.obtainMessage(3, response).sendToTarget();
+                    }
+                });
     }
+
+    private void setValues() {
+        Glide.with(mActivity).load(mRecommAdapterList.get(0).getRe_image()).into(mIvOne);
+        Glide.with(mActivity).load(mRecommAdapterList.get(1).getRe_image()).into(mIvTwo);
+        Glide.with(mActivity).load(mRecommAdapterList.get(2).getRe_image()).into(mIvThree);
+        Glide.with(mActivity).load(mRecommAdapterList.get(3).getRe_image()).into(mIvFour);
+        mIvOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mActivity, PostDetailActivity.class);
+                intent.putExtra("post_id", mRecommAdapterList.get(0).getTid());
+                mActivity.startActivity(intent);
+            }
+        });
+        mIvTwo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mActivity, PostDetailActivity.class);
+                intent.putExtra("post_id", mRecommAdapterList.get(1).getTid());
+                mActivity.startActivity(intent);
+            }
+        });
+        mIvThree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mActivity, PostDetailActivity.class);
+                intent.putExtra("post_id", mRecommAdapterList.get(2).getTid());
+                mActivity.startActivity(intent);
+            }
+        });
+        mIvFour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mActivity, PostDetailActivity.class);
+                intent.putExtra("post_id", mRecommAdapterList.get(3).getTid());
+                mActivity.startActivity(intent);
+            }
+        });
+    }
+
     @Override
     protected View initView() {
         View view = View.inflate(mActivity, R.layout.fragment_comm_class, null);
@@ -168,6 +256,10 @@ public class CommHotFragment extends BaseFragment {
 
         //头布局
         View headerView = View.inflate(mActivity, R.layout.part_comm_header, null);
+        mIvOne = (ImageView) headerView.findViewById(R.id.iv_one);
+        mIvTwo = (ImageView) headerView.findViewById(R.id.iv_two);
+        mIvThree = (ImageView) headerView.findViewById(R.id.iv_three);
+        mIvFour = (ImageView) headerView.findViewById(R.id.iv_four);
         mCommHotAdapter.setHeaderView(headerView);
         mCommHotAdapter.setFooterView(loadingData);
         mRecyclerView.setAdapter(mCommHotAdapter);
@@ -224,16 +316,18 @@ public class CommHotFragment extends BaseFragment {
             }
         });
     }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser&&IS_FIRST_INIT_DATA) {
+        if (isVisibleToUser && IS_FIRST_INIT_DATA) {
             initData(PAGENUMBER);
-            IS_FIRST_INIT_DATA=false;
+            IS_FIRST_INIT_DATA = false;
         } else {
             //不可见时不执行操作
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

@@ -128,7 +128,6 @@ public class RecommendGameFragment extends BaseFragment {
                             }.getType());
                     List<String> imageList = new ArrayList<>();
                     for (int i = 0; i < mHotBannerGameList.size(); i++) {
-                        Log.e("lunbo",mHotBannerGameList.get(i).getData());
                         imageList.add(mHotBannerGameList.get(i).getData());
                     }
                     mBanner.setImages(imageList).setImageLoader(new GlideImageLoader()).start();
@@ -183,7 +182,6 @@ public class RecommendGameFragment extends BaseFragment {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        Log.e("hot", e.toString() + ":e");
                     }
 
                     @Override

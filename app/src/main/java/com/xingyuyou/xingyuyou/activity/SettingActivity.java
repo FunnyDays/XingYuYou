@@ -81,7 +81,7 @@ public class SettingActivity extends AppCompatActivity {
         mVersionCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              Toast.makeText(SettingActivity.this, "当前版本号是："+AppUtils.getAppVersionCode(SettingActivity.this), Toast.LENGTH_LONG).show();
+              Toast.makeText(SettingActivity.this, "当前版本号是："+AppUtils.getAppVersionName(SettingActivity.this), Toast.LENGTH_LONG).show();
             }
         });
         //用户公约

@@ -164,6 +164,8 @@
         </activity>
         <activity android:name=".activity.ExemptionActivity">
         </activity>
+        <activity android:name=".activity.CollectListActivity">
+        </activity>
     </application>
 
 </manifest>

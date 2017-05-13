@@ -88,8 +88,8 @@
                     android:id="@+id/iv_post_cover0"
                     android:layout_width="0dp"
                     android:layout_height="100dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:scaleType="centerCrop"
                     android:src="@mipmap/icon"/>
@@ -98,8 +98,8 @@
                     android:id="@+id/iv_post_cover1"
                     android:layout_width="0dp"
                     android:layout_height="100dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:scaleType="centerCrop"
                     android:src="@mipmap/icon"/>
