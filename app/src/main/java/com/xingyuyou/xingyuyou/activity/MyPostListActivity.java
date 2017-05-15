@@ -1,15 +1,13 @@
 package com.xingyuyou.xingyuyou.activity;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,14 +17,11 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
-import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.SPUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
-import com.xingyuyou.xingyuyou.adapter.CommSortAdapter;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
 import com.xingyuyou.xingyuyou.bean.community.PostTopAndWellBean;
-import com.xingyuyou.xingyuyou.bean.community.SortPostListBean;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -39,7 +34,7 @@ import java.util.List;
 
 import okhttp3.Call;
 
-public class CollectListActivity extends AppCompatActivity {
+public class MyPostListActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private int  PAGENUMBER = 1;
     private List<PostListBean> mPostList=new ArrayList();
@@ -52,7 +47,7 @@ public class CollectListActivity extends AppCompatActivity {
             super.handleMessage(msg);
             if (msg.what == 1) {
                 if (msg.obj.toString().contains("\"data\":null")) {
-                    Toast.makeText(CollectListActivity.this, "已经没有更多数据", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MyPostListActivity.this, "已经没有更多数据", Toast.LENGTH_SHORT).show();
                     mPbNodata.setVisibility(View.GONE);
                     mTvNodata.setText("已经没有更多数据");
                     return;
@@ -70,7 +65,7 @@ public class CollectListActivity extends AppCompatActivity {
                     mPostAdapterList.addAll(mPostList);
 
                     if (mPostList.size()<20){
-                        Toast.makeText(CollectListActivity.this, "已经没有更多数据", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MyPostListActivity.this, "已经没有更多数据", Toast.LENGTH_SHORT).show();
                         mPbNodata.setVisibility(View.GONE);
                         mTvNodata.setText("已经没有更多数据");
                     }
@@ -100,7 +95,7 @@ public class CollectListActivity extends AppCompatActivity {
     }
     private void initToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar_collect_list);
-        mToolbar.setTitle("我的收藏");
+        mToolbar.setTitle("我的帖子");
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,16 +123,16 @@ public class CollectListActivity extends AppCompatActivity {
                 switch (newState) {
                     case RecyclerView.SCROLL_STATE_SETTLING:
                         //   Log.i("Main", "用户在手指离开屏幕之前，由于滑了一下，视图仍然依靠惯性继续滑动");
-                        Glide.with(CollectListActivity.this).pauseRequests();
+                        Glide.with(MyPostListActivity.this).pauseRequests();
                         //刷新
                         break;
                     case RecyclerView.SCROLL_STATE_IDLE:
                         //  Log.i("Main", "视图已经停止滑动");
-                        Glide.with(CollectListActivity.this).resumeRequests();
+                        Glide.with(MyPostListActivity.this).resumeRequests();
                         break;
                     case RecyclerView.SCROLL_STATE_DRAGGING:
                         //  Log.i("Main", "手指没有离开屏幕，视图正在滑动");
-                        Glide.with(CollectListActivity.this).resumeRequests();
+                        Glide.with(MyPostListActivity.this).resumeRequests();
                         break;
                 }
 
@@ -185,7 +180,7 @@ public class CollectListActivity extends AppCompatActivity {
         OkHttpUtils.post()//
                 .addParams("page",String.valueOf(PAGENUMBER))
                 .addParams("uid",user_data.getString("id"))
-                .url(XingYuInterface.COLLECT_LIST)
+                .url(XingYuInterface.OWN_POST_LIST)
                 .tag(this)//
                 .build()//
                 .execute(new StringCallback() {

@@ -37,7 +37,7 @@ import okhttp3.Call;
  */
 public class CommHotAdapter extends RecyclerView.Adapter {
     //数据
-    private List<SortPostListBean> mListData;
+    private List<PostListBean> mListData;
     private Activity mActivity;
 
     public static final int TYPE_HEADER = 0;  //说明是带有Header的
@@ -51,12 +51,12 @@ public class CommHotAdapter extends RecyclerView.Adapter {
     private View mHeaderView;
     private View mFooterView;
 
-    public CommHotAdapter(Activity activity, List<SortPostListBean> listData) {
+    public CommHotAdapter(Activity activity, List<PostListBean> listData) {
         mListData = listData;
         mActivity = activity;
     }
 
-    public void setDatas(List<SortPostListBean> listData) {
+    public void setDatas(List<PostListBean> listData) {
         mListData = listData;
     }
 

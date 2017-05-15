@@ -179,7 +179,7 @@
                     android:background="@color/custom_gray"/>
 
                 <RelativeLayout
-                    android:id="@+id/rl_my_common"
+                    android:id="@+id/rl_my_message"
                     style="@style/ManageRelativeLayout"
                     android:layout_width="match_parent"
                     >

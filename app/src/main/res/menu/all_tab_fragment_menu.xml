@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/ab_search"
-        android:icon="@mipmap/ic_action_serach"
+        android:icon="@mipmap/ic_action_search_mg"
         android:title="搜索游戏"
         app:showAsAction="always"/>
     <item
         android:id="@+id/action_download"
-        android:icon="@mipmap/ic_action_download"
+        android:icon="@mipmap/ic_action_dowmload_mg"
         android:title="下载管理"
         app:showAsAction="always"/>
 

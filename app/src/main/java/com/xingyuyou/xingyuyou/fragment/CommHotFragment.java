@@ -23,6 +23,7 @@ import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
+import com.xingyuyou.xingyuyou.bean.community.PostListBean;
 import com.xingyuyou.xingyuyou.bean.community.SortPostListBean;
 import com.xingyuyou.xingyuyou.bean.community.TopViewRecommBean;
 import com.xingyuyou.xingyuyou.weight.WrapContentLinearLayoutManager;
@@ -71,7 +72,7 @@ public class CommHotFragment extends BaseFragment {
                     Log.e("post", "解析数据：" + ja.toString());
                     Gson gson = new Gson();
                     mPostList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<SortPostListBean>>() {
+                            new TypeToken<List<PostListBean>>() {
                             }.getType());
                     if (CLEAR_DATA == true) {
                         mPostAdapterList.clear();

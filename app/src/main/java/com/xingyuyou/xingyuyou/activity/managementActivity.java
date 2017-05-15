@@ -217,7 +217,23 @@ public class ManagementActivity extends AppCompatActivity {
         mSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(ManagementActivity.this, CollectListActivity.class);
+                if (UserUtils.logined()) {
+                    IntentUtils.startActivity(ManagementActivity.this, CollectListActivity.class);
+                } else {
+                    IntentUtils.startActivity(ManagementActivity.this, LoginActivity.class);
+                }
+            }
+        });
+        //我的消息
+        mSetting = (RelativeLayout) findViewById(R.id.rl_my_message);
+        mSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (UserUtils.logined()) {
+                    IntentUtils.startActivity(ManagementActivity.this, MyMessagePostActivity.class);
+                } else {
+                    IntentUtils.startActivity(ManagementActivity.this, LoginActivity.class);
+                }
             }
         });
         //我的帖子
@@ -225,7 +241,11 @@ public class ManagementActivity extends AppCompatActivity {
         mFeedBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // IntentUtils.startActivity(ManagementActivity.this, FeedBackActivity.class);
+                if (UserUtils.logined()) {
+                    IntentUtils.startActivity(ManagementActivity.this, MyPostListActivity.class);
+                } else {
+                    IntentUtils.startActivity(ManagementActivity.this, LoginActivity.class);
+                }
             }
         });
 

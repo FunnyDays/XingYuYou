@@ -17,6 +17,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.AppUtils;
+import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
 import com.xingyuyou.xingyuyou.Utils.FileUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideRoundTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
@@ -120,7 +122,7 @@ public class SortGameListActivity extends AppCompatActivity {
         });
 
         initView();
-       // initData(PAGENUMBER);
+        initData(PAGENUMBER);
     }
 
     private void  initData(int PAGENUMBER){
@@ -147,19 +149,28 @@ public class SortGameListActivity extends AppCompatActivity {
         mListView = (ListView)findViewById(R.id.lv_download);
         downloadManager = DownloadManager.getInstance();
         downloadListAdapter = new DownloadListAdapter();
+
+        //头布局
+        ImageView imageView = new ImageView(SortGameListActivity.this);
+        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ConvertUtils.dp2px(150));
+        imageView.setLayoutParams(lp);
+        imageView.setBackgroundResource(R.drawable.shape_rectangle_post_cover);
+        mListView.addHeaderView(imageView);
+
         //设置底部布局
         mLoading = View.inflate(SortGameListActivity.this, R.layout.default_loading, null);
         mLoadingText = (TextView) mLoading.findViewById(R.id.loading_text);
         mPbLoading = (ProgressBar) mLoading.findViewById(R.id.pb_loading);
         mListView.addFooterView(mLoading);
+
         mListView.setDividerHeight(0);
         mListView.setAdapter(downloadListAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(SortGameListActivity.this,HotGameDetailActivity.class);
-                intent.putExtra("game_id",mDatas.get(i).getId());
-                intent.putExtra("game_name",mDatas.get(i).getGame_name());
+                intent.putExtra("game_id",mDatas.get(i-1).getId());
+                intent.putExtra("game_name",mDatas.get(i-1).getGame_name());
                 startActivity(intent);
             }
         });

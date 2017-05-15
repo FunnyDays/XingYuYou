@@ -12,16 +12,21 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
+import com.xingyuyou.xingyuyou.Utils.glide.BlurTransformation;
+import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.adapter.CommHeaderFooterAdapter;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.adapter.CommSortAdapter;
 import com.xingyuyou.xingyuyou.bean.community.PostBean;
@@ -126,12 +131,32 @@ public class PostClassListActivity extends AppCompatActivity {
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mCommHotAdapter = new CommSortAdapter(this, mPostAdapterList);
+        //底部布局
         View loadingData = View.inflate(this, R.layout.default_loading, null);
         mPbNodata = (ProgressBar) loadingData.findViewById(R.id.pb_loading);
         mTvNodata = (TextView) loadingData.findViewById(R.id.loading_text);
-        TextView textView = new TextView(this);
-        textView.setText("");
-        mCommHotAdapter.setHeaderView(textView);
+        //头布局
+        View headerView = View.inflate(this, R.layout.header_sort_post_list, null);
+        ImageView ivBg = (ImageView) headerView.findViewById(R.id.iv_bg);
+        ImageView ivLabel = (ImageView) headerView.findViewById(R.id.iv_class_label);
+        TextView tvPostNum = (TextView) headerView.findViewById(R.id.tv_post_num);
+        TextView tvPostDes = (TextView) headerView.findViewById(R.id.tv_post_describe);
+        Glide.with(getApplication())
+                .load(getIntent().getStringExtra("class_image"))
+                .transform(new BlurTransformation(PostClassListActivity.this, 20))
+
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(ivBg);
+        Glide.with(getApplication())
+                .load(getIntent().getStringExtra("class_image"))
+                .transform(new GlideCircleTransform(PostClassListActivity.this))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(ivLabel);
+        tvPostNum.setText(getIntent().getStringExtra("posts_num"));
+        tvPostDes.setText(getIntent().getStringExtra("describe"));
+
+
+        mCommHotAdapter.setHeaderView(headerView);
         mCommHotAdapter.setFooterView(loadingData);
         mRecyclerView.setAdapter(mCommHotAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -220,6 +245,7 @@ public class PostClassListActivity extends AppCompatActivity {
      * 初始化数据
      */
     public void initData(int PAGENUMBER) {
+
         OkHttpUtils.post()//
                 .addParams("page",String.valueOf(PAGENUMBER))
                 .addParams("fid",getIntent().getStringExtra("list_id"))

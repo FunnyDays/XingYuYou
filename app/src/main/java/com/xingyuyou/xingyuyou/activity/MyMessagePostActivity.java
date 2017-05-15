@@ -1,18 +1,16 @@
 package com.xingyuyou.xingyuyou.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -25,16 +23,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
-import com.xingyuyou.xingyuyou.Utils.DiffCallBack;
-import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.SPUtils;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
-import com.xingyuyou.xingyuyou.Utils.glide.GlideRoundTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
-import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
-import com.xingyuyou.xingyuyou.adapter.FenLeiGameAdapter;
-import com.xingyuyou.xingyuyou.bean.community.LabelClassBean;
 import com.xingyuyou.xingyuyou.bean.user.MyReplyPostBean;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -48,7 +40,7 @@ import java.util.List;
 
 import okhttp3.Call;
 
-public class MyReplyPostActivity extends AppCompatActivity {
+public class MyMessagePostActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private RecyclerView mRecyclerView;
@@ -64,7 +56,7 @@ public class MyReplyPostActivity extends AppCompatActivity {
             super.handleMessage(msg);
             if (msg.what == 1) {
                 if (msg.obj.toString().contains("\"data\":null")) {
-                    Toast.makeText(MyReplyPostActivity.this, "已经没有更多数据", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MyMessagePostActivity.this, "已经没有更多数据", Toast.LENGTH_SHORT).show();
                     mPbNodata.setVisibility(View.GONE);
                     mTvNodata.setText("已经没有更多数据");
                     return;
@@ -84,7 +76,7 @@ public class MyReplyPostActivity extends AppCompatActivity {
                         mDatas.addAll(mMyReplyPostList);
                     }
                     if (mMyReplyPostList.size()<20){
-                        Toast.makeText(MyReplyPostActivity.this, "已经没有更多数据", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MyMessagePostActivity.this, "已经没有更多数据", Toast.LENGTH_SHORT).show();
                         mPbNodata.setVisibility(View.GONE);
                         mTvNodata.setText("已经没有更多数据");
                     }
@@ -113,7 +105,7 @@ public class MyReplyPostActivity extends AppCompatActivity {
         SPUtils user_data = new SPUtils("user_data");
         mUserId = user_data.getString("id");
         OkHttpUtils.post()//
-                .url(XingYuInterface.MY_REPLIES_LIST)
+                .url(XingYuInterface.GET_MYNEWS_LIST)
                 .addParams("uid", mUserId)
                 .addParams("page", String.valueOf(PAGENUMBER))
                 .tag(this)//
@@ -132,7 +124,7 @@ public class MyReplyPostActivity extends AppCompatActivity {
 
     private void initToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle("我的回帖");
+        mToolbar.setTitle("我的消息");
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,14 +134,14 @@ public class MyReplyPostActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        View loadingData = View.inflate(MyReplyPostActivity.this, R.layout.default_loading, null);
+        View loadingData = View.inflate(MyMessagePostActivity.this, R.layout.default_loading, null);
         mPbNodata = (ProgressBar) loadingData.findViewById(R.id.pb_loading);
         mTvNodata = (TextView) loadingData.findViewById(R.id.loading_text);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mPostAdapter = new MyReplyPostAdapter();
-        mPostAdapter.setHeaderView(new View(MyReplyPostActivity.this));
+        mPostAdapter.setHeaderView(new View(MyMessagePostActivity.this));
         mPostAdapter.setFooterView(loadingData);
         mRecyclerView.setAdapter(mPostAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -231,7 +223,7 @@ public class MyReplyPostActivity extends AppCompatActivity {
             if (mFooterView != null && viewType == TYPE_FOOTER) {
                 return new ItemViewHolder(mFooterView);
             }
-            View layout = LayoutInflater.from(MyReplyPostActivity.this).inflate(R.layout.item_my_reply_list, parent, false);
+            View layout = LayoutInflater.from(MyMessagePostActivity.this).inflate(R.layout.item_my_reply_list, parent, false);
             return new ItemViewHolder(layout);
         }
 
@@ -247,14 +239,14 @@ public class MyReplyPostActivity extends AppCompatActivity {
                     Glide.with(getApplication())
                             .load(mDatas.get(position-1).getHead_image())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .transform(new GlideCircleTransform(MyReplyPostActivity.this))
+                            .transform(new GlideCircleTransform(MyMessagePostActivity.this))
                             .into(((ItemViewHolder) holder).mIvUserPhoto);
                     ((ItemViewHolder) holder).mItemOnclick.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(MyReplyPostActivity.this, PostDetailActivity.class);
+                            Intent intent = new Intent(MyMessagePostActivity.this, PostDetailActivity.class);
                             intent.putExtra("post_id", mDatas.get(position - 1).getId());
-                            MyReplyPostActivity.this.startActivity(intent);
+                            MyMessagePostActivity.this.startActivity(intent);
                         }
                     });
                     return;

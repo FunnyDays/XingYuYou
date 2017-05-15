@@ -45,8 +45,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="邮箱: 946551863@qq.com"
-                android:textSize="22sp"/>
+                android:text="邮箱：946551863@qq.com"
+                android:textSize="16sp"/>
 
             <View
                 android:layout_width="match_parent"
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="官群：614848840"
-                android:textSize="22sp"/>
+                android:textSize="16sp"/>
 
            <!-- <View
                 android:layout_width="match_parent"
@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="免责声明"
-                android:textSize="22sp"/>
+                android:textSize="16sp"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
