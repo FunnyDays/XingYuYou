@@ -245,7 +245,7 @@ public class MyMessagePostActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             Intent intent = new Intent(MyMessagePostActivity.this, PostDetailActivity.class);
-                            intent.putExtra("post_id", mDatas.get(position - 1).getId());
+                            intent.putExtra("post_id", mDatas.get(position - 1).getTid());
                             MyMessagePostActivity.this.startActivity(intent);
                         }
                     });

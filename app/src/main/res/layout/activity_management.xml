@@ -77,7 +77,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@mipmap/libao"/>
+                        android:src="@mipmap/ic_game_package"/>
 
                     <TextView
                         style="@style/ManageTextView"
@@ -127,7 +127,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@mipmap/xiezai"/>
+                        android:src="@mipmap/ic_my_commoment"/>
 
                     <TextView
                         style="@style/ManageTextView"
@@ -157,7 +157,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@mipmap/gongju"/>
+                        android:src="@mipmap/ic_my_collect"/>
 
                     <TextView
                         style="@style/ManageTextView"
@@ -187,7 +187,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@mipmap/fenxaing"/>
+                        android:src="@mipmap/ic_my_message"/>
 
                     <TextView
                         style="@style/ManageTextView"
@@ -215,7 +215,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@mipmap/fenxaing"/>
+                        android:src="@mipmap/ic_my_post"/>
 
                     <TextView
                         style="@style/ManageTextView"
@@ -245,7 +245,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@mipmap/xiazai"/>
+                        android:src="@mipmap/ic_download"/>
 
                     <TextView
                         style="@style/ManageTextView"
@@ -274,7 +274,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@mipmap/xiazai"/>
+                        android:src="@mipmap/ic_messgae"/>
 
                     <TextView
                         style="@style/ManageTextView"
@@ -304,7 +304,10 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@mipmap/xiazai"/>
+                        android:src="@mipmap/ic_tools"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"/>
 
                     <TextView
                         style="@style/ManageTextView"
@@ -334,7 +337,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@mipmap/guanyu"/>
+                        android:src="@mipmap/ic_qq_group"/>
 
                     <TextView
                         style="@style/ManageTextView"

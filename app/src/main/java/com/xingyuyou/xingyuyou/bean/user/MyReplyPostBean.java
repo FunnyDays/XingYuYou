@@ -19,6 +19,7 @@ public class MyReplyPostBean {
      */
 
     private String id;
+    private String tid;
     private String uid;
     private String re_conenct;
     private String conenct;
@@ -34,7 +35,13 @@ public class MyReplyPostBean {
     public void setId(String id) {
         this.id = id;
     }
+    public String getTid() {
+        return tid;
+    }
 
+    public void setTid(String tid) {
+        this.tid = tid;
+    }
     public String getUid() {
         return uid;
     }

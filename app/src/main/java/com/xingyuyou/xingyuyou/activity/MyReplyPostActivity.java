@@ -253,7 +253,7 @@ public class MyReplyPostActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             Intent intent = new Intent(MyReplyPostActivity.this, PostDetailActivity.class);
-                            intent.putExtra("post_id", mDatas.get(position - 1).getId());
+                            intent.putExtra("post_id", mDatas.get(position - 1).getTid());
                             MyReplyPostActivity.this.startActivity(intent);
                         }
                     });

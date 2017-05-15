@@ -3,26 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     >
-    <LinearLayout
-        android:id="@+id/ll_bottom"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
         <RelativeLayout
-
+            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
            >
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_edit_parent"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 >
 
                 <EditText
-                    android:id="@+id/edit_text"
+                    android:id="@+id/bottom_edit_text"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"
@@ -67,7 +61,7 @@
                     tools:text="7766"/>
 
             </LinearLayout>
-            <LinearLayout
+           <!-- <LinearLayout
                 android:id="@+id/ll_send_parent"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -116,20 +110,15 @@
                     android:layout_weight="1"
                     android:background="@color/colorPrimary"
                     android:text="发送"/>
-            </LinearLayout>
-
-        </RelativeLayout>
-        <LinearLayout
-            android:visibility="gone"
-            android:orientation="vertical"
-            android:id="@+id/ll_select_emotion"
-            android:layout_width="match_parent"
-            android:layout_height="200dp">
-            <TextView
-                android:text="hehehhhehe"
+            </LinearLayout>-->
+            <LinearLayout
+                android:id="@+id/ll_send_parent"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:orientation="horizontal">
+            <include layout="@layout/reply_layout"/>
+            </LinearLayout>
+        </RelativeLayout>
 
 </merge>
