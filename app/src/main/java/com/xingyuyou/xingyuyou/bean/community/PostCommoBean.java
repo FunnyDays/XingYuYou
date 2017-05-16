@@ -38,6 +38,22 @@ public class PostCommoBean {
     private List<String> imgarr;
     private List<ChildBean> child;
 
+    public PostCommoBean(String id, String pid, String uid, String replies_content, String dateline, String tid, String floor_num, String nickname, String head_image, String laud_count, String laud_status, List<String> imgarr, List<ChildBean> child) {
+        this.id = id;
+        this.pid = pid;
+        this.uid = uid;
+        this.replies_content = replies_content;
+        this.dateline = dateline;
+        this.tid = tid;
+        this.floor_num = floor_num;
+        this.nickname = nickname;
+        this.head_image = head_image;
+        this.laud_count = laud_count;
+        this.laud_status = laud_status;
+        this.imgarr = imgarr;
+        this.child = child;
+    }
+
     public String getId() {
         return id;
     }

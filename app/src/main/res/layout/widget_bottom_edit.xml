@@ -9,7 +9,7 @@
             android:layout_height="wrap_content"
            >
             <LinearLayout
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/ll_edit_parent"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -112,10 +112,10 @@
                     android:text="发送"/>
             </LinearLayout>-->
             <LinearLayout
-                android:id="@+id/ll_send_parent"
+                android:id="@+id/ll_emotion_parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:orientation="horizontal">
             <include layout="@layout/reply_layout"/>
             </LinearLayout>

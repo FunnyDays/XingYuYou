@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
+import android.sax.RootElement;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -93,6 +96,7 @@ public class PostDetailActivity extends BaseActivity {
             }
             if (msg.what == 2) {
                 String response = (String) msg.obj;
+
                 JSONObject jo = null;
                 try {
                     jo = new JSONObject(response);
@@ -111,8 +115,7 @@ public class PostDetailActivity extends BaseActivity {
         }
     };
     private FrameLayout extendView, emotionView;
-
-    private ScrollView contentView;
+    private NestedScrollView contentView;
     private ImageView extendButton, emotionButton;
     private EditText edittext;
     private Button btnSend;
@@ -135,7 +138,7 @@ public class PostDetailActivity extends BaseActivity {
     private LinearLayout mEditParent;
     private RecyclerView mRecyclerView;
     private ImageAdapter mImageAdapter;
-    private static final int PAGENUM = 1;
+    private int PAGENUM = 1;
     private static final int REQUEST_IMAGE = 2;
     private static final int TYPE_FOOTER = 21;
     private ArrayList<String> mImageList = new ArrayList();
@@ -149,39 +152,22 @@ public class PostDetailActivity extends BaseActivity {
     private RadioGroup rgTipPoints;
     private RadioButton rbPoint;
     private static final int emsNumOfEveryFragment = 20;//每页的表情数量
+    boolean isLoading = false;
+    private LinearLayoutManager mLayoutManager;
+    private RelativeLayout mTopView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
         initToolBar();
         initKeyBoardView();
-        bindToEmotionKeyboard();
         initView();
         initData();
         initCommoData(PAGENUM);
     }
 
-
-    private void initCommoData(int PAGENUM) {
-        OkHttpUtils.post()//
-                .addParams("page", String.valueOf(PAGENUM))
-                .addParams("tid", getIntent().getStringExtra("post_id"))
-                .url(XingYuInterface.GET_FORUMS_LIST)
-                .tag(this)//
-                .build()//
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        // Log.e("hot", e.toString() + ":e");
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        handler.obtainMessage(2, response).sendToTarget();
-                    }
-                });
-    }
-
+    //********************************************以下是初始化代码**************************************************
     private void initToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.inflateMenu(R.menu.post_share_menu);
@@ -206,6 +192,19 @@ public class PostDetailActivity extends BaseActivity {
         });
     }
 
+    private void initKeyBoardView() {
+        contentView = (NestedScrollView) findViewById(R.id.txt_main_content);
+        extendButton = (ImageView) findViewById(R.id.bt_add_image);
+        emotionButton = (ImageView) findViewById(R.id.img_reply_layout_emotion);
+        edittext = (EditText) findViewById(R.id.edit_text);
+        edittext.addTextChangedListener(new ButtonBtnWatcher());//动态监听EditText
+        btnSend = (Button) findViewById(R.id.btn_send);
+        extendView = (FrameLayout) findViewById(R.id.extend_layout);
+        emotionView = (FrameLayout) findViewById(R.id.emotion_layout);
+        //绑定软键盘
+        bindToEmotionKeyboard();
+    }
+
     private void initView() {
         mTvContent = (TextView) findViewById(R.id.tv_content);
         mUserName = (TextView) findViewById(R.id.tv_user_name);
@@ -216,159 +215,20 @@ public class PostDetailActivity extends BaseActivity {
         mRootImage = (LinearLayout) findViewById(R.id.ll_root_image);
         mIvUserPhoto = (ImageView) findViewById(R.id.civ_user_photo);
         mEditText = (EditText) findViewById(R.id.bottom_edit_text);
-       // mEditTextReal = (EditText) findViewById(R.id.edit_text_real);
+        // mEditTextReal = (EditText) findViewById(R.id.edit_text_real);
         //底部两个editText视图parent
         mLinearLayout = (LinearLayout) findViewById(R.id.ll_edit_parent);
-        mLinearLayout2 = (LinearLayout) findViewById(R.id.ll_send_parent);
-       // mSelectEmotion = (LinearLayout) findViewById(R.id.ll_select_emotion);
-        mButton = (Button) findViewById(R.id.btn_send);
+        mLinearLayout2 = (LinearLayout) findViewById(R.id.ll_emotion_parent);
+        // mSelectEmotion = (LinearLayout) findViewById(R.id.ll_select_emotion);
         mRecyclerView = (RecyclerView) findViewById(R.id.rl_all_image);
         initRecyclerView();
         mCommoListView = (RecyclerView) findViewById(R.id.rl_comm_list);
         initCommoListView();
     }
-    private void initKeyBoardView() {
-        contentView = (ScrollView) findViewById(R.id.txt_main_content);
-        extendButton = (ImageView) findViewById(R.id.bt_add_image);
-        emotionButton = (ImageView) findViewById(R.id.img_reply_layout_emotion);
-        edittext = (EditText) findViewById(R.id.edit_text);
-        edittext.addTextChangedListener(new ButtonBtnWatcher());//动态监听EditText
-        btnSend = (Button) findViewById(R.id.btn_send);
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(PostDetailActivity.this, edittext.getText(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        extendView = (FrameLayout) findViewById(R.id.extend_layout);
-        emotionView = (FrameLayout) findViewById(R.id.emotion_layout);
-    }
-    /* EditText输入框动态监听 */
-    class ButtonBtnWatcher implements TextWatcher {
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if(!TextUtils.isEmpty(edittext.getText().toString())){ //有文本内容，按钮为可点击状态
-                btnSend.setBackgroundResource(R.drawable.shape_button_reply_button_clickable);
-                btnSend.setTextColor(getResources().getColor(R.color.light_white));
-            } else { // 无文本内容，按钮为不可点击状态
-                btnSend.setBackgroundResource(R.drawable.shape_button_reply_button_unclickable);
-                btnSend.setTextColor(getResources().getColor(R.color.reply_button_text_disable));
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-        }
-    }
-
-    private void bindToEmotionKeyboard() {
-        emotionKeyboard = EmotionKeyboard.with(this)
-                .setExtendView(extendView)
-                .setEmotionView(emotionView)
-                .bindToContent(contentView)
-                .bindToEditText(edittext)
-                .bindToExtendButton(extendButton)
-                .bindToEmotionButton(emotionButton)
-                .build();
-        setUpEmotionViewPager();
-        setUpExtendView();
-    }
-    /* 设置表情布局下的视图 */
-    private void setUpEmotionViewPager() {
-        int fragmentNum;
-		/*获取ems文件夹有多少个表情  减1 是因为有个删除键
-                         每页20个表情  总共有length个表情
-                         先判断能不能整除  判断是否有不满一页的表情
-		 */
-        int emsTotalNum = getSizeOfAssetsCertainFolder("ems") - 1;//表情的数量(除去删除按钮)
-        if(emsTotalNum % emsNumOfEveryFragment == 0){
-            fragmentNum = emsTotalNum / emsNumOfEveryFragment;
-        } else {
-            fragmentNum = (emsTotalNum / emsNumOfEveryFragment) + 1;
-        }
-        EmotionAdapter mViewPagerAdapter = new EmotionAdapter(getSupportFragmentManager(), fragmentNum);
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mViewPagerAdapter);
-        mViewPager.setCurrentItem(0);
-
-        GlobalOnItemClickManager globalOnItemClickListener = GlobalOnItemClickManager.getInstance();
-        globalOnItemClickListener.attachToEditText((EditText)findViewById(R.id.edit_text));
-
-		/* 设置表情下的提示点 */
-        setUpTipPoints(fragmentNum, mViewPager);
-    }
-    /* 获取assets下某个指定文件夹下的文件数量 */
-    private int getSizeOfAssetsCertainFolder(String folderName){
-        int size = 0;
-        try {
-            size = getAssets().list(folderName).length;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return size;
-    }
-
-    /* 设置扩展布局下的视图 */
-    private void setUpExtendView() {
-        mRecyclerView = (RecyclerView) findViewById(R.id.rl_all_image);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(PostDetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
-        mImageAdapter = new ImageAdapter();
-        mRecyclerView.setAdapter(mImageAdapter);
-    }
 
     /**
-     @param
-     num   提示点的数量
+     * 获取文章内容
      */
-    private void setUpTipPoints(int num, ViewPager mViewPager) {
-        rgTipPoints = (RadioGroup) findViewById(R.id.rg_reply_layout);
-        for(int i=0;i<num;i++){
-            rbPoint = new RadioButton(this);
-            RadioGroup.LayoutParams lp = new RadioGroup.LayoutParams(30, 30);
-            lp.setMargins(10, 0, 10, 0);
-            rbPoint.setLayoutParams(lp);
-            rbPoint.setId(i);//为每个RadioButton设置标记
-            rbPoint.setButtonDrawable(getResources().getDrawable(R.color.transparent));//设置button为@null
-            rbPoint.setBackgroundResource(R.drawable.emotion_tip_points_selector);
-            rbPoint.setClickable(false);
-            if(i == 0){ // 第一个点默认为选中，与其他点显示颜色不同
-                rbPoint.setChecked(true);
-            } else {
-                rbPoint.setChecked(false);
-            }
-            rgTipPoints.addView(rbPoint);
-        }
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                rgTipPoints.check(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
-    }
-    private void initCommoListView() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setSmoothScrollbarEnabled(true);
-        linearLayoutManager.setAutoMeasureEnabled(true);
-        mCommoListView.setLayoutManager(linearLayoutManager);
-        mCommoListView.setHasFixedSize(true);
-        mCommoListView.setNestedScrollingEnabled(false);
-        mCommoListAdapter = new CommoListAdapter();
-        mCommoListView.setAdapter(mCommoListAdapter);
-    }
-
     @Override
     public void initData() {
         OkHttpUtils.post()//
@@ -390,6 +250,300 @@ public class PostDetailActivity extends BaseActivity {
 
     }
 
+    /**
+     * 获取评论内容
+     *
+     * @param PAGENUM
+     */
+    private void initCommoData(int PAGENUM) {
+        OkHttpUtils.post()//
+                .addParams("page", String.valueOf(PAGENUM))
+                .addParams("tid", getIntent().getStringExtra("post_id"))
+                .url(XingYuInterface.GET_FORUMS_LIST)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        // Log.e("hot", e.toString() + ":e");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        handler.obtainMessage(2, response).sendToTarget();
+                    }
+                });
+    }
+
+    //*********************************************以下是软键盘设置代码*****************************************************
+
+    /**
+     * 绑定软键盘
+     */
+    private void bindToEmotionKeyboard() {
+        emotionKeyboard = EmotionKeyboard.with(this)
+                .setExtendView(extendView)
+                .setEmotionView(emotionView)
+                .bindToContent(contentView)
+                .bindToEditText(edittext)
+                .bindToExtendButton(extendButton)
+                .bindToEmotionButton(emotionButton)
+                .build();
+        setUpEmotionViewPager();
+        setUpExtendView();
+    }
+
+    /**
+     * 软键盘文本内容监听
+     */
+    class ButtonBtnWatcher implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (!TextUtils.isEmpty(edittext.getText().toString())) { //有文本内容，按钮为可点击状态
+                btnSend.setBackgroundResource(R.drawable.shape_button_reply_button_clickable);
+                btnSend.setTextColor(getResources().getColor(R.color.light_white));
+            } else { // 无文本内容，按钮为不可点击状态
+                btnSend.setBackgroundResource(R.drawable.shape_button_reply_button_unclickable);
+                btnSend.setTextColor(getResources().getColor(R.color.reply_button_text_disable));
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+    }
+
+
+    /**
+     * 设置表情布局下的视图
+     */
+    private void setUpEmotionViewPager() {
+        int fragmentNum;
+        /*获取ems文件夹有多少个表情  减1 是因为有个删除键
+                         每页20个表情  总共有length个表情
+                         先判断能不能整除  判断是否有不满一页的表情
+		 */
+        int emsTotalNum = getSizeOfAssetsCertainFolder("ems") - 1;//表情的数量(除去删除按钮)
+        if (emsTotalNum % emsNumOfEveryFragment == 0) {
+            fragmentNum = emsTotalNum / emsNumOfEveryFragment;
+        } else {
+            fragmentNum = (emsTotalNum / emsNumOfEveryFragment) + 1;
+        }
+        EmotionAdapter mViewPagerAdapter = new EmotionAdapter(getSupportFragmentManager(), fragmentNum);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(mViewPagerAdapter);
+        mViewPager.setCurrentItem(0);
+
+        GlobalOnItemClickManager globalOnItemClickListener = GlobalOnItemClickManager.getInstance();
+        globalOnItemClickListener.attachToEditText((EditText) findViewById(R.id.edit_text));
+
+		/* 设置表情下的提示点 */
+        setUpTipPoints(fragmentNum, mViewPager);
+    }
+
+    /**
+     * 获取assets下某个指定文件夹下的文件数量
+     */
+    private int getSizeOfAssetsCertainFolder(String folderName) {
+        int size = 0;
+        try {
+            size = getAssets().list(folderName).length;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return size;
+    }
+
+    /**
+     * 设置扩展布局下的视图
+     */
+    private void setUpExtendView() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.rl_all_image);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(PostDetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        mImageAdapter = new ImageAdapter();
+        mRecyclerView.setAdapter(mImageAdapter);
+    }
+
+    /**
+     * @param num 提示点的数量
+     */
+    private void setUpTipPoints(int num, ViewPager mViewPager) {
+        rgTipPoints = (RadioGroup) findViewById(R.id.rg_reply_layout);
+        for (int i = 0; i < num; i++) {
+            rbPoint = new RadioButton(this);
+            RadioGroup.LayoutParams lp = new RadioGroup.LayoutParams(30, 30);
+            lp.setMargins(10, 0, 10, 0);
+            rbPoint.setLayoutParams(lp);
+            rbPoint.setId(i);//为每个RadioButton设置标记
+            rbPoint.setButtonDrawable(getResources().getDrawable(R.color.transparent));//设置button为@null
+            rbPoint.setBackgroundResource(R.drawable.emotion_tip_points_selector);
+            rbPoint.setClickable(false);
+            if (i == 0) { // 第一个点默认为选中，与其他点显示颜色不同
+                rbPoint.setChecked(true);
+            } else {
+                rbPoint.setChecked(false);
+            }
+            rgTipPoints.addView(rbPoint);
+        }
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                rgTipPoints.check(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+    }
+
+    //***********************************************以下是评论列表****************************************************
+    private void initCommoListView() {
+        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mCommoListView.setLayoutManager(mLayoutManager);
+        mCommoListView.setNestedScrollingEnabled(false);
+        mCommoListAdapter = new CommoListAdapter();
+        mCommoListView.setAdapter(mCommoListAdapter);
+        contentView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (v.getMeasuredHeight() > (v.getChildAt(0).getMeasuredHeight() - scrollY) / 2) {
+                    if (!isLoading) {
+                        isLoading = true;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                PAGENUM++;
+                                initCommoData(PAGENUM);
+                                isLoading = false;
+                            }
+                        }, 200);
+                    }
+                }
+            }
+        });
+    }
+
+    private class CommoListAdapter extends RecyclerView.Adapter {
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View layout = LayoutInflater.from(PostDetailActivity.this).inflate(R.layout.item_commo_post_list, parent, false);
+            return new ItemViewHolder(layout);
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if (holder instanceof CommoListAdapter.ItemViewHolder) {
+                if (mCommoAdapterList.get(position).getImgarr().size() != 0) {
+                    for (int i = 0; i < mCommoAdapterList.get(position).getImgarr().size(); i++) {
+                        ImageView imageView = new ImageView(PostDetailActivity.this);
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        lp.setMargins(ConvertUtils.dp2px(10), 0, ConvertUtils.dp2px(10), ConvertUtils.dp2px(5));
+                        imageView.setLayoutParams(lp);
+                        imageView.setAdjustViewBounds(true);
+                        Glide.with(PostDetailActivity.this)
+                                .load(mCommoAdapterList.get(position).getImgarr().get(i))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(imageView);
+                        ((CommoListAdapter.ItemViewHolder) holder).mLlRootImageItem.addView(imageView);
+                    }
+                }
+                Glide.with(PostDetailActivity.this)
+                        .load(mCommoAdapterList.get(position).getHead_image())
+                        .transform(new GlideCircleTransform(PostDetailActivity.this))
+                        .into(((CommoListAdapter.ItemViewHolder) holder).mUserPhoto);
+                ((CommoListAdapter.ItemViewHolder) holder).mUserName
+                        .setText(mCommoAdapterList.get(position).getNickname());
+                ((CommoListAdapter.ItemViewHolder) holder).mPostTime
+                        .setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mCommoAdapterList.get(position).getDateline() + "000")));
+                ((CommoListAdapter.ItemViewHolder) holder).mFloorNum
+                        .setText(mCommoAdapterList.get(position).getFloor_num() + "楼");
+                ((CommoListAdapter.ItemViewHolder) holder).mLoveNum
+                        .setText(mCommoAdapterList.get(position).getLaud_count());
+                ((CommoListAdapter.ItemViewHolder) holder).mCommoContent
+                        .setText(mCommoAdapterList.get(position).getReplies_content());
+                if (mCommoAdapterList.get(position).getChild() != null && mCommoAdapterList.get(position).getChild().size() > 0) {
+                    ((CommoListAdapter.ItemViewHolder) holder).mLlMoreCommoItem.setVisibility(View.VISIBLE);
+                    ((CommoListAdapter.ItemViewHolder) holder).mCommo2Name
+                            .setText(mCommoAdapterList.get(position).getChild().get(0).getNickname() + ":");
+                    ((CommoListAdapter.ItemViewHolder) holder).mCommo2Content
+                            .setText(mCommoAdapterList.get(position).getChild().get(0).getReplies_content());
+                    ((CommoListAdapter.ItemViewHolder) holder).mCommo2Time
+                            .setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mCommoAdapterList.get(position).getChild().get(0).getDateline() + "000")));
+                }
+                ((CommoListAdapter.ItemViewHolder) holder).mLlMoreCommoItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivityToPostReplyCommo();
+                    }
+                });
+                ((CommoListAdapter.ItemViewHolder) holder).mLlCommoItemDetail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivityToPostReplyCommo();
+                    }
+                });
+
+            }
+        }
+
+        private void startActivityToPostReplyCommo() {
+            Intent intent = new Intent(PostDetailActivity.this, PostReplyCommoActivity.class);
+            intent.putExtra("content", "");
+            PostDetailActivity.this.startActivity(intent);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mCommoAdapterList.size();
+        }
+
+        class ItemViewHolder extends RecyclerView.ViewHolder {
+
+            private ImageView mUserPhoto;
+            private ImageView mLove;
+            private TextView mUserName;
+            private TextView mPostTime;
+            private TextView mFloorNum;
+            private TextView mLoveNum;
+            private TextView mCommoContent;
+            private TextView mCommo2Name;
+            private TextView mCommo2Content;
+            private TextView mCommo2Time;
+            private LinearLayout mLlCommoItemDetail;
+            private LinearLayout mLlMoreCommoItem;
+            private LinearLayout mLlRootImageItem;
+
+            public ItemViewHolder(View itemView) {
+                super(itemView);
+                mUserPhoto = (ImageView) itemView.findViewById(R.id.iv_user_photo);
+                mLove = (ImageView) itemView.findViewById(R.id.iv_love);
+                mUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
+                mPostTime = (TextView) itemView.findViewById(R.id.tv_post_time);
+                mFloorNum = (TextView) itemView.findViewById(R.id.tv_floor_num);
+                mLoveNum = (TextView) itemView.findViewById(R.id.tv_love_num);
+                mCommoContent = (TextView) itemView.findViewById(R.id.tv_commo_content);
+                mCommo2Name = (TextView) itemView.findViewById(R.id.tv_commo2_name);
+                mCommo2Content = (TextView) itemView.findViewById(R.id.tv_commo2_content);
+                mCommo2Time = (TextView) itemView.findViewById(R.id.tv_commo2_time);
+                mLlCommoItemDetail = (LinearLayout) itemView.findViewById(R.id.item_commo_detail);
+                mLlMoreCommoItem = (LinearLayout) itemView.findViewById(R.id.ll_more_commo_item);
+                mLlRootImageItem = (LinearLayout) itemView.findViewById(R.id.ll_root_image_item);
+            }
+        }
+    }
+
+    //*********************************************以下是赋值代码***************************************************
     private void setValues() {
         Glide.with(getApplication())
                 .load(mPostDetailBean.getHead_image())
@@ -415,41 +569,23 @@ public class PostDetailActivity extends BaseActivity {
                     .into(imageView);
             mRootImage.addView(imageView);
         }
-        mEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               // Toast.makeText(PostDetailActivity.this, "gagagaga", Toast.LENGTH_SHORT).show();
-            }
-        });
+
         mEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-               // Toast.makeText(PostDetailActivity.this, "gaaaaa", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(PostDetailActivity.this, "gaaaaa", Toast.LENGTH_SHORT).show();
                 mLinearLayout.setVisibility(View.GONE);
                 mLinearLayout2.setVisibility(View.VISIBLE);
                 //开启软键盘
-               // KeyboardUtils.showSoftInput(mEditTextReal);
+                KeyboardUtils.showSoftInput(edittext);
             }
         });
-     /*   mButton.setOnClickListener(new View.OnClickListener() {
+        btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (StringUtils.isEmpty(mEditTextReal.getText().toString().trim())) {
-                    Toast.makeText(PostDetailActivity.this, "请输入内容", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 sendReply();
-                int visibility = mRecyclerView.getVisibility();
-                switch (visibility) {
-                    case View.GONE:
-                        break;
-                    case View.VISIBLE:
-                        mImageList.clear();
-                        mRecyclerView.setVisibility(View.GONE);
-                        break;
-                }
             }
-        });*/
+        });
         mCollectNum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -460,7 +596,7 @@ public class PostDetailActivity extends BaseActivity {
         mCommNum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  Toast.makeText(PostDetailActivity.this, "评论", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(PostDetailActivity.this, "评论", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -471,45 +607,19 @@ public class PostDetailActivity extends BaseActivity {
 
             }
         });
-       /* mAddImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int visibility = mRecyclerView.getVisibility();
-                switch (visibility) {
-                    case View.GONE:
-                        mRecyclerView.setVisibility(View.VISIBLE);
-                        break;
-                    case View.VISIBLE:
-                        mRecyclerView.setVisibility(View.GONE);
-                        mImageList.clear();
-                        break;
-                }
-            }
-        });*/
-       /* mAddExpression.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int visibility = mSelectEmotion.getVisibility();
-                switch (visibility) {
-                    case View.GONE:
-                        mSelectEmotion.setVisibility(View.VISIBLE);
-                        KeyboardUtils.hideSoftInput(PostDetailActivity.this);
-                        break;
-                    case View.VISIBLE:
-                        mSelectEmotion.setVisibility(View.GONE);
-                        KeyboardUtils.showSoftInput(mEditTextReal);
-                        //mImageList.clear();
-                        break;
-                }
 
-            }
-        });*/
     }
 
     /**
      * 回帖
      */
     private void sendReply() {
+        if (StringUtils.isEmpty(edittext.getText().toString().trim())) {
+            Toast.makeText(this, "评论内容为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //关闭键盘
+        KeyboardUtils.hideSoftInput(this);
         mDialog = new CustomDialog(PostDetailActivity.this, "正在回帖中...");
         mDialog.showDialog();
 
@@ -517,8 +627,9 @@ public class PostDetailActivity extends BaseActivity {
         params.put("pid", "0");
         params.put("uid", "105");
         params.put("tid", mPostDetailBean.getId());
-        params.put("replies_content", mEditTextReal.getText().toString().trim());
-
+        params.put("replies_content", edittext.getText().toString().trim());
+        //隐藏键盘
+        emotionKeyboard.interceptBackPress();
         PostFormBuilder post = OkHttpUtils.post();
         for (int i = 0; i < mImageList.size(); i++) {
             File file = new File(mImageList.get(i));
@@ -542,26 +653,18 @@ public class PostDetailActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         mDialog.dismissDialog();
-                        initCommoData(PAGENUM);
+                        mImageList.clear();
+                        // mCommoAdapterList.clear();
+                        //待优化
                     }
                 });
     }
 
+    //**********************************************以下是回复图片设置代码****************************************************
     private void initRecyclerView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(PostDetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
         mImageAdapter = new ImageAdapter();
         mRecyclerView.setAdapter(mImageAdapter);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE) {
-            if (resultCode == RESULT_OK) {
-                List<String> path = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-                mImageList.addAll(path);
-                mImageAdapter.notifyDataSetChanged();
-            }
-        }
     }
 
     private class ImageAdapter extends RecyclerView.Adapter {
@@ -634,97 +737,23 @@ public class PostDetailActivity extends BaseActivity {
         }
     }
 
-    private class CommoListAdapter extends RecyclerView.Adapter {
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View layout = LayoutInflater.from(PostDetailActivity.this).inflate(R.layout.item_commo_post_list, parent, false);
-            return new ItemViewHolder(layout);
+    @Override
+    public void onBackPressed() {
+        if (!emotionKeyboard.interceptBackPress()) {
+            super.onBackPressed();
         }
+    }
 
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (holder instanceof CommoListAdapter.ItemViewHolder) {
-                if (mCommoAdapterList.get(position).getImgarr().size()!=0){
-                    for (int i = 0; i < mCommoAdapterList.get(position).getImgarr().size(); i++) {
-                        ImageView imageView = new ImageView(PostDetailActivity.this);
-                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        lp.setMargins(ConvertUtils.dp2px(10), 0, ConvertUtils.dp2px(10), ConvertUtils.dp2px(5));
-                        imageView.setLayoutParams(lp);
-                        imageView.setAdjustViewBounds(true);
-                        Glide.with(PostDetailActivity.this)
-                                .load(mCommoAdapterList.get(position).getImgarr().get(i))
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(imageView);
-                        ((CommoListAdapter.ItemViewHolder) holder).mLlRootImageItem.addView(imageView);
-                    }
-                }
-                Glide.with(PostDetailActivity.this)
-                        .load(mCommoAdapterList.get(position).getHead_image())
-                        .into(((CommoListAdapter.ItemViewHolder) holder).mUserPhoto);
-                ((CommoListAdapter.ItemViewHolder) holder).mUserName
-                        .setText(mCommoAdapterList.get(position).getNickname());
-                ((CommoListAdapter.ItemViewHolder) holder).mPostTime
-                        .setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mCommoAdapterList.get(position).getDateline() + "000")));
-                ((CommoListAdapter.ItemViewHolder) holder).mFloorNum
-                        .setText(mCommoAdapterList.get(position).getFloor_num()+"楼");
-                ((CommoListAdapter.ItemViewHolder) holder).mLoveNum
-                        .setText(mCommoAdapterList.get(position).getLaud_count());
-                ((CommoListAdapter.ItemViewHolder) holder).mCommoContent
-                        .setText(mCommoAdapterList.get(position).getReplies_content());
-                if (mCommoAdapterList.get(position).getChild()!=null&&mCommoAdapterList.get(position).getChild().size() > 0) {
-                    ((CommoListAdapter.ItemViewHolder) holder).mLlMoreCommoItem.setVisibility(View.VISIBLE);
-                    ((CommoListAdapter.ItemViewHolder) holder).mCommo2Name
-                            .setText(mCommoAdapterList.get(position).getChild().get(0).getNickname()+":");
-                    ((CommoListAdapter.ItemViewHolder) holder).mCommo2Content
-                            .setText(mCommoAdapterList.get(position).getChild().get(0).getReplies_content());
-                    ((CommoListAdapter.ItemViewHolder) holder).mCommo2Time
-                            .setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mCommoAdapterList.get(position).getChild().get(0).getDateline() + "000")));
-                }
-                ((CommoListAdapter.ItemViewHolder) holder).mLlMoreCommoItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(PostDetailActivity.this, "新评论界面", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            return mCommoAdapterList.size();
-        }
-
-        class ItemViewHolder extends RecyclerView.ViewHolder {
-
-            private ImageView mUserPhoto;
-            private ImageView mLove;
-            private TextView mUserName;
-            private TextView mPostTime;
-            private TextView mFloorNum;
-            private TextView mLoveNum;
-            private TextView mCommoContent;
-            private TextView mCommo2Name;
-            private TextView mCommo2Content;
-            private TextView mCommo2Time;
-            private LinearLayout mLlMoreCommoItem;
-            private LinearLayout mLlRootImageItem;
-
-
-            public ItemViewHolder(View itemView) {
-                super(itemView);
-                mUserPhoto = (ImageView) itemView.findViewById(R.id.iv_user_photo);
-                mLove = (ImageView) itemView.findViewById(R.id.iv_love);
-                mUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
-                mPostTime = (TextView) itemView.findViewById(R.id.tv_post_time);
-                mFloorNum = (TextView) itemView.findViewById(R.id.tv_floor_num);
-                mLoveNum = (TextView) itemView.findViewById(R.id.tv_love_num);
-                mCommoContent = (TextView) itemView.findViewById(R.id.tv_commo_content);
-                mCommo2Name = (TextView) itemView.findViewById(R.id.tv_commo2_name);
-                mCommo2Content = (TextView) itemView.findViewById(R.id.tv_commo2_content);
-                mCommo2Time = (TextView) itemView.findViewById(R.id.tv_commo2_time);
-                mLlMoreCommoItem = (LinearLayout) itemView.findViewById(R.id.ll_more_commo_item);
-                mLlRootImageItem = (LinearLayout) itemView.findViewById(R.id.ll_root_image_item);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE) {
+            if (resultCode == RESULT_OK) {
+                List<String> path = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+                mImageList.addAll(path);
+                mImageAdapter.notifyDataSetChanged();
             }
         }
     }
+
+
 }

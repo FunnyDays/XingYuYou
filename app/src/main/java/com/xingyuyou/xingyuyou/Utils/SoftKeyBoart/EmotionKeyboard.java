@@ -163,6 +163,10 @@ public class EmotionKeyboard {
             hideLayout(mEmotionLayout, false);
             return true;
         }
+        if (mExtendLayout.isShown()) {
+            hideLayout(mExtendLayout, false);
+            return true;
+        }
         return false;
     }
 

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.xingyuyou.xingyuyou.activity.PostReplyCommoActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <LinearLayout
+        android:id="@+id/txt_main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            >
+
+            <ImageView
+                android:id="@+id/iv_user_photo"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_margin="2dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/icon"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/iv_user_photo"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    tools:text="7766"/>
+
+                <TextView
+                    android:id="@+id/tv_post_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    tools:text="7766"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_love_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/tv_floor_num"
+                tools:text="998"/>
+
+            <ImageView
+                android:id="@+id/iv_love"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/tv_love_num"
+                android:src="@mipmap/ic_zan"/>
+
+            <TextView
+                android:id="@+id/tv_floor_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="1楼"
+                android:textColor="@color/blue"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_commo_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="40dp"
+            tools:text="平路的对方的soils的开发"/>
+
+        <LinearLayout
+            android:id="@+id/ll_root_image_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:orientation="vertical">
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/custom_gray"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp">
+        </android.support.v7.widget.RecyclerView>
+
+
+    </LinearLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/reply_layout"/>
+</LinearLayout>
