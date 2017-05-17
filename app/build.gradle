@@ -14,6 +14,9 @@ android {
         renderscriptSupportModeEnabled true
         testInstrumentationRunner "android.support.search.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a"
+        }
     }
     buildTypes {
         release {

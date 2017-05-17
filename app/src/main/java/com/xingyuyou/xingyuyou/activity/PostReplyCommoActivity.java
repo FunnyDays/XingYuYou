@@ -1,14 +1,24 @@
 package com.xingyuyou.xingyuyou.activity;
 
+import android.graphics.Color;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -16,14 +26,42 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.gson.Gson;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.KeyboardUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.EmotionAdapter;
 import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.EmotionKeyboard;
 import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.GlobalOnItemClickManager;
+import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.SpanStringUtils;
+import com.xingyuyou.xingyuyou.Utils.StringUtils;
+import com.xingyuyou.xingyuyou.Utils.TimeUtils;
+import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
+import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.bean.community.PostCommoBean;
+import com.xingyuyou.xingyuyou.bean.user.UserBean;
+import com.xingyuyou.xingyuyou.weight.dialog.CustomDialog;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.builder.PostFormBuilder;
+import com.zhy.http.okhttp.callback.StringCallback;
 
+import net.bither.util.NativeUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PostReplyCommoActivity extends AppCompatActivity {
 
@@ -46,25 +84,80 @@ public class PostReplyCommoActivity extends AppCompatActivity {
     private ImageView extendButton, emotionButton;
     private EditText edittext;
     private Button btnSend;
+    private Toolbar mToolbar;
+    private CustomDialog mDialog;
+    private PostCommoBean mPostCommoBean;
+    private CommoToCommoAdapter mToCommoAdapter;
+    List<PostCommoBean.ChildBean> mCommoAdapterList = new ArrayList();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_reply_commo);
+        initData();
+        initToolBar();
         initKeyBoardView();
         initView();
     }
 
+    private void initData() {
+        String itemList = getIntent().getStringExtra("item_list");
+        try {
+            JSONObject jo = new JSONObject(itemList);
+            Gson gson = new Gson();
+            mPostCommoBean = gson.fromJson(jo.toString(), PostCommoBean.class);
+            if (mPostCommoBean.getChild()!=null)
+            mCommoAdapterList.addAll(mPostCommoBean.getChild());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void initToolBar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
+
     private void initView() {
-        mTvContent = (TextView) findViewById(R.id.tv_content);
         mUserName = (TextView) findViewById(R.id.tv_user_name);
         mPostTime = (TextView) findViewById(R.id.tv_post_time);
         mCommoContent = (TextView) findViewById(R.id.tv_commo_content);
         mFloorNum = (TextView) findViewById(R.id.tv_floor_num);
         mLoveNum = (TextView) findViewById(R.id.tv_love_num);
         mLlRootImage = (LinearLayout) findViewById(R.id.ll_root_image_item);
+
         mIvLove = (ImageView) findViewById(R.id.iv_love);
         mIvUserPhoto = (ImageView) findViewById(R.id.iv_user_photo);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        initRecyclerView();
+        setValues();
+    }
+
+    //****************************************楼中楼回复显示********************************************************
+    private void initRecyclerView() {
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            mToCommoAdapter = new CommoToCommoAdapter();
+            mRecyclerView.setAdapter(mToCommoAdapter);
+
+    }
+
+    private void setValues() {
+        Glide.with(getApplication())
+                .load(mPostCommoBean.getHead_image())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transform(new GlideCircleTransform(getApplication()))
+                .into(mIvUserPhoto);
+        mUserName.setText(mPostCommoBean.getNickname());
+        mPostTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mPostCommoBean.getDateline() + "000")));
+        mCommoContent.setText(SpanStringUtils.getEmotionContent(getApplication(),mCommoContent,mPostCommoBean.getReplies_content()));
+        mFloorNum.setText(mPostCommoBean.getFloor_num() + "楼");
     }
 
     //*****************************************软键盘*****************************************************
@@ -77,9 +170,13 @@ public class PostReplyCommoActivity extends AppCompatActivity {
         btnSend = (Button) findViewById(R.id.btn_send);
         extendView = (FrameLayout) findViewById(R.id.extend_layout);
         emotionView = (FrameLayout) findViewById(R.id.emotion_layout);
+        //发送
+        initButton();
         //绑定软键盘
         bindToEmotionKeyboard();
     }
+
+
     /**
      * 绑定软键盘
      */
@@ -89,7 +186,6 @@ public class PostReplyCommoActivity extends AppCompatActivity {
                 .setEmotionView(emotionView)
                 .bindToContent(contentView)
                 .bindToEditText(edittext)
-                .bindToExtendButton(extendButton)
                 .bindToEmotionButton(emotionButton)
                 .build();
         setUpEmotionViewPager();
@@ -204,5 +300,108 @@ public class PostReplyCommoActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
+    }
+
+    //*****************************************回复****************************************************
+    private void initButton() {
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendReply();
+            }
+        });
+    }
+
+    /**
+     * 回帖
+     */
+    private void sendReply() {
+        if (StringUtils.isEmpty(edittext.getText().toString().trim())) {
+            Toast.makeText(this, "评论内容为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //关闭键盘
+        KeyboardUtils.hideSoftInput(PostReplyCommoActivity.this);
+        emotionKeyboard.interceptBackPress();
+        mDialog = new CustomDialog(PostReplyCommoActivity.this, "正在回复中...");
+        mDialog.showDialog();
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("pid", mPostCommoBean.getId());
+        params.put("uid", UserUtils.getUserId());
+        params.put("tid", mPostCommoBean.getTid());
+        params.put("replies_content", edittext.getText().toString().trim());
+
+        PostFormBuilder post = OkHttpUtils.post();
+
+        post.url(XingYuInterface.REPLIES)
+                .params(params)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(okhttp3.Call call, Exception e, int id) {
+                        mDialog.dismissDialog();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        mDialog.dismissDialog();
+                        // mCommoAdapterList.clear();
+                        //待优化
+                        PostCommoBean.ChildBean childBean = new PostCommoBean.ChildBean();
+                        childBean.setNickname(UserUtils.getNickName());
+                        childBean.setReplies_content(edittext.getText().toString().trim());
+                        childBean.setDateline(String.valueOf(TimeUtils.getNowTimeMills()).substring(0, String.valueOf(TimeUtils.getNowTimeMills()).length() - 3));
+                        mCommoAdapterList.add(childBean);
+                        mToCommoAdapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    private class CommoToCommoAdapter extends RecyclerView.Adapter {
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View layout = LayoutInflater.from(PostReplyCommoActivity.this).inflate(R.layout.item_commo_to_commo_list, parent, false);
+            return new ItemCommoViewHolder(layout);
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+            ((ItemCommoViewHolder) holder).mUser2Name.setText(mCommoAdapterList.get(position).getNickname() + ":");
+            ((ItemCommoViewHolder) holder).mCommo2Content.setText(SpanStringUtils.getEmotionContent(getApplication(),((ItemCommoViewHolder) holder).mCommo2Content,mCommoAdapterList.get(position).getReplies_content()));
+            ((ItemCommoViewHolder) holder).mCommo2Time.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mCommoAdapterList.get(position).getDateline() + "000")));
+            ((ItemCommoViewHolder) holder).mRlItemCommoDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String content = "@" + mCommoAdapterList.get(position).getNickname() + " ";
+                    SpannableString spannableString = new SpannableString(content);
+                    spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.blue)), 0, content.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    edittext.setText(spannableString);
+                    edittext.setSelection(content.length());
+                    //开启键盘
+                    KeyboardUtils.showSoftInput(edittext);
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return mCommoAdapterList.size();
+        }
+
+        class ItemCommoViewHolder extends RecyclerView.ViewHolder {
+            private TextView mUser2Name;
+            private TextView mCommo2Content;
+            private TextView mCommo2Time;
+            private RelativeLayout mRlItemCommoDetail;
+
+            public ItemCommoViewHolder(View itemView) {
+                super(itemView);
+                mRlItemCommoDetail = (RelativeLayout) itemView.findViewById(R.id.item_commo_detail);
+                mUser2Name = (TextView) itemView.findViewById(R.id.tv_user2_name);
+                mCommo2Content = (TextView) itemView.findViewById(R.id.tv_commo2_content);
+                mCommo2Time = (TextView) itemView.findViewById(R.id.tv_commo2_time);
+            }
+        }
     }
 }

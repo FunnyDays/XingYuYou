@@ -38,6 +38,9 @@ public class PostCommoBean {
     private List<String> imgarr;
     private List<ChildBean> child;
 
+    public PostCommoBean() {
+    }
+
     public PostCommoBean(String id, String pid, String uid, String replies_content, String dateline, String tid, String floor_num, String nickname, String head_image, String laud_count, String laud_status, List<String> imgarr, List<ChildBean> child) {
         this.id = id;
         this.pid = pid;
@@ -252,5 +255,24 @@ public class PostCommoBean {
         public void setNickname(String nickname) {
             this.nickname = nickname;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "PostCommoBean{" +
+                "id='" + id + '\'' +
+                ", pid='" + pid + '\'' +
+                ", uid='" + uid + '\'' +
+                ", replies_content='" + replies_content + '\'' +
+                ", dateline='" + dateline + '\'' +
+                ", tid='" + tid + '\'' +
+                ", floor_num='" + floor_num + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", head_image='" + head_image + '\'' +
+                ", laud_count='" + laud_count + '\'' +
+                ", laud_status='" + laud_status + '\'' +
+                ", imgarr=" + imgarr +
+                ", child=" + child +
+                '}';
     }
 }

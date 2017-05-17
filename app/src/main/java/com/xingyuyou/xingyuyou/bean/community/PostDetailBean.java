@@ -8,19 +8,20 @@ import java.util.List;
 
 public class PostDetailBean {
 
-
     /**
-     * id : 103
-     * subject : 测量了了了
-     * message : 好了了了了
-     * posts_image : ["http://xingyuyou.com/Public/app/posts_image/590973907cdaa.png","http://xingyuyou.com/Public/app/posts_image/590973907d1c4.png"]
-     * dateline : 1493791632
-     * posts_laud : 0
-     * posts_forums : 0
-     * posts_collect : 0
-     * nickname : 1111111
-     * head_image : http://xingyuyou.com/Uploads/Picture/2017-03-15/
-     * uid : 206
+     * id : 150
+     * subject : 第二条数据
+     * message : 阿尔山
+     * posts_image : ["http://xingyuyou.com/Public/app/posts_image/591565e82140b.jpg"]
+     * dateline : 1494574568
+     * posts_laud : 1
+     * posts_forums : 6
+     * posts_collect : 1
+     * nickname : 噢耶了了了
+     * head_image : http://xingyuyou.com/Public/app/user_image/["591565e82140b.jpg"]
+     * uid : 105
+     * laud_status : 1
+     * collect_status : 1
      */
 
     private String id;
@@ -33,6 +34,8 @@ public class PostDetailBean {
     private String nickname;
     private String head_image;
     private String uid;
+    private String laud_status;
+    private String collect_status;
     private List<String> posts_image;
 
     public String getId() {
@@ -115,28 +118,27 @@ public class PostDetailBean {
         this.uid = uid;
     }
 
+    public String getLaud_status() {
+        return laud_status;
+    }
+
+    public void setLaud_status(String laud_status) {
+        this.laud_status = laud_status;
+    }
+
+    public String getCollect_status() {
+        return collect_status;
+    }
+
+    public void setCollect_status(String collect_status) {
+        this.collect_status = collect_status;
+    }
+
     public List<String> getPosts_image() {
         return posts_image;
     }
 
     public void setPosts_image(List<String> posts_image) {
         this.posts_image = posts_image;
-    }
-
-    @Override
-    public String toString() {
-        return "PostDetailBean{" +
-                "id='" + id + '\'' +
-                ", subject='" + subject + '\'' +
-                ", message='" + message + '\'' +
-                ", dateline='" + dateline + '\'' +
-                ", posts_laud='" + posts_laud + '\'' +
-                ", posts_forums='" + posts_forums + '\'' +
-                ", posts_collect='" + posts_collect + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", head_image='" + head_image + '\'' +
-                ", uid='" + uid + '\'' +
-                ", posts_image=" + posts_image +
-                '}';
     }
 }

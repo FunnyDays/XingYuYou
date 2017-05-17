@@ -73,7 +73,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:gravity="center"
-            android:text="1楼"
+            android:text="正在抢楼中"
             android:textColor="@color/blue"/>
     </RelativeLayout>
 

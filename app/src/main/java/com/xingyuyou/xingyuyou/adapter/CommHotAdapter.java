@@ -169,7 +169,6 @@ public class CommHotAdapter extends RecyclerView.Adapter {
                         .into(((ItemViewHolder) holder).mPostCover1);
             }
             if (getItemViewType(position) == TYPE_THREE_PIC) {
-
                 Glide.with(mActivity)
                         .load(mListData.get(position - 1).getPosts_image().get(2))
                         .diskCacheStrategy(DiskCacheStrategy.ALL)

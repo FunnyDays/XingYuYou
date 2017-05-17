@@ -1,6 +1,7 @@
 package com.xingyuyou.xingyuyou.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
@@ -36,14 +37,18 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
+import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.KeyboardUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.EmotionAdapter;
 import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.EmotionKeyboard;
 import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.GlobalOnItemClickManager;
+import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.SpanStringUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.base.BaseActivity;
 import com.xingyuyou.xingyuyou.bean.community.PostCommoBean;
 import com.xingyuyou.xingyuyou.bean.community.PostDetailBean;
@@ -442,9 +447,9 @@ public class PostDetailActivity extends BaseActivity {
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
             if (holder instanceof CommoListAdapter.ItemViewHolder) {
-                if (mCommoAdapterList.get(position).getImgarr().size() != 0) {
+                if (mCommoAdapterList.get(position).getImgarr()!=null&&mCommoAdapterList.get(position).getImgarr().size() != 0) {
                     for (int i = 0; i < mCommoAdapterList.get(position).getImgarr().size(); i++) {
                         ImageView imageView = new ImageView(PostDetailActivity.this);
                         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -466,41 +471,48 @@ public class PostDetailActivity extends BaseActivity {
                         .setText(mCommoAdapterList.get(position).getNickname());
                 ((CommoListAdapter.ItemViewHolder) holder).mPostTime
                         .setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mCommoAdapterList.get(position).getDateline() + "000")));
+                if (mCommoAdapterList.get(position).getFloor_num()!=null)
                 ((CommoListAdapter.ItemViewHolder) holder).mFloorNum
                         .setText(mCommoAdapterList.get(position).getFloor_num() + "楼");
+                if (mCommoAdapterList.get(position).getFloor_num()!=null)
                 ((CommoListAdapter.ItemViewHolder) holder).mLoveNum
                         .setText(mCommoAdapterList.get(position).getLaud_count());
                 ((CommoListAdapter.ItemViewHolder) holder).mCommoContent
-                        .setText(mCommoAdapterList.get(position).getReplies_content());
+                        .setText(SpanStringUtils.getEmotionContent(getApplication(),((CommoListAdapter.ItemViewHolder) holder).mCommoContent,mCommoAdapterList.get(position).getReplies_content()));
                 if (mCommoAdapterList.get(position).getChild() != null && mCommoAdapterList.get(position).getChild().size() > 0) {
                     ((CommoListAdapter.ItemViewHolder) holder).mLlMoreCommoItem.setVisibility(View.VISIBLE);
                     ((CommoListAdapter.ItemViewHolder) holder).mCommo2Name
                             .setText(mCommoAdapterList.get(position).getChild().get(0).getNickname() + ":");
                     ((CommoListAdapter.ItemViewHolder) holder).mCommo2Content
-                            .setText(mCommoAdapterList.get(position).getChild().get(0).getReplies_content());
+                            .setText(SpanStringUtils.getEmotionContent(getApplication(),((CommoListAdapter.ItemViewHolder) holder).mCommo2Content,mCommoAdapterList.get(position).getChild().get(0).getReplies_content()));
                     ((CommoListAdapter.ItemViewHolder) holder).mCommo2Time
                             .setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mCommoAdapterList.get(position).getChild().get(0).getDateline() + "000")));
                 }
                 ((CommoListAdapter.ItemViewHolder) holder).mLlMoreCommoItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivityToPostReplyCommo();
+                            startActivityToPostReplyCommo(position);
                     }
                 });
                 ((CommoListAdapter.ItemViewHolder) holder).mLlCommoItemDetail.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivityToPostReplyCommo();
+                            startActivityToPostReplyCommo(position);
                     }
                 });
 
             }
         }
 
-        private void startActivityToPostReplyCommo() {
-            Intent intent = new Intent(PostDetailActivity.this, PostReplyCommoActivity.class);
-            intent.putExtra("content", "");
-            PostDetailActivity.this.startActivity(intent);
+        private void startActivityToPostReplyCommo(int position) {
+            if (mCommoAdapterList.get(position).getFloor_num()!=null){
+                Gson gson = new Gson();
+                String json = gson.toJson(mCommoAdapterList.get(position), PostCommoBean.class);
+                Intent intent = new Intent(PostDetailActivity.this, PostReplyCommoActivity.class);
+                intent.putExtra("item_list", json);
+                PostDetailActivity.this.startActivity(intent);
+            }
+
         }
 
         @Override
@@ -545,6 +557,25 @@ public class PostDetailActivity extends BaseActivity {
 
     //*********************************************以下是赋值代码***************************************************
     private void setValues() {
+        //收藏状态
+        if (mPostDetailBean.getCollect_status().equals("1")){
+            Drawable drawable= getResources().getDrawable(R.mipmap.ic_collect_fill);
+            drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mCollectNum.setCompoundDrawables(null,drawable,null,null);
+        }else {
+            Drawable drawable= getResources().getDrawable(R.mipmap.shoucang);
+            drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mCollectNum.setCompoundDrawables(null,drawable,null,null);
+        }
+        if (mPostDetailBean.getLaud_status().equals("1")){
+            Drawable drawable= getResources().getDrawable(R.mipmap.ic_zan_fill);
+            drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mJiaonangNum.setCompoundDrawables(null,drawable,null,null);
+        }else {
+            Drawable drawable= getResources().getDrawable(R.mipmap.ic_zan);
+            drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mJiaonangNum.setCompoundDrawables(null,drawable,null,null);
+        }
         Glide.with(getApplication())
                 .load(mPostDetailBean.getHead_image())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -573,6 +604,10 @@ public class PostDetailActivity extends BaseActivity {
         mEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
+                if (!UserUtils.logined()){
+                    IntentUtils.startActivity(PostDetailActivity.this,LoginActivity.class);
+                    return;
+                }
                 // Toast.makeText(PostDetailActivity.this, "gaaaaa", Toast.LENGTH_SHORT).show();
                 mLinearLayout.setVisibility(View.GONE);
                 mLinearLayout2.setVisibility(View.VISIBLE);
@@ -589,7 +624,29 @@ public class PostDetailActivity extends BaseActivity {
         mCollectNum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(PostDetailActivity.this, "收藏", Toast.LENGTH_SHORT).show();
+                if (!UserUtils.logined()){
+                    IntentUtils.startActivity(PostDetailActivity.this, LoginActivity.class);
+                    return;
+                }
+                getCollect(mPostDetailBean.getId());
+                if (mPostDetailBean.getCollect_status().equals("1")){
+                    mCollectNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect())-1)));
+                    mPostDetailBean.setPosts_collect(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect())-1)));
+                    mPostDetailBean.setCollect_status("0");
+                    Toast.makeText(PostDetailActivity.this, "取消收藏", Toast.LENGTH_SHORT).show();
+                    Drawable drawable= getResources().getDrawable(R.mipmap.shoucang);
+                    drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    mCollectNum.setCompoundDrawables(null,drawable,null,null);
+                }else {
+                    mCollectNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect())+1)));
+                    mPostDetailBean.setPosts_collect(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect())+1)));
+                    mPostDetailBean.setCollect_status("1");
+                    Toast.makeText(PostDetailActivity.this, "收藏", Toast.LENGTH_SHORT).show();
+                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_collect_fill);
+                    drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    mCollectNum.setCompoundDrawables(null,drawable,null,null);
+
+                }
 
             }
         });
@@ -603,13 +660,80 @@ public class PostDetailActivity extends BaseActivity {
         mJiaonangNum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(PostDetailActivity.this, "点赞", Toast.LENGTH_SHORT).show();
+                if (!UserUtils.logined()){
+                    IntentUtils.startActivity(PostDetailActivity.this, LoginActivity.class);
+                    return;
+                }
+                getLaud(mPostDetailBean.getId());
+                if (mPostDetailBean.getLaud_status().equals("1")){
+                    mJiaonangNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status())-1)));
+                    mPostDetailBean.setLaud_status(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status())-1)));
+                    mPostDetailBean.setLaud_status("0");
+                    Toast.makeText(PostDetailActivity.this, "取消点赞", Toast.LENGTH_SHORT).show();
+                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_zan);
+                    drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    mJiaonangNum.setCompoundDrawables(null,drawable,null,null);
+                }else {
+                    mJiaonangNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status())+1)));
+                    mPostDetailBean.setLaud_status(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status())+1)));
+                    mPostDetailBean.setLaud_status("1");
+                    Toast.makeText(PostDetailActivity.this, "点赞", Toast.LENGTH_SHORT).show();
+                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_zan_fill);
+                    drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    mJiaonangNum.setCompoundDrawables(null,drawable,null,null);
+
+                }
 
             }
         });
 
     }
 
+    /**
+     * 点赞
+     * @param tid
+     */
+    public void getLaud( String tid) {
+        OkHttpUtils.post()//
+                .addParams("tid",tid)
+                .addParams("uid",UserUtils.getUserId())
+                .url(XingYuInterface.GET_LAUD)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Log.e("hot", e.toString() + ":e");
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                    }
+                });
+
+    }
+    /**
+     * 收藏
+     * @param tid
+     */
+    public void getCollect(final String tid) {
+        OkHttpUtils.post()//
+                .addParams("tid",tid)
+                .addParams("uid",UserUtils.getUserId())
+                .url(XingYuInterface.GET_COLLECT)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        // Log.e("hot", e.toString() + ":e");
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.e("weiwei","hahah"+UserUtils.getUserId()+tid+response);
+                    }
+                });
+
+    }
     /**
      * 回帖
      */
@@ -625,7 +749,7 @@ public class PostDetailActivity extends BaseActivity {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("pid", "0");
-        params.put("uid", "105");
+        params.put("uid", UserUtils.getUserId());
         params.put("tid", mPostDetailBean.getId());
         params.put("replies_content", edittext.getText().toString().trim());
         //隐藏键盘
@@ -653,8 +777,14 @@ public class PostDetailActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         mDialog.dismissDialog();
+                        PostCommoBean postCommoBean = new PostCommoBean();
+                        postCommoBean.setNickname(UserUtils.getNickName());
+                        postCommoBean.setHead_image(UserUtils.getUserPhoto());
+                        postCommoBean.setDateline(String.valueOf(TimeUtils.getNowTimeMills()).substring(0, String.valueOf(TimeUtils.getNowTimeMills()).length() - 3));
+                        postCommoBean.setReplies_content( edittext.getText().toString().trim());
+                        mCommoAdapterList.add(postCommoBean);
+                        mCommoListAdapter.notifyDataSetChanged();
                         mImageList.clear();
-                        // mCommoAdapterList.clear();
                         //待优化
                     }
                 });
