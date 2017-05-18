@@ -1,0 +1,352 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        >
+
+        <ImageView
+            android:id="@+id/iv_game_cover_pic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/shape_rectangle_cover"/>
+
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/bt_get_package"
+        android:layout_width="60dp"
+        android:layout_height="28dp"
+        android:layout_gravity="end"
+        android:layout_margin="10dp"
+        android:background="@drawable/game_detail_fudai_bg"
+        android:text="福袋"
+        android:textColor="@color/white"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_margin="20dp"
+        android:background="@color/colorPrimaryDark">
+    </View>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="游戏介绍："
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:id="@+id/iv_game_intro_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:ellipsize="end"
+        tools:text="游戏介绍游戏介绍游戏介绍游戏介绍"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorPrimaryDark">
+    </View>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+    </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginRight="10dp"
+            android:background="@color/colorPrimaryDark">
+
+        </View>
+
+        <!--      <TextView
+                  android:id="@+id/tv_game_name"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:ellipsize="end"
+                  android:lines="1"
+                  android:text="@string/app_name"
+                  android:textColor="@android:color/black"
+                  android:textSize="24sp"/>-->
+        <TextView
+            android:id="@+id/tv_game_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="详细信息"
+            android:textSize="16sp"/>
+
+        <!--  <TextView
+              android:layout_marginLeft="10dp"
+              android:id="@+id/tv_game_type"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_below="@id/tv_game_name"
+              android:text="game_type_id"
+              android:textSize="12sp"/>-->
+
+        <TextView
+            android:id="@+id/tv_game_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="2.8"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tv_game_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="12sp"
+            tools:text="67M"/>
+
+        <TextView
+            android:id="@+id/tv_down_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="12sp"
+            tools:text="6744"/>
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_margin="20dp"
+        android:background="@color/colorPrimaryDark">
+    </View>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:text="综合评估"
+        android:textSize="16sp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_game_score"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginLeft="30dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_game_score_bg"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@+id/iv_game_score"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rl_score_root"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_score"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:gravity="end"
+                    android:text="SSS"
+                    android:textColor="@color/colorPrimaryDark"/>
+                <ProgressBar
+                    android:layout_toRightOf="@+id/tv_score"
+                    android:id="@+id/pb_sss"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:paddingTop="7dp"
+                    android:paddingBottom="7dp"
+                    android:layout_height="wrap_content"
+                    android:max="100"
+                    android:progress="50"
+                    android:progressDrawable="@drawable/shape_game_detail_score_bg"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text2"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:gravity="end"
+                    android:text="SSR"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <ProgressBar
+                    android:id="@+id/pb_ssr"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:paddingTop="7dp"
+                    android:paddingBottom="7dp"
+                    android:layout_height="wrap_content"
+                    android:max="100"
+                    android:progress="50"
+                    android:progressDrawable="@drawable/shape_game_detail_score_bg"
+                    android:layout_toRightOf="@+id/text2"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text3"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:gravity="end"
+                    android:text="SR"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <ProgressBar
+                    android:id="@+id/pb_sr"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:paddingTop="7dp"
+                    android:paddingBottom="7dp"
+                    android:layout_height="wrap_content"
+                    android:max="100"
+                    android:progress="50"
+                    android:progressDrawable="@drawable/shape_game_detail_score_bg"
+                    android:layout_toRightOf="@+id/text3"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text4"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:gravity="end"
+                    android:text="R:"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <ProgressBar
+                    android:id="@+id/pb_r"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:paddingTop="7dp"
+                    android:paddingBottom="7dp"
+                    android:layout_height="wrap_content"
+                    android:max="100"
+                    android:progress="50"
+                    android:progressDrawable="@drawable/shape_game_detail_score_bg"
+                    android:layout_toRightOf="@+id/text4"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text5"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:gravity="end"
+                    android:text="N"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <ProgressBar
+                    android:id="@+id/pb_n"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:paddingTop="7dp"
+                    android:paddingBottom="7dp"
+                    android:layout_height="wrap_content"
+                    android:max="100"
+                    android:progress="50"
+                    android:progressDrawable="@drawable/shape_game_detail_score_bg"
+                    android:layout_toRightOf="@+id/text5"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_margin="20dp"
+        android:background="@color/colorPrimaryDark">
+    </View>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="30dp"
+        android:drawableLeft="@mipmap/ic_zan"
+        android:drawablePadding="5dp"
+        android:gravity="center_vertical"
+        android:text="精彩评论"
+        android:textSize="20sp"/>
+
+</LinearLayout>

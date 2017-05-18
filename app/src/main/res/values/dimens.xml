@@ -28,7 +28,7 @@
     <dimen name="textSize_small">14sp</dimen>
 
     <!--下载按钮-->
-    <dimen name="corner_radius">8dp</dimen>
+    <dimen name="corner_radius">20dp</dimen>
     <dimen name="layer_padding">0dp</dimen>
     <!--锤子的dimens-->
     <dimen name="smartlist_marginright">50.0px</dimen>

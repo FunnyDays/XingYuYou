@@ -172,6 +172,7 @@
         </activity>
         <activity android:name=".activity.PostReplyCommoActivity">
         </activity>
+        <activity android:name=".activity.GameDetailActivity"/>
     </application>
 
 </manifest>

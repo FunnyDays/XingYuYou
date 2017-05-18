@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
+import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 import android.widget.Button;
 
@@ -17,7 +18,7 @@ import com.xingyuyou.xingyuyou.R;
 /**
  * Created by cxm on 2016/9/7.
  */
-public class ProgressButton extends Button {
+public class ProgressButton extends AppCompatButton {
 
     private int mProgress; //当前进度
     private int mMaxProgress = 100; //最大进度：默认为100
@@ -43,11 +44,11 @@ public class ProgressButton extends Button {
         init(context, attrs);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+   /* @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public ProgressButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context, attrs);
-    }
+    }*/
 
     private void init(Context context, AttributeSet attributeSet) {
 

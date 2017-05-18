@@ -1,32 +1,38 @@
-/*
 package com.xingyuyou.xingyuyou.activity;
 
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RatingBar;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.xingyuyou.xingyuyou.DataParserBean.DataParser;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.AppUtils;
 import com.xingyuyou.xingyuyou.Utils.FileUtils;
-import com.xingyuyou.xingyuyou.Utils.Loading.LoadingLayout;
-import com.xingyuyou.xingyuyou.Utils.NetUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
+import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.adapter.GameDetailListViewAdapter;
 import com.xingyuyou.xingyuyou.adapter.GameDetailPicAdapter;
-import com.xingyuyou.xingyuyou.base.BaseActivity;
-import com.xingyuyou.xingyuyou.bean.GameDetail;
+import com.xingyuyou.xingyuyou.bean.community.PostListBean;
+import com.xingyuyou.xingyuyou.bean.hotgame.GameDetailBean;
+import com.xingyuyou.xingyuyou.bean.hotgame.GameDetailCommoBean;
+import com.xingyuyou.xingyuyou.download.DownloadHelper;
 import com.xingyuyou.xingyuyou.download.DownloadInfo;
 import com.xingyuyou.xingyuyou.download.DownloadManager;
 import com.xingyuyou.xingyuyou.download.DownloadState;
@@ -45,168 +51,301 @@ import org.xutils.x;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.Inflater;
 
 import okhttp3.Call;
 
-*/
-/**
- * Created by Administrator on 2016/11/21.
- *//*
+public class GameDetailActivity extends AppCompatActivity {
 
 
-public class GameDetailActivity extends BaseActivity {
+    private Toolbar mToolbar;
+    private Intent mIntent;
+    private ImageView mGameIcon;
+    private TextView mGameName;
+    private TextView mGameType;
+    private TextView mGameVersion;
+    private TextView mGameSize;
+    private TextView mGameIntro;
+    private List<GameDetailBean> mGameDetailList = null;
+    ArrayList<String> gamePics = new ArrayList<>();
+    private List<GameDetailCommoBean> mCommoList = new ArrayList<>();
+    private List<GameDetailCommoBean> mHotCommoList = new ArrayList<>();
+    private List<GameDetailCommoBean> mCommoAdapterList = new ArrayList<>();
+    private List<GameDetailCommoBean> mHotCommoAdapterList = new ArrayList<>();
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+                String response = (String) msg.obj;
+                JSONObject jo = null;
+                mGameDetailList = new ArrayList<>();
+                try {
+                    jo = new JSONObject(response);
+                    JSONArray ja = jo.getJSONArray("list");
+                    // Log.e("hot", "解析数据："+  ja.toString());
+                    Gson gson = new Gson();
+                    mGameDetailList = gson.fromJson(ja.toString(),
+                            new TypeToken<List<GameDetailBean>>() {
+                            }.getType());
+                    setValues();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (msg.what == 2) {
+                final String response = (String) msg.obj;
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("status").equals("-1")) {
+                        mBtPackage.setBackgroundResource(R.drawable.button_gray_bg);
+                        mBtPackage.setTextColor(getResources().getColor(R.color.darker_gray));
+                        mBtPackage.setEnabled(false);
+                    } else if (jsonObject.getString("status").equals("1")) {
+                        mBtPackage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(GameDetailActivity.this, GetGamePackageActivity.class);
+                                intent.putExtra("gameDetail", response);
+                                startActivity(intent);
+                            }
+                        });
+                    }
 
-    private RecyclerView recyclerView;
-    private ArrayList arrayList = null;
-    private Toolbar toolbar;
-    private ImageView gamePic, gamePic1, gamePic2, gamePic3, gamePic4;
-    private TextView gameName;
-    private TextView gameEnName;
-    private RatingBar gameRatingBar;
-    private Float gameStar;
-    private GameDetailPicAdapter gameDetailPicAdapter;
-    private GameDetail gameDetail;
-    private ArrayList<String> gamePics = new ArrayList<>();
-    private TextView textView, textView1, textView2, textView3, textView8, textView9, textView10,
-            textView4, textView5, textView6, textView7;
-    private String gameNameTitle;
-    private LoadingLayout mLoadingLayout;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (msg.what == 3) {
+                String response = (String) msg.obj;
+                JSONObject jo = null;
+                try {
+                    jo = new JSONObject(response);
+                    JSONArray ja = jo.getJSONArray("nicedata");
+                    Gson gson = new Gson();
+                    mHotCommoList = gson.fromJson(ja.toString(),
+                            new TypeToken<List<GameDetailCommoBean>>() {
+                            }.getType());
+                    mHotCommoAdapterList.addAll(mHotCommoList);
+                    JSONArray ja1 = jo.getJSONArray("data");
+                    mCommoList = gson.fromJson(ja1.toString(),
+                            new TypeToken<List<GameDetailCommoBean>>() {
+                            }.getType());
+                    mCommoAdapterList.addAll(mCommoList);
+                    setCommoValues();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
+
+    private RecyclerView mRecyclerView;
+    private GameDetailPicAdapter mGameDetailPicAdapter;
     private ProgressButton mBtInstallGame;
-    private String mGameLink;
-    private Handler mHandler;
     private DownloadInfo mDownloadInfo;
     private DbManager mDb;
-    private DownloadManager downloadManager;
+    private String mGameNameTitle;
     private DownloadItemViewHolder mViewHolder;
+    private DownloadManager mDownloadManager;
+    private TextView mDownNumber;
+    private Button mBtPackage;
+    private ImageView mGameCoverIcon;
+    private ListView mListView;
+    private ProgressBar mPbSss;
+    private ProgressBar mPbSsr;
+    private ProgressBar mPbSr;
+    private ProgressBar mPbR;
+    private ProgressBar mPbN;
 
-    private String mFirstGameUrl="";
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_detail);
-
-        installOpenGame();
-        checkDownload();
+        setContentView(R.layout.activity_game_detail_listview);
+        mIntent = getIntent();
+        initToolBar();
         initData();
+        initView();
         getDownloadInfo();
         initDownload();
         initButtonDownload();
-        initView();
-        initToolBar();
-    }
-
-    private void installOpenGame() {
 
     }
 
-    */
-/**
-     * 检查app是否已经安装或者正在下载
-     *//*
+    private void initToolBar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle(mIntent.getStringExtra("game_name"));
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
 
-    private void checkDownload() {
+    private void initData() {
+        mGameNameTitle = getIntent().getStringExtra("game_name");
+        OkHttpUtils.post()//
+                .url(XingYuInterface.GET_GAME_DETAILS)
+                .tag(this)//
+                .addParams("game_id", mIntent.getStringExtra("game_id"))
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                    }
 
+                    @Override
+                    public void onResponse(String response, int id) {
+                        mHandler.obtainMessage(1, response).sendToTarget();
+                    }
+                });
+        //礼包详情
+        OkHttpUtils.post()//
+                .url(XingYuInterface.GAME_GIFT_LIST)
+                .tag(this)//
+                .addParams("game_id", mIntent.getStringExtra("game_id"))
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        mHandler.obtainMessage(2, response).sendToTarget();
+                    }
+                });
+        //游戏评分和游戏评价
+        OkHttpUtils.post()//
+                .url(XingYuInterface.GET_EVALUATE_LIST)
+                .tag(this)//
+                .addParams("uid", UserUtils.getUserId())
+                .addParams("gid", "18")
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.e("game_id", response + "");
+                        mHandler.obtainMessage(3, response).sendToTarget();
+                    }
+                });
     }
 
     private void initView() {
-        mLoadingLayout = (LoadingLayout) findViewById(R.id.empty_view_game);
-        initEmptyView();
+        //listview
+        mListView = (ListView) findViewById(R.id.listView);
+        View view = View.inflate(GameDetailActivity.this, R.layout.part_game_detail_header, null);
+        mListView.addHeaderView(view);
 
-        gamePic = (ImageView) findViewById(R.id.iv_game_pic);
-        gameName = (TextView) findViewById(R.id.tv_game_name);
-        gameEnName = (TextView) findViewById(R.id.tv_game_name_en);
-        gameRatingBar = (RatingBar) findViewById(R.id.ratingBar);
-        gameRatingBar.setRating(gameStar);
+        GameDetailListViewAdapter listViewAdapter = new GameDetailListViewAdapter(GameDetailActivity.this, null);
+        mListView.setAdapter(listViewAdapter);
 
-        textView = (TextView) findViewById(R.id.tv_game_type);
-        textView1 = (TextView) findViewById(R.id.tv_game_edition);
-        textView6 = (TextView) findViewById(R.id.tv_game_time);
-        textView2 = (TextView) findViewById(R.id.tv_game_size);
-        textView3 = (TextView) findViewById(R.id.tv_game_lang);
-        textView4 = (TextView) findViewById(R.id.tv_game_maker);
-        textView5 = (TextView) findViewById(R.id.tv_game_system);
-        textView7 = (TextView) findViewById(R.id.tv_content);
-
-        gamePic1 = (ImageView) findViewById(R.id.iv_game_one);
-        gamePic2 = (ImageView) findViewById(R.id.iv_game_two);
-        gamePic3 = (ImageView) findViewById(R.id.iv_game_three);
-        gamePic4 = (ImageView) findViewById(R.id.iv_game_intro_more);
-
-        textView8 = (TextView) findViewById(R.id.tv_game_one);
-        textView9 = (TextView) findViewById(R.id.tv_game_two);
-        textView10 = (TextView) findViewById(R.id.tv_game_three);
-
-
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mGameCoverIcon = (ImageView) view.findViewById(R.id.iv_game_cover_pic);
+        mGameVersion = (TextView) view.findViewById(R.id.tv_game_version);
+        mGameSize = (TextView) view.findViewById(R.id.tv_game_size);
+        mGameIntro = (TextView) view.findViewById(R.id.tv_content);
+        mDownNumber = (TextView) view.findViewById(R.id.tv_down_number);
+        //礼包按钮
+        mBtPackage = (Button) view.findViewById(R.id.bt_get_package);
+        //游戏介绍图片
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        gameDetailPicAdapter = new GameDetailPicAdapter(this, gamePics);
-        gameDetailPicAdapter.setOnItemClickLitener(new GameDetailPicAdapter.OnItemClickLitener() {
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+
+        mGameDetailPicAdapter = new GameDetailPicAdapter(this, gamePics);
+        mGameDetailPicAdapter.setOnItemClickLitener(new GameDetailPicAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
-               */
-/* startActivity(new Intent(Game10Activity.this, imageDetailPagerActivity.class)
-                        .putStringArrayListExtra("gameLink", gamePics));*//*
-
+               /* startActivity(new Intent(Game10Activity.this, imageDetailPagerActivity.class)
+                        .putStringArrayListExtra("gameLink", gamePics));*/
             }
         });
-        recyclerView.setAdapter(gameDetailPicAdapter);
+        mRecyclerView.setAdapter(mGameDetailPicAdapter);
 
+        //游戏评分
+        mPbSss = (ProgressBar) view.findViewById(R.id.pb_sss);
+        mPbSsr = (ProgressBar) view.findViewById(R.id.pb_ssr);
+        mPbSr = (ProgressBar) view.findViewById(R.id.pb_sr);
+        mPbR = (ProgressBar) view.findViewById(R.id.pb_r);
+        mPbN = (ProgressBar) view.findViewById(R.id.pb_n);
+
+
+        //下载按钮
+        mBtInstallGame = (ProgressButton) findViewById(R.id.bt_bottom_install);
+    }
+
+    private void setValues() {
+        Glide.with(this).load(getIntent().getStringExtra("game_cover_pic")).into(mGameCoverIcon);
+        //mGameName.setText(mGameDetailList.get(0).getGame_name());
+        // mGameType.setText(mGameDetailList.get(0).getGame_type_id());
+        mGameVersion.setText("版本：" + mGameDetailList.get(0).getVersion());
+        mGameSize.setText("大小：" + mGameDetailList.get(0).getGame_size());
+        mGameIntro.setText(mGameDetailList.get(0).getIntroduction());
+        mDownNumber.setText("下载次数：" + mGameDetailList.get(0).getDow_num());
+
+        //游戏介绍图
+        gamePics.addAll(mGameDetailList.get(0).getScreenshot());
+        mGameDetailPicAdapter.notifyDataSetChanged();
+    }
+
+    private void setCommoValues() {
+        //热门评论
+        for (int i = 0; i <mHotCommoAdapterList.size(); i++) {
+            View commo = View.inflate(GameDetailActivity.this, R.layout.item_game_commo_list, null);
+            mListView.addHeaderView(commo);
+            TextView commoUserName = (TextView) commo.findViewById(R.id.tv_user_name);
+            commoUserName.setText(mHotCommoAdapterList.get(i).getNickname()+i);
+        }
 
     }
-    */
-/**
-     * 获取下载信息状态
-     *//*
 
+    /**
+     * 获取下载信息状态
+     */
     private void getDownloadInfo() {
-        downloadManager = DownloadManager.getInstance();
+        mDownloadManager = DownloadManager.getInstance();
         DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()
                 .setDbName("download")
                 .setDbVersion(1);
         mDb = x.getDb(daoConfig);
         try {
             mDownloadInfo = mDb.selector(DownloadInfo.class)
-                    .where("label", "=", gameNameTitle)
-                    .and("fileSavePath", "=", FileUtils.fileSavePath+gameNameTitle+".apk")
+                    .where("label", "=", mGameNameTitle)
+                    .and("fileSavePath", "=", FileUtils.fileSavePath + mGameNameTitle + ".apk")
                     .findFirst();
         } catch (DbException e) {
             e.printStackTrace();
         }
         if (mDownloadInfo != null) {
-            Log.e("download", "详情里面的"+mDownloadInfo.toString()+"---------");
+            Log.e("download", "详情里面的" + mDownloadInfo.toString() + "---------");
         }
 
     }
+
     private void initDownload() {
-        gameEnName = (TextView) findViewById(R.id.tv_game_name_en);
-        mBtInstallGame = (ProgressButton) findViewById(R.id.bt_bottom_install);
-        if (mDownloadInfo!=null){
-            mViewHolder = new DownloadItemViewHolder(null,mDownloadInfo);
+        if (mDownloadInfo != null) {
+            mViewHolder = new DownloadItemViewHolder(null, mDownloadInfo);
             mViewHolder.refresh();
-            if (mDownloadInfo.getState().value() < DownloadState.FINISHED.value()){
+            if (mDownloadInfo.getState().value() < DownloadState.FINISHED.value()) {
                 try {
-                    downloadManager.startDownload(
-                            mDownloadInfo.getUrl(), mDownloadInfo.getGamePicUrl(),mDownloadInfo.getPackageName(), mDownloadInfo.getLabel(),mDownloadInfo.getGameSize(), mDownloadInfo.getGameIntro(),
+                    mDownloadManager.startDownload(
+                            mDownloadInfo.getUrl(), mDownloadInfo.getGamePicUrl(), mDownloadInfo.getPackageName(), mDownloadInfo.getLabel(), mDownloadInfo.getGameSize(), mDownloadInfo.getGameIntro(),
                             mDownloadInfo.getFileSavePath(), mDownloadInfo.isAutoResume(), mDownloadInfo.isAutoRename(), mViewHolder);
                 } catch (DbException e) {
                     e.printStackTrace();
                 }
             }
             mBtInstallGame.setTag(1);
-        }else{
+        } else {
             mBtInstallGame.setTag(0);
-        }*/
-/*else {
-            DownloadInfo downloadInfo = new DownloadInfo();
-            downloadInfo.setUrl("");
-            downloadInfo.setAutoResume(true);
-            downloadInfo.setAutoRename(false);
-            downloadInfo.setLabel(gameNameTitle);
-            downloadInfo.setFileSavePath(FileUtils.fileSavePath+gameNameTitle+".apk");
-            mViewHolder = new DownloadItemViewHolder(null,downloadInfo);
-        }*//*
-
+        }
     }
 
     private void initButtonDownload() {
@@ -215,34 +354,27 @@ public class GameDetailActivity extends BaseActivity {
             public void onClick(View view) {
                 // 防止开启多个异步线程
                 if ((Integer) mBtInstallGame.getTag() == 0) {
-                    //获取游戏下载链接
-                    getGameDownLoadLink(mGameLink);
-                    mHandler = new Handler() {
-                        @Override
-                        public void handleMessage(Message msg) {
-                            super.handleMessage(msg);
-                            if (msg.what == 2) {
-                                mFirstGameUrl = (String) msg.obj;
-                                DownloadInfo downloadInfo = new DownloadInfo();
-                                downloadInfo.setUrl(mFirstGameUrl);
-                                downloadInfo.setGamePicUrl(gameDetail.getGameIcon());
-                                Log.e("wei", "gameDetail.getGameIcon()"+gameDetail.getGameIcon());
-                                downloadInfo.setAutoResume(true);
-                                downloadInfo.setAutoRename(false);
-                                downloadInfo.setLabel(gameNameTitle);
-                                downloadInfo.setFileSavePath(FileUtils.fileSavePath+gameNameTitle+".apk");
-                                mViewHolder = new DownloadItemViewHolder(null,downloadInfo);
-                                mViewHolder.toggleEvent(null);
-                            }
-                        }
-                    };
+                    //向服务器传输下载数据
+                    DownloadHelper.updataDown(mIntent.getStringExtra("game_id"));
+                    //初始化下载信息
+                    DownloadInfo downloadInfo = new DownloadInfo();
+                    downloadInfo.setUrl(mGameDetailList.get(0).getAdd_game_address());
+                    downloadInfo.setGamePicUrl(mGameDetailList.get(0).getIcon());
+                    downloadInfo.setPackageName(mGameDetailList.get(0).getGame_baoming());
+                    downloadInfo.setAutoResume(true);
+                    downloadInfo.setAutoRename(false);
+                    downloadInfo.setLabel(mGameDetailList.get(0).getGame_name());
+                    downloadInfo.setFileSavePath(FileUtils.fileSavePath + mGameNameTitle + ".apk");
+                    mViewHolder = new DownloadItemViewHolder(null, downloadInfo);
+                    mViewHolder.toggleEvent(null);
                     mBtInstallGame.setTag(1);
-                }else {
+                } else {
                     mViewHolder.toggleEvent(null);
                 }
             }
         });
     }
+
     public class DownloadItemViewHolder extends DownloadViewHolder {
 
 
@@ -257,12 +389,12 @@ public class GameDetailActivity extends BaseActivity {
             switch (state) {
                 case WAITING:
                 case STARTED:
-                    downloadManager.stopDownload(downloadInfo);
+                    mDownloadManager.stopDownload(downloadInfo);
                     break;
                 case ERROR:
                 case STOPPED:
                     try {
-                        downloadManager.startDownload(
+                        mDownloadManager.startDownload(
                                 downloadInfo.getUrl(),
                                 downloadInfo.getGamePicUrl(),
                                 downloadInfo.getPackageName(),
@@ -278,7 +410,13 @@ public class GameDetailActivity extends BaseActivity {
                     }
                     break;
                 case FINISHED:
-                    Toast.makeText(x.app(), "已经下载完成", Toast.LENGTH_LONG).show();
+                    if (AppUtils.isInstallApp(GameDetailActivity.this, downloadInfo.getPackageName())) {
+                        mBtInstallGame.setText("打开");
+                        AppUtils.launchApp(GameDetailActivity.this, downloadInfo.getPackageName());
+                    } else {
+                        mBtInstallGame.setText("安装");
+                        AppUtils.installApp(GameDetailActivity.this, downloadInfo.getFileSavePath());
+                    }
                     break;
                 default:
                     break;
@@ -315,6 +453,7 @@ public class GameDetailActivity extends BaseActivity {
         @Override
         public void onSuccess(File result) {
             Log.e("wei", "onSuccess");
+            AppUtils.installApp(GameDetailActivity.this, downloadInfo.getFileSavePath());
             refresh();
         }
 
@@ -331,10 +470,7 @@ public class GameDetailActivity extends BaseActivity {
         }
 
         public void refresh() {
-           // game.setText(downloadInfo.getLabel());
-           // state.setText(downloadInfo.getState().toString());
-            gameEnName.setText(downloadInfo.getLabel()+"---"+downloadInfo.getState().toString()+"---"+downloadInfo.getProgress());
-            //mProgressBar.setProgress(downloadInfo.getProgress());
+            //gameEnName.setText(downloadInfo.getLabel()+"---"+downloadInfo.getState().toString()+"---"+downloadInfo.getProgress());
             mBtInstallGame.setProgress(downloadInfo.getProgress());
             mBtInstallGame.setVisibility(View.VISIBLE);
             mBtInstallGame.setText(x.app().getString(R.string.stop));
@@ -350,6 +486,13 @@ public class GameDetailActivity extends BaseActivity {
                     break;
                 case FINISHED:
                     mBtInstallGame.setText("下载完成");
+                    if (AppUtils.isInstallApp(GameDetailActivity.this, downloadInfo.getPackageName())) {
+                        mBtInstallGame.setText("打开");
+                        // AppUtils.launchApp(HotGameDetailActivity.this, downloadInfo.getPackageName());
+                    } else {
+                        mBtInstallGame.setText("安装");
+                        //AppUtils.installApp(HotGameDetailActivity.this, downloadInfo.getFileSavePath());
+                    }
                     break;
                 default:
                     mBtInstallGame.setText(x.app().getString(R.string.start));
@@ -358,178 +501,9 @@ public class GameDetailActivity extends BaseActivity {
         }
     }
 
-
-    */
-/**
-     * 空布局
-     *//*
-
-    private void initEmptyView() {
-        mLoadingLayout.setOnReloadListener(new LoadingLayout.OnReloadListener() {
-
-            @Override
-            public void onReload(View v) {
-                //Toast.makeText(mActivity, "重试", Toast.LENGTH_SHORT).show();
-                initEmptyView();
-                initData();
-            }
-        });
-        if (!NetUtils.checkNetWorkIsAvailable(this)) {
-            mLoadingLayout.setStatus(LoadingLayout.No_Network);//无网络
-            return;
-        }
-        mLoadingLayout.setStatus(LoadingLayout.Loading);//加载中
-    }
     @Override
-    public void initData() {
-        mGameLink = getIntent().getStringExtra("gameLink");
-        gameNameTitle = getIntent().getStringExtra("gameName");
-        gameStar = getIntent().getFloatExtra("gameStar", 5);
-        //无网络
-        //成功
-        //监听游戏介绍显示方式
-        mHandler = new Handler() {
-            private Boolean mState = false;
-
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                if (msg.what == 1 && gameDetail != null) {
-                    if (!NetUtils.checkNetWorkIsAvailable(GameDetailActivity.this)) {
-                        mLoadingLayout.setStatus(LoadingLayout.No_Network);//无网络
-                        return;
-                    } else {
-                        mLoadingLayout.setStatus(LoadingLayout.Success);//成功
-                    }
-                    gamePics.addAll(gameDetail.getGamePic());
-                    gameDetailPicAdapter.notifyDataSetChanged();
-                    Glide.with(GameDetailActivity.this).load(gameDetail.getGameIcon()).into(gamePic);
-                    Glide.with(GameDetailActivity.this).load(gameDetail.getGameRecommendImage().get(0)).into(gamePic1);
-                    Glide.with(GameDetailActivity.this).load(gameDetail.getGameRecommendImage().get(1)).into(gamePic2);
-                    Glide.with(GameDetailActivity.this).load(gameDetail.getGameRecommendImage().get(2)).into(gamePic3);
-                    gameName.setText(gameNameTitle);
-                    gameEnName.setText(gameDetail.getGameEnName());
-                    textView.setText("•" + gameDetail.getGameAllIntro().get(0));
-                    textView1.setText("•" + gameDetail.getGameAllIntro().get(1));
-                    textView2.setText("•" + gameDetail.getGameAllIntro().get(2));
-                    textView3.setText("•" + gameDetail.getGameAllIntro().get(3));
-                    textView4.setText("•" + gameDetail.getGameAllIntro().get(7));
-                    textView5.setText("•" + gameDetail.getGameAllIntro().get(8));
-                    textView6.setText("•" + gameDetail.getGameAllIntro().get(6));
-
-                    textView8.setText(gameDetail.getGamerecommendName().get(0));
-                    textView9.setText(gameDetail.getGamerecommendName().get(1));
-                    textView10.setText(gameDetail.getGamerecommendName().get(2));
-
-                    //监听游戏介绍显示方式
-                    textView7.setText(gameDetail.getGameDetailIntro());
-                    gamePic4.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (mState) {
-                                mState = false;
-                                textView7.setEllipsize(TextUtils.TruncateAt.END);
-                                textView7.setMaxLines(3);
-                                ObjectAnimator animator3 = ObjectAnimator.ofFloat(gamePic4, "rotation", 180f, 360f);
-                                animator3.setDuration(500).start();
-                            } else {
-                                mState = true;
-                                textView7.setEllipsize(null);
-                                textView7.setMaxLines(Integer.MAX_VALUE);
-                                ObjectAnimator animator3 = ObjectAnimator.ofFloat(gamePic4, "rotation", 0f, 180f);
-                                animator3.setDuration(500).start();
-                            }
-                        }
-                    });
-                    textView7.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (mState) {
-                                mState = false;
-                                textView7.setEllipsize(TextUtils.TruncateAt.END);
-                                textView7.setMaxLines(3);
-                                ObjectAnimator animator3 = ObjectAnimator.ofFloat(gamePic4, "rotation", 180f, 360f);
-                                animator3.setDuration(500).start();
-                            } else {
-                                mState = true;
-                                textView7.setEllipsize(null);
-                                textView7.setMaxLines(Integer.MAX_VALUE);
-                                ObjectAnimator animator3 = ObjectAnimator.ofFloat(gamePic4, "rotation", 0f, 180f);
-                                animator3.setDuration(500).start();
-                            }
-                        }
-                    });
-
-
-                }
-            }
-        };
-
-        new Thread() {
-            @Override
-            public void run() {
-                gameDetail = DataParser.getGameDetail(mGameLink);
-                if (gameDetail != null) {
-                    mHandler.obtainMessage(1).sendToTarget();
-                }
-
-            }
-        }.start();
-    }
-
-    private void initToolBar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(gameNameTitle);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-    }
-
-    */
-/**
-     * 获取游戏下载链接
-     *//*
-
-    public String getGameDownLoadLink(String link) {
-        final String[] mPkgUrl = new String[1];
-        final int[] lastIndexOf = {link.lastIndexOf("/")};
-        String substring = link.substring(lastIndexOf[0]);
-        int i1 = substring.indexOf(".");
-        String s = substring.substring(0, i1);
-        // LG.e(s + "haha");
-        OkHttpUtils.get().url("http://android.d.cn/rm/red/1" + s).build().execute(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                try {
-                    if (response != null) {
-                        JSONObject jsonObject = new JSONObject(response);
-                        JSONArray pkgs = jsonObject.getJSONArray("pkgs");
-                        mPkgUrl[0] = pkgs.getJSONObject(0).getString("pkgUrl");
-                        Log.e("gameurl", mPkgUrl[0] + "");
-                        mHandler.obtainMessage(2, mPkgUrl[0]).sendToTarget();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-        return mPkgUrl[0];
+    public void onDestroy() {
+        super.onDestroy();
+        OkHttpUtils.getInstance().cancelTag(this);
     }
 }
-*/

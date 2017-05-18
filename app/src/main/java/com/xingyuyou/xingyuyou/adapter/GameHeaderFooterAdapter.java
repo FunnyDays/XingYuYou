@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.activity.GameDetailActivity;
 import com.xingyuyou.xingyuyou.activity.HotGameDetailActivity;
 import com.xingyuyou.xingyuyou.bean.hotgame.HotGameBean;
 
@@ -112,9 +113,10 @@ public class GameHeaderFooterAdapter extends RecyclerView.Adapter {
                 ((ItemViewHolder) holder).mGameCover.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(mActivity,HotGameDetailActivity.class);
+                        Intent intent = new Intent(mActivity,GameDetailActivity.class);
                         intent.putExtra("game_id",mListData.get(position-1).getId());
                         intent.putExtra("game_name",mListData.get(position-1).getGame_name());
+                        intent.putExtra("game_cover_pic",mListData.get(position-1).getCover());
                         mActivity.startActivity(intent);
                     }
                 });

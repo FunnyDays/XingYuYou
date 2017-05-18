@@ -69,7 +69,6 @@ public class CommHotFragment extends BaseFragment {
                 try {
                     jo = new JSONObject(response);
                     JSONArray ja = jo.getJSONArray("data");
-                    Log.e("post", "解析数据：" + ja.toString());
                     Gson gson = new Gson();
                     mPostList = gson.fromJson(ja.toString(),
                             new TypeToken<List<PostListBean>>() {

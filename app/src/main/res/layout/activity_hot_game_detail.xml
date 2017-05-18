@@ -169,6 +169,7 @@
             </LinearLayout>
         </ScrollView>
         <LinearLayout
+            android:orientation="horizontal"
            android:paddingBottom="10dp"
            android:paddingTop="10dp"
             android:background="@android:color/white"
@@ -178,7 +179,8 @@
             <com.xingyuyou.xingyuyou.weight.ProgressButton
                android:gravity="center"
                 android:id="@+id/bt_bottom_install"
-                android:layout_width="match_parent"
+               android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
@@ -189,10 +191,15 @@
                 app:progressBgColor="@color/colorPrimary"
                 app:buttonNormalColor="@color/colorPrimaryDark"
                 app:buttonPressedColor="@color/colorPrimary"
-                app:buttonCornerRadius="0dp"
+                app:buttonCornerRadius="15dp"
                 app:showProgressNum="true"
                 android:textColor="#ffffff"
                 />
+            <Button
+                android:background="@color/blue"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
     </RelativeLayout>

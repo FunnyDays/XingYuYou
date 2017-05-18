@@ -51,36 +51,6 @@ import okhttp3.Call;
 public class HotGameDetailActivity extends AppCompatActivity {
 
 
-    /*
-    * {
-    "status": 1,
-    "game": {
-        "game_id": "34",
-        "game_name": "钢铁雄狮(安卓版)",
-        "gift_count": 1,
-        "game_size": "186.3MB",
-        "game_icon": "http://xingyuyou.com/Uploads/Picture/2017-03-23/58d39094bcc44.png"
-    },
-    "msg": [{
-        "gift_id": "14",
-        "game_id": "34",
-        "giftbag_type": null,
-        "game_name": "钢铁雄狮(安卓版)",
-        "giftbag_name": "新手礼包",
-        "desribe": "金币*10000 普通技能书*20 普通军牌*4 ",
-        "novice": 999,
-        "icon": "http://xingyuyou.com/Uploads/Picture/2017-03-23/58d39094bcc44.png",
-        "game_size": "186.3MB"
-    }]
-}
-
-
-{
-    "status": -1,
-    "msg": "没有数据"
-}*/
-
-
     private Toolbar mToolbar;
     private Intent mIntent;
     private ImageView mGameIcon;
