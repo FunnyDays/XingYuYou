@@ -449,7 +449,7 @@ public class PostDetailActivity extends BaseActivity {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
             if (holder instanceof CommoListAdapter.ItemViewHolder) {
-                if (mCommoAdapterList.get(position).getImgarr()!=null&&mCommoAdapterList.get(position).getImgarr().size() != 0) {
+                if (mCommoAdapterList.get(position).getImgarr()!=null&&mCommoAdapterList.get(position).getImgarr().size() != 0&&!mCommoAdapterList.get(position).getImgarr().get(0).equals("")) {
                     for (int i = 0; i < mCommoAdapterList.get(position).getImgarr().size(); i++) {
                         ImageView imageView = new ImageView(PostDetailActivity.this);
                         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);

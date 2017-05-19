@@ -65,7 +65,6 @@ public class CustomDialog {
             mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    Log.e("value", animation.getAnimatedValue().toString());
                     if (animation.getAnimatedValue().toString().equals("20.0"))
                         mAlertDialog.dismiss();
                 }

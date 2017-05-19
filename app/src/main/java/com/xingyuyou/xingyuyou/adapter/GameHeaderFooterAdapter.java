@@ -115,6 +115,7 @@ public class GameHeaderFooterAdapter extends RecyclerView.Adapter {
                     public void onClick(View view) {
                         Intent intent = new Intent(mActivity,GameDetailActivity.class);
                         intent.putExtra("game_id",mListData.get(position-1).getId());
+                        Log.e("weiwei", "onClick: "+mListData.get(position-1).getId() );
                         intent.putExtra("game_name",mListData.get(position-1).getGame_name());
                         intent.putExtra("game_cover_pic",mListData.get(position-1).getCover());
                         mActivity.startActivity(intent);

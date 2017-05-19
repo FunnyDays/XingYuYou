@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.xingyuyou.xingyuyou.activity.GameCommoActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <com.xingyuyou.xingyuyou.weight.RatingBar
+        android:id="@+id/rb"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        app:starCount="5"
+        app:starEmpty="@mipmap/shoucang"
+        app:starFill="@mipmap/ic_collect_fill"
+        app:starHalf="@mipmap/ic_collect_fill"
+        app:starImageSize="25dp"
+        app:starPadding="20dp"
+        app:starStep="1"
+        app:stepSize="Full">
+    </com.xingyuyou.xingyuyou.weight.RatingBar>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/custom_gray"/>
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:paddingLeft="20dp"
+        android:textColor="@color/black"
+        android:background="@null"
+        android:hint="对这个游戏感觉怎么样？写下来吧~"
+        android:lines="15"
+        android:textColorHint="#55787777"/>
+</LinearLayout>

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
@@ -10,7 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         >
 
         <ImageView
@@ -177,8 +178,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="120dp">
         <ImageView
             android:id="@+id/iv_game_score"
             android:layout_width="120dp"
@@ -186,6 +186,17 @@
             android:layout_marginLeft="30dp"
             android:scaleType="fitXY"
             android:src="@drawable/ic_game_score_bg"/>
+        <TextView
+            android:textColor="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:layout_width="120dp"
+            android:text="8.5"
+            android:textSize="40sp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="30dp"/>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -208,15 +219,16 @@
                     android:gravity="end"
                     android:text="SSS"
                     android:textColor="@color/colorPrimaryDark"/>
+
                 <ProgressBar
-                    android:layout_toRightOf="@+id/tv_score"
                     android:id="@+id/pb_sss"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
-                    android:paddingTop="7dp"
-                    android:paddingBottom="7dp"
                     android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/tv_score"
                     android:max="100"
+                    android:paddingBottom="7dp"
+                    android:paddingTop="7dp"
                     android:progress="50"
                     android:progressDrawable="@drawable/shape_game_detail_score_bg"
                     />
@@ -241,13 +253,13 @@
                     android:id="@+id/pb_ssr"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
-                    android:paddingTop="7dp"
-                    android:paddingBottom="7dp"
                     android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/text2"
                     android:max="100"
+                    android:paddingBottom="7dp"
+                    android:paddingTop="7dp"
                     android:progress="50"
-                    android:progressDrawable="@drawable/shape_game_detail_score_bg"
-                    android:layout_toRightOf="@+id/text2"/>
+                    android:progressDrawable="@drawable/shape_game_detail_score_bg"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -268,13 +280,13 @@
                     android:id="@+id/pb_sr"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
-                    android:paddingTop="7dp"
-                    android:paddingBottom="7dp"
                     android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/text3"
                     android:max="100"
+                    android:paddingBottom="7dp"
+                    android:paddingTop="7dp"
                     android:progress="50"
-                    android:progressDrawable="@drawable/shape_game_detail_score_bg"
-                    android:layout_toRightOf="@+id/text3"/>
+                    android:progressDrawable="@drawable/shape_game_detail_score_bg"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -295,13 +307,13 @@
                     android:id="@+id/pb_r"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
-                    android:paddingTop="7dp"
-                    android:paddingBottom="7dp"
                     android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/text4"
                     android:max="100"
+                    android:paddingBottom="7dp"
+                    android:paddingTop="7dp"
                     android:progress="50"
-                    android:progressDrawable="@drawable/shape_game_detail_score_bg"
-                    android:layout_toRightOf="@+id/text4"/>
+                    android:progressDrawable="@drawable/shape_game_detail_score_bg"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -322,13 +334,13 @@
                     android:id="@+id/pb_n"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
-                    android:paddingTop="7dp"
-                    android:paddingBottom="7dp"
                     android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/text5"
                     android:max="100"
+                    android:paddingBottom="7dp"
+                    android:paddingTop="7dp"
                     android:progress="50"
-                    android:progressDrawable="@drawable/shape_game_detail_score_bg"
-                    android:layout_toRightOf="@+id/text5"/>
+                    android:progressDrawable="@drawable/shape_game_detail_score_bg"/>
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
@@ -339,14 +351,32 @@
         android:layout_margin="20dp"
         android:background="@color/colorPrimaryDark">
     </View>
-    <TextView
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginLeft="30dp"
-        android:drawableLeft="@mipmap/ic_zan"
-        android:drawablePadding="5dp"
-        android:gravity="center_vertical"
-        android:text="精彩评论"
-        android:textSize="20sp"/>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_huangguan"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@+id/image"
+            android:gravity="center_vertical"
+            android:text="精彩评论"
+            android:textSize="20sp"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_no_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="暂无数据"/>
 
 </LinearLayout>

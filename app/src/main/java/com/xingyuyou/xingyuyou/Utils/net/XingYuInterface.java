@@ -22,6 +22,7 @@ public class XingYuInterface {
     public static final String RCEIVE_GIFT=Host+"Server/receive_gift";
     public static final String ABOUT_US=Host+"Server/about_us";
     public static final String UPDATA_DOWN=Host+"Server/updata_down";
+    public static final String GET_EVALUATE=Host+"Server/get_evaluate";
     public static final String GET_EVALUATE_LIST=Host+"Server/get_evaluate_list";
     public static final String GAME_GIFT_LIST=Host+"Server/game_gift_list";
     public static final String GET_LABEL_CLASS=Host+"Community/get_label_class";

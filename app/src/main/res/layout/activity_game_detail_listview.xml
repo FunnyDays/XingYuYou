@@ -58,6 +58,7 @@
             />
 
         <Button
+            android:id="@+id/bt_commo_game"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginLeft="15dp"
