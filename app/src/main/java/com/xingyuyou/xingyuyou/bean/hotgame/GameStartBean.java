@@ -16,6 +16,10 @@ public class GameStartBean {
      */
 
     private String sum_star;
+
+
+
+    private String star_ratio;
     private String one_star;
     private String two_star;
     private String three_star;
@@ -33,7 +37,13 @@ public class GameStartBean {
     public String getOne_star() {
         return one_star;
     }
+    public String getStar_ratio() {
+        return star_ratio;
+    }
 
+    public void setStar_ratio(String star_ratio) {
+        this.star_ratio = star_ratio;
+    }
     public void setOne_star(String one_star) {
         this.one_star = one_star;
     }
@@ -74,6 +84,7 @@ public class GameStartBean {
     public String toString() {
         return "GameStartBean{" +
                 "sum_star='" + sum_star + '\'' +
+                "sum_star='" + star_ratio + '\'' +
                 ", one_star='" + one_star + '\'' +
                 ", two_star='" + two_star + '\'' +
                 ", three_star='" + three_star + '\'' +

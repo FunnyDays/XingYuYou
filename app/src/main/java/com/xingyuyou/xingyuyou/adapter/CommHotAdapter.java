@@ -245,7 +245,7 @@ public class CommHotAdapter extends RecyclerView.Adapter {
         }
 
     }
-    public void getCollect(final String tid) {
+    public void getCollect( String tid) {
         OkHttpUtils.post()//
                 .addParams("tid",tid)
                 .addParams("uid",UserUtils.getUserId())
@@ -259,7 +259,6 @@ public class CommHotAdapter extends RecyclerView.Adapter {
                     }
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.e("weiwei","hahah"+UserUtils.getUserId()+tid+response);
                     }
                 });
 

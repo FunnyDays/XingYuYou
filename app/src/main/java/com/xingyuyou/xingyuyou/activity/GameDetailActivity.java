@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -33,6 +34,7 @@ import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.adapter.GameDetailListViewAdapter;
 import com.xingyuyou.xingyuyou.adapter.GameDetailPicAdapter;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
@@ -129,22 +131,32 @@ public class GameDetailActivity extends AppCompatActivity {
                 JSONObject jo = null;
                 try {
                     jo = new JSONObject(response);
-                    JSONArray ja = jo.getJSONArray("nicedata");
                     Gson gson = new Gson();
-                    mHotCommoList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<GameDetailCommoBean>>() {
-                            }.getType());
-                    mHotCommoAdapterList.addAll(mHotCommoList);
-                    JSONArray ja1 = jo.getJSONArray("data");
-                    mCommoList = gson.fromJson(ja1.toString(),
-                            new TypeToken<List<GameDetailCommoBean>>() {
-                            }.getType());
-                    mCommoAdapterList.addAll(mCommoList);
-                    mListViewAdapter.notifyDataSetChanged();
+                    if (PAGENUM<2){
+                        JSONArray ja = jo.getJSONArray("nicedata");
+                        mHotCommoList = gson.fromJson(ja.toString(),
+                                new TypeToken<List<GameDetailCommoBean>>() {
+                                }.getType());
+                        mHotCommoAdapterList.addAll(mHotCommoList);
 
-                    JSONObject star = jo.getJSONObject("star");
-                    mGameStartBean = gson.fromJson(star.toString(), GameStartBean.class);
+                        JSONObject star = jo.getJSONObject("star");
+                        mGameStartBean = gson.fromJson(star.toString(), GameStartBean.class);
 
+                        JSONArray ja1 = jo.getJSONArray("data");
+                        mCommoList = gson.fromJson(ja1.toString(),
+                                new TypeToken<List<GameDetailCommoBean>>() {
+                                }.getType());
+                        mCommoAdapterList.addAll(mCommoList);
+                    }else {
+
+                        JSONArray ja1 = jo.getJSONArray("data");
+                        mCommoList = gson.fromJson(ja1.toString(),
+                                new TypeToken<List<GameDetailCommoBean>>() {
+                                }.getType());
+                        mCommoAdapterList.addAll(mCommoList);
+                    }
+
+                    mIsLoading=false;
                     setCommoValues();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -174,6 +186,9 @@ public class GameDetailActivity extends AppCompatActivity {
     private GameDetailListViewAdapter mListViewAdapter;
     private GameStartBean mGameStartBean;
     private Button mCommoGame;
+    private boolean mIsLoading = false;
+    private int PAGENUM =0;
+    private TextView mTvStarRatio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,6 +203,7 @@ public class GameDetailActivity extends AppCompatActivity {
         initButtonDownload();
 
     }
+
 
     private void initToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -231,14 +247,23 @@ public class GameDetailActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         mHandler.obtainMessage(2, response).sendToTarget();
+                        Log.e("weiwei", "onResponse: "+mIntent.getStringExtra("game_id"));
                     }
                 });
+
+    }
+
+    /**
+     * 评分数据
+     */
+    private void initCommoData(int PAGENUM) {
         //游戏评分和游戏评价
         OkHttpUtils.post()//
                 .url(XingYuInterface.GET_EVALUATE_LIST)
                 .tag(this)//
                 .addParams("uid", UserUtils.getUserId())
                 .addParams("gid", mIntent.getStringExtra("game_id"))
+                .addParams("page", String.valueOf(PAGENUM))
                 .build()//
                 .execute(new StringCallback() {
                     @Override
@@ -260,6 +285,24 @@ public class GameDetailActivity extends AppCompatActivity {
 
         mListViewAdapter = new GameDetailListViewAdapter(GameDetailActivity.this, mCommoAdapterList);
         mListView.setAdapter(mListViewAdapter);
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                int lastItemIndex = firstVisibleItem + visibleItemCount ;
+                if (lastItemIndex >= (totalItemCount- 5) && !mIsLoading) {
+                    mIsLoading = true;
+                    PAGENUM++;
+                    initCommoData(PAGENUM);
+                }
+            }
+        });
+
 
         mGameCoverIcon = (ImageView) view.findViewById(R.id.iv_game_cover_pic);
         mGameVersion = (TextView) view.findViewById(R.id.tv_game_version);
@@ -279,8 +322,8 @@ public class GameDetailActivity extends AppCompatActivity {
         mGameDetailPicAdapter.setOnItemClickLitener(new GameDetailPicAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
-               /* startActivity(new Intent(Game10Activity.this, imageDetailPagerActivity.class)
-                        .putStringArrayListExtra("gameLink", gamePics));*/
+                startActivity(new Intent(GameDetailActivity.this, PhotoViewActivity.class)
+                        .putStringArrayListExtra("picsLink", gamePics).putExtra("position",position));
             }
         });
         mRecyclerView.setAdapter(mGameDetailPicAdapter);
@@ -291,6 +334,7 @@ public class GameDetailActivity extends AppCompatActivity {
         mPbSr = (ProgressBar) view.findViewById(R.id.pb_sr);
         mPbR = (ProgressBar) view.findViewById(R.id.pb_r);
         mPbN = (ProgressBar) view.findViewById(R.id.pb_n);
+        mTvStarRatio = (TextView) view.findViewById(R.id.tv_star_ratio);
 
 
         //下载按钮
@@ -301,9 +345,11 @@ public class GameDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(GameDetailActivity.this, GameCommoActivity.class);
-                intent.putExtra("gid", mIntent.getStringExtra("game_id"));
+                intent.putExtra("game_id", mIntent.getStringExtra("game_id"));
+                intent.putExtra("game_cover_pic", mIntent.getStringExtra("game_name"));
+                intent.putExtra("game_cover_pic", mIntent.getStringExtra("game_cover_pic"));
                 startActivity(intent);
-
+                finish();
             }
         });
     }
@@ -325,28 +371,28 @@ public class GameDetailActivity extends AppCompatActivity {
     }
 
     private void setCommoValues() {
-
+        mListViewAdapter.notifyDataSetChanged();
         //游戏评分
         mPbSss.setMax(Integer.parseInt(mGameStartBean.getSum_star()));
         mPbSsr.setMax(Integer.parseInt(mGameStartBean.getSum_star()));
         mPbSr.setMax(Integer.parseInt(mGameStartBean.getSum_star()));
         mPbR.setMax(Integer.parseInt(mGameStartBean.getSum_star()));
         mPbN.setMax(Integer.parseInt(mGameStartBean.getSum_star()));
-        mPbSss.setProgress(Integer.parseInt(mGameStartBean.getOne_star()));
-        mPbSsr.setProgress(Integer.parseInt(mGameStartBean.getTwo_star()));
+        mPbN.setProgress(Integer.parseInt(mGameStartBean.getOne_star()));
+        mPbR.setProgress(Integer.parseInt(mGameStartBean.getTwo_star()));
         mPbSr.setProgress(Integer.parseInt(mGameStartBean.getThree_star()));
-        mPbR.setProgress(Integer.parseInt(mGameStartBean.getFour_star()));
-        mPbN.setProgress(Integer.parseInt(mGameStartBean.getFive_star()));
-
+        mPbSsr.setProgress(Integer.parseInt(mGameStartBean.getFour_star()));
+        mPbSss.setProgress(Integer.parseInt(mGameStartBean.getFive_star()));
+        mTvStarRatio.setText(mGameStartBean.getStar_ratio());
         //热门评论
         if (mHotCommoAdapterList.size() != 0) {
             mNoData.setVisibility(View.GONE);
-            for (int i = 0; i < (mHotCommoAdapterList.size()>2?2:mHotCommoAdapterList.size()); i++) {
+            for (int i = 0; i < (mHotCommoAdapterList.size() > 2 ? 2 : mHotCommoAdapterList.size()); i++) {
                 View commo = View.inflate(GameDetailActivity.this, R.layout.item_game_commo_list, null);
                 ImageView iv_user_photo = (ImageView) commo.findViewById(R.id.iv_user_photo);
-                ImageView iv_zan = (ImageView) commo.findViewById(R.id.iv_zan);
+                final ImageView iv_zan = (ImageView) commo.findViewById(R.id.iv_zan);
                 TextView tv_user_name = (TextView) commo.findViewById(R.id.tv_user_name);
-                TextView tv_zan_num = (TextView) commo.findViewById(R.id.tv_zan_num);
+                final TextView tv_zan_num = (TextView) commo.findViewById(R.id.tv_zan_num);
                 TextView tv_reply_content = (TextView) commo.findViewById(R.id.tv_reply_content);
                 TextView tv_commo_time = (TextView) commo.findViewById(R.id.tv_commo_time);
                 RatingBar rb_score = (RatingBar) commo.findViewById(R.id.rb_score);
@@ -357,6 +403,35 @@ public class GameDetailActivity extends AppCompatActivity {
                         .into(iv_user_photo);
                 tv_user_name.setText(mHotCommoAdapterList.get(i).getNickname());
                 tv_zan_num.setText(mHotCommoAdapterList.get(i).getLaud_num());
+                final int finalI = i;
+                if (mHotCommoAdapterList.get(i).getLaud_status() == 1) {
+                    iv_zan.setImageResource(R.mipmap.ic_zan_fill);
+                } else {
+                    iv_zan.setImageResource(R.mipmap.ic_zan);
+                }
+                iv_zan.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!UserUtils.logined()) {
+                            IntentUtils.startActivity(GameDetailActivity.this, LoginActivity.class);
+                            return;
+                        }
+                        getLuad(mHotCommoAdapterList.get(finalI).getId());
+                        if (mHotCommoAdapterList.get(finalI).getLaud_status() == 1) {
+                            tv_zan_num.setText(String.valueOf((Integer.parseInt(mHotCommoAdapterList.get(finalI).getLaud_num()) - 1)));
+                            mHotCommoAdapterList.get(finalI).setLaud_num(String.valueOf((Integer.parseInt(mHotCommoAdapterList.get(finalI).getLaud_num()) - 1)));
+                            mHotCommoAdapterList.get(finalI).setLaud_status(0);
+                            Toast.makeText(GameDetailActivity.this, "取消点赞", Toast.LENGTH_SHORT).show();
+                            iv_zan.setImageResource(R.mipmap.ic_zan);
+                        } else {
+                            tv_zan_num.setText(String.valueOf((Integer.parseInt(mHotCommoAdapterList.get(finalI).getLaud_num()) + 1)));
+                            mHotCommoAdapterList.get(finalI).setLaud_num(String.valueOf((Integer.parseInt(mHotCommoAdapterList.get(finalI).getLaud_num()) + 1)));
+                            mHotCommoAdapterList.get(finalI).setLaud_status(1);
+                            Toast.makeText(GameDetailActivity.this, "点赞", Toast.LENGTH_SHORT).show();
+                            iv_zan.setImageResource(R.mipmap.ic_zan_fill);
+                        }
+                    }
+                });
                 tv_reply_content.setText(mHotCommoAdapterList.get(i).getComment());
                 tv_commo_time.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mHotCommoAdapterList.get(i).getDateline() + "000")));
                 rb_score.setRating(Integer.parseInt(mHotCommoAdapterList.get(i).getStar_num()));
@@ -369,6 +444,30 @@ public class GameDetailActivity extends AppCompatActivity {
             textView.setVisibility(View.GONE);
         }
         mListView.addHeaderView(view);
+
+    }
+
+    /**
+     * 点赞
+     */
+    private void getLuad(String eid) {
+        OkHttpUtils.post()//
+                .addParams("eid", eid)
+                .addParams("uid", UserUtils.getUserId())
+                .url(XingYuInterface.GET_EVALUATE_LAUD)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        // Log.e("hot", e.toString() + ":e");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                    }
+                });
+
     }
 
     /**

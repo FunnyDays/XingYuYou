@@ -26,7 +26,7 @@ public class GameCommoActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private EditText mEditText;
-    private int mMRatingCount=5;
+    private int mMRatingCount=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,11 @@ public class GameCommoActivity extends AppCompatActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(GameCommoActivity.this,GameDetailActivity.class);
+                intent.putExtra("game_id",getIntent().getStringExtra("game_id"));
+                intent.putExtra("game_name",getIntent().getStringExtra("game_name"));
+                intent.putExtra("game_cover_pic",getIntent().getStringExtra("game_cover_pic"));
+                GameCommoActivity.this.startActivity(intent);
                 finish();
             }
         });
@@ -63,7 +68,7 @@ public class GameCommoActivity extends AppCompatActivity {
         mEditText = (EditText) findViewById(R.id.editText);
         RatingBar ratingBar= (RatingBar) findViewById(R.id.rb);
         ratingBar.setClickable(true);//设置可否点击
-        ratingBar.setStar(5f);//设置显示的星星个数
+        ratingBar.setStar(0f);//设置显示的星星个数
         ratingBar.setStepSize(RatingBar.StepSize.Full);//设置每次点击增加一颗星还是半颗星
         ratingBar.setOnRatingChangeListener(new RatingBar.OnRatingChangeListener() {
             @Override
@@ -73,15 +78,20 @@ public class GameCommoActivity extends AppCompatActivity {
         });
     }
     private void dealEditData() {
+        if (mMRatingCount==0){
+            Toast.makeText(this, "心级不能为零", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (StringUtils.isEmpty(mEditText.getText().toString().trim())){
             Toast.makeText(this, "内容不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
         final CustomDialog customDialog = new CustomDialog(GameCommoActivity.this, "正在提交评价");
         customDialog.showDialog();
+        Log.e("weiwei", "dealEditData: "+ String.valueOf(mMRatingCount));
         OkHttpUtils.post()//
                 .addParams("uid", UserUtils.getUserId())
-                .addParams("gid", getIntent().getStringExtra("gid"))
+                .addParams("gid", getIntent().getStringExtra("game_id"))
                 .addParams("star_num", String.valueOf(mMRatingCount))
                 .addParams("comment", mEditText.getText().toString().trim())
                 .url(XingYuInterface.GET_EVALUATE)
@@ -101,11 +111,11 @@ public class GameCommoActivity extends AppCompatActivity {
                        // handler.obtainMessage(2, response).sendToTarget();
                         customDialog.dismissDialog();
                         customDialog.CancelDialog();
-                        /*Intent intent = new Intent(GameCommoActivity.this,GameDetailActivity.class);
-                        intent.putExtra("game_id",mListData.get(position-1).getId());
-                        intent.putExtra("game_name",mListData.get(position-1).getGame_name());
-                        intent.putExtra("game_cover_pic",mListData.get(position-1).getCover());
-                        GameCommoActivity.this.startActivity(intent);*/
+                        Intent intent = new Intent(GameCommoActivity.this,GameDetailActivity.class);
+                        intent.putExtra("game_id",getIntent().getStringExtra("game_id"));
+                        intent.putExtra("game_name",getIntent().getStringExtra("game_name"));
+                        intent.putExtra("game_cover_pic",getIntent().getStringExtra("game_cover_pic"));
+                        GameCommoActivity.this.startActivity(intent);
                         finish();
 
                     }

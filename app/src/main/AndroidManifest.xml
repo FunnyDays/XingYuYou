@@ -175,6 +175,8 @@
         <activity android:name=".activity.GameDetailActivity"/>
         <activity android:name=".activity.GameCommoActivity">
         </activity>
+        <activity android:name=".activity.PhotoViewActivity">
+        </activity>
     </application>
 
 </manifest>

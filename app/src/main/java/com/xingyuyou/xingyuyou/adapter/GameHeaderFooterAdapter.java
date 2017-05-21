@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.activity.GameDetailActivity;
@@ -100,13 +101,14 @@ public class GameHeaderFooterAdapter extends RecyclerView.Adapter {
                 ((ItemViewHolder) holder).mGameFeature.setText(mListData.get(position-1).getFeatures());
                 Glide.with(mActivity)
                         .load(mListData.get(position-1).getIcon())
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .dontAnimate()
                         .into(((ItemViewHolder) holder).mGamePic);
                 Glide.with(mActivity)
                         .load(mListData.get(position-1).getCover())
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .dontAnimate()
+                        .priority( Priority.HIGH )
                         .placeholder(R.drawable.shape_rectangle_cover)
                         .into(((ItemViewHolder) holder).mGameCover);
 
@@ -115,7 +117,6 @@ public class GameHeaderFooterAdapter extends RecyclerView.Adapter {
                     public void onClick(View view) {
                         Intent intent = new Intent(mActivity,GameDetailActivity.class);
                         intent.putExtra("game_id",mListData.get(position-1).getId());
-                        Log.e("weiwei", "onClick: "+mListData.get(position-1).getId() );
                         intent.putExtra("game_name",mListData.get(position-1).getGame_name());
                         intent.putExtra("game_cover_pic",mListData.get(position-1).getCover());
                         mActivity.startActivity(intent);

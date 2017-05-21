@@ -283,7 +283,7 @@ public class SelectTagActivity extends AppCompatActivity {
             }
             if (mTagListAdapter.get(position).getId() == "0") {
                 holder.title.setText("创建标签：" + mTagListAdapter.get(position).getLabel_name());
-                holder.title.setTextColor(getColor(R.color.colorAccent));
+                holder.title.setTextColor(getResources().getColor(R.color.colorAccent));
             } else {
                 holder.title.setText(mTagListAdapter.get(position).getLabel_name());
                 holder.title.setTextColor(getResources().getColor(R.color.black));

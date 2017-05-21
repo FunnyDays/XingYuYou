@@ -66,16 +66,16 @@ public class GameDetailPicAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        switch (viewType) {
+      /*  switch (viewType) {
             case 0:
                 view = LayoutInflater.from(mActivity).inflate(R.layout.item_viewpager_image_horizontal, parent, false);
                 return new ItemViewHolder(view);
-            case 1:
+           *//* case 1:
                 view = LayoutInflater.from(mActivity).inflate(R.layout.item_viewpager_image_vertical, parent, false);
-                return new ItemViewHolder(view);
-        }
-
-        return null;
+                return new ItemViewHolder(view);*//*
+        }*/
+        view = LayoutInflater.from(mActivity).inflate(R.layout.item_viewpager_image_horizontal, parent, false);
+        return new ItemViewHolder(view);
     }
 
     @Override
