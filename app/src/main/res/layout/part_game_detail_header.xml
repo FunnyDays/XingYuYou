@@ -24,27 +24,31 @@
             android:scaleType="fitXY"
             android:src="@drawable/shape_rectangle_cover"/>
 
-
+        <Button
+            android:id="@+id/bt_get_package"
+            android:layout_marginBottom="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="60dp"
+            android:layout_height="28dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/game_detail_fudai_bg"
+            android:text="福袋"
+            android:visibility="visible"
+            android:textColor="@color/white"/>
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/bt_get_package"
-        android:layout_width="60dp"
-        android:layout_height="28dp"
-        android:layout_gravity="end"
-        android:layout_margin="10dp"
-        android:background="@drawable/game_detail_fudai_bg"
-        android:text="福袋"
-        android:textColor="@color/white"/>
+
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_margin="20dp"
+        android:layout_margin="5dp"
         android:background="@color/colorPrimaryDark">
     </View>
 
     <RelativeLayout
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
