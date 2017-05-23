@@ -177,6 +177,10 @@
         </activity>
         <activity android:name=".activity.PhotoViewActivity">
         </activity>
+        <activity android:name=".activity.GodDeatilActivity">
+        </activity>
+        <activity android:name=".activity.GodListDetailActivity">
+        </activity>
     </application>
 
 </manifest>

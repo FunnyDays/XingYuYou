@@ -1,11 +1,19 @@
 package com.xingyuyou.xingyuyou.weight.infiniteViewPager;
 
+import android.app.Activity;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.glide.GlideRoundTransform;
+import com.xingyuyou.xingyuyou.adapter.GodAdapter;
+import com.xingyuyou.xingyuyou.bean.god.GodBean;
+
+import java.util.List;
 
 /**
  * Created by twiceYuan on 9/13/16.
@@ -13,20 +21,22 @@ import com.xingyuyou.xingyuyou.R;
  * Site: http://twiceyuan.com
  */
 public class ImagePagerAdapter extends PagerAdapter {
+    private List<GodBean> imgRes;
+    private Activity mActivity;
+    public ImagePagerAdapter(List<GodBean> imgRes, Activity activity) {
+        this.imgRes = imgRes;
+        this.mActivity=activity;
+    }
 
-    int[] imgRes = {
-            R.mipmap.al,
-            R.mipmap.dj,
-            R.mipmap.al,
-
-    };
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         ImageView view = new ImageView(container.getContext());
         view.setScaleType(ImageView.ScaleType.FIT_XY);
-
-        view.setImageResource(imgRes[position]);
+        Glide.with(mActivity)
+                .load(imgRes.get(position).getGod_image())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(view);
         container.addView(view);
         return view;
     }
@@ -38,7 +48,7 @@ public class ImagePagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return imgRes.length;
+        return imgRes.size();
     }
 
     @Override

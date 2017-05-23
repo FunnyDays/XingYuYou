@@ -1,13 +1,14 @@
-package com.xingyuyou.xingyuyou.bean.community;
+package com.xingyuyou.xingyuyou.bean.god;
+
+import com.xingyuyou.xingyuyou.bean.community.PostCommoBean;
 
 import java.util.List;
 
 /**
- * Created by 24002 on 2017/5/8.
+ * Created by 24002 on 2017/5/23.
  */
 
-public class PostCommoBean {
-
+public class GodCommoBean {
     /**
      * id : 38
      * pid : 0
@@ -33,29 +34,12 @@ public class PostCommoBean {
     private String floor_num;
     private String nickname;
     private String head_image;
-    private String laud_count;
-    private String laud_status;
+    private String forum_laud;
+    private int laud_status;
     private List<String> imgarr;
-    private List<ChildBean> child;
+    private List<PostCommoBean.ChildBean> child;
 
-    public PostCommoBean() {
-    }
 
-    public PostCommoBean(String id, String pid, String uid, String replies_content, String dateline, String tid, String floor_num, String nickname, String head_image, String laud_count, String laud_status, List<String> imgarr, List<ChildBean> child) {
-        this.id = id;
-        this.pid = pid;
-        this.uid = uid;
-        this.replies_content = replies_content;
-        this.dateline = dateline;
-        this.tid = tid;
-        this.floor_num = floor_num;
-        this.nickname = nickname;
-        this.head_image = head_image;
-        this.laud_count = laud_count;
-        this.laud_status = laud_status;
-        this.imgarr = imgarr;
-        this.child = child;
-    }
 
     public String getId() {
         return id;
@@ -129,19 +113,18 @@ public class PostCommoBean {
         this.head_image = head_image;
     }
 
-    public String getLaud_count() {
-        return laud_count;
+    public String getForum_laud() {
+        return forum_laud;
     }
 
-    public void setLaud_count(String laud_count) {
-        this.laud_count = laud_count;
+    public void setForum_laud(String forum_laud) {
+        this.forum_laud = forum_laud;
     }
-
-    public String getLaud_status() {
+    public int getLaud_status() {
         return laud_status;
     }
 
-    public void setLaud_status(String laud_status) {
+    public void setLaud_status(int laud_status) {
         this.laud_status = laud_status;
     }
 
@@ -153,11 +136,11 @@ public class PostCommoBean {
         this.imgarr = imgarr;
     }
 
-    public List<ChildBean> getChild() {
+    public List<PostCommoBean.ChildBean> getChild() {
         return child;
     }
 
-    public void setChild(List<ChildBean> child) {
+    public void setChild(List<PostCommoBean.ChildBean> child) {
         this.child = child;
     }
 
@@ -269,10 +252,11 @@ public class PostCommoBean {
                 ", floor_num='" + floor_num + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", head_image='" + head_image + '\'' +
-                ", laud_count='" + laud_count + '\'' +
+                ", laud_count='" + forum_laud + '\'' +
                 ", laud_status='" + laud_status + '\'' +
                 ", imgarr=" + imgarr +
                 ", child=" + child +
                 '}';
     }
+
 }
