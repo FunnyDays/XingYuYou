@@ -8,12 +8,18 @@
     android:layout_height="match_parent"
     tools:context="com.xingyuyou.xingyuyou.activity.GodListDetailActivity">
     <include layout="@layout/toolbar"/>
-    <ListView
-        android:id="@+id/listView"
-        android:layout_weight="1"
+    <LinearLayout
+        android:id="@+id/txt_main_content"
         android:layout_width="match_parent"
+        android:layout_weight="1"
         android:layout_height="wrap_content">
-    </ListView>
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </ListView>
+    </LinearLayout>
+
     <include
         layout="@layout/widget_bottom_edit"/>
 </LinearLayout>

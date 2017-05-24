@@ -38,6 +38,7 @@ public class XingYuInterface {
     public static final String GET_LAUD=Host+"Community/get_laud";
     public static final String GET_COLLECT=Host+"Community/get_collect";
     public static final String GET_RECOMMEND=Host+"Community/get_recommend";
+    public static final String REPLIES_LAUD=Host+"Community/replies_laud";
 
     public static final String UPDATE_INFORMATION=Host+"UserCenter/update_information";
     public static final String GET_USER_INFO=Host+"UserCenter/get_user_info";

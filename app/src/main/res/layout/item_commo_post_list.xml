@@ -138,16 +138,16 @@
 
         <TextView
             android:id="@+id/tv_commo2_more"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/x40"
+            android:layout_height="@dimen/x14"
             android:layout_gravity="center"
             android:layout_marginBottom="5dp"
             android:background="@color/blue"
             android:gravity="center"
-            android:padding="3dp"
+            android:padding="0dp"
             android:text="更多"
             android:textColor="@color/light_white"
-            android:textSize="12sp"/>
+            android:textSize="@dimen/x8"/>
     </LinearLayout>
 
     <View

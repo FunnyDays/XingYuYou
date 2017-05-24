@@ -6,12 +6,17 @@ import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,9 +33,13 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.IntentUtils;
+import com.xingyuyou.xingyuyou.Utils.KeyboardUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.EmotionAdapter;
 import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.EmotionKeyboard;
 import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.GlobalOnItemClickManager;
+import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
@@ -42,17 +51,26 @@ import com.xingyuyou.xingyuyou.bean.god.GodDetailBean;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameDetailBean;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameDetailCommoBean;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameStartBean;
+import com.xingyuyou.xingyuyou.weight.dialog.CustomDialog;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import net.bither.util.NativeUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import me.nereo.multi_image_selector.MultiImageSelector;
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import okhttp3.Call;
 
 public class GodListDetailActivity extends AppCompatActivity {
@@ -65,6 +83,9 @@ public class GodListDetailActivity extends AppCompatActivity {
     private ImageView extendButton, emotionButton;
     private EditText edittext;
     private Button btnSend;
+    private static final int REQUEST_IMAGE = 2;
+    private static final int TYPE_FOOTER = 21;
+    private ArrayList<String> mImageList = new ArrayList();
     private Toolbar mToolbar;
     private TextView mTv_title;
     private TextView mTv_time;
@@ -84,8 +105,8 @@ public class GodListDetailActivity extends AppCompatActivity {
                     if (string.equals("1")) {
                         JSONObject jsonObject = jo.getJSONObject("data");
                         Gson gson = new Gson();
-                        GodActivityDetailBean godDetailBean = gson.fromJson(jsonObject.toString(), GodActivityDetailBean.class);
-                        setValues(godDetailBean);
+                        mGodDetailBean = gson.fromJson(jsonObject.toString(), GodActivityDetailBean.class);
+                        setValues(mGodDetailBean);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -93,7 +114,10 @@ public class GodListDetailActivity extends AppCompatActivity {
             }
             if (msg.what == 2) {
                 String response = (String) msg.obj;
-
+                if (response.contains("\"data\":null")) {
+                  //  Toast.makeText(GodListDetailActivity.this, "已经没有更多数据", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 JSONObject jo = null;
                 try {
                     jo = new JSONObject(response);
@@ -103,6 +127,11 @@ public class GodListDetailActivity extends AppCompatActivity {
                             new TypeToken<List<GodCommoBean>>() {
                             }.getType());
                     mCommoAdapterList.addAll(mCommoList);
+                    if (mCommoAdapterList.size()<=20){
+                        TextView textView = new TextView(GodListDetailActivity.this);
+                        textView.setText("没有更多数据");
+                        mListView.addFooterView(textView);
+                    }
                     mGodCommoListAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -111,15 +140,26 @@ public class GodListDetailActivity extends AppCompatActivity {
         }
     };
     private GodCommoListAdapter mGodCommoListAdapter;
-
+    private RecyclerView mRecyclerView;
+    private ImageAdapter mImageAdapter;
+    private EditText mEditText;
+    private LinearLayout mLinearLayout;
+    private LinearLayout mLinearLayout2;
+    private CustomDialog mDialog;
+    private GodActivityDetailBean mGodDetailBean;
+    private LinearLayout mLlMoreCommoItem;
+    private ListView mListView;
+    private int PAGENUM = 1;
+    boolean isLoading = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_god_list_detail);
+        initCommoData(1);
         initData();
         initToolBar();
+        initKeyBoardView();
         initView();
-        initCommoData(1);
     }
     /**
      * 获取评论内容
@@ -166,19 +206,48 @@ public class GodListDetailActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        ListView listView = (ListView) findViewById(R.id.listView);
+        //底部发送
+        mEditText = (EditText) findViewById(R.id.bottom_edit_text);
+        mLinearLayout = (LinearLayout) findViewById(R.id.ll_edit_parent);
+        mLinearLayout2 = (LinearLayout) findViewById(R.id.ll_emotion_parent);
+
+        mListView = (ListView) findViewById(R.id.listView);
         View view = View.inflate(GodListDetailActivity.this, R.layout.part_god_activity_header, null);
         mTv_title = (TextView) view.findViewById(R.id.tv_title);
         mTv_time = (TextView) view.findViewById(R.id.tv_time);
         mTv_content = (TextView) view.findViewById(R.id.tv_content);
         mIv_god_content = (ImageView) view.findViewById(R.id.iv_god_content);
-        listView.addHeaderView(view);
+        mListView.addHeaderView(view);
         mGodCommoListAdapter = new GodCommoListAdapter(GodListDetailActivity.this,mCommoAdapterList);
-        listView.setAdapter(mGodCommoListAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setAdapter(mGodCommoListAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(GodListDetailActivity.this, ""+i, Toast.LENGTH_SHORT).show();
+                if (i!=0)
+                startActivityToPostReplyCommo(i-1);
+            }
+        });
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+             if (i+i1+9==i2){
+                 if (!isLoading) {
+                     isLoading = true;
+                     mHandler.postDelayed(new Runnable() {
+                         @Override
+                         public void run() {
+                             PAGENUM++;
+                             initCommoData(PAGENUM);
+                             isLoading = false;
+                         }
+                     }, 200);
+                 }
+             }
             }
         });
     }
@@ -193,7 +262,16 @@ public class GodListDetailActivity extends AppCompatActivity {
         });
     }
 
+    private void startActivityToPostReplyCommo(int position) {
+        if (mCommoAdapterList.get(position).getFloor_num()!=null){
+            Gson gson = new Gson();
+            String json = gson.toJson(mCommoAdapterList.get(position), GodCommoBean.class);
+            Intent intent = new Intent(GodListDetailActivity.this, PostReplyCommoActivity.class);
+            intent.putExtra("item_list", json);
+            GodListDetailActivity.this.startActivity(intent);
+        }
 
+    }
     public void setValues(GodActivityDetailBean values) {
         mTv_title.setText(values.getSubject());
         mTv_content.setText(values.getMessage());
@@ -201,6 +279,21 @@ public class GodListDetailActivity extends AppCompatActivity {
         Glide.with(getApplication())
                 .load(values.getPosts_image())
                 .into(mIv_god_content);
+
+        mEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!UserUtils.logined()){
+                    IntentUtils.startActivity(GodListDetailActivity.this,LoginActivity.class);
+                    return;
+                }
+                mLinearLayout.setVisibility(View.GONE);
+                mLinearLayout2.setVisibility(View.VISIBLE);
+                //开启软键盘
+                KeyboardUtils.showSoftInput(edittext);
+            }
+        });
+
     }
     //*****************************************软键盘*****************************************************
     private void initKeyBoardView() {
@@ -228,6 +321,7 @@ public class GodListDetailActivity extends AppCompatActivity {
                 .setEmotionView(emotionView)
                 .bindToContent(contentView)
                 .bindToEditText(edittext)
+                .bindToExtendButton(extendButton)
                 .bindToEmotionButton(emotionButton)
                 .build();
         setUpEmotionViewPager();
@@ -306,7 +400,10 @@ public class GodListDetailActivity extends AppCompatActivity {
      * 设置扩展布局下的视图
      */
     private void setUpExtendView() {
-
+        mRecyclerView = (RecyclerView) findViewById(R.id.rl_all_image);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(GodListDetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        mImageAdapter = new ImageAdapter();
+        mRecyclerView.setAdapter(mImageAdapter);
     }
 
     /**
@@ -350,9 +447,145 @@ public class GodListDetailActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //sendReply();
+                sendReply();
             }
         });
     }
 
+    /**
+     * 回帖
+     */
+    private void sendReply() {
+        if (StringUtils.isEmpty(edittext.getText().toString().trim())) {
+            Toast.makeText(this, "评论内容为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //关闭键盘
+        KeyboardUtils.hideSoftInput(this);
+        mDialog = new CustomDialog(GodListDetailActivity.this, "正在回帖中...");
+        mDialog.showDialog();
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("pid", "0");
+        params.put("uid", UserUtils.getUserId());
+        params.put("tid", mGodDetailBean.getId());
+        params.put("replies_content", edittext.getText().toString().trim());
+        //隐藏键盘
+        emotionKeyboard.interceptBackPress();
+        PostFormBuilder post = OkHttpUtils.post();
+        for (int i = 0; i < mImageList.size(); i++) {
+            File file = new File(mImageList.get(i));
+            if (file.exists()) {
+                File file1 = new File(getExternalCacheDir() + "tempCompress" + i + ".jpg");
+                NativeUtil.compressBitmap(mImageList.get(i), file1.getAbsolutePath());
+                String s = "replies_image";
+                post.addFile(s + i, file.getName(), file1);
+            }
+
+        }
+        post.url(XingYuInterface.REPLIES)
+                .params(params)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(okhttp3.Call call, Exception e, int id) {
+                        mDialog.dismissDialog();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        mDialog.dismissDialog();
+                       /* PostCommoBean postCommoBean = new PostCommoBean();
+                        postCommoBean.setNickname(UserUtils.getNickName());
+                        postCommoBean.setHead_image(UserUtils.getUserPhoto());
+                        postCommoBean.setDateline(String.valueOf(TimeUtils.getNowTimeMills()).substring(0, String.valueOf(TimeUtils.getNowTimeMills()).length() - 3));
+                        postCommoBean.setReplies_content( edittext.getText().toString().trim());
+                        mCommoAdapterList.add(postCommoBean);
+                        mCommoListAdapter.notifyDataSetChanged();*/
+                        mImageList.clear();
+                        //待优化
+                    }
+                });
+    }
+
+
+    private class ImageAdapter extends RecyclerView.Adapter {
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View layout = LayoutInflater.from(GodListDetailActivity.this).inflate(R.layout.item_post_commo_image, parent, false);
+            return new ImageAdapter.ItemViewHolder(layout);
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+            if (getItemViewType(position) == TYPE_FOOTER) {
+                ((ImageAdapter.ItemViewHolder) holder).mClosePic.setVisibility(View.GONE);
+                ((ImageAdapter.ItemViewHolder) holder).mPostImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (mImageList.size() >= 5) {
+                            Toast.makeText(GodListDetailActivity.this, "只能发布五张图片", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        MultiImageSelector.create(GodListDetailActivity.this)
+                                .showCamera(true)
+                                .single()
+                                .start(GodListDetailActivity.this, REQUEST_IMAGE);
+                    }
+                });
+            }
+            if (holder instanceof ImageAdapter.ItemViewHolder) {
+                if (mImageList.size() != 0) {
+                    if (getItemViewType(position) != TYPE_FOOTER) {
+                        Glide.with(GodListDetailActivity.this)
+                                .load(mImageList.get(position))
+                                .into(((ImageAdapter.ItemViewHolder) holder).mPostImage);
+                        ((ImageAdapter.ItemViewHolder) holder).mClosePic.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                mImageList.remove(position);
+                                notifyDataSetChanged();
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (position == getItemCount() - 1) {
+                //最后一个,应该加载Footer
+                return TYPE_FOOTER;
+            }
+            return super.getItemViewType(position);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mImageList.size() == 0 ? 1 : mImageList.size() + 1;
+        }
+
+        class ItemViewHolder extends RecyclerView.ViewHolder {
+
+            private ImageView mClosePic;
+            private ImageView mPostImage;
+
+            public ItemViewHolder(View itemView) {
+                super(itemView);
+                mClosePic = (ImageView) itemView.findViewById(R.id.iv_close);
+                mPostImage = (ImageView) itemView.findViewById(R.id.iv_post_image);
+            }
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE) {
+            if (resultCode == RESULT_OK) {
+                List<String> path = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+                mImageList.addAll(path);
+                mImageAdapter.notifyDataSetChanged();
+            }
+        }
+    }
 }
