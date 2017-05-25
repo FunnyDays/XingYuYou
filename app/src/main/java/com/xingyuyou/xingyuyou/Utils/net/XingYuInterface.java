@@ -47,6 +47,9 @@ public class XingYuInterface {
     public static final String USER_FEEDBACK=Host+"UserCenter/user_feedback";
     public static final String COLLECT_LIST=Host+"UserCenter/collect_list";//帖子收藏
     public static final String MY_REPLIES_LIST=Host+"UserCenter/my_replies_list";//我的评论
+    public static final String PRIVATE_LETTER_LIST=Host+"UserCenter/private_letter_list";//私信列表
+    public static final String PRIVATE_LETTER_ADD=Host+"UserCenter/private_letter_add";//用户回复私信
+    public static final String PRIVATE_LETTER_READ=Host+"UserCenter/private_letter_read";//私信最新消息判断
 
     public static final String GET_GODLIST=Host+"GodForum/get_godlist";//神社轮播图接口
     public static final String GET_GOD_FORUMS=Host+"GodForum/get_god_forums";//神社活动回帖列表

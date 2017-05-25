@@ -588,4 +588,10 @@ public class GodListDetailActivity extends AppCompatActivity {
             }
         }
     }
+    @Override
+    public void onBackPressed() {
+        if (!emotionKeyboard.interceptBackPress()) {
+            super.onBackPressed();
+        }
+    }
 }

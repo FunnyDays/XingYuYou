@@ -162,7 +162,7 @@ public class CommHotFragment extends BaseFragment {
     public void initData(int PAGENUMBER) {
         OkHttpUtils.post()//
                 .addParams("page", String.valueOf(PAGENUMBER))
-                .addParams("type", String.valueOf("1"))
+                .addParams("type", getArguments().getString("ARGS"))
                 .url(XingYuInterface.GET_POSTS_LIST)
                 .tag(this)//
                 .build()//

@@ -88,9 +88,9 @@ public class TwoFragment extends BaseFragment {
     private void minitData() {
         mFragments = new ArrayList<BaseFragment>();
         mTitles = new ArrayList<String>();
-        CommHotFragment hf = new CommHotFragment();
-        OnlineGameFragment hf1 = new OnlineGameFragment();
-        AloneGameFragment hf2 = new AloneGameFragment();
+        CommHotFragment hf = CommHotFragment.newInstance("1");
+        CommHotFragment hf1 =CommHotFragment.newInstance("2");
+        CommHotFragment hf2 = CommHotFragment.newInstance("3");
         mFragments.add(hf);
         mFragments.add(hf1);
         mFragments.add(hf2);

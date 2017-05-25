@@ -181,6 +181,9 @@
         </activity>
         <activity android:name=".activity.GodListDetailActivity">
         </activity>
+        <activity android:name=".activity.PrivateLetterActivity">
+        </activity>
+        <activity android:name=".activity.PrivateLetterDetailActivity"/>
     </application>
 
 </manifest>

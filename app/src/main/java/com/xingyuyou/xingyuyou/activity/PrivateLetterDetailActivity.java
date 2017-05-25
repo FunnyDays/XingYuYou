@@ -1,41 +1,36 @@
 package com.xingyuyou.xingyuyou.activity;
 
-import android.graphics.Color;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
-import com.xingyuyou.xingyuyou.Utils.KeyboardUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
+import com.xingyuyou.xingyuyou.Utils.SPUtils;
 import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.EmotionAdapter;
 import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.EmotionKeyboard;
 import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.GlobalOnItemClickManager;
@@ -44,37 +39,52 @@ import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
-import com.xingyuyou.xingyuyou.bean.community.PostCommoBean;
-import com.xingyuyou.xingyuyou.bean.user.UserBean;
-import com.xingyuyou.xingyuyou.weight.dialog.CustomDialog;
+import com.xingyuyou.xingyuyou.bean.user.PrivateLetterBean;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import net.bither.util.NativeUtil;
-
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class PostReplyCommoActivity extends AppCompatActivity {
+import okhttp3.Call;
 
-    private TextView mTvContent;
-    private TextView mUserName;
-    private TextView mPostTime;
-    private TextView mCommoContent;
-    private TextView mFloorNum;
-    private TextView mLoveNum;
-    private LinearLayout mLlRootImage;
-    private ImageView mIvLove;
-    private ImageView mIvUserPhoto;
-    private RecyclerView mRecyclerView;
+public class PrivateLetterDetailActivity extends AppCompatActivity {
+    private List<PrivateLetterBean> mLetterList = new ArrayList();
+    private List<PrivateLetterBean> mLetterAdapterList = new ArrayList();
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.obj != null) {
+                if (msg.what == 1) {
+                    String response = (String) msg.obj;
+
+                    JSONObject jo = null;
+                    try {
+                        jo = new JSONObject(response);
+                        String string = jo.getString("status");
+                        if (string.equals("1")) {
+                            JSONArray ja = jo.getJSONArray("data");
+                            Gson gson = new Gson();
+                            mLetterList = gson.fromJson(ja.toString(),
+                                    new TypeToken<List<PrivateLetterBean>>() {
+                                    }.getType());
+                            mLetterAdapterList.addAll(mLetterList);
+                            mLetterAdapter.notifyDataSetChanged();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }
+    };
+
     private EmotionKeyboard emotionKeyboard;
     private RadioGroup rgTipPoints;
     private RadioButton rbPoint;
@@ -85,79 +95,60 @@ public class PostReplyCommoActivity extends AppCompatActivity {
     private EditText edittext;
     private Button btnSend;
     private Toolbar mToolbar;
-    private CustomDialog mDialog;
-    private PostCommoBean mPostCommoBean;
-    private CommoToCommoAdapter mToCommoAdapter;
-    List<PostCommoBean.ChildBean> mCommoAdapterList = new ArrayList();
-
+    private PrivateLetterAdapter mLetterAdapter;
+    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_reply_commo);
-        initData();
-        initToolBar();
-        initKeyBoardView();
+        setContentView(R.layout.activity_private_letter);
         initView();
+        initData();
+        initKeyBoardView();
+        initToolBar();
     }
 
-    private void initData() {
-        String itemList = getIntent().getStringExtra("item_list");
-        try {
-            JSONObject jo = new JSONObject(itemList);
-            Gson gson = new Gson();
-            mPostCommoBean = gson.fromJson(jo.toString(), PostCommoBean.class);
-            if (mPostCommoBean.getChild()!=null)
-            mCommoAdapterList.addAll(mPostCommoBean.getChild());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    private void initView() {
+        mListView = (ListView) findViewById(R.id.listView);
+        mListView.setDivider(null);
+        mLetterAdapter = new PrivateLetterAdapter();
+        mListView.setAdapter(mLetterAdapter);
 
+    }
+
+    /**
+     * 初始化数据
+     */
+    public void initData() {
+        SPUtils user_data = new SPUtils("user_data");
+        OkHttpUtils.post()//
+                .addParams("uid", user_data.getString("id"))
+                .url(XingYuInterface.PRIVATE_LETTER_LIST)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        // Log.e("hot", e.toString() + ":e");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        mHandler.obtainMessage(1, response).sendToTarget();
+                        Log.e("onResponse", response + ":e");
+                    }
+                });
     }
 
     private void initToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("私信");
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-    }
-
-    private void initView() {
-        mUserName = (TextView) findViewById(R.id.tv_user_name);
-        mPostTime = (TextView) findViewById(R.id.tv_post_time);
-        mCommoContent = (TextView) findViewById(R.id.tv_commo_content);
-        mFloorNum = (TextView) findViewById(R.id.tv_floor_num);
-        mLoveNum = (TextView) findViewById(R.id.tv_love_num);
-        mLlRootImage = (LinearLayout) findViewById(R.id.ll_root_image_item);
-
-        mIvLove = (ImageView) findViewById(R.id.iv_love);
-        mIvUserPhoto = (ImageView) findViewById(R.id.iv_user_photo);
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        initRecyclerView();
-        setValues();
-    }
-
-    //****************************************楼中楼回复显示********************************************************
-    private void initRecyclerView() {
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            mToCommoAdapter = new CommoToCommoAdapter();
-            mRecyclerView.setAdapter(mToCommoAdapter);
-
-    }
-
-    private void setValues() {
-        Glide.with(getApplication())
-                .load(mPostCommoBean.getHead_image())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .transform(new GlideCircleTransform(getApplication()))
-                .into(mIvUserPhoto);
-        mUserName.setText(mPostCommoBean.getNickname());
-        mPostTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mPostCommoBean.getDateline() + "000")));
-        mCommoContent.setText(SpanStringUtils.getEmotionContent(getApplication(),mCommoContent,mPostCommoBean.getReplies_content()));
-        mFloorNum.setText(mPostCommoBean.getFloor_num() + "楼");
     }
 
     //*****************************************软键盘*****************************************************
@@ -312,99 +303,105 @@ public class PostReplyCommoActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * 回帖
-     */
     private void sendReply() {
-        if (StringUtils.isEmpty(edittext.getText().toString().trim())) {
-            Toast.makeText(this, "评论内容为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        //关闭键盘
-        KeyboardUtils.hideSoftInput(PostReplyCommoActivity.this);
-        emotionKeyboard.interceptBackPress();
-        mDialog = new CustomDialog(PostReplyCommoActivity.this, "正在回复中...");
-        mDialog.showDialog();
-
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("pid", mPostCommoBean.getId());
-        params.put("uid", UserUtils.getUserId());
-        params.put("tid", mPostCommoBean.getTid());
-        params.put("replies_content", edittext.getText().toString().trim());
-        Log.e("weiwei", "sendReply: "+mPostCommoBean.getId()+"getTid"+mPostCommoBean.getTid() );
-
-        PostFormBuilder post = OkHttpUtils.post();
-
-        post.url(XingYuInterface.REPLIES)
-                .params(params)
-                .build()
+        OkHttpUtils.post()//
+                .url(XingYuInterface.PRIVATE_LETTER_ADD)
+                .addParams("uid", UserUtils.getUserId())
+                .addParams("content", edittext.getText().toString().trim())
+                .tag(this)//
+                .build()//
                 .execute(new StringCallback() {
                     @Override
-                    public void onError(okhttp3.Call call, Exception e, int id) {
-                        mDialog.dismissDialog();
+                    public void onError(Call call, Exception e, int id) {
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-                        mDialog.dismissDialog();
-                        Log.e("weiwei", "1sendReply: "+response );
-                        // mCommoAdapterList.clear();
-                        //待优化
-                        PostCommoBean.ChildBean childBean = new PostCommoBean.ChildBean();
-                        childBean.setNickname(UserUtils.getNickName());
-                        childBean.setReplies_content(edittext.getText().toString().trim());
-                        childBean.setDateline(String.valueOf(TimeUtils.getNowTimeMills()).substring(0, String.valueOf(TimeUtils.getNowTimeMills()).length() - 3));
-                        mCommoAdapterList.add(childBean);
-                        mToCommoAdapter.notifyDataSetChanged();
+                        PrivateLetterBean privateLetterBean = new PrivateLetterBean(edittext.getText().toString().trim(), UserUtils.getUserPhoto(),"1");
+                        mLetterAdapterList.add(privateLetterBean);
+                        mLetterAdapter.notifyDataSetChanged();
+                        mListView.smoothScrollToPosition(mLetterAdapterList.size());
                     }
                 });
     }
 
-    private class CommoToCommoAdapter extends RecyclerView.Adapter {
+    private class PrivateLetterAdapter extends BaseAdapter {
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View layout = LayoutInflater.from(PostReplyCommoActivity.this).inflate(R.layout.item_commo_to_commo_list, parent, false);
-            return new ItemCommoViewHolder(layout);
+        public int getCount() {
+            return mLetterAdapterList.size();
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-            ((ItemCommoViewHolder) holder).mUser2Name.setText(mCommoAdapterList.get(position).getNickname() + ":");
-            ((ItemCommoViewHolder) holder).mCommo2Content.setText(SpanStringUtils.getEmotionContent(getApplication(),((ItemCommoViewHolder) holder).mCommo2Content,mCommoAdapterList.get(position).getReplies_content()));
-            ((ItemCommoViewHolder) holder).mCommo2Time.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mCommoAdapterList.get(position).getDateline() + "000")));
-            ((ItemCommoViewHolder) holder).mRlItemCommoDetail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String content = "@" + mCommoAdapterList.get(position).getNickname() + " ";
-                    SpannableString spannableString = new SpannableString(content);
-                    spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.blue)), 0, content.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    edittext.setText(spannableString);
-                    edittext.setSelection(content.length());
-                    //开启键盘
-                    KeyboardUtils.showSoftInput(edittext);
-                }
-            });
+        public int getItemViewType(int position) {
+            return Integer.parseInt(mLetterAdapterList.get(position).getPid()) == 0 ? 1 : 0;
         }
 
         @Override
-        public int getItemCount() {
-            return mCommoAdapterList.size();
+        public int getViewTypeCount() {
+            return 2;
         }
 
-        class ItemCommoViewHolder extends RecyclerView.ViewHolder {
-            private TextView mUser2Name;
-            private TextView mCommo2Content;
-            private TextView mCommo2Time;
-            private RelativeLayout mRlItemCommoDetail;
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
 
-            public ItemCommoViewHolder(View itemView) {
-                super(itemView);
-                mRlItemCommoDetail = (RelativeLayout) itemView.findViewById(R.id.item_commo_detail);
-                mUser2Name = (TextView) itemView.findViewById(R.id.tv_user2_name);
-                mCommo2Content = (TextView) itemView.findViewById(R.id.tv_commo2_content);
-                mCommo2Time = (TextView) itemView.findViewById(R.id.tv_commo2_time);
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            ZeroViewHolder zeroViewHolder;
+            OneViewHolder oneViewHolder;
+            switch (getItemViewType(i)) {
+                case 0:
+                    if (view==null){
+                        view = View.inflate(PrivateLetterDetailActivity.this, R.layout.item_private_letter_com_list, null);
+                        zeroViewHolder = new ZeroViewHolder();
+                        zeroViewHolder.iv_user_photo = (ImageView) view.findViewById(R.id.iv_user_photo);
+                        zeroViewHolder.tv_content = (TextView) view.findViewById(R.id.tv_content);
+                        view.setTag(zeroViewHolder);
+                    }else {
+                        zeroViewHolder =(ZeroViewHolder) view.getTag();
+                    }
+                    zeroViewHolder.tv_content.setText(SpanStringUtils.getEmotionContent(PrivateLetterDetailActivity.this, zeroViewHolder.tv_content, mLetterAdapterList.get(i).getContent()));
+                    Glide.with(getApplication())
+                            .load(mLetterAdapterList.get(i).getHead_image())
+                            .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                            .transform(new GlideCircleTransform(getApplication()))
+                            .into(zeroViewHolder.iv_user_photo);
+                    break;
+                case 1:
+                    if (view==null){
+                        view = View.inflate(PrivateLetterDetailActivity.this, R.layout.item_private_letter_send_list, null);
+                        oneViewHolder= new OneViewHolder();
+                        oneViewHolder.iv_user_photo = (ImageView) view.findViewById(R.id.iv_user_photo);
+                        oneViewHolder.tv_content = (TextView) view.findViewById(R.id.tv_content);
+                        view.setTag(oneViewHolder);
+                    }else {
+                        oneViewHolder = (OneViewHolder) view.getTag();
+                    }
+                    oneViewHolder.tv_content.setText(SpanStringUtils.getEmotionContent(PrivateLetterDetailActivity.this, oneViewHolder.tv_content, mLetterAdapterList.get(i).getContent()));
+                    Glide.with(getApplication())
+                            .load(mLetterAdapterList.get(i).getHead_image())
+                            .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                            .transform(new GlideCircleTransform(getApplication()))
+                            .into(oneViewHolder.iv_user_photo);
+                    break;
             }
+            return view;
         }
+        class ZeroViewHolder {
+            TextView tv_content;
+            ImageView iv_user_photo;
+        }
+        class OneViewHolder {
+            TextView tv_content;
+            ImageView iv_user_photo;
+        }
+
     }
     @Override
     public void onBackPressed() {

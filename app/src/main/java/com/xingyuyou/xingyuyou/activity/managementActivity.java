@@ -77,6 +77,7 @@ public class ManagementActivity extends AppCompatActivity {
         }
     };
     private TextView mTvNickName;
+    private RelativeLayout rl_letter;
 
     private void setValues() {
         UserUtils.setNickName(mUserBean.getNickname());
@@ -249,14 +250,19 @@ public class ManagementActivity extends AppCompatActivity {
             }
         });
 
-       /* //关于星宇
-        mAboutXingYu = (RelativeLayout) findViewById(R.id.rl_six);
-        mAboutXingYu.setOnClickListener(new View.OnClickListener() {
+        //私信
+        rl_letter = (RelativeLayout) findViewById(R.id.rl_letter);
+        rl_letter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(ManagementActivity.this, AboutActivity.class);
+                if (UserUtils.logined()) {
+                    IntentUtils.startActivity(ManagementActivity.this, PrivateLetterDetailActivity.class);
+                } else {
+                    IntentUtils.startActivity(ManagementActivity.this, LoginActivity.class);
+                }
+
             }
-        });*/
+        });
         //下载管理
         mGameDownload = (RelativeLayout) findViewById(R.id.rl_seven);
         mGameDownload.setOnClickListener(new View.OnClickListener() {
