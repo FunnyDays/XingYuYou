@@ -108,6 +108,7 @@ public class GameDetailActivity extends AppCompatActivity {
                 try {
                     jsonObject = new JSONObject(response);
                     if (jsonObject.getString("status").equals("-1")) {
+                        mBtPackage.setVisibility(View.GONE);
                         mBtPackage.setBackgroundResource(R.drawable.button_gray_bg);
                         mBtPackage.setTextColor(getResources().getColor(R.color.darker_gray));
                         mBtPackage.setEnabled(false);
@@ -132,7 +133,7 @@ public class GameDetailActivity extends AppCompatActivity {
                 try {
                     jo = new JSONObject(response);
                     Gson gson = new Gson();
-                    if (PAGENUM<2){
+                    if (PAGENUM < 2) {
                         JSONArray ja = jo.getJSONArray("nicedata");
                         mHotCommoList = gson.fromJson(ja.toString(),
                                 new TypeToken<List<GameDetailCommoBean>>() {
@@ -147,7 +148,7 @@ public class GameDetailActivity extends AppCompatActivity {
                                 new TypeToken<List<GameDetailCommoBean>>() {
                                 }.getType());
                         mCommoAdapterList.addAll(mCommoList);
-                    }else {
+                    } else {
 
                         JSONArray ja1 = jo.getJSONArray("data");
                         mCommoList = gson.fromJson(ja1.toString(),
@@ -156,7 +157,7 @@ public class GameDetailActivity extends AppCompatActivity {
                         mCommoAdapterList.addAll(mCommoList);
                     }
 
-                    mIsLoading=false;
+                    mIsLoading = false;
                     setCommoValues();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -187,8 +188,10 @@ public class GameDetailActivity extends AppCompatActivity {
     private GameStartBean mGameStartBean;
     private Button mCommoGame;
     private boolean mIsLoading = false;
-    private int PAGENUM =0;
+    private int PAGENUM = 0;
     private TextView mTvStarRatio;
+    private RelativeLayout mRl_top_image;
+    private RelativeLayout mRl_top_game_detail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,7 +250,7 @@ public class GameDetailActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         mHandler.obtainMessage(2, response).sendToTarget();
-                        Log.e("weiwei", "onResponse: "+mIntent.getStringExtra("game_id"));
+                        Log.e("weiwei", "onResponse: " + mIntent.getStringExtra("game_id"));
                     }
                 });
 
@@ -294,8 +297,8 @@ public class GameDetailActivity extends AppCompatActivity {
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
-                int lastItemIndex = firstVisibleItem + visibleItemCount ;
-                if (lastItemIndex >= (totalItemCount- 5) && !mIsLoading) {
+                int lastItemIndex = firstVisibleItem + visibleItemCount;
+                if (lastItemIndex >= (totalItemCount - 5) && !mIsLoading) {
                     mIsLoading = true;
                     PAGENUM++;
                     initCommoData(PAGENUM);
@@ -303,6 +306,9 @@ public class GameDetailActivity extends AppCompatActivity {
             }
         });
 
+        //游戏Cover图
+        mRl_top_image = (RelativeLayout) view.findViewById(R.id.rl_top_image);
+        mRl_top_game_detail = (RelativeLayout) view.findViewById(R.id.rl_top_game_detail);
 
         mGameCoverIcon = (ImageView) view.findViewById(R.id.iv_game_cover_pic);
         mGameVersion = (TextView) view.findViewById(R.id.tv_game_version);
@@ -323,7 +329,7 @@ public class GameDetailActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, int position) {
                 startActivity(new Intent(GameDetailActivity.this, PhotoViewActivity.class)
-                        .putStringArrayListExtra("picsLink", gamePics).putExtra("position",position));
+                        .putStringArrayListExtra("picsLink", gamePics).putExtra("position", position));
             }
         });
         mRecyclerView.setAdapter(mGameDetailPicAdapter);
@@ -346,7 +352,7 @@ public class GameDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(GameDetailActivity.this, GameCommoActivity.class);
                 intent.putExtra("game_id", mIntent.getStringExtra("game_id"));
-                intent.putExtra("game_cover_pic", mIntent.getStringExtra("game_name"));
+                intent.putExtra("game_name", mIntent.getStringExtra("game_name"));
                 intent.putExtra("game_cover_pic", mIntent.getStringExtra("game_cover_pic"));
                 startActivity(intent);
                 finish();
@@ -355,7 +361,12 @@ public class GameDetailActivity extends AppCompatActivity {
     }
 
     private void setValues() {
-        Glide.with(this).load(getIntent().getStringExtra("game_cover_pic")).into(mGameCoverIcon);
+        if (mGameDetailList.get(0).getCover().equals("http://xingyuyou.com")) {
+            mRl_top_image.setVisibility(View.GONE);
+        } else {
+            Glide.with(this).load(mGameDetailList.get(0).getCover()).into(mGameCoverIcon);
+            mRl_top_game_detail.setVisibility(View.GONE);
+        }
         //mGameName.setText(mGameDetailList.get(0).getGame_name());
         // mGameType.setText(mGameDetailList.get(0).getGame_type_id());
         mGameVersion.setText("版本：" + mGameDetailList.get(0).getVersion());

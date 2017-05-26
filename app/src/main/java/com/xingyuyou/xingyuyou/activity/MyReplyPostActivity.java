@@ -254,6 +254,7 @@ public class MyReplyPostActivity extends AppCompatActivity {
                         public void onClick(View view) {
                             Intent intent = new Intent(MyReplyPostActivity.this, PostDetailActivity.class);
                             intent.putExtra("post_id", mDatas.get(position - 1).getTid());
+                            Log.e("weiwei", "onClick: "+mDatas.get(position - 1).getTid());
                             MyReplyPostActivity.this.startActivity(intent);
                         }
                     });

@@ -31,6 +31,7 @@ import com.xingyuyou.xingyuyou.Utils.FileUtils;
 import com.xingyuyou.xingyuyou.Utils.GlideImageLoader;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideRoundTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.activity.GameDetailActivity;
 import com.xingyuyou.xingyuyou.activity.HotGameDetailActivity;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.Game;
@@ -261,7 +262,7 @@ public class NewGameFragment extends BaseFragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(mActivity,HotGameDetailActivity.class);
+                Intent intent = new Intent(mActivity,GameDetailActivity.class);
                 intent.putExtra("game_id",mGameListAdapter.get(i-1).getId());
                 intent.putExtra("game_name",mGameListAdapter.get(i-1).getGame_name());
                 startActivity(intent);

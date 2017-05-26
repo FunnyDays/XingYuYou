@@ -25,6 +25,9 @@ public class XingYuInterface {
     public static final String GET_EVALUATE=Host+"Server/get_evaluate";
     public static final String GET_EVALUATE_LAUD=Host+"Server/get_evaluate_laud";
     public static final String GET_EVALUATE_LIST=Host+"Server/get_evaluate_list";
+    public static final String GET_GAME_NAME_LIST=Host+"Server/get_game_name_list";
+
+
     public static final String GAME_GIFT_LIST=Host+"Server/game_gift_list";
     public static final String GET_LABEL_CLASS=Host+"Community/get_label_class";
     public static final String GET_POSTS_LIST=Host+"Community/get_posts_list";

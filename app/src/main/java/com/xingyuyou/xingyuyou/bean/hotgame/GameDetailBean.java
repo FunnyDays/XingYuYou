@@ -28,6 +28,7 @@ public class GameDetailBean {
     private String game_name;
     private String version;
     private String icon;
+    private String cover;
     private String game_baoming;
     private String game_type_id;
     private String game_size;
@@ -83,7 +84,13 @@ public class GameDetailBean {
     public void setIcon(String icon) {
         this.icon = icon;
     }
+    public String getCover() {
+        return cover;
+    }
 
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
     public String getGame_type_id() {
         return game_type_id;
     }
