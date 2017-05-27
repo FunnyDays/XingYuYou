@@ -21,11 +21,11 @@
     </RelativeLayout>
     <com.xingyuyou.xingyuyou.weight.infiniteViewPager.InfiniteViewPager
         android:id="@+id/id_viewpager"
-        android:layout_marginTop="@dimen/x80"
+        android:layout_marginTop="@dimen/x70"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_width="@dimen/x80"
-        android:layout_height="@dimen/x170"
+        android:layout_width="@dimen/x104"
+        android:layout_height="@dimen/x180"
         android:clipChildren="false"/>
 
 

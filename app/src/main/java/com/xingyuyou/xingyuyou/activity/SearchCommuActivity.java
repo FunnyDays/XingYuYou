@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,13 +27,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
-import com.xingyuyou.xingyuyou.Utils.MCUtils.HttpUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
-import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideRoundTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
-import com.xingyuyou.xingyuyou.bean.community.TopViewRecommBean;
+import com.xingyuyou.xingyuyou.bean.community.PostListBean;
+import com.xingyuyou.xingyuyou.bean.community.SearchPopularTags;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameDetailBean;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameTag;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -50,44 +50,52 @@ import java.util.List;
 
 import okhttp3.Call;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchCommuActivity extends AppCompatActivity {
+    private static boolean CLEAR_DATA = false;
+    private List mPostList = new ArrayList();
+    private List mPostAdapterList = new ArrayList();
     private int PAGENUMBER = 1;
+    boolean isLoading = false;
     private int GAMEPAGENUMBER = 1;
+    private ProgressBar mPbNodata;
+    private TextView mTvNodata;
     private String KeyWords;
     private Toolbar mToolbar;
     private TextView mTextView;
     private SearchView mSearchView;
     private RecyclerView mSearchList;
-    boolean isLoading = false;
-    private List<GameTag> mGameTagList = new ArrayList<>();
-    private List<GameTag> mGameTagAdapterList = new ArrayList<>();
-    private List<GameDetailBean> mGameDetailList = new ArrayList<>();
-    private List<GameDetailBean> mGameDetailAdapterList = new ArrayList<>();
+    private List<SearchPopularTags> mGameTagList = new ArrayList<>();
+    private List<SearchPopularTags> mGameTagAdapterList = new ArrayList<>();
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 1) {
-                String response = (String) msg.obj;
-                JSONObject jo = null;
-                if (response.contains("\"list\":null")) {
-                    Toast.makeText(SearchActivity.this, "没有此游戏或更多游戏", Toast.LENGTH_SHORT).show();
-                    mSearchListAdapter.notifyDataSetChanged();
+                if (msg.obj.toString().contains("\"data\":null")) {
+                    Toast.makeText(SearchCommuActivity.this, "已经没有更多数据", Toast.LENGTH_SHORT).show();
+                    mPbNodata.setVisibility(View.GONE);
+                    mTvNodata.setText("已经没有更多数据");
                     return;
                 }
+                String response = (String) msg.obj;
+                JSONObject jo = null;
                 try {
                     jo = new JSONObject(response);
-                    JSONArray ja = jo.getJSONArray("list");
-                    Log.e("hot", "解析数据：" + ja.toString());
+                    JSONArray ja = jo.getJSONArray("data");
                     Gson gson = new Gson();
-                    mGameDetailList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<GameDetailBean>>() {
+                    mPostList = gson.fromJson(ja.toString(),
+                            new TypeToken<List<PostListBean>>() {
                             }.getType());
-                    mGameDetailAdapterList.addAll(mGameDetailList);
-                    Log.e("hot", "解析数据：" + mGameDetailAdapterList.toString());
-                    mSearchListAdapter.notifyDataSetChanged();
+                    mPostAdapterList.addAll(mPostList);
+                    if (mPostAdapterList.size()<=20){
+                        mPbNodata.setVisibility(View.GONE);
+                        mTvNodata.setText("已经没有更多数据");
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                //更新UI
+                if (mAdapter != null)
+                    mAdapter.notifyDataSetChanged();
             }
             if (msg.what == 2) {
                 String response = (String) msg.obj;
@@ -97,7 +105,7 @@ public class SearchActivity extends AppCompatActivity {
                     JSONArray ja = jo.getJSONArray("data");
                     Gson gson = new Gson();
                     mGameTagList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<GameTag>>() {
+                            new TypeToken<List<SearchPopularTags>>() {
                             }.getType());
                     mGameTagAdapterList.clear();
                     mGameTagAdapterList.addAll(mGameTagList);
@@ -111,24 +119,23 @@ public class SearchActivity extends AppCompatActivity {
     private TagFlowLayout mTagFlowLayout;
     private GameTagAdapter mGameTagAdapter;
     private TextView mTvChangeData;
-    private SearchListAdapter mSearchListAdapter;
     private RelativeLayout mRl_root;
     private LinearLayoutManager mLinearLayoutManager;
+    private CommHotAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        initData(PAGENUMBER);
+        initData();
         initToolbar();
         initView();
     }
 
-    private void initData(int PAGENUMBER) {
+    private void initData() {
         //获取游戏标签
         OkHttpUtils.post()//
-                .addParams("page", String.valueOf(PAGENUMBER))
-                .url(XingYuInterface.GET_GAME_NAME_LIST)
+                .url(XingYuInterface.GET_SEARCH_POPULAR_TAGS)
                 .tag(this)//
                 .build()//
                 .execute(new StringCallback() {
@@ -151,8 +158,7 @@ public class SearchActivity extends AppCompatActivity {
         mTvChangeData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PAGENUMBER++;
-                initData(PAGENUMBER);
+                initData();
             }
         });
         //游戏tag
@@ -162,32 +168,33 @@ public class SearchActivity extends AppCompatActivity {
         mTagFlowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
-                startActivity(new Intent(SearchActivity.this, GameDetailActivity.class)
-                        .putExtra("game_name", mGameTagAdapterList.get(position).getGame_name().substring(0, mGameTagAdapterList.get(position).getGame_name().length() - 5))
-                        .putExtra("game_id", mGameTagAdapterList.get(position).getId()));
+                startActivity(new Intent(SearchCommuActivity.this, SearchCommuListActivity.class)
+                        .putExtra("bid", mGameTagAdapterList.get(position).getId()));
                 return true;
             }
         });
+        //底部布局
+        View loadingData = View.inflate(SearchCommuActivity.this, R.layout.default_loading, null);
+        mPbNodata = (ProgressBar) loadingData.findViewById(R.id.pb_loading);
+        mTvNodata = (TextView) loadingData.findViewById(R.id.loading_text);
         //搜索结果列表页
         mSearchList = (RecyclerView) findViewById(R.id.rv_search_list);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mSearchList.setLayoutManager(mLinearLayoutManager);
-        mSearchListAdapter = new SearchListAdapter();
-        mSearchList.setAdapter(mSearchListAdapter);
+        mAdapter = new CommHotAdapter(SearchCommuActivity.this, mPostAdapterList);
+        mAdapter.setHeaderView(new View(SearchCommuActivity.this));
+        mAdapter.setFooterView(loadingData);
+        mSearchList.setAdapter(mAdapter);
         mSearchList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int lastVisibleItemPosition = mLinearLayoutManager.findLastVisibleItemPosition();
                 if (!recyclerView.canScrollVertically(-1)) {
-                    //T.show(mActivity,"已经到第一条");
                 } else if (!recyclerView.canScrollVertically(1)) {
-                    //T.show(mActivity,"到了最后一条");
                 } else if (dy < 0) {
-                    //T.show(mActivity,"正在向上滑动");
                 } else if (dy > 0) {
-                    // T.show(mActivity,"正在向下滑动");
-                    if (lastVisibleItemPosition + 1 == mSearchListAdapter.getItemCount() - 3) {
+                    if (lastVisibleItemPosition + 1 == mAdapter.getItemCount() - 5) {
                         //  Log.e("search", "loading executed");
                         if (!isLoading) {
                             isLoading = true;
@@ -195,7 +202,6 @@ public class SearchActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     GAMEPAGENUMBER++;
-                                    // Log.d("search", "load more completed");
                                     doSearchToDisplay(KeyWords,GAMEPAGENUMBER);
                                     isLoading = false;
                                 }
@@ -246,7 +252,8 @@ public class SearchActivity extends AppCompatActivity {
                     mRl_root.setVisibility(View.GONE);
                     mSearchList.setVisibility(View.VISIBLE);
                     //查询并显示
-                    mGameDetailAdapterList.clear();
+                    mPostAdapterList.clear();
+                    mAdapter.notifyDataSetChanged();
                     GAMEPAGENUMBER=1;
                     doSearchToDisplay(KeyWords,GAMEPAGENUMBER);
                 }
@@ -269,9 +276,9 @@ public class SearchActivity extends AppCompatActivity {
     private void doSearchToDisplay(String query,int GAMEPAGENUMBER) {
         //获取游戏标签
         OkHttpUtils.post()//
-                .addParams("game_name", query)
-                .addParams("limit", String.valueOf(GAMEPAGENUMBER))
-                .url(XingYuInterface.GET_GAME_LIST)
+                .addParams("keyword", query)
+                .addParams("page", String.valueOf(GAMEPAGENUMBER))
+                .url(XingYuInterface.GET_SEARCH_FORUMS)
                 .tag(this)//
                 .build()//
                 .execute(new StringCallback() {
@@ -283,69 +290,24 @@ public class SearchActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         handler.obtainMessage(1, response).sendToTarget();
-                        Log.e("hot", response + ":e");
                     }
                 });
     }
 
     class GameTagAdapter extends TagAdapter {
-        public GameTagAdapter(List<GameTag> datas) {
+        public GameTagAdapter(List<SearchPopularTags> datas) {
             super(datas);
         }
 
         @Override
         public View getView(FlowLayout parent, int position, Object o) {
-            TextView tv = (TextView) LayoutInflater.from(SearchActivity.this).inflate(R.layout.tv,
+            TextView tv = (TextView) LayoutInflater.from(SearchCommuActivity.this).inflate(R.layout.tv,
                     mTagFlowLayout, false);
-            tv.setText(((GameTag) o).getGame_name().substring(0, ((GameTag) o).getGame_name().length() - 5));
+            tv.setText(((SearchPopularTags) o).getLabel_name());
             return tv;
         }
     }
 
-    class SearchListAdapter extends RecyclerView.Adapter {
 
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(SearchActivity.this).inflate(R.layout.item_seaech_game_view, parent, false);
-            return new ItemViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-
-            ((ItemViewHolder) holder).gameName.setText(mGameDetailAdapterList.get(position).getGame_name());
-            Glide.with(getApplication())
-                    .load(mGameDetailAdapterList.get(position).getIcon())
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .transform(new GlideRoundTransform(getApplication()))
-                    .into(((ItemViewHolder) holder).gamePic);
-            ((ItemViewHolder) holder).rl_item.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(SearchActivity.this, GameDetailActivity.class)
-                            .putExtra("game_name", mGameDetailAdapterList.get(position).getGame_name())
-                            .putExtra("game_id", mGameDetailAdapterList.get(position).getId()));
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mGameDetailAdapterList.size();
-        }
-
-        class ItemViewHolder extends RecyclerView.ViewHolder {
-            private final TextView gameName;
-            private final ImageView gamePic;
-            private final RelativeLayout rl_item;
-
-            public ItemViewHolder(View itemView) {
-                super(itemView);
-                gameName = (TextView) itemView.findViewById(R.id.game_name);
-                gamePic = (ImageView) itemView.findViewById(R.id.game_pic);
-                rl_item = (RelativeLayout) itemView.findViewById(R.id.rl_item);
-            }
-        }
-    }
 
 }

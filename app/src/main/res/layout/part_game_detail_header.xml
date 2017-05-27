@@ -70,6 +70,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="30dp"
+            android:tint="@color/colorPrimary"
+            app:srcCompat="@drawable/ic_expand_more_black_24dp"
             />
     </RelativeLayout>
 
@@ -81,6 +83,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:ellipsize="end"
+        android:lines="3"
         tools:text="游戏介绍游戏介绍游戏介绍游戏介绍"/>
 
     <View

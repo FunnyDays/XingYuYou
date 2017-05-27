@@ -1,5 +1,6 @@
 package com.xingyuyou.xingyuyou.activity;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,8 +74,9 @@ public class GameDetailActivity extends AppCompatActivity {
     private Intent mIntent;
     private ImageView mGameIcon;
     private TextView mGameName;
-    private TextView mGameType;
+    private TextView mGameVersionTop;
     private TextView mGameVersion;
+    private TextView mGameSizeTop;
     private TextView mGameSize;
     private TextView mGameIntro;
     private List<GameDetailBean> mGameDetailList = null;
@@ -174,6 +177,7 @@ public class GameDetailActivity extends AppCompatActivity {
     private String mGameNameTitle;
     private DownloadItemViewHolder mViewHolder;
     private DownloadManager mDownloadManager;
+    private TextView mDownNumberTop;
     private TextView mDownNumber;
     private Button mBtPackage;
     private ImageView mGameCoverIcon;
@@ -192,6 +196,7 @@ public class GameDetailActivity extends AppCompatActivity {
     private TextView mTvStarRatio;
     private RelativeLayout mRl_top_image;
     private RelativeLayout mRl_top_game_detail;
+    private boolean mState=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -310,11 +315,18 @@ public class GameDetailActivity extends AppCompatActivity {
         mRl_top_image = (RelativeLayout) view.findViewById(R.id.rl_top_image);
         mRl_top_game_detail = (RelativeLayout) view.findViewById(R.id.rl_top_game_detail);
 
+        //top需要隐藏的view
+        mGameIcon = (ImageView) view.findViewById(R.id.iv_game_pic_top);
+        mGameName = (TextView) view.findViewById(R.id.tv_game_name_top);
+        mGameVersionTop = (TextView) view.findViewById(R.id.tv_game_version_top);
+        mGameSizeTop = (TextView) view.findViewById(R.id.tv_game_size_top);
+        mDownNumberTop = (TextView) view.findViewById(R.id.tv_down_number_top);
+
         mGameCoverIcon = (ImageView) view.findViewById(R.id.iv_game_cover_pic);
         mGameVersion = (TextView) view.findViewById(R.id.tv_game_version);
         mGameSize = (TextView) view.findViewById(R.id.tv_game_size);
-        mGameIntro = (TextView) view.findViewById(R.id.tv_content);
         mDownNumber = (TextView) view.findViewById(R.id.tv_down_number);
+        mGameIntro = (TextView) view.findViewById(R.id.tv_content);
         mNoData = (TextView) view.findViewById(R.id.tv_no_data);
         //礼包按钮
         mBtPackage = (Button) view.findViewById(R.id.bt_get_package);
@@ -358,17 +370,59 @@ public class GameDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //介绍文字动画控制
+        final ImageView iv_game_intro_more = (ImageView) view.findViewById(R.id.iv_game_intro_more);
+        iv_game_intro_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mState) {
+                    mState = false;
+                    mGameIntro.setEllipsize(TextUtils.TruncateAt.END);
+                    mGameIntro.setMaxLines(3);
+                    ObjectAnimator animator3 = ObjectAnimator.ofFloat(iv_game_intro_more, "rotation", 180f, 360f);
+                    animator3.setDuration(500).start();
+                } else {
+                    mState = true;
+                    mGameIntro.setEllipsize(null);
+                    mGameIntro.setMaxLines(Integer.MAX_VALUE);
+                    ObjectAnimator animator3 = ObjectAnimator.ofFloat(iv_game_intro_more, "rotation", 0f, 180f);
+                    animator3.setDuration(500).start();
+                }
+            }
+        });
+        mGameIntro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mState) {
+                    mState = false;
+                    mGameIntro.setEllipsize(TextUtils.TruncateAt.END);
+                    mGameIntro.setMaxLines(3);
+                    ObjectAnimator animator3 = ObjectAnimator.ofFloat(iv_game_intro_more, "rotation", 180f, 360f);
+                    animator3.setDuration(500).start();
+                } else {
+                    mState = true;
+                    mGameIntro.setEllipsize(null);
+                    mGameIntro.setMaxLines(Integer.MAX_VALUE);
+                    ObjectAnimator animator3 = ObjectAnimator.ofFloat(iv_game_intro_more, "rotation", 0f, 180f);
+                    animator3.setDuration(500).start();
+                }
+            }
+        });
     }
 
     private void setValues() {
         if (mGameDetailList.get(0).getCover().equals("http://xingyuyou.com")) {
+            Glide.with(this).load(mGameDetailList.get(0).getIcon()).into(mGameIcon);
+            mGameVersionTop.setText("版本：" + mGameDetailList.get(0).getVersion());
+            mGameSizeTop.setText("大小：" + mGameDetailList.get(0).getGame_size());
+            mDownNumberTop.setText("下载次数：" + mGameDetailList.get(0).getDow_num());
             mRl_top_image.setVisibility(View.GONE);
         } else {
             Glide.with(this).load(mGameDetailList.get(0).getCover()).into(mGameCoverIcon);
             mRl_top_game_detail.setVisibility(View.GONE);
         }
-        //mGameName.setText(mGameDetailList.get(0).getGame_name());
-        // mGameType.setText(mGameDetailList.get(0).getGame_type_id());
+        mGameName.setText(mGameDetailList.get(0).getGame_name());
         mGameVersion.setText("版本：" + mGameDetailList.get(0).getVersion());
         mGameSize.setText("大小：" + mGameDetailList.get(0).getGame_size());
         mGameIntro.setText(mGameDetailList.get(0).getIntroduction());

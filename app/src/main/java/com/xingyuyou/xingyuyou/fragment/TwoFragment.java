@@ -14,6 +14,7 @@ import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.activity.DownLoadActivity;
 import com.xingyuyou.xingyuyou.activity.SearchActivity;
+import com.xingyuyou.xingyuyou.activity.SearchCommuActivity;
 import com.xingyuyou.xingyuyou.adapter.MainVPAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 
@@ -76,7 +77,7 @@ public class TwoFragment extends BaseFragment {
                         IntentUtils.startActivity(mActivity, DownLoadActivity.class);
                         break;
                     case R.id.ab_search:
-                        IntentUtils.startActivity(mActivity, SearchActivity.class);
+                        IntentUtils.startActivity(mActivity, SearchCommuActivity.class);
                         break;
                     default:
                         break;

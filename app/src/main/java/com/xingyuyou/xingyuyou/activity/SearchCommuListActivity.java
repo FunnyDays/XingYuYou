@@ -2,8 +2,6 @@ package com.xingyuyou.xingyuyou.activity;
 
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,29 +10,18 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
-import com.xingyuyou.xingyuyou.Utils.IntentUtils;
-import com.xingyuyou.xingyuyou.Utils.glide.BlurTransformation;
-import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
-import com.xingyuyou.xingyuyou.adapter.CommHeaderFooterAdapter;
-import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.adapter.CommSortAdapter;
-import com.xingyuyou.xingyuyou.bean.community.PostBean;
-import com.xingyuyou.xingyuyou.bean.community.PostDetailBean;
-import com.xingyuyou.xingyuyou.bean.community.PostListBean;
 import com.xingyuyou.xingyuyou.bean.community.PostTopAndWellBean;
 import com.xingyuyou.xingyuyou.bean.community.SortPostListBean;
-import com.xingyuyou.xingyuyou.fragment.CommHotFragment;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -47,21 +34,25 @@ import java.util.List;
 
 import okhttp3.Call;
 
-public class PostClassListActivity extends AppCompatActivity {
-
+public class SearchCommuListActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private int  PAGENUMBER = 1;
     private List<SortPostListBean> mPostList=new ArrayList();
     private List<PostTopAndWellBean> mPostTopWellList=new ArrayList();
     private List<SortPostListBean> mPostAdapterList=new ArrayList();
     boolean isLoading = false;
+    private CommSortAdapter mCommHotAdapter;
+    private ProgressBar mPbNodata;
+    private TextView mTvNodata;
+    private LinearLayoutManager mLinearLayoutManager;
+    private Toolbar mToolbar;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1) {
                 if (msg.obj.toString().contains("\"data\":null")) {
-                    Toast.makeText(PostClassListActivity.this, "已经没有更多数据", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchCommuListActivity.this, "已经没有更多数据", Toast.LENGTH_SHORT).show();
                     mPbNodata.setVisibility(View.GONE);
                     mTvNodata.setText("已经没有更多数据");
                     return;
@@ -71,17 +62,16 @@ public class PostClassListActivity extends AppCompatActivity {
                 try {
                     jo = new JSONObject(response);
                     JSONArray ja = jo.getJSONArray("data");
-                 //   Log.e("post", "解析数据："+  ja.toString());
+                    //   Log.e("post", "解析数据："+  ja.toString());
                     Gson gson = new Gson();
                     mPostList = gson.fromJson(ja.toString(),
                             new TypeToken<List<SortPostListBean>>() {
                             }.getType());
+                    if (mPostAdapterList.size()<=20){
+                        mPbNodata.setVisibility(View.GONE);
+                        mTvNodata.setText("已经没有更多数据");
+                    }
                     mPostAdapterList.addAll(mPostList);
-                    ja = jo.getJSONArray("top_well");
-                    gson = new Gson();
-                    mPostTopWellList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<PostTopAndWellBean>>() {
-                            }.getType());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -91,41 +81,37 @@ public class PostClassListActivity extends AppCompatActivity {
             }
         }
     };
-    private CommSortAdapter mCommHotAdapter;
-    private ProgressBar mPbNodata;
-    private TextView mTvNodata;
-    private SwipeRefreshLayout mRefreshLayout;
-    private LinearLayoutManager mLinearLayoutManager;
-    private Toolbar mToolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_class_list);
+        setContentView(R.layout.activity_search_commu_list);
         initView();
         initToolBar();
-        initSwipeRefreshLayout();
         initData(1);
     }
-    private void initToolBar() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+    /**
+     * 初始化数据
+     */
+    public void initData(int PAGENUMBER) {
+        OkHttpUtils.post()//
+                .addParams("page",String.valueOf(PAGENUMBER))
+                .addParams("bid",getIntent().getStringExtra("bid"))
+                .url(XingYuInterface.LABEL_SEARCH)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        // Log.e("hot", e.toString() + ":e");
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                        handler.obtainMessage(1, response).sendToTarget();
+                    }
+                });
     }
+
     private void initView() {
-        //发帖
-        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab_add_comment);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                IntentUtils.startActivity(PostClassListActivity.this, PostingActivity.class);
-            }
-        });
-        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -134,26 +120,7 @@ public class PostClassListActivity extends AppCompatActivity {
         View loadingData = View.inflate(this, R.layout.default_loading, null);
         mPbNodata = (ProgressBar) loadingData.findViewById(R.id.pb_loading);
         mTvNodata = (TextView) loadingData.findViewById(R.id.loading_text);
-        //头布局
-        View headerView = View.inflate(this, R.layout.header_sort_post_list, null);
-        ImageView ivBg = (ImageView) headerView.findViewById(R.id.iv_bg);
-        ImageView ivLabel = (ImageView) headerView.findViewById(R.id.iv_class_label);
-        TextView tvPostNum = (TextView) headerView.findViewById(R.id.tv_post_num);
-        TextView tvPostDes = (TextView) headerView.findViewById(R.id.tv_post_describe);
-        Glide.with(getApplication())
-                .load(getIntent().getStringExtra("class_head_image"))
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .into(ivBg);
-        Glide.with(getApplication())
-                .load(getIntent().getStringExtra("class_image"))
-                .transform(new GlideCircleTransform(PostClassListActivity.this))
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .into(ivLabel);
-        tvPostNum.setText(getIntent().getStringExtra("posts_num"));
-        tvPostDes.setText(getIntent().getStringExtra("describe"));
-
-
-        mCommHotAdapter.setHeaderView(headerView);
+        mCommHotAdapter.setHeaderView(new View(SearchCommuListActivity.this));
         mCommHotAdapter.setFooterView(loadingData);
         mRecyclerView.setAdapter(mCommHotAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -162,16 +129,16 @@ public class PostClassListActivity extends AppCompatActivity {
                 switch (newState) {
                     case RecyclerView.SCROLL_STATE_SETTLING:
                         //   Log.i("Main", "用户在手指离开屏幕之前，由于滑了一下，视图仍然依靠惯性继续滑动");
-                        Glide.with(PostClassListActivity.this).pauseRequests();
+                        Glide.with(getApplication()).pauseRequests();
                         //刷新
                         break;
                     case RecyclerView.SCROLL_STATE_IDLE:
                         //  Log.i("Main", "视图已经停止滑动");
-                        Glide.with(PostClassListActivity.this).resumeRequests();
+                        Glide.with(getApplication()).resumeRequests();
                         break;
                     case RecyclerView.SCROLL_STATE_DRAGGING:
                         //  Log.i("Main", "手指没有离开屏幕，视图正在滑动");
-                        Glide.with(PostClassListActivity.this).resumeRequests();
+                        Glide.with(getApplication()).resumeRequests();
                         break;
                 }
 
@@ -210,60 +177,13 @@ public class PostClassListActivity extends AppCompatActivity {
         });
     }
 
-    private void initSwipeRefreshLayout() {
-        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        mRefreshLayout.post(new Runnable() {
+    private void initToolBar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(true);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRefreshLayout.setRefreshing(false);
-                    }
-                }, 2000);
+            public void onClick(View view) {
+                finish();
             }
         });
-        //下拉刷新
-        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRefreshLayout.setRefreshing(false);
-                    }
-                }, 2000);
-            }
-        });
-
-    }
-    /**
-     * 初始化数据
-     */
-    public void initData(int PAGENUMBER) {
-        OkHttpUtils.post()//
-                .addParams("page",String.valueOf(PAGENUMBER))
-                .addParams("fid",getIntent().getStringExtra("list_id"))
-                .url(XingYuInterface.GET_POSTS_CLASS_LIST)
-                .tag(this)//
-                .build()//
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        // Log.e("hot", e.toString() + ":e");
-                    }
-                    @Override
-                    public void onResponse(String response, int id) {
-                        handler.obtainMessage(1, response).sendToTarget();
-                    }
-                });
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        OkHttpUtils.getInstance().cancelTag(this);
     }
 }

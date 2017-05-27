@@ -26,7 +26,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_centerVertical="true"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@id/iv_game_pic_top"
             android:orientation="vertical">
@@ -45,7 +45,7 @@
                 android:id="@+id/tv_game_version_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2.8"
+
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
             <TextView
@@ -64,17 +64,7 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/bt_get_package_top"
-            android:layout_width="60dp"
-            android:layout_height="28dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/app_uninstall_button_bg"
-            android:text="礼包"
-            android:textColor="@color/colorAccent"
-            android:layout_alignBottom="@+id/iv_game_pic_top"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
+
     </RelativeLayout>
 
 </merge>

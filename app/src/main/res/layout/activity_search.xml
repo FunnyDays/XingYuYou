@@ -10,50 +10,58 @@
     tools:context="com.xingyuyou.xingyuyou.activity.SearchActivity">
 
     <include layout="@layout/toolbar"></include>
-    <android.support.v7.widget.RecyclerView
-        android:visibility="gone"
-        android:id="@+id/rv_search_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content">
+        <android.support.v7.widget.RecyclerView
+            android:visibility="gone"
+            android:id="@+id/rv_search_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
         <RelativeLayout
-            android:id="@+id/rl"
-            android:padding="5dp"
+            android:id="@+id/rl_root"
             android:layout_width="match_parent"
-            android:layout_height="30dp">
-            <TextView
-                android:text="热门搜索"
-                android:textSize="@dimen/x14"
-                android:layout_marginLeft="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:id="@+id/tv_change_data"
-                android:text="换一批"
-                android:textSize="@dimen/x14"
-                android:drawableTint="@color/blue"
-                android:drawableRight="@drawable/ic_autorenew_black_24dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:id="@+id/rl"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x30">
+                <TextView
+                    android:layout_centerVertical="true"
+                    android:text="热门搜索"
+                    android:textSize="@dimen/x14"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:layout_centerVertical="true"
+                    android:id="@+id/tv_change_data"
+                    android:text="换一批"
+                    android:textSize="@dimen/x14"
+                    android:drawableTint="@color/blue"
+                    android:drawableRight="@drawable/ic_autorenew_black_24dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
+            </RelativeLayout>
+            <View
+                android:layout_below="@+id/rl"
+                android:background="@color/custom_gray"
+                android:layout_width="match_parent"
+                android:layout_height="1px"/>
+            <com.zhy.view.flowlayout.TagFlowLayout
+                android:layout_below="@+id/rl"
+                android:id="@+id/id_flowlayout"
+                zhy:max_select="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp">
+            </com.zhy.view.flowlayout.TagFlowLayout>
         </RelativeLayout>
-        <View
-            android:layout_below="@+id/rl"
-            android:background="@color/custom_gray"
-            android:layout_width="match_parent"
-            android:layout_height="1px"/>
-        <com.zhy.view.flowlayout.TagFlowLayout
-            android:layout_below="@+id/rl"
-            android:id="@+id/id_flowlayout"
-            zhy:max_select="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp">
-        </com.zhy.view.flowlayout.TagFlowLayout>
     </RelativeLayout>
+
 </LinearLayout>

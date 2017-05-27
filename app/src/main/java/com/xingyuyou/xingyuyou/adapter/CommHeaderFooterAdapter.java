@@ -59,6 +59,7 @@ public class CommHeaderFooterAdapter extends RecyclerView.Adapter {
                     Intent intent = new Intent(mActivity,PostClassListActivity.class);
                     intent.putExtra("list_id",mListData.get(position).getId());
                     intent.putExtra("class_image",mListData.get(position).getClass_image());
+                    intent.putExtra("class_head_image",mListData.get(position).getClass_head_image());
                     intent.putExtra("describe",mListData.get(position).getDescribe());
                     intent.putExtra("posts_num",mListData.get(position).getPosts_num());
                     mActivity.startActivity(intent);

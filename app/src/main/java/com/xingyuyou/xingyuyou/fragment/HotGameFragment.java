@@ -274,7 +274,6 @@ public class HotGameFragment extends BaseFragment {
                 Intent intent = new Intent(mActivity,HotGameDetailActivity.class);
                 intent.putExtra("game_id",mGameListAdapter.get(i-2).getId());
                 intent.putExtra("game_name",mGameListAdapter.get(i-2).getGame_name());
-                Log.e("game_id",mGameListAdapter.get(i-2).getId());
                 startActivity(intent);
             }
         });

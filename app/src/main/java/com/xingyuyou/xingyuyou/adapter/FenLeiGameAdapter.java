@@ -89,7 +89,7 @@ public class FenLeiGameAdapter extends RecyclerView.Adapter {
         if (mFooterView != null && viewType == TYPE_FOOTER) {
             return new ItemViewHolder(mFooterView);
         }
-        View layout = LayoutInflater.from(mActivity).inflate(R.layout.item_sort_game_list, parent, false);
+        View layout = LayoutInflater.from(mActivity).inflate(R.layout.item_sort_game_list_with_cover, parent, false);
         return new ItemViewHolder(layout);
     }
 

@@ -184,6 +184,9 @@
         <activity android:name=".activity.PrivateLetterActivity">
         </activity>
         <activity android:name=".activity.PrivateLetterDetailActivity"/>
+        <activity android:name=".activity.SearchCommuActivity"/>
+        <activity android:name=".activity.SearchCommuListActivity">
+        </activity>
     </application>
 
 </manifest>

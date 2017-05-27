@@ -41,7 +41,6 @@ public class GameHeaderFooterAdapter extends RecyclerView.Adapter {
     public GameHeaderFooterAdapter(Activity activity, List<HotGameBean> listData) {
         mListData = listData;
         mActivity=activity;
-        Log.e("test111",mListData.toString());
     }
 
     //HeaderView和FooterView的get和set函数

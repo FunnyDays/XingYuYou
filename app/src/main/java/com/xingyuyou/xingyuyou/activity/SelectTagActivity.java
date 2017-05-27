@@ -68,7 +68,6 @@ public class SelectTagActivity extends AppCompatActivity {
                 try {
                     jo = new JSONObject(response);
                     JSONArray ja = jo.getJSONArray("data");
-                    Log.e("weiwei", "解析数据：" + ja.toString());
                     Gson gson = new Gson();
                     mTagList = gson.fromJson(ja.toString(),
                             new TypeToken<List<TagBean>>() {

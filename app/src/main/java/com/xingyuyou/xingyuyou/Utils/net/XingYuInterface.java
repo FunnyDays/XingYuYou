@@ -42,6 +42,7 @@ public class XingYuInterface {
     public static final String GET_COLLECT=Host+"Community/get_collect";
     public static final String GET_RECOMMEND=Host+"Community/get_recommend";
     public static final String REPLIES_LAUD=Host+"Community/replies_laud";
+    public static final String GET_SEARCH_POPULAR_TAGS=Host+"Community/get_search_popular_tags";//社区热门标签搜索
 
     public static final String UPDATE_INFORMATION=Host+"UserCenter/update_information";
     public static final String GET_USER_INFO=Host+"UserCenter/get_user_info";
@@ -53,6 +54,8 @@ public class XingYuInterface {
     public static final String PRIVATE_LETTER_LIST=Host+"UserCenter/private_letter_list";//私信列表
     public static final String PRIVATE_LETTER_ADD=Host+"UserCenter/private_letter_add";//用户回复私信
     public static final String PRIVATE_LETTER_READ=Host+"UserCenter/private_letter_read";//私信最新消息判断
+    public static final String GET_SEARCH_FORUMS=Host+"UserCenter/get_search_forums";//社区帖子关键字搜索接口
+    public static final String LABEL_SEARCH=Host+"UserCenter/label_search";//社区帖子关键字搜索接口
 
     public static final String GET_GODLIST=Host+"GodForum/get_godlist";//神社轮播图接口
     public static final String GET_GOD_FORUMS=Host+"GodForum/get_god_forums";//神社活动回帖列表

@@ -595,9 +595,9 @@ public class PostDetailActivity extends BaseActivity {
             lp.setMargins(ConvertUtils.dp2px(10), ConvertUtils.dp2px(10), ConvertUtils.dp2px(10), ConvertUtils.dp2px(10));
             imageView.setLayoutParams(lp);
             imageView.setAdjustViewBounds(true);
-            Glide.with(PostDetailActivity.this)
+            Glide.with(getApplication())
                     .load(mPostDetailBean.getPosts_image().get(i))
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(imageView);
             mRootImage.addView(imageView);
         }
