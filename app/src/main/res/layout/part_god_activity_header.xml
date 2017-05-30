@@ -6,14 +6,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-    <TextView
-        android:id="@+id/tv_title"
-        android:textSize="@dimen/x22"
-        android:layout_marginRight="@dimen/x10"
-        android:layout_marginLeft="@dimen/x10"
-        android:text="dfsfsdfsfsdfs"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_title"
+            android:textSize="@dimen/x22"
+            android:layout_marginRight="@dimen/x10"
+            android:layout_marginLeft="@dimen/x10"
+            android:text="dfsfsdfsfsdfs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:padding="1dp"
+            android:layout_gravity="center"
+            android:background="@drawable/textview_bg"
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="8sp"
+            android:textColor="@color/white"
+            android:text="官方"
+            />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/tv_time"
         android:gravity="end"

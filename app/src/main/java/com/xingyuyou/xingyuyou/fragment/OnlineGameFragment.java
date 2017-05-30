@@ -112,7 +112,7 @@ public class OnlineGameFragment extends BaseFragment {
                 mPopWindow.dismiss();
             }
         });
-        mPopWindow = new PopupWindow(popupView,
+            mPopWindow = new PopupWindow(popupView,
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         mPopWindow.setAnimationStyle(R.style.animatorUP);  //设置加载动画
         mPopWindow.setBackgroundDrawable(getResources().getDrawable(R.color.colorControlNormal));    //要为popWindow设置一个背景才有效

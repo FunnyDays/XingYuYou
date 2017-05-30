@@ -143,13 +143,13 @@
         <item name="android:layout_marginLeft">40dp</item>
         <item name="android:layout_alignParentLeft">true</item>
        <item name="android:gravity">center</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/x12</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">wrap_content</item>
     </style>
     <style name="ManageRelativeLayout">
         <item name="android:paddingLeft">20dp</item>
-        <item name="android:layout_height">46dp</item>
+        <item name="android:layout_height">@dimen/x40</item>
     </style>
 
   <!--  星星评价-->

@@ -42,6 +42,7 @@ public class XingYuInterface {
     public static final String GET_COLLECT=Host+"Community/get_collect";
     public static final String GET_RECOMMEND=Host+"Community/get_recommend";
     public static final String REPLIES_LAUD=Host+"Community/replies_laud";
+    public static final String USER_SIGN=Host+"Community/user_sign";//用户签到
     public static final String GET_SEARCH_POPULAR_TAGS=Host+"Community/get_search_popular_tags";//社区热门标签搜索
 
     public static final String UPDATE_INFORMATION=Host+"UserCenter/update_information";

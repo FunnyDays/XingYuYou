@@ -15,6 +15,8 @@
         android:layout_height="wrap_content">
         <ListView
             android:id="@+id/listView"
+            android:scrollbarSize="@dimen/x3"
+            android:scrollbarThumbVertical="@color/blue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         </ListView>

@@ -464,6 +464,11 @@ public class PostDetailActivity extends BaseActivity {
                         ((CommoListAdapter.ItemViewHolder) holder).mLlRootImageItem.addView(imageView);
                     }
                 }
+                if (mPostDetailBean.getUid().equals(mCommoAdapterList.get(position).getUid())){
+                    ((CommoListAdapter.ItemViewHolder) holder).tv_louzhu.setVisibility(View.VISIBLE);
+                }else {
+                    ((CommoListAdapter.ItemViewHolder) holder).tv_louzhu.setVisibility(View.GONE);
+                }
                 Glide.with(PostDetailActivity.this)
                         .load(mCommoAdapterList.get(position).getHead_image())
                         .transform(new GlideCircleTransform(PostDetailActivity.this))
@@ -526,6 +531,7 @@ public class PostDetailActivity extends BaseActivity {
             private ImageView mUserPhoto;
             private ImageView mLove;
             private TextView mUserName;
+            private TextView tv_louzhu;
             private TextView mPostTime;
             private TextView mFloorNum;
             private TextView mLoveNum;
@@ -542,6 +548,7 @@ public class PostDetailActivity extends BaseActivity {
                 mUserPhoto = (ImageView) itemView.findViewById(R.id.iv_user_photo);
                 mLove = (ImageView) itemView.findViewById(R.id.iv_love);
                 mUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
+                tv_louzhu = (TextView) itemView.findViewById(R.id.tv_louzhu);
                 mPostTime = (TextView) itemView.findViewById(R.id.tv_post_time);
                 mFloorNum = (TextView) itemView.findViewById(R.id.tv_floor_num);
                 mLoveNum = (TextView) itemView.findViewById(R.id.tv_love_num);

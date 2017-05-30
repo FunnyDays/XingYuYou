@@ -180,8 +180,8 @@ public class SortGameListActivity extends AppCompatActivity {
                 lastItem = firstVisibleItem + visibleItemCount + 1 ;
                 if (lastItem==totalItemCount&&MLOADINGMORE_FLAG==0){
                     MLOADINGMORE_FLAG++;
-                    initData(PAGENUMBER);
                     PAGENUMBER++;
+                    initData(PAGENUMBER);
                 }
             }
             public void onScrollStateChanged(AbsListView view, int scrollState) {

@@ -39,12 +39,15 @@ import okhttp3.Call;
 public class GodCommoListAdapter extends BaseAdapter {
     private Activity mActivity;
     private List<GodCommoBean> mCommoBeanList;
+    private String Uid;
 
     public GodCommoListAdapter(Activity activity, List<GodCommoBean> commoBeanList) {
         this.mActivity = activity;
         this.mCommoBeanList = commoBeanList;
     }
-
+    public void setUid(String uid){
+        this.Uid=uid;
+    }
     @Override
     public int getCount() {
         return mCommoBeanList.size();
@@ -69,6 +72,7 @@ public class GodCommoListAdapter extends BaseAdapter {
             holder.iv_user_photo = (ImageView) view.findViewById(R.id.iv_user_photo);
             holder.iv_zan = (ImageView) view.findViewById(R.id.iv_love);
             holder.tv_user_name = (TextView) view.findViewById(R.id.tv_user_name);
+            holder.tv_louzhu = (TextView) view.findViewById(R.id.tv_louzhu);
             holder.tv_zan_num = (TextView) view.findViewById(R.id.tv_love_num);
             holder.tv_reply_content = (TextView) view.findViewById(R.id.tv_commo_content);
             holder.tv_commo_time = (TextView) view.findViewById(R.id.tv_post_time);
@@ -83,6 +87,11 @@ public class GodCommoListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
+      /*  if (Uid.equals(mCommoBeanList.get(i).getUid())){
+            holder.tv_louzhu.setVisibility(View.VISIBLE);
+        }else {
+            holder.tv_louzhu.setVisibility(View.GONE);
+        }*/
         holder.tv_floor_num.setText(mCommoBeanList.get(i).getFloor_num() + "楼");
         holder.tv_user_name.setText(mCommoBeanList.get(i).getNickname());
         holder.tv_zan_num.setText(mCommoBeanList.get(i).getForum_laud());
@@ -149,7 +158,7 @@ public class GodCommoListAdapter extends BaseAdapter {
                     .setText(SpanStringUtils.getEmotionContent(mActivity, holder.tv_commo2_content, mCommoBeanList.get(i).getChild().get(0).getReplies_content()));
             holder.tv_commo2_time
                     .setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mCommoBeanList.get(i).getChild().get(0).getDateline() + "000")));
-        }else {
+        } else {
             holder.ll_more_commo_item.setVisibility(View.GONE);
         }
         return view;
@@ -162,6 +171,7 @@ public class GodCommoListAdapter extends BaseAdapter {
         public TextView tv_commo2_content;
         public TextView tv_commo2_time;
         public TextView tv_commo2_more;
+        public TextView tv_louzhu;
         public TextView tv_zan_num;
         public TextView tv_reply_content;
         public TextView tv_commo_time;

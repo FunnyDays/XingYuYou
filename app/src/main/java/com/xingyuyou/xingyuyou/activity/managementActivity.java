@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -78,6 +79,8 @@ public class ManagementActivity extends AppCompatActivity {
     };
     private TextView mTvNickName;
     private RelativeLayout rl_letter;
+    private Button mBtSig;
+    private SPUtils mConfig_def;
 
     private void setValues() {
         UserUtils.setNickName(mUserBean.getNickname());
@@ -157,6 +160,27 @@ public class ManagementActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        //签到
+        mBtSig = (Button) findViewById(R.id.bt_sig);
+        mConfig_def = new SPUtils("config_def");
+        boolean isSig = mConfig_def.getBoolean("isSig", false);
+        if (isSig){
+            mBtSig.setText("已签到");
+            mBtSig.setEnabled(false);
+        }else {
+            mBtSig.setText("签到");
+        }
+        mBtSig.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (UserUtils.logined()) {
+                    sigDay();
+                } else {
+                    IntentUtils.startActivity(ManagementActivity.this, LoginActivity.class);
+                }
+            }
+        });
+
         mTvNickName = (TextView) findViewById(R.id.user_nickname);
         //登录
         mUserPhoto = (ImageView) findViewById(R.id.user_photo);
@@ -347,5 +371,23 @@ public class ManagementActivity extends AppCompatActivity {
         super.finish();
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
+    private void sigDay() {
+        OkHttpUtils.post()//
+                .url(XingYuInterface.USER_SIGN)
+                .addParams("uid", UserUtils.getUserId())
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                    }
 
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Toast.makeText(ManagementActivity.this, "签到成功", Toast.LENGTH_SHORT).show();
+                        mConfig_def.putBoolean("isSig", true);
+                        mBtSig.setText("已签到");
+                    }
+                });
+    }
 }

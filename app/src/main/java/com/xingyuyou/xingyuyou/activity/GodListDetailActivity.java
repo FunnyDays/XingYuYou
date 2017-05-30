@@ -24,6 +24,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -116,6 +117,8 @@ public class GodListDetailActivity extends AppCompatActivity {
                 String response = (String) msg.obj;
                 if (response.contains("\"data\":null")) {
                   //  Toast.makeText(GodListDetailActivity.this, "已经没有更多数据", Toast.LENGTH_SHORT).show();
+                    mPbNodata.setVisibility(View.GONE);
+                    mTvNodata.setText("已经没有更多数据");
                     return;
                 }
                 JSONObject jo = null;
@@ -127,11 +130,12 @@ public class GodListDetailActivity extends AppCompatActivity {
                             new TypeToken<List<GodCommoBean>>() {
                             }.getType());
                     mCommoAdapterList.addAll(mCommoList);
-                    if (mCommoAdapterList.size()<=20){
+                    isLoading = false;
+                   /* if (mCommoAdapterList.size()<=20){
                         TextView textView = new TextView(GodListDetailActivity.this);
                         textView.setText("没有更多数据");
                         mListView.addFooterView(textView);
-                    }
+                    }*/
                     mGodCommoListAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -151,6 +155,9 @@ public class GodListDetailActivity extends AppCompatActivity {
     private ListView mListView;
     private int PAGENUM = 1;
     boolean isLoading = false;
+    private ProgressBar mPbNodata;
+    private TextView mTvNodata;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -218,6 +225,10 @@ public class GodListDetailActivity extends AppCompatActivity {
         mTv_content = (TextView) view.findViewById(R.id.tv_content);
         mIv_god_content = (ImageView) view.findViewById(R.id.iv_god_content);
         mListView.addHeaderView(view);
+        View loadingData = View.inflate(GodListDetailActivity.this, R.layout.default_loading, null);
+        mPbNodata = (ProgressBar) loadingData.findViewById(R.id.pb_loading);
+        mTvNodata = (TextView) loadingData.findViewById(R.id.loading_text);
+        mListView.addFooterView(loadingData);
         mGodCommoListAdapter = new GodCommoListAdapter(GodListDetailActivity.this,mCommoAdapterList);
         mListView.setAdapter(mGodCommoListAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -235,7 +246,7 @@ public class GodListDetailActivity extends AppCompatActivity {
 
             @Override
             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-             if (i+i1+9==i2){
+             if (i+i1==i2){
                  if (!isLoading) {
                      isLoading = true;
                      mHandler.postDelayed(new Runnable() {
@@ -243,9 +254,8 @@ public class GodListDetailActivity extends AppCompatActivity {
                          public void run() {
                              PAGENUM++;
                              initCommoData(PAGENUM);
-                             isLoading = false;
                          }
-                     }, 200);
+                     }, 100);
                  }
              }
             }
@@ -293,6 +303,7 @@ public class GodListDetailActivity extends AppCompatActivity {
                 KeyboardUtils.showSoftInput(edittext);
             }
         });
+
 
     }
     //*****************************************软键盘*****************************************************

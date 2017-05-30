@@ -393,6 +393,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="暂无数据"/>
+        android:text="快来抢沙发吧"/>
 
 </LinearLayout>

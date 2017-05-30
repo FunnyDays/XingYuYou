@@ -16,10 +16,15 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +33,11 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.umeng.socialize.UMShareAPI;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.AppUtils;
+import com.xingyuyou.xingyuyou.Utils.IntentUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.PermissionsChecker;
+import com.xingyuyou.xingyuyou.Utils.SPUtils;
+import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.MainContentVPAdapter;
 import com.xingyuyou.xingyuyou.base.BaseActivity;
@@ -54,7 +63,7 @@ import java.util.ArrayList;
 import okhttp3.Call;
 
 public class MainActivity extends BaseActivity {
-    private FragmentManager supportFragmentManager  = getSupportFragmentManager();
+    private FragmentManager supportFragmentManager = getSupportFragmentManager();
     private ArrayList<BaseFragment> fragments;
     public static BottomNavigationBar bottomNavigationBar;
     private CustomViewPager customViewPager;
@@ -89,11 +98,16 @@ public class MainActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
+            if (msg.what == 2) {
+                mPopWindow.showAtLocation(customViewPager, Gravity.CENTER, 0, 0);
+            }
         }
     };
     private TextView mTvUpdateInfo;
     private ProgressButton mBtUpdate;
     private AlertDialog mAlertDialog;
+    private SPUtils mConfig_def;
+    private PopupWindow mPopWindow;
 
 
     @Override
@@ -104,6 +118,63 @@ public class MainActivity extends BaseActivity {
         mPermissionsChecker = new PermissionsChecker(this);
         initView();
         checkUpdate();
+        firstStartForDay();
+    }
+
+    private void firstStartForDay() {
+        mConfig_def = new SPUtils("config_def");
+        String sameDayTime = mConfig_def.getString("sameDayTime", "777");
+        if (TimeUtils.isSameDay(sameDayTime)) {
+           // Toast.makeText(this, "同一天", Toast.LENGTH_SHORT).show();
+        } else {
+            mConfig_def.putBoolean("isSig", false);
+            View popupView = LayoutInflater.from(this).inflate(R.layout.popup_signatures_layout, null);
+            mPopWindow = new PopupWindow(popupView,
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+            mPopWindow.setBackgroundDrawable(getResources().getDrawable(R.color.custom_gray));
+            mHandler.sendEmptyMessageDelayed(2, 2000);
+            //签到按钮
+            Button btSig = (Button) popupView.findViewById(R.id.bt_sig);
+            btSig.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (UserUtils.logined()) {
+                        sigDay();
+                    } else {
+                        IntentUtils.startActivity(MainActivity.this, LoginActivity.class);
+                    }
+                }
+            });
+            //取消签到
+            ImageView ivClose = (ImageView) popupView.findViewById(R.id.iv_close);
+            ivClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mPopWindow.dismiss();
+                }
+            });
+        }
+
+    }
+
+    private void sigDay() {
+        OkHttpUtils.post()//
+                .url(XingYuInterface.USER_SIGN)
+                .addParams("uid", UserUtils.getUserId())
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        mPopWindow.dismiss();
+                        Toast.makeText(MainActivity.this, "签到成功", Toast.LENGTH_SHORT).show();
+                        mConfig_def.putBoolean("isSig", true);
+                    }
+                });
     }
 
 
@@ -156,6 +227,7 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
+
     private ArrayList<BaseFragment> getFragments() {
         fragments = new ArrayList<>();
         fragments.add(OneFragment.newInstance("游戏"));
@@ -166,43 +238,48 @@ public class MainActivity extends BaseActivity {
         return fragments;
     }
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
         // 缺少权限时, 进入权限配置页面
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             //进入到这里代表没有权限.
-            if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 //已经禁止提示了
                 Toast.makeText(MainActivity.this, "您已禁止该权限，需要重新开启。", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
             }
         }
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
+        switch (requestCode) {
             case REQUEST_CODE:
-                if(grantResults.length >0 &&grantResults[0]== PackageManager.PERMISSION_GRANTED){
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //用户同意授权
 
-                }else{
+                } else {
                     //用户拒绝授权
-                   // Toast.makeText(this, "您已拒绝访问sd卡权限，会导致无法下载游戏", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(this, "您已拒绝访问sd卡权限，会导致无法下载游戏", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
     }
-    private long firstTime=0;
+
+    private long firstTime = 0;
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode==KeyEvent.KEYCODE_BACK && event.getAction()==KeyEvent.ACTION_DOWN){
-            if (System.currentTimeMillis()-firstTime>2000){
-                Toast.makeText(MainActivity.this,"再按一次退出程序",Toast.LENGTH_SHORT).show();
-                firstTime=System.currentTimeMillis();
-            }else{
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (System.currentTimeMillis() - firstTime > 2000) {
+                Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                firstTime = System.currentTimeMillis();
+            } else {
+                mConfig_def.putString("sameDayTime", TimeUtils.getNowTimeString());
                 finish();
                 System.exit(0);
             }
@@ -210,6 +287,7 @@ public class MainActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -246,12 +324,11 @@ public class MainActivity extends BaseActivity {
         mBtUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if ((int)mBtUpdate.getTag()==0){
+                if ((int) mBtUpdate.getTag() == 0) {
                     mBtUpdate.setTag(1);
                     toDownload();
                     Toast.makeText(MainActivity.this, "开始下载", Toast.LENGTH_SHORT).show();
-                }else
-                {
+                } else {
                     Toast.makeText(MainActivity.this, "正在下载，请稍后", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -260,6 +337,7 @@ public class MainActivity extends BaseActivity {
         mAlertDialog.setCancelable(false);
         mAlertDialog.show();
     }
+
     private void toDownload() {
         OkHttpUtils//
                 .get()//
@@ -275,21 +353,24 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void inProgress(float progress, long total, int id) {
 
-                        mBtUpdate.setProgress((int)(progress*100));
+                        mBtUpdate.setProgress((int) (progress * 100));
                     }
 
                     @Override
                     public void onResponse(File response, int id) {
-                        Log.e("dizhi", "onResponse :" + response.getAbsolutePath());
                     }
 
                     @Override
                     public void onAfter(int id) {
                         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/xingyu.apk";
-                        Log.e("dizhi", "onResponse :" + path);
-                        AppUtils.installApp(MainActivity.this,path);
+                        AppUtils.installApp(MainActivity.this, path);
                         Toast.makeText(MainActivity.this, "下载完成", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
