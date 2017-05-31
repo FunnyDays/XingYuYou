@@ -19,11 +19,15 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -49,11 +53,14 @@ import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
+import com.xingyuyou.xingyuyou.adapter.GodCommoListAdapter;
+import com.xingyuyou.xingyuyou.adapter.PostCommoListAdapter;
 import com.xingyuyou.xingyuyou.base.BaseActivity;
 import com.xingyuyou.xingyuyou.bean.community.PostCommoBean;
 import com.xingyuyou.xingyuyou.bean.community.PostDetailBean;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
 import com.xingyuyou.xingyuyou.bean.community.TopViewRecommBean;
+import com.xingyuyou.xingyuyou.bean.god.GodCommoBean;
 import com.xingyuyou.xingyuyou.weight.dialog.CustomDialog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
@@ -101,7 +108,11 @@ public class PostDetailActivity extends BaseActivity {
             }
             if (msg.what == 2) {
                 String response = (String) msg.obj;
-
+                if (response.contains("\"data\":null")) {
+                    mPbNodata.setVisibility(View.GONE);
+                    mTvNodata.setText("已经没有更多数据");
+                    return;
+                }
                 JSONObject jo = null;
                 try {
                     jo = new JSONObject(response);
@@ -111,7 +122,7 @@ public class PostDetailActivity extends BaseActivity {
                             new TypeToken<List<PostCommoBean>>() {
                             }.getType());
                     mCommoAdapterList.addAll(mCommoList);
-                    mCommoListAdapter.notifyDataSetChanged();
+                    mPostCommoListAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -120,7 +131,7 @@ public class PostDetailActivity extends BaseActivity {
         }
     };
     private FrameLayout extendView, emotionView;
-    private NestedScrollView contentView;
+    private LinearLayout contentView;
     private ImageView extendButton, emotionButton;
     private EditText edittext;
     private Button btnSend;
@@ -148,8 +159,7 @@ public class PostDetailActivity extends BaseActivity {
     private static final int TYPE_FOOTER = 21;
     private ArrayList<String> mImageList = new ArrayList();
     private CustomDialog mDialog;
-    private RecyclerView mCommoListView;
-    private CommoListAdapter mCommoListAdapter;
+    private ListView mCommoListView;
     private ImageView mAddExpression;
     private EditText mEditTextReal;
     private LinearLayout mSelectEmotion;
@@ -160,6 +170,9 @@ public class PostDetailActivity extends BaseActivity {
     boolean isLoading = false;
     private LinearLayoutManager mLayoutManager;
     private RelativeLayout mTopView;
+    private PostCommoListAdapter mPostCommoListAdapter;
+    private ProgressBar mPbNodata;
+    private TextView mTvNodata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,7 +211,7 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     private void initKeyBoardView() {
-        contentView = (NestedScrollView) findViewById(R.id.txt_main_content);
+        contentView = (LinearLayout) findViewById(R.id.txt_main_content);
         extendButton = (ImageView) findViewById(R.id.bt_add_image);
         emotionButton = (ImageView) findViewById(R.id.img_reply_layout_emotion);
         edittext = (EditText) findViewById(R.id.edit_text);
@@ -211,23 +224,28 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     private void initView() {
-        mTvContent = (TextView) findViewById(R.id.tv_content);
-        mUserName = (TextView) findViewById(R.id.tv_user_name);
-        mPostTime = (TextView) findViewById(R.id.tv_post_time);
+        View headerView = View.inflate(PostDetailActivity.this, R.layout.part_post_header, null);
+        mTvContent = (TextView) headerView.findViewById(R.id.tv_content);
+        mUserName = (TextView) headerView.findViewById(R.id.tv_user_name);
+        mPostTime = (TextView) headerView.findViewById(R.id.tv_post_time);
+        mRootImage = (LinearLayout) headerView.findViewById(R.id.ll_root_image);
+        mIvUserPhoto = (ImageView) headerView.findViewById(R.id.civ_user_photo);
+
+        View loadingData = View.inflate(PostDetailActivity.this, R.layout.default_loading, null);
+        mPbNodata = (ProgressBar) loadingData.findViewById(R.id.pb_loading);
+        mTvNodata = (TextView) loadingData.findViewById(R.id.loading_text);
+        //底部收藏点赞数量
         mCollectNum = (TextView) findViewById(R.id.tv_collect_num);
-        mCommNum = (TextView) findViewById(R.id.tv_comm_num);
         mJiaonangNum = (TextView) findViewById(R.id.tv_jiaonang_num);
-        mRootImage = (LinearLayout) findViewById(R.id.ll_root_image);
-        mIvUserPhoto = (ImageView) findViewById(R.id.civ_user_photo);
-        mEditText = (EditText) findViewById(R.id.bottom_edit_text);
-        // mEditTextReal = (EditText) findViewById(R.id.edit_text_real);
         //底部两个editText视图parent
+        mEditText = (EditText) findViewById(R.id.bottom_edit_text);
         mLinearLayout = (LinearLayout) findViewById(R.id.ll_edit_parent);
         mLinearLayout2 = (LinearLayout) findViewById(R.id.ll_emotion_parent);
-        // mSelectEmotion = (LinearLayout) findViewById(R.id.ll_select_emotion);
         mRecyclerView = (RecyclerView) findViewById(R.id.rl_all_image);
         initRecyclerView();
-        mCommoListView = (RecyclerView) findViewById(R.id.rl_comm_list);
+        mCommoListView = (ListView) findViewById(R.id.listView);
+        mCommoListView.addHeaderView(headerView);
+        mCommoListView.addFooterView(loadingData);
         initCommoListView();
     }
 
@@ -238,6 +256,7 @@ public class PostDetailActivity extends BaseActivity {
     public void initData() {
         OkHttpUtils.post()//
                 .addParams("pid", getIntent().getStringExtra("post_id"))
+                .addParams("uid", UserUtils.getUserId())
                 .url(XingYuInterface.GET_POSTS_INFO)
                 .tag(this)//
                 .build()//
@@ -413,16 +432,24 @@ public class PostDetailActivity extends BaseActivity {
 
     //***********************************************以下是评论列表****************************************************
     private void initCommoListView() {
-        mLayoutManager = new LinearLayoutManager(this);
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mCommoListView.setLayoutManager(mLayoutManager);
-        mCommoListView.setNestedScrollingEnabled(false);
-        mCommoListAdapter = new CommoListAdapter();
-        mCommoListView.setAdapter(mCommoListAdapter);
-        contentView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+        mPostCommoListAdapter = new PostCommoListAdapter(PostDetailActivity.this,mCommoAdapterList);
+        mCommoListView.setAdapter(mPostCommoListAdapter);
+        mCommoListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (v.getMeasuredHeight() > (v.getChildAt(0).getMeasuredHeight() - scrollY) / 2) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i!=0)
+                    startActivityToPostReplyCommo(i-1);
+            }
+        });
+        mCommoListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                if (i+i1==i2){
                     if (!isLoading) {
                         isLoading = true;
                         handler.postDelayed(new Runnable() {
@@ -437,132 +464,19 @@ public class PostDetailActivity extends BaseActivity {
                 }
             }
         });
+
     }
 
-    private class CommoListAdapter extends RecyclerView.Adapter {
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View layout = LayoutInflater.from(PostDetailActivity.this).inflate(R.layout.item_commo_post_list, parent, false);
-            return new ItemViewHolder(layout);
-        }
+   private void startActivityToPostReplyCommo(int position) {
+       if (mCommoAdapterList.get(position).getFloor_num()!=null){
+           Gson gson = new Gson();
+           String json = gson.toJson(mCommoAdapterList.get(position), PostCommoBean.class);
+           Intent intent = new Intent(PostDetailActivity.this, PostReplyCommoActivity.class);
+           intent.putExtra("item_list", json);
+           PostDetailActivity.this.startActivity(intent);
+       }
 
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-            if (holder instanceof CommoListAdapter.ItemViewHolder) {
-                ((CommoListAdapter.ItemViewHolder) holder).mLlRootImageItem.removeAllViews();
-                if (mCommoAdapterList.get(position).getImgarr()!=null&&!mCommoAdapterList.get(position).getImgarr().get(0).equals("")&&mCommoAdapterList.get(position).getImgarr().size() != 0) {
-                    for (int i = 0; i < mCommoAdapterList.get(position).getImgarr().size(); i++) {
-                        ImageView imageView = new ImageView(PostDetailActivity.this);
-                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        lp.setMargins(ConvertUtils.dp2px(10), 0, ConvertUtils.dp2px(10), ConvertUtils.dp2px(5));
-                        imageView.setLayoutParams(lp);
-                        imageView.setAdjustViewBounds(true);
-                        Glide.with(PostDetailActivity.this)
-                                .load(mCommoAdapterList.get(position).getImgarr().get(i))
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(imageView);
-                        ((CommoListAdapter.ItemViewHolder) holder).mLlRootImageItem.addView(imageView);
-                    }
-                }
-                if (mPostDetailBean.getUid().equals(mCommoAdapterList.get(position).getUid())){
-                    ((CommoListAdapter.ItemViewHolder) holder).tv_louzhu.setVisibility(View.VISIBLE);
-                }else {
-                    ((CommoListAdapter.ItemViewHolder) holder).tv_louzhu.setVisibility(View.GONE);
-                }
-                Glide.with(PostDetailActivity.this)
-                        .load(mCommoAdapterList.get(position).getHead_image())
-                        .transform(new GlideCircleTransform(PostDetailActivity.this))
-                        .into(((CommoListAdapter.ItemViewHolder) holder).mUserPhoto);
-                ((CommoListAdapter.ItemViewHolder) holder).mUserName
-                        .setText(mCommoAdapterList.get(position).getNickname());
-                ((CommoListAdapter.ItemViewHolder) holder).mPostTime
-                        .setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mCommoAdapterList.get(position).getDateline() + "000")));
-                if (mCommoAdapterList.get(position).getFloor_num()!=null)
-                ((CommoListAdapter.ItemViewHolder) holder).mFloorNum
-                        .setText(mCommoAdapterList.get(position).getFloor_num() + "楼");
-                if (mCommoAdapterList.get(position).getFloor_num()!=null)
-                ((CommoListAdapter.ItemViewHolder) holder).mLoveNum
-                        .setText(mCommoAdapterList.get(position).getLaud_count());
-                ((CommoListAdapter.ItemViewHolder) holder).mCommoContent
-                        .setText(SpanStringUtils.getEmotionContent(getApplication(),((CommoListAdapter.ItemViewHolder) holder).mCommoContent,mCommoAdapterList.get(position).getReplies_content()));
-                if (mCommoAdapterList.get(position).getChild() != null && mCommoAdapterList.get(position).getChild().size() > 0) {
-                    ((CommoListAdapter.ItemViewHolder) holder).mLlMoreCommoItem.setVisibility(View.VISIBLE);
-                    ((CommoListAdapter.ItemViewHolder) holder).mCommo2Name
-                            .setText(mCommoAdapterList.get(position).getChild().get(0).getNickname() + ":");
-                    ((CommoListAdapter.ItemViewHolder) holder).mCommo2Content
-                            .setText(SpanStringUtils.getEmotionContent(getApplication(),((CommoListAdapter.ItemViewHolder) holder).mCommo2Content,mCommoAdapterList.get(position).getChild().get(0).getReplies_content()));
-                    ((CommoListAdapter.ItemViewHolder) holder).mCommo2Time
-                            .setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mCommoAdapterList.get(position).getChild().get(0).getDateline() + "000")));
-                }
-                ((CommoListAdapter.ItemViewHolder) holder).mLlMoreCommoItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                            startActivityToPostReplyCommo(position);
-                    }
-                });
-                ((CommoListAdapter.ItemViewHolder) holder).mLlCommoItemDetail.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                            startActivityToPostReplyCommo(position);
-                    }
-                });
-
-            }
-        }
-
-        private void startActivityToPostReplyCommo(int position) {
-            if (mCommoAdapterList.get(position).getFloor_num()!=null){
-                Gson gson = new Gson();
-                String json = gson.toJson(mCommoAdapterList.get(position), PostCommoBean.class);
-                Intent intent = new Intent(PostDetailActivity.this, PostReplyCommoActivity.class);
-                intent.putExtra("item_list", json);
-                PostDetailActivity.this.startActivity(intent);
-            }
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return mCommoAdapterList.size();
-        }
-
-        class ItemViewHolder extends RecyclerView.ViewHolder {
-
-            private ImageView mUserPhoto;
-            private ImageView mLove;
-            private TextView mUserName;
-            private TextView tv_louzhu;
-            private TextView mPostTime;
-            private TextView mFloorNum;
-            private TextView mLoveNum;
-            private TextView mCommoContent;
-            private TextView mCommo2Name;
-            private TextView mCommo2Content;
-            private TextView mCommo2Time;
-            private LinearLayout mLlCommoItemDetail;
-            private LinearLayout mLlMoreCommoItem;
-            private LinearLayout mLlRootImageItem;
-
-            public ItemViewHolder(View itemView) {
-                super(itemView);
-                mUserPhoto = (ImageView) itemView.findViewById(R.id.iv_user_photo);
-                mLove = (ImageView) itemView.findViewById(R.id.iv_love);
-                mUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
-                tv_louzhu = (TextView) itemView.findViewById(R.id.tv_louzhu);
-                mPostTime = (TextView) itemView.findViewById(R.id.tv_post_time);
-                mFloorNum = (TextView) itemView.findViewById(R.id.tv_floor_num);
-                mLoveNum = (TextView) itemView.findViewById(R.id.tv_love_num);
-                mCommoContent = (TextView) itemView.findViewById(R.id.tv_commo_content);
-                mCommo2Name = (TextView) itemView.findViewById(R.id.tv_commo2_name);
-                mCommo2Content = (TextView) itemView.findViewById(R.id.tv_commo2_content);
-                mCommo2Time = (TextView) itemView.findViewById(R.id.tv_commo2_time);
-                mLlCommoItemDetail = (LinearLayout) itemView.findViewById(R.id.item_commo_detail);
-                mLlMoreCommoItem = (LinearLayout) itemView.findViewById(R.id.ll_more_commo_item);
-                mLlRootImageItem = (LinearLayout) itemView.findViewById(R.id.ll_root_image_item);
-            }
-        }
-    }
-
+   }
     //*********************************************以下是赋值代码***************************************************
     private void setValues() {
         //收藏状态
@@ -594,7 +508,7 @@ public class PostDetailActivity extends BaseActivity {
         mPostTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mPostDetailBean.getDateline() + "000")));
         mTvContent.setText(mPostDetailBean.getMessage());
         mCollectNum.setText(mPostDetailBean.getPosts_collect());
-        mCommNum.setText(mPostDetailBean.getPosts_forums());
+        //mCommNum.setText(mPostDetailBean.getPosts_forums());
         mJiaonangNum.setText(mPostDetailBean.getPosts_laud());
         for (int i = 0; i < mPostDetailBean.getPosts_image().size(); i++) {
             ImageView imageView = new ImageView(PostDetailActivity.this);
@@ -658,13 +572,13 @@ public class PostDetailActivity extends BaseActivity {
 
             }
         });
-        mCommNum.setOnClickListener(new View.OnClickListener() {
+       /* mCommNum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //  Toast.makeText(PostDetailActivity.this, "评论", Toast.LENGTH_SHORT).show();
 
             }
-        });
+        });*/
         mJiaonangNum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -791,7 +705,7 @@ public class PostDetailActivity extends BaseActivity {
                         postCommoBean.setDateline(String.valueOf(TimeUtils.getNowTimeMills()).substring(0, String.valueOf(TimeUtils.getNowTimeMills()).length() - 3));
                         postCommoBean.setReplies_content( edittext.getText().toString().trim());
                         mCommoAdapterList.add(postCommoBean);
-                        mCommoListAdapter.notifyDataSetChanged();
+                         mPostCommoListAdapter.notifyDataSetChanged();
                         mImageList.clear();
                         //待优化
                     }

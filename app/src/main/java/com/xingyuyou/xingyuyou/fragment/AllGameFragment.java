@@ -104,7 +104,8 @@ public class AllGameFragment extends BaseFragment {
         mAdapter = new FenLeiGameAdapter(mActivity,mDatas);
         View view1 = new View(mActivity);
         mAdapter.setHeaderView(view1);
-        mAdapter.setFooterView(view1);
+        View view2 = View.inflate(mActivity, R.layout.part_all_game_footer, null);
+        mAdapter.setFooterView(view2);
         mRecyclerView.setAdapter(mAdapter);
         return view;
     }

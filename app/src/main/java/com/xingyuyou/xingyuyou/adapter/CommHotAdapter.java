@@ -177,6 +177,7 @@ public class CommHotAdapter extends RecyclerView.Adapter {
             ((ItemViewHolder) holder).mLinearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     Intent intent = new Intent(mActivity, PostDetailActivity.class);
                     intent.putExtra("post_id", mListData.get(position - 1).getId());
                     mActivity.startActivity(intent);

@@ -158,6 +158,12 @@ public class PostReplyCommoActivity extends AppCompatActivity {
         mPostTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mPostCommoBean.getDateline() + "000")));
         mCommoContent.setText(SpanStringUtils.getEmotionContent(getApplication(),mCommoContent,mPostCommoBean.getReplies_content()));
         mFloorNum.setText(mPostCommoBean.getFloor_num() + "楼");
+        mIvLove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     //*****************************************软键盘*****************************************************
@@ -331,7 +337,6 @@ public class PostReplyCommoActivity extends AppCompatActivity {
         params.put("uid", UserUtils.getUserId());
         params.put("tid", mPostCommoBean.getTid());
         params.put("replies_content", edittext.getText().toString().trim());
-        Log.e("weiwei", "sendReply: "+mPostCommoBean.getId()+"getTid"+mPostCommoBean.getTid() );
 
         PostFormBuilder post = OkHttpUtils.post();
 
@@ -347,8 +352,6 @@ public class PostReplyCommoActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         mDialog.dismissDialog();
-                        Log.e("weiwei", "1sendReply: "+response );
-                        // mCommoAdapterList.clear();
                         //待优化
                         PostCommoBean.ChildBean childBean = new PostCommoBean.ChildBean();
                         childBean.setNickname(UserUtils.getNickName());

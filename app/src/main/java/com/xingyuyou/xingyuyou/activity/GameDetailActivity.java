@@ -698,15 +698,13 @@ public class GameDetailActivity extends AppCompatActivity {
         }
 
         public void refresh() {
-            //gameEnName.setText(downloadInfo.getLabel()+"---"+downloadInfo.getState().toString()+"---"+downloadInfo.getProgress());
-            mBtInstallGame.setProgress(downloadInfo.getProgress());
-            mBtInstallGame.setVisibility(View.VISIBLE);
             mBtInstallGame.setText(x.app().getString(R.string.stop));
+           // mBtInstallGame.setProgress(downloadInfo.getProgress());
             DownloadState state = downloadInfo.getState();
             switch (state) {
                 case WAITING:
                 case STARTED:
-                    mBtInstallGame.setText(x.app().getString(R.string.stop));
+                    mBtInstallGame.setText(downloadInfo.getProgress()+"%");
                     break;
                 case ERROR:
                 case STOPPED:

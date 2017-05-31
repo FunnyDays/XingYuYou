@@ -41,7 +41,7 @@ public class UserUtils {
             String id = user_data.getString("id");
             return id;
         }
-        return "未登录";
+        return "0";
     }
 
     public static String getUserAccount() {

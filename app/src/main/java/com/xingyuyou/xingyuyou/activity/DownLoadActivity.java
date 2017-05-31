@@ -97,7 +97,6 @@ public class DownLoadActivity extends AppCompatActivity {
         public View getView(int i, View view, ViewGroup viewGroup) {
             DownloadItemViewHolder holder = null;
             DownloadInfo downloadInfo = downloadManager.getDownloadInfo(i);
-            Log.e("download", "列表下载里面的"+downloadInfo.toString());
             if (view == null) {
                 view = mInflater.inflate(R.layout.item_download_app_list, null);
                 holder = new DownloadItemViewHolder(view, downloadInfo);

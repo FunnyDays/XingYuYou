@@ -15,10 +15,10 @@
         android:background="@color/colorPrimary"
         android:elevation="0dp"
         android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
         app:layout_scrollFlags="scroll|enterAlways"
         app:navigationIcon="?android:attr/homeAsUpIndicator"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        android:theme="?attr/actionBarTheme"/>
+        app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
 
     <LinearLayout
@@ -36,8 +36,8 @@
 
             <ImageView
                 android:id="@+id/user_photo"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/profile_picture"/>
@@ -51,18 +51,23 @@
                 android:text="点击登陆"
                 android:textColor="@color/light_white"
                 android:textSize="16sp"/>
+
             <TextView
-                android:text="积分：4332"
-                android:layout_gravity="center_horizontal"
                 android:id="@+id/tv_user_integral"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="积分：4332"
+                android:textColor="@color/light_white"
+                android:visibility="visible"/>
+
             <Button
                 android:id="@+id/bt_sig"
-                android:text="签到"
-                android:background="@drawable/button_blue_bg"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_blue_bg"
+                android:text="签到"
+                android:visibility="gone"/>
         </LinearLayout>
 
 
@@ -96,13 +101,14 @@
                         android:layout_centerInParent="true"
                         android:text="我的礼包"
                         />
+
                     <ImageView
-                        android:layout_marginRight="10dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:src="@mipmap/ic_right_back"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@mipmap/ic_right_back"/>
                 </RelativeLayout>
                 <!--<View
                     android:background="@color/custom_gray"
@@ -146,13 +152,14 @@
                         android:layout_centerInParent="true"
                         android:text="我的回贴"
                         />
+
                     <ImageView
-                        android:layout_marginRight="10dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:src="@mipmap/ic_right_back"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@mipmap/ic_right_back"/>
                 </RelativeLayout>
 
                 <View
@@ -176,13 +183,14 @@
                         android:layout_centerInParent="true"
                         android:text="收藏"
                         />
+
                     <ImageView
-                        android:layout_marginRight="10dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:src="@mipmap/ic_right_back"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@mipmap/ic_right_back"/>
                 </RelativeLayout>
 
                 <View
@@ -206,14 +214,17 @@
                         android:layout_centerInParent="true"
                         android:text="我的消息"
                         />
+
                     <ImageView
-                        android:layout_marginRight="10dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:src="@mipmap/ic_right_back"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                </RelativeLayout> <View
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@mipmap/ic_right_back"/>
+                </RelativeLayout>
+
+                <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:background="@color/custom_gray"/>
@@ -234,13 +245,14 @@
                         android:layout_centerInParent="true"
                         android:text="我的帖子"
                         />
+
                     <ImageView
-                        android:layout_marginRight="10dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:src="@mipmap/ic_right_back"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@mipmap/ic_right_back"/>
                 </RelativeLayout>
 
                 <View
@@ -264,14 +276,16 @@
                         android:layout_centerInParent="true"
                         android:text="下载管理"
                         />
+
                     <ImageView
-                        android:layout_marginRight="10dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:src="@mipmap/ic_right_back"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@mipmap/ic_right_back"/>
                 </RelativeLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
@@ -293,13 +307,14 @@
                         android:layout_centerInParent="true"
                         android:text="私信"
                         />
+
                     <ImageView
-                        android:layout_marginRight="10dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:src="@mipmap/ic_right_back"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@mipmap/ic_right_back"/>
                 </RelativeLayout>
 
                 <View
@@ -316,23 +331,24 @@
                     <ImageView
                         android:layout_width="@dimen/x20"
                         android:layout_height="match_parent"
-                        android:src="@mipmap/ic_tools"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"/>
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:src="@mipmap/ic_tools"/>
 
                     <TextView
                         style="@style/ManageTextView"
                         android:layout_centerInParent="true"
                         android:text="小工具"
                         />
+
                     <ImageView
-                        android:layout_marginRight="10dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:src="@mipmap/ic_right_back"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@mipmap/ic_right_back"/>
                 </RelativeLayout>
 
                 <View
@@ -356,13 +372,14 @@
                         android:layout_centerInParent="true"
                         android:text="加入官群"
                         />
+
                     <ImageView
-                        android:layout_marginRight="10dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:src="@mipmap/ic_right_back"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@mipmap/ic_right_back"/>
                 </RelativeLayout>
                 <!-- <View
                     android:background="@color/custom_gray"

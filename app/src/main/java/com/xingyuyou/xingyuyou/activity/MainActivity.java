@@ -118,7 +118,7 @@ public class MainActivity extends BaseActivity {
         mPermissionsChecker = new PermissionsChecker(this);
         initView();
         checkUpdate();
-        firstStartForDay();
+       // firstStartForDay();
     }
 
     private void firstStartForDay() {
@@ -279,7 +279,7 @@ public class MainActivity extends BaseActivity {
                 Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
                 firstTime = System.currentTimeMillis();
             } else {
-                mConfig_def.putString("sameDayTime", TimeUtils.getNowTimeString());
+              //  mConfig_def.putString("sameDayTime", TimeUtils.getNowTimeString());
                 finish();
                 System.exit(0);
             }

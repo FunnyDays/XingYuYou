@@ -141,4 +141,23 @@ public class PostDetailBean {
     public void setPosts_image(List<String> posts_image) {
         this.posts_image = posts_image;
     }
+
+    @Override
+    public String toString() {
+        return "PostDetailBean{" +
+                "id='" + id + '\'' +
+                ", subject='" + subject + '\'' +
+                ", message='" + message + '\'' +
+                ", dateline='" + dateline + '\'' +
+                ", posts_laud='" + posts_laud + '\'' +
+                ", posts_forums='" + posts_forums + '\'' +
+                ", posts_collect='" + posts_collect + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", head_image='" + head_image + '\'' +
+                ", uid='" + uid + '\'' +
+                ", laud_status='" + laud_status + '\'' +
+                ", collect_status='" + collect_status + '\'' +
+                ", posts_image=" + posts_image +
+                '}';
+    }
 }

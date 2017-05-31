@@ -81,11 +81,13 @@ public class ManagementActivity extends AppCompatActivity {
     private RelativeLayout rl_letter;
     private Button mBtSig;
     private SPUtils mConfig_def;
+    private TextView mTvUserIntegral;
 
     private void setValues() {
         UserUtils.setNickName(mUserBean.getNickname());
         UserUtils.setUserPhoto(mUserBean.getHead_image());
         mTvNickName.setText(mUserBean.getNickname());
+        mTvUserIntegral.setText("积分："+mUserBean.getUser_integral());
         Glide.with(ManagementActivity.this)
                 .load(mUserBean.getHead_image())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -160,7 +162,7 @@ public class ManagementActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        //签到
+       /* //签到
         mBtSig = (Button) findViewById(R.id.bt_sig);
         mConfig_def = new SPUtils("config_def");
         boolean isSig = mConfig_def.getBoolean("isSig", false);
@@ -179,9 +181,11 @@ public class ManagementActivity extends AppCompatActivity {
                     IntentUtils.startActivity(ManagementActivity.this, LoginActivity.class);
                 }
             }
-        });
+        });*/
 
         mTvNickName = (TextView) findViewById(R.id.user_nickname);
+        mTvUserIntegral = (TextView) findViewById(R.id.tv_user_integral);
+
         //登录
         mUserPhoto = (ImageView) findViewById(R.id.user_photo);
         Glide.with(ManagementActivity.this)

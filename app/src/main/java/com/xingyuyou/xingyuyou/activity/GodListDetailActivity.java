@@ -1,6 +1,7 @@
 package com.xingyuyou.xingyuyou.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
@@ -157,6 +158,8 @@ public class GodListDetailActivity extends AppCompatActivity {
     boolean isLoading = false;
     private ProgressBar mPbNodata;
     private TextView mTvNodata;
+    private TextView mCollectNum;
+    private TextView mJiaonangNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,6 +199,7 @@ public class GodListDetailActivity extends AppCompatActivity {
     private void initData() {
         OkHttpUtils.post()//
                 .addParams("activity_id", getIntent().getStringExtra("activity_id"))
+                .addParams("uid", UserUtils.getUserId())
                 .url(XingYuInterface.GET_ACTIVITY_INFO)
                 .tag(this)//
                 .build()//
@@ -213,6 +217,9 @@ public class GodListDetailActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        //底部收藏点赞数量
+        mCollectNum = (TextView) findViewById(R.id.tv_collect_num);
+        mJiaonangNum = (TextView) findViewById(R.id.tv_jiaonang_num);
         //底部发送
         mEditText = (EditText) findViewById(R.id.bottom_edit_text);
         mLinearLayout = (LinearLayout) findViewById(R.id.ll_edit_parent);
@@ -283,6 +290,88 @@ public class GodListDetailActivity extends AppCompatActivity {
 
     }
     public void setValues(GodActivityDetailBean values) {
+        //收藏状态
+        if (mGodDetailBean.getCollect_status().equals("1")){
+            Drawable drawable= getResources().getDrawable(R.mipmap.ic_collect_fill);
+            drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mCollectNum.setCompoundDrawables(null,drawable,null,null);
+        }else {
+            Drawable drawable= getResources().getDrawable(R.mipmap.shoucang);
+            drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mCollectNum.setCompoundDrawables(null,drawable,null,null);
+        }
+        if (mGodDetailBean.getLaud_status().equals("1")){
+            Drawable drawable= getResources().getDrawable(R.mipmap.ic_zan_fill);
+            drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mJiaonangNum.setCompoundDrawables(null,drawable,null,null);
+        }else {
+            Drawable drawable= getResources().getDrawable(R.mipmap.ic_zan);
+            drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mJiaonangNum.setCompoundDrawables(null,drawable,null,null);
+        }
+        mCollectNum.setText(mGodDetailBean.getPosts_collect());
+        mJiaonangNum.setText(mGodDetailBean.getPosts_laud());
+
+        mCollectNum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!UserUtils.logined()){
+                    IntentUtils.startActivity(GodListDetailActivity.this, LoginActivity.class);
+                    return;
+                }
+                getCollect(mGodDetailBean.getId());
+                if (mGodDetailBean.getCollect_status().equals("1")){
+                    mCollectNum.setText(String.valueOf((Integer.parseInt(mGodDetailBean.getPosts_collect())-1)));
+                    mGodDetailBean.setPosts_collect(String.valueOf((Integer.parseInt(mGodDetailBean.getPosts_collect())-1)));
+                    mGodDetailBean.setCollect_status("0");
+                    Toast.makeText(GodListDetailActivity.this, "取消收藏", Toast.LENGTH_SHORT).show();
+                    Drawable drawable= getResources().getDrawable(R.mipmap.shoucang);
+                    drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    mCollectNum.setCompoundDrawables(null,drawable,null,null);
+                }else {
+                    mCollectNum.setText(String.valueOf((Integer.parseInt(mGodDetailBean.getPosts_collect())+1)));
+                    mGodDetailBean.setPosts_collect(String.valueOf((Integer.parseInt(mGodDetailBean.getPosts_collect())+1)));
+                    mGodDetailBean.setCollect_status("1");
+                    Toast.makeText(GodListDetailActivity.this, "收藏", Toast.LENGTH_SHORT).show();
+                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_collect_fill);
+                    drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    mCollectNum.setCompoundDrawables(null,drawable,null,null);
+
+                }
+
+            }
+        });
+
+        mJiaonangNum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!UserUtils.logined()){
+                    IntentUtils.startActivity(GodListDetailActivity.this, LoginActivity.class);
+                    return;
+                }
+                getLaud(mGodDetailBean.getId());
+                if (mGodDetailBean.getLaud_status().equals("1")){
+                    mJiaonangNum.setText(String.valueOf((Integer.parseInt(mGodDetailBean.getLaud_status())-1)));
+                    mGodDetailBean.setLaud_status(String.valueOf((Integer.parseInt(mGodDetailBean.getLaud_status())-1)));
+                    mGodDetailBean.setLaud_status("0");
+                    Toast.makeText(GodListDetailActivity.this, "取消点赞", Toast.LENGTH_SHORT).show();
+                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_zan);
+                    drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    mJiaonangNum.setCompoundDrawables(null,drawable,null,null);
+                }else {
+                    mJiaonangNum.setText(String.valueOf((Integer.parseInt(mGodDetailBean.getLaud_status())+1)));
+                    mGodDetailBean.setLaud_status(String.valueOf((Integer.parseInt(mGodDetailBean.getLaud_status())+1)));
+                    mGodDetailBean.setLaud_status("1");
+                    Toast.makeText(GodListDetailActivity.this, "点赞", Toast.LENGTH_SHORT).show();
+                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_zan_fill);
+                    drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    mJiaonangNum.setCompoundDrawables(null,drawable,null,null);
+
+                }
+
+            }
+        });
+
         mTv_title.setText(values.getSubject());
         mTv_content.setText(values.getMessage());
         mTv_time.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(values.getDateline() + "000")));
@@ -306,6 +395,53 @@ public class GodListDetailActivity extends AppCompatActivity {
 
 
     }
+    /**
+     * 点赞
+     * @param tid
+     */
+    public void getLaud( String tid) {
+        OkHttpUtils.post()//
+                .addParams("tid",tid)
+                .addParams("uid",UserUtils.getUserId())
+                .url(XingYuInterface.GET_LAUD)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Log.e("hot", e.toString() + ":e");
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                    }
+                });
+
+    }
+
+    /**
+     * 收藏
+     * @param tid
+     */
+    public void getCollect(final String tid) {
+        OkHttpUtils.post()//
+                .addParams("tid",tid)
+                .addParams("uid",UserUtils.getUserId())
+                .url(XingYuInterface.GET_COLLECT)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        // Log.e("hot", e.toString() + ":e");
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.e("weiwei","hahah"+UserUtils.getUserId()+tid+response);
+                    }
+                });
+
+    }
+
     //*****************************************软键盘*****************************************************
     private void initKeyBoardView() {
         contentView = (LinearLayout) findViewById(R.id.txt_main_content);
@@ -506,13 +642,6 @@ public class GodListDetailActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         mDialog.dismissDialog();
-                       /* PostCommoBean postCommoBean = new PostCommoBean();
-                        postCommoBean.setNickname(UserUtils.getNickName());
-                        postCommoBean.setHead_image(UserUtils.getUserPhoto());
-                        postCommoBean.setDateline(String.valueOf(TimeUtils.getNowTimeMills()).substring(0, String.valueOf(TimeUtils.getNowTimeMills()).length() - 3));
-                        postCommoBean.setReplies_content( edittext.getText().toString().trim());
-                        mCommoAdapterList.add(postCommoBean);
-                        mCommoListAdapter.notifyDataSetChanged();*/
                         mImageList.clear();
                         //待优化
                     }
