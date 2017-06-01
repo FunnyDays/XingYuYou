@@ -40,7 +40,7 @@
                 android:layout_height="70dp"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/profile_picture"/>
+                android:src="@drawable/ic_user_defalut"/>
 
             <TextView
                 android:id="@+id/user_nickname"
@@ -59,7 +59,7 @@
                 android:layout_gravity="center_horizontal"
                 android:text="积分：4332"
                 android:textColor="@color/light_white"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/bt_sig"

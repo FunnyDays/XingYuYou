@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.SPUtils;
+import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.SpanStringUtils;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
@@ -232,7 +233,7 @@ public class MyMessagePostActivity extends AppCompatActivity {
             if(getItemViewType(position) == TYPE_NORMAL){
                 if(holder instanceof ItemViewHolder) {
                     ((ItemViewHolder) holder).mTvUserName.setText(mDatas.get(position-1).getNickname());
-                    ((ItemViewHolder) holder).mTvReplyContent.setText(mDatas.get(position-1).getConenct());
+                    ((ItemViewHolder) holder).mTvReplyContent.setText(SpanStringUtils.getEmotionContent(getApplication(),((ItemViewHolder) holder).mTvReplyContent,mDatas.get(position - 1).getConenct()));
                     ((ItemViewHolder) holder).mTvReplyTitle.setText(mDatas.get(position-1).getRe_conenct());
                     ((ItemViewHolder) holder).mTvReplyTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mDatas.get(position - 1).getDateline() + "000")));
                     ((ItemViewHolder) holder).mTvReplyFloor.setText(mDatas.get(position-1).getFloor()+"楼");
@@ -244,9 +245,13 @@ public class MyMessagePostActivity extends AppCompatActivity {
                     ((ItemViewHolder) holder).mItemOnclick.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(MyMessagePostActivity.this, PostDetailActivity.class);
-                            intent.putExtra("post_id", mDatas.get(position - 1).getTid());
-                            MyMessagePostActivity.this.startActivity(intent);
+                            if (mDatas.get(position - 1).getUid().equals("206")) {
+                                MyMessagePostActivity.this.startActivity(new Intent(MyMessagePostActivity.this, GodListDetailActivity.class)
+                                        .putExtra("activity_id", mDatas.get(position - 1).getTid()));
+                            } else {
+                                MyMessagePostActivity.this.startActivity(new Intent(MyMessagePostActivity.this, GodListDetailActivity.class)
+                                        .putExtra("post_id", mDatas.get(position - 1).getTid()));
+                            }
                         }
                     });
                     return;

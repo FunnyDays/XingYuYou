@@ -180,6 +180,7 @@ public class GodListDetailActivity extends AppCompatActivity {
         OkHttpUtils.post()//
                 .addParams("page", String.valueOf(PAGENUM))
                 .addParams("tid", getIntent().getStringExtra("activity_id"))
+                .addParams("uid", UserUtils.getUserId())
                 .url(XingYuInterface.GET_GOD_FORUMS)
                 .tag(this)//
                 .build()//
@@ -336,7 +337,6 @@ public class GodListDetailActivity extends AppCompatActivity {
                     Drawable drawable= getResources().getDrawable(R.mipmap.ic_collect_fill);
                     drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     mCollectNum.setCompoundDrawables(null,drawable,null,null);
-
                 }
 
             }

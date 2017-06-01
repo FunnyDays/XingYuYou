@@ -30,7 +30,24 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="120dp"
+        android:src="@color/blue"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+    <android.support.design.widget.FloatingActionButton
+        app:rippleColor="#56abe4"
+        app:backgroundTint="#56abe4"
+        app:layout_anchor="@id/iv"
 
+        android:id="@+id/fab_add_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_send"/>
 
 </android.support.design.widget.CoordinatorLayout>

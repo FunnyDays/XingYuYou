@@ -1,18 +1,26 @@
 package com.xingyuyou.xingyuyou.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.activity.DownLoadActivity;
+import com.xingyuyou.xingyuyou.activity.PostingActivity;
 import com.xingyuyou.xingyuyou.activity.SearchActivity;
 import com.xingyuyou.xingyuyou.activity.SearchCommuActivity;
 import com.xingyuyou.xingyuyou.adapter.MainVPAdapter;
@@ -34,6 +42,7 @@ public class TwoFragment extends BaseFragment {
     public Map<String, Integer> mClasses = new HashMap<String, Integer>();
     private List<String> mTitles;
     private boolean isHide;
+
     public static TwoFragment newInstance(String content) {
         Bundle args = new Bundle();
         args.putString("ARGS", content);
@@ -41,6 +50,8 @@ public class TwoFragment extends BaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+
 
     @Nullable
     @Override
@@ -58,6 +69,22 @@ public class TwoFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         minitView();
         minitData();
+        updatePost();
+    }
+
+    private void updatePost() {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getActivity());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("updateFragment");
+        BroadcastReceiver br = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mContent.setCurrentItem(2);
+            }
+
+        };
+        localBroadcastManager.registerReceiver(br, intentFilter);
     }
 
     private void minitView() {
@@ -65,7 +92,16 @@ public class TwoFragment extends BaseFragment {
         initToolbar();
         mTab = (TabLayout) getView().findViewById(R.id.tabs);
         mContent = (ViewPager) getView().findViewById(R.id.viewpager);
+
+        FloatingActionButton floatingActionButton = (FloatingActionButton) getView().findViewById(R.id.fab_add_comment);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentUtils.startActivity(mActivity, PostingActivity.class);
+            }
+        });
     }
+
     private void initToolbar() {
         mToolbar.setTitle("社区");
         mToolbar.inflateMenu(R.menu.all_tab_fragment_menu);
@@ -86,12 +122,13 @@ public class TwoFragment extends BaseFragment {
             }
         });
     }
+
     private void minitData() {
         mFragments = new ArrayList<BaseFragment>();
         mTitles = new ArrayList<String>();
         CommHotFragment hf = CommHotFragment.newInstance("1");
-        CommHotFragment hf1 =CommHotFragment.newInstance("2");
-        CommHotFragment hf2 = CommHotFragment.newInstance("3");
+        CommHotFragment hf1 = CommHotFragment.newInstance("2");
+        CommNewFragment hf2 = CommNewFragment.newInstance("3");
         mFragments.add(hf);
         mFragments.add(hf1);
         mFragments.add(hf2);

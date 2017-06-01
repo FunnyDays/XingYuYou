@@ -147,6 +147,11 @@ public class SelectTagActivity extends AppCompatActivity {
                             JSONArray array = new JSONArray(list);
                             Intent intent = new Intent(SelectTagActivity.this, PostingActivity.class);
                             intent.putExtra("PostTags", array.toString());
+                            String[] strings = new String[mSelectTagList.size()];
+                            for (int i = 0; i < mSelectTagList.size(); i++) {
+                                strings[i]=mSelectTagList.get(i).getLabel_name();
+                            }
+                            intent.putExtra("PostTagsList", strings);
                             startActivity(intent);
                             finish();
                         }

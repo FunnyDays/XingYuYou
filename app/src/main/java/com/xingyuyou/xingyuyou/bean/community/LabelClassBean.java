@@ -21,6 +21,7 @@ public class LabelClassBean {
     private String describe;
     private String posts_num;
     private String class_head_image;
+    private String class_virtual_image;
 
     public String getId() {
         return id;
@@ -68,6 +69,13 @@ public class LabelClassBean {
 
     public void setClass_head_image(String class_head_image) {
         this.class_head_image = class_head_image;
+    }
+    public String getClass_virtual_image() {
+        return class_virtual_image;
+    }
+
+    public void setClass_virtual_image(String class_virtual_image) {
+        this.class_virtual_image = class_virtual_image;
     }
 
     @Override

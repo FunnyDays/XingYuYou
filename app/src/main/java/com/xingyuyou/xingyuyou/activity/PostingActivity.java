@@ -1,6 +1,7 @@
 package com.xingyuyou.xingyuyou.activity;
 
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -21,6 +23,8 @@ import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.bean.community.TagBean;
+import com.xingyuyou.xingyuyou.fragment.TwoFragment;
 import com.xingyuyou.xingyuyou.weight.dialog.CustomDialog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
@@ -51,7 +55,8 @@ public class PostingActivity extends AppCompatActivity {
     private String mPostTags;
     private RelativeLayout mRlCommMore;
     private String mPostCommId;
-    private Map map=new HashMap<String,String>();
+    private Map map = new HashMap<String, String>();
+    private String[] mPostTagsLists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +78,7 @@ public class PostingActivity extends AppCompatActivity {
         mRlCommMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(PostingActivity.this,SelectCommTagActivity.class);
+                IntentUtils.startActivity(PostingActivity.this, SelectCommTagActivity.class);
             }
         });
     }
@@ -88,7 +93,7 @@ public class PostingActivity extends AppCompatActivity {
         mRlTagMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(PostingActivity.this,SelectTagActivity.class);
+                IntentUtils.startActivity(PostingActivity.this, SelectTagActivity.class);
             }
         });
     }
@@ -119,10 +124,48 @@ public class PostingActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         if (!StringUtils.isEmpty(intent.getStringExtra("PostTags"))) {
-            map.put("PostTags",intent.getStringExtra("PostTags"));
+            map.put("PostTags", intent.getStringExtra("PostTags"));
+            mPostTagsLists = intent.getStringArrayExtra("PostTagsList");
+            TextView tv_select_tag = (TextView) findViewById(R.id.tv_select_tag);
+            TextView tv_tag_one = (TextView) findViewById(R.id.tv_tag_one);
+            tv_tag_one.setText("");
+            TextView tv_tag_two = (TextView) findViewById(R.id.tv_tag_two);
+            tv_tag_two.setText("");
+            TextView tv_tag_three = (TextView) findViewById(R.id.tv_tag_three);
+            tv_tag_three.setText("");
+            TextView tv_tag_four = (TextView) findViewById(R.id.tv_tag_four);
+            tv_tag_four.setText("");
+            TextView tv_tag_five = (TextView) findViewById(R.id.tv_tag_five);
+            tv_tag_five.setText("");
+            for (int i = 0; i < mPostTagsLists.length; i++) {
+                if (i == 0) {
+                    tv_select_tag.setVisibility(View.GONE);
+                    tv_tag_one.setText(mPostTagsLists[0]);
+                    tv_tag_one.setVisibility(View.VISIBLE);
+                }
+                if (i == 1) {
+                    tv_tag_two.setText(mPostTagsLists[1]);
+                    tv_tag_two.setVisibility(View.VISIBLE);
+                }
+                if (i == 2) {
+                    tv_tag_three.setText(mPostTagsLists[2]);
+                    tv_tag_three.setVisibility(View.VISIBLE);
+                }
+                if (i == 3) {
+                    tv_tag_four.setText(mPostTagsLists[3]);
+                    tv_tag_four.setVisibility(View.VISIBLE);
+                }
+                if (i == 4) {
+                    tv_tag_five.setText(mPostTagsLists[4]);
+                    tv_tag_five.setVisibility(View.VISIBLE);
+                }
+            }
         }
         if (!StringUtils.isEmpty(intent.getStringExtra("PostCommId"))) {
-            map.put("PostCommId",intent.getStringExtra("PostCommId"));
+            map.put("PostCommId", intent.getStringExtra("PostCommId"));
+            TextView tv_tag_commu = (TextView) findViewById(R.id.tv_tag_commu);
+            tv_tag_commu.setVisibility(View.VISIBLE);
+            tv_tag_commu.setText(intent.getStringExtra("PostCommClassName"));
         }
 
     }
@@ -140,15 +183,15 @@ public class PostingActivity extends AppCompatActivity {
             return;
         }
 
-        if (StringUtils.isEmpty((String)map.get("PostTags"))){
+        if (StringUtils.isEmpty((String) map.get("PostTags"))) {
             Toast.makeText(this, "请选择标签", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (StringUtils.isEmpty((String)map.get("PostCommId"))){
+        if (StringUtils.isEmpty((String) map.get("PostCommId"))) {
             Toast.makeText(this, "请选发帖社区", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (mImageList.size()==0){
+        if (mImageList.size() == 0) {
             Toast.makeText(this, "请至少选择一张图片", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -157,20 +200,19 @@ public class PostingActivity extends AppCompatActivity {
 
 
         Map<String, String> params = new HashMap<String, String>();
-        params.put("fid", (String)map.get("PostCommId"));
+        params.put("fid", (String) map.get("PostCommId"));
         params.put("uid", "105");
         params.put("subject", mStTitle.getText().toString().trim());
         params.put("message", mEtContent.getText().toString().trim());
-        params.put("tags", (String)map.get("PostTags"));
+        params.put("tags", (String) map.get("PostTags"));
 
         PostFormBuilder post = OkHttpUtils.post();
-        for (int i = 0; i < mImageList.size() ; i++) {
+        for (int i = 0; i < mImageList.size(); i++) {
             File file = new File(mImageList.get(i));
-            if(file.exists()) {
-                File file1 = new File(getExternalCacheDir()+"/tempCompress"+i+".jpg");
+            if (file.exists()) {
+                File file1 = new File(getExternalCacheDir() + "/tempCompress" + i + ".jpg");
                 NativeUtil.compressBitmap(mImageList.get(i), file1.getAbsolutePath());
                 String s = "posts_image";
-                Log.e("file1",file1.getAbsolutePath()+file1.getName());
                 post.addFile(s + i, file1.getName(), file1);
             }
 
@@ -187,6 +229,11 @@ public class PostingActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         mDialog.dismissDialog();
+                        Intent intent = new Intent("updateFragment");
+                        LocalBroadcastManager.getInstance(PostingActivity.this)
+                                .sendBroadcast(intent);
+                        Toast.makeText(PostingActivity.this, "发帖成功", Toast.LENGTH_SHORT).show();
+                        PostingActivity.this.finish();
                     }
                 });
 
@@ -218,13 +265,13 @@ public class PostingActivity extends AppCompatActivity {
                 ((ItemViewHolder) holder).mPostImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (mImageList.size()>=5){
+                        if (mImageList.size() >= 5) {
                             Toast.makeText(PostingActivity.this, "只能发布五张图片", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         MultiImageSelector.create(PostingActivity.this)
                                 .showCamera(true)
-                                .single()
+                                .count(5)
                                 .start(PostingActivity.this, REQUEST_IMAGE);
                     }
                 });
@@ -265,8 +312,6 @@ public class PostingActivity extends AppCompatActivity {
 
             private ImageView mClosePic;
             private ImageView mPostImage;
-
-
             public ItemViewHolder(View itemView) {
                 super(itemView);
                /* if (itemView == mFooterView) {

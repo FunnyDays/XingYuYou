@@ -12,7 +12,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -29,7 +28,6 @@ import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
-import com.xingyuyou.xingyuyou.bean.community.SortPostListBean;
 import com.xingyuyou.xingyuyou.bean.community.TopViewRecommBean;
 import com.xingyuyou.xingyuyou.weight.WrapContentLinearLayoutManager;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -47,7 +45,7 @@ import okhttp3.Call;
 /**
  * Created by Administrator on 2016/6/28.
  */
-public class CommHotFragment extends BaseFragment {
+public class CommNewFragment extends BaseFragment {
 
     private static boolean CLEAR_DATA = false;
     private RecyclerView mRecyclerView;
@@ -121,10 +119,10 @@ public class CommHotFragment extends BaseFragment {
     private ImageView mIvThree;
     private ImageView mIvFour;
 
-    public static CommHotFragment newInstance(String content) {
+    public static CommNewFragment newInstance(String content) {
         Bundle args = new Bundle();
         args.putString("ARGS", content);
-        CommHotFragment fragment = new CommHotFragment();
+        CommNewFragment fragment = new CommNewFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -160,7 +158,34 @@ public class CommHotFragment extends BaseFragment {
         });
 
     }
+    private void updatePost() {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getActivity());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("updateFragment");
+        BroadcastReceiver br = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRefreshLayout.setRefreshing(true);
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                PAGENUMBER = 1;
+                                CLEAR_DATA = true;
+                                initData(PAGENUMBER);
+                                mRefreshLayout.setRefreshing(false);
+                            }
+                        }, 200);
+                    }
+                });
+            }
 
+        };
+        localBroadcastManager.registerReceiver(br, intentFilter);
+    }
     /**
      * 初始化数据
      */
@@ -246,6 +271,7 @@ public class CommHotFragment extends BaseFragment {
         View view = View.inflate(mActivity, R.layout.fragment_comm_class, null);
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         initSwipeRefreshLayout();
+        updatePost();
         return view;
     }
 

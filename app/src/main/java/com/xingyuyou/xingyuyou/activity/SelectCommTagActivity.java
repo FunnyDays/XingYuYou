@@ -52,7 +52,6 @@ public class SelectCommTagActivity extends AppCompatActivity {
             super.handleMessage(msg);
             if (msg.what == 1) {
                 String response = (String) msg.obj;
-                Log.e("weiwei",response);
                 JSONObject jo = null;
                 try {
                     jo = new JSONObject(response);
@@ -129,13 +128,14 @@ public class SelectCommTagActivity extends AppCompatActivity {
                 ((ItemViewHolder) holder).mGameName.setText(mDatas.get(position).getClass_name());
                 Glide.with(SelectCommTagActivity.this)
                         .load(mDatas.get(position).getClass_image())
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .into(((ItemViewHolder) holder).mGamePic);
                 ((ItemViewHolder) holder).mRelativeLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(SelectCommTagActivity.this, PostingActivity.class);
                         intent.putExtra("PostCommId", mDatas.get(position).getId());
+                        intent.putExtra("PostCommClassName", mDatas.get(position).getClass_name());
                         startActivity(intent);
                         finish();
                     }

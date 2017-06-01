@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
@@ -104,7 +105,10 @@ public class GodDeatilActivity extends AppCompatActivity {
 
     private void setValues(GodDetailBean godDetailBean) {
         mTv_god_des.setText(godDetailBean.getGod_describe());
-        Glide.with(getApplication()).load(godDetailBean.getImage_info()).into(mIv_god);
+        Glide.with(getApplication()).load(godDetailBean.getImage_info())
+                .asGif()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .into(mIv_god);
     }
 
     private Toolbar mToolbar;

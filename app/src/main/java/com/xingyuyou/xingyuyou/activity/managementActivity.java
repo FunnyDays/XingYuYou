@@ -82,12 +82,13 @@ public class ManagementActivity extends AppCompatActivity {
     private Button mBtSig;
     private SPUtils mConfig_def;
     private TextView mTvUserIntegral;
+    private TextView mTvNickName1;
 
     private void setValues() {
         UserUtils.setNickName(mUserBean.getNickname());
         UserUtils.setUserPhoto(mUserBean.getHead_image());
         mTvNickName.setText(mUserBean.getNickname());
-        mTvUserIntegral.setText("积分："+mUserBean.getUser_integral());
+       // mTvUserIntegral.setText("积分："+mUserBean.getUser_integral());
         Glide.with(ManagementActivity.this)
                 .load(mUserBean.getHead_image())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -154,11 +155,24 @@ public class ManagementActivity extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-       /* //显示用户信息
+        //显示用户信息
         if (UserUtils.logined()) {
-            TextView tvNickName = (TextView) findViewById(R.id.user_nickname);
-            tvNickName.setText(UserUtils.getNickName());
-        }*/
+            mTvNickName.setText(UserUtils.getNickName());
+            Glide.with(getApplication())
+                    .load(UserUtils.getUserPhoto())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(new GlideCircleTransform(getApplication()))
+                    .dontAnimate()
+                    .into(mUserPhoto);
+        }else {
+            mTvNickName.setText("点击登陆");
+            Glide.with(getApplication())
+                    .load(R.drawable.ic_user_defalut)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(new GlideCircleTransform(getApplication()))
+                    .dontAnimate()
+                    .into(mUserPhoto);
+        }
     }
 
     private void initData() {
@@ -184,6 +198,16 @@ public class ManagementActivity extends AppCompatActivity {
         });*/
 
         mTvNickName = (TextView) findViewById(R.id.user_nickname);
+        mTvNickName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (UserUtils.logined()) {
+                    IntentUtils.startActivity(ManagementActivity.this, UserInfoActivity.class);
+                } else {
+                    IntentUtils.startActivity(ManagementActivity.this, LoginActivity.class);
+                }
+            }
+        });
         mTvUserIntegral = (TextView) findViewById(R.id.tv_user_integral);
 
         //登录

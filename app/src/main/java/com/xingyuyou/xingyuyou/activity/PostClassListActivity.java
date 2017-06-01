@@ -141,11 +141,11 @@ public class PostClassListActivity extends AppCompatActivity {
         TextView tvPostNum = (TextView) headerView.findViewById(R.id.tv_post_num);
         TextView tvPostDes = (TextView) headerView.findViewById(R.id.tv_post_describe);
         Glide.with(getApplication())
-                .load(getIntent().getStringExtra("class_head_image"))
+                .load(getIntent().getStringExtra("class_virtual_image"))
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(ivBg);
         Glide.with(getApplication())
-                .load(getIntent().getStringExtra("class_image"))
+                .load(getIntent().getStringExtra("class_head_image"))
                 .transform(new GlideCircleTransform(PostClassListActivity.this))
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(ivLabel);

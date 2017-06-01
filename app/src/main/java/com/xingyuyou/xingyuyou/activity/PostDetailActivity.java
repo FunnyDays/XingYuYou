@@ -283,6 +283,7 @@ public class PostDetailActivity extends BaseActivity {
         OkHttpUtils.post()//
                 .addParams("page", String.valueOf(PAGENUM))
                 .addParams("tid", getIntent().getStringExtra("post_id"))
+                .addParams("uid", UserUtils.getUserId())
                 .url(XingYuInterface.GET_FORUMS_LIST)
                 .tag(this)//
                 .build()//

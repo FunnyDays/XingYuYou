@@ -739,7 +739,7 @@ public class TimeUtils {
             return String.format("今天%tR", millis);
         } else if (millis >= wee - ConstUtils.DAY) {
             //return String.format("昨天%tR", millis);
-            return "一天前";
+            return "1天前";
         } else {
             // return String.format("%tF", millis);
             return getFitTimeSpanByNow(millis,1)+"前";

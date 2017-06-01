@@ -104,7 +104,7 @@ public class FenLeiGameAdapter extends RecyclerView.Adapter {
                 Glide.with(mActivity)
                         .load(mListData.get(position-1).getIcon())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .transform(new GlideRoundTransform(mActivity,10))
+
                         .into(((ItemViewHolder) holder).mSortGamePic);
                 ((ItemViewHolder) holder).mItemOnclick.setOnClickListener(new View.OnClickListener() {
                     @Override

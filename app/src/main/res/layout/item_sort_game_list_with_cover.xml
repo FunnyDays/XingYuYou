@@ -12,6 +12,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/cv_item_onclick"
         app:cardElevation="1dp"
+        app:cardCornerRadius="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -27,7 +28,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:adjustViewBounds="true"
-                android:scaleType="center"/>
+                android:scaleType="fitXY"/>
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/x88"
@@ -35,6 +36,7 @@
                 >
 
                 <TextView
+                    android:visibility="gone"
                     android:layout_centerInParent="true"
                     android:id="@+id/tv_sort_game_name"
                     android:layout_width="wrap_content"
@@ -68,6 +70,7 @@
                     >
 
                     <TextView
+                        android:textColor="@color/white"
                         android:id="@+id/tv_game_num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -75,6 +78,7 @@
                         tools:text="下载量： 72662"/>
 
                     <TextView
+                        android:textColor="@color/white"
                         android:layout_marginLeft="20dp"
                         android:layout_toRightOf="@+id/tv_game_num"
                         android:id="@+id/tv_game_hot"
@@ -90,6 +94,6 @@
     </android.support.v7.widget.CardView>
     <View
         android:layout_width="match_parent"
-        android:layout_height="9dp"
+        android:layout_height="11dp"
         android:background="@color/colorItemRecycle"/>
 </LinearLayout>

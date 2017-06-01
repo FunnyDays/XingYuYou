@@ -22,7 +22,7 @@
                 android:id="@+id/et_title"
 
                 android:layout_width="match_parent"
-                android:layout_height="58dp"
+                android:layout_height="@dimen/x50"
                 android:layout_marginBottom="5dp"
                 android:background="@android:color/white"
                 android:hint="标题（必填）"
@@ -39,7 +39,7 @@
                 android:background="@android:color/white"
                 android:gravity="left"
                 android:hint="请输入内容（必填）"
-                android:lines="10"
+                android:lines="8"
                 android:paddingLeft="20dp"
                 android:paddingTop="10dp"
                 android:textColor="@android:color/black"/>
@@ -47,7 +47,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="160dp"
+                android:layout_height="@dimen/x140"
                 android:layout_marginTop="5dp">
 
             </android.support.v7.widget.RecyclerView>
@@ -55,11 +55,12 @@
             <RelativeLayout
                 android:id="@+id/rl_tag_more"
                 android:layout_width="match_parent"
-                android:layout_height="58dp"
+                android:layout_height="@dimen/x50"
                 android:layout_marginTop="5dp"
                 android:background="@android:color/white">
 
                 <ImageView
+                    android:layout_centerInParent="true"
                     android:id="@+id/iv_one"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
@@ -69,16 +70,87 @@
                     android:src="@mipmap/ic_tag"/>
 
                 <TextView
+                    android:id="@+id/tv_select_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/iv_one"
                     android:text="选择标签"/>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="50dp"
+                    android:layout_toRightOf="@+id/iv_one">
+
+                    <TextView
+                        android:paddingLeft="@dimen/x2"
+                        android:paddingRight="@dimen/x2"
+                        android:background="@drawable/tag_textview_bg"
+                        android:lines="1"
+                        android:visibility="gone"
+                        android:id="@+id/tv_tag_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        />
+
+                    <TextView
+                        android:paddingLeft="@dimen/x2"
+                        android:paddingRight="@dimen/x2"
+                        android:background="@drawable/tag_textview_bg"
+                        android:lines="1"
+                        android:visibility="gone"
+                        android:id="@+id/tv_tag_two"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        />
+
+                    <TextView
+                        android:paddingLeft="@dimen/x2"
+                        android:paddingRight="@dimen/x2"
+                        android:background="@drawable/tag_textview_bg"
+                        android:lines="1"
+                        android:visibility="gone"
+                        android:id="@+id/tv_tag_three"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        />
+
+                    <TextView
+                        android:paddingLeft="@dimen/x2"
+                        android:paddingRight="@dimen/x2"
+                        android:background="@drawable/tag_textview_bg"
+                        android:lines="1"
+                        android:visibility="gone"
+                        android:id="@+id/tv_tag_four"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        />
+
+                    <TextView
+                        android:paddingLeft="@dimen/x2"
+                        android:paddingRight="@dimen/x2"
+                        android:background="@drawable/tag_textview_bg"
+                        android:lines="1"
+                        android:visibility="gone"
+                        android:id="@+id/tv_tag_five"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        />
+
+                </LinearLayout>
+
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
                     android:layout_margin="4dp"
                     android:padding="5dp"
                     android:src="@mipmap/ic_right_tag"
@@ -89,34 +161,53 @@
             <RelativeLayout
                 android:id="@+id/rl_comm_more"
                 android:layout_width="match_parent"
-                android:layout_height="58dp"
+                android:layout_height="@dimen/x50"
                 android:layout_marginTop="5dp"
                 android:background="@android:color/white">
 
                 <ImageView
+                    android:layout_centerInParent="true"
                     android:id="@+id/iv_one1"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_margin="4dp"
                     android:padding="10dp"
-                    android:src="@mipmap/ic_tag"/>
+                    android:src="@mipmap/ic_tag"
+                    android:layout_alignTop="@+id/imageView2"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"/>
 
                 <TextView
+                    android:id="@+id/tv_select_commu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/iv_one1"
                     android:text="选择社区"/>
 
+                <TextView
+                    android:paddingLeft="@dimen/x2"
+                    android:paddingRight="@dimen/x2"
+                    android:background="@drawable/tag_textview_bg"
+                    android:visibility="gone"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:id="@+id/tv_tag_commu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/tv_select_commu">
+
+                </TextView>
+
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
                     android:layout_margin="4dp"
                     android:padding="5dp"
                     android:src="@mipmap/ic_right_tag"
-                    android:tint="#ffd6d7d7"/>
+                    android:tint="#ffd6d7d7"
+                    android:id="@+id/imageView2"/>
 
             </RelativeLayout>
         </LinearLayout>

@@ -28,6 +28,7 @@ import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.DiffCallBack;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.SPUtils;
+import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.SpanStringUtils;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideRoundTransform;
@@ -54,11 +55,11 @@ public class MyReplyPostActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private MyReplyPostAdapter mPostAdapter;
     private String mUserId;
-    private int PAGENUMBER=1;
+    private int PAGENUMBER = 1;
     boolean isLoading = false;
-    private List<MyReplyPostBean> mMyReplyPostList=new ArrayList<>();
-    private List<MyReplyPostBean> mDatas=new ArrayList<>();
-    private Handler mHandler=new Handler(){
+    private List<MyReplyPostBean> mMyReplyPostList = new ArrayList<>();
+    private List<MyReplyPostBean> mDatas = new ArrayList<>();
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -74,7 +75,7 @@ public class MyReplyPostActivity extends AppCompatActivity {
                 try {
                     jo = new JSONObject(response);
                     String string = jo.getString("status");
-                    if (string.equals("1")){
+                    if (string.equals("1")) {
                         JSONArray ja = jo.getJSONArray("data");
                         //Log.e("hot", "解析数据："+  ja.toString());
                         Gson gson = new Gson();
@@ -83,12 +84,12 @@ public class MyReplyPostActivity extends AppCompatActivity {
                                 }.getType());
                         mDatas.addAll(mMyReplyPostList);
                     }
-                    if (mMyReplyPostList.size()<20){
+                    if (mMyReplyPostList.size() < 20) {
                         Toast.makeText(MyReplyPostActivity.this, "已经没有更多数据", Toast.LENGTH_SHORT).show();
                         mPbNodata.setVisibility(View.GONE);
                         mTvNodata.setText("已经没有更多数据");
                     }
-                    if (mPostAdapter!=null)
+                    if (mPostAdapter != null)
                         mPostAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -180,7 +181,7 @@ public class MyReplyPostActivity extends AppCompatActivity {
         });
     }
 
-    private class MyReplyPostAdapter extends RecyclerView.Adapter{
+    private class MyReplyPostAdapter extends RecyclerView.Adapter {
         public static final int TYPE_HEADER = 0;
         public static final int TYPE_FOOTER = 1;
         public static final int TYPE_NORMAL = 2;
@@ -207,6 +208,7 @@ public class MyReplyPostActivity extends AppCompatActivity {
             mFooterView = footerView;
             notifyItemInserted(getItemCount() - 1);
         }
+
         @Override
         public int getItemViewType(int position) {
             if (mHeaderView == null && mFooterView == null) {
@@ -237,33 +239,36 @@ public class MyReplyPostActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-            if(getItemViewType(position) == TYPE_NORMAL){
-                if(holder instanceof ItemViewHolder) {
-                    ((ItemViewHolder) holder).mTvUserName.setText(mDatas.get(position-1).getNickname());
-                    ((ItemViewHolder) holder).mTvReplyContent.setText(mDatas.get(position-1).getConenct());
-                    ((ItemViewHolder) holder).mTvReplyTitle.setText(mDatas.get(position-1).getRe_conenct());
+            if (getItemViewType(position) == TYPE_NORMAL) {
+                if (holder instanceof ItemViewHolder) {
+                    ((ItemViewHolder) holder).mTvUserName.setText(mDatas.get(position - 1).getNickname());
+                    ((ItemViewHolder) holder).mTvReplyContent.setText(SpanStringUtils.getEmotionContent(getApplication(),((ItemViewHolder) holder).mTvReplyContent,mDatas.get(position - 1).getConenct()));
+                    ((ItemViewHolder) holder).mTvReplyTitle.setText(mDatas.get(position - 1).getRe_conenct());
                     ((ItemViewHolder) holder).mTvReplyTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mDatas.get(position - 1).getDateline() + "000")));
-                    ((ItemViewHolder) holder).mTvReplyFloor.setText(mDatas.get(position-1).getFloor()+"楼");
+                    ((ItemViewHolder) holder).mTvReplyFloor.setText(mDatas.get(position - 1).getFloor() + "楼");
                     Glide.with(getApplication())
-                            .load(mDatas.get(position-1).getHead_image())
+                            .load(mDatas.get(position - 1).getHead_image())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .transform(new GlideCircleTransform(MyReplyPostActivity.this))
                             .into(((ItemViewHolder) holder).mIvUserPhoto);
                     ((ItemViewHolder) holder).mItemOnclick.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(MyReplyPostActivity.this, PostDetailActivity.class);
-                            intent.putExtra("post_id", mDatas.get(position - 1).getTid());
-                            Log.e("weiwei", "onClick: "+mDatas.get(position - 1).getTid());
-                            MyReplyPostActivity.this.startActivity(intent);
+                            if (mDatas.get(position - 1).getUid().equals("206")) {
+                                MyReplyPostActivity.this.startActivity(new Intent(MyReplyPostActivity.this, GodListDetailActivity.class)
+                                        .putExtra("activity_id", mDatas.get(position - 1).getTid()));
+                            } else {
+                                MyReplyPostActivity.this.startActivity(new Intent(MyReplyPostActivity.this, GodListDetailActivity.class)
+                                        .putExtra("post_id", mDatas.get(position - 1).getTid()));
+                            }
                         }
                     });
                     return;
                 }
                 return;
-            }else if(getItemViewType(position) == TYPE_HEADER){
+            } else if (getItemViewType(position) == TYPE_HEADER) {
                 return;
-            }else{
+            } else {
                 return;
             }
         }
@@ -283,13 +288,13 @@ public class MyReplyPostActivity extends AppCompatActivity {
 
         class ItemViewHolder extends RecyclerView.ViewHolder {
 
-            private  ConstraintLayout mItemOnclick;
-            private  ImageView mIvUserPhoto;
-            private  TextView mTvUserName;
-            private  TextView mTvReplyContent;
-            private  TextView mTvReplyTitle;
-            private  TextView mTvReplyTime;
-            private  TextView mTvReplyFloor;
+            private ConstraintLayout mItemOnclick;
+            private ImageView mIvUserPhoto;
+            private TextView mTvUserName;
+            private TextView mTvReplyContent;
+            private TextView mTvReplyTitle;
+            private TextView mTvReplyTime;
+            private TextView mTvReplyFloor;
 
             public ItemViewHolder(View itemView) {
                 super(itemView);

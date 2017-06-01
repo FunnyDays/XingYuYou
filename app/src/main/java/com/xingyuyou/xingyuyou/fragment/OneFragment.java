@@ -57,14 +57,7 @@ public class OneFragment extends BaseFragment {
     protected View initView() {
         View view = View.inflate(mActivity, R.layout.fragment_one, null);
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        mIvManage = (ImageView) view.findViewById(R.id.iv_manage);
-        mIvManage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                    IntentUtils.startActivity(mActivity,ManagementActivity.class);
-                mActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-            }
-        });
+
         initToolbar();
         //tablayout设置
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
@@ -80,7 +73,21 @@ public class OneFragment extends BaseFragment {
 
         //登陆账号设置
         mTvUserAccount = (TextView) view.findViewById(R.id.tv_user_account);
-
+        mTvUserAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentUtils.startActivity(mActivity,ManagementActivity.class);
+                mActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+        });
+        mIvManage = (ImageView) view.findViewById(R.id.iv_manage);
+        mIvManage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentUtils.startActivity(mActivity,ManagementActivity.class);
+                mActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+        });
         //设置Nva
        /* DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -130,6 +137,14 @@ public class OneFragment extends BaseFragment {
             mTvUserAccount.setText(UserUtils.getNickName());
             Glide.with(mActivity)
                     .load(UserUtils.getUserPhoto())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(new GlideCircleTransform(mActivity))
+                    .dontAnimate()
+                    .into(mIvManage);
+        }else {
+            mTvUserAccount.setText("未登陆");
+            Glide.with(mActivity)
+                    .load(R.drawable.ic_user_defalut)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(new GlideCircleTransform(mActivity))
                     .dontAnimate()

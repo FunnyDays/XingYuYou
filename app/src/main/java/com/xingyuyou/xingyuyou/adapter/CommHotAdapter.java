@@ -21,6 +21,8 @@ import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.activity.GodDeatilActivity;
+import com.xingyuyou.xingyuyou.activity.GodListDetailActivity;
 import com.xingyuyou.xingyuyou.activity.LoginActivity;
 import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
@@ -177,10 +179,14 @@ public class CommHotAdapter extends RecyclerView.Adapter {
             ((ItemViewHolder) holder).mLinearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    Intent intent = new Intent(mActivity, PostDetailActivity.class);
-                    intent.putExtra("post_id", mListData.get(position - 1).getId());
-                    mActivity.startActivity(intent);
+                    if (mListData.get(position - 1).getUid().equals("206")) {
+                        mActivity.startActivity(new Intent(mActivity,GodListDetailActivity.class)
+                                .putExtra("activity_id",mListData.get(position - 1).getId()));
+                    }else {
+                        Intent intent = new Intent(mActivity, PostDetailActivity.class);
+                        intent.putExtra("post_id", mListData.get(position - 1).getId());
+                        mActivity.startActivity(intent);
+                    }
                 }
             });
             ((ItemViewHolder) holder).mRlCollect.setOnClickListener(new View.OnClickListener() {
@@ -210,9 +216,9 @@ public class CommHotAdapter extends RecyclerView.Adapter {
             ((ItemViewHolder) holder).mRlComm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(mActivity, PostDetailActivity.class);
+                   /* Intent intent = new Intent(mActivity, PostDetailActivity.class);
                     intent.putExtra("post_id", mListData.get(position - 1).getId());
-                    mActivity.startActivity(intent);
+                    mActivity.startActivity(intent);*/
                 }
             });
             ((ItemViewHolder) holder).mRlJiaonang.setOnClickListener(new View.OnClickListener() {

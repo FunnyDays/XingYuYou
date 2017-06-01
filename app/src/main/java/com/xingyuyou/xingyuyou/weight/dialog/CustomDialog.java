@@ -59,19 +59,20 @@ public class CustomDialog {
     }
 
     public void dismissDialog() {
-        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+        mAlertDialog.dismiss();
+       /* if (mAlertDialog != null && mAlertDialog.isShowing()) {
             mValueAnimator = ValueAnimator.ofFloat(0, 20);
             mValueAnimator.setDuration(2000);
             mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    if (animation.getAnimatedValue().toString().equals("20.0"))
-                        mAlertDialog.dismiss();
+                    if (animation.getAnimatedValue().toString().equals("20.0"));
+
                 }
             });
             mValueAnimator.start();
 
-        }
+        }*/
     }
 
     public void CancelDialog() {
