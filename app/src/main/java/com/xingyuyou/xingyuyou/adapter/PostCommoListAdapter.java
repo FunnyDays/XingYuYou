@@ -168,7 +168,6 @@ public class PostCommoListAdapter extends BaseAdapter {
         public TextView tv_commo2_name;
         public TextView tv_commo2_content;
         public TextView tv_commo2_time;
-        public TextView tv_commo2_more;
         public TextView tv_louzhu;
         public TextView tv_zan_num;
         public TextView tv_reply_content;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_user_info"
     android:layout_width="match_parent"
@@ -8,7 +9,17 @@
     android:orientation="vertical"
     tools:context="com.xingyuyou.xingyuyou.activity.UserInfoActivity">
 
-    <include layout="@layout/toolbar"/>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:elevation="0dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:navigationIcon="@drawable/ic_action_back"
+        app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -22,10 +33,8 @@
             <RelativeLayout
                 android:id="@+id/rl_user_photo"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/ripple_bg"
+                android:layout_height="@dimen/x160"
+                android:background="@color/colorPrimary"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp">
 
@@ -37,38 +46,39 @@
                     android:layout_centerVertical="true"
                     android:text="头像"
                     android:textColor="#000000"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    android:visibility="gone"/>
 
                 <ImageView
                     android:id="@+id/iv_user_photo"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
+                    android:layout_width="@dimen/x70"
+                    android:layout_height="@dimen/x70"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/x10"
                     android:src="@mipmap/profile_picture"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_nick_name"
+                style="@style/UserInfoRelativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="3dp"
                 android:background="@drawable/ripple_bg"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp">
 
                 <TextView
+                    style="@style/UserInfoTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:text="昵称"
-                    android:textColor="#000000"
-                    android:textSize="16sp"/>
+                    android:textColor="#000000"/>
 
                 <TextView
+                    style="@style/UserInfoTextView"
                     android:id="@+id/tv_nick_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -79,10 +89,9 @@
 
             <RelativeLayout
                 android:id="@+id/rl_user_sex"
+                style="@style/UserInfoRelativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
                 android:background="@drawable/ripple_bg"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp">
@@ -95,9 +104,10 @@
                     android:layout_centerVertical="true"
                     android:text="性别"
                     android:textColor="#000000"
-                    android:textSize="16sp"/>
+                    style="@style/UserInfoTextView"/>
 
                 <TextView
+                    style="@style/UserInfoTextView"
                     android:id="@+id/tv_user_sex"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -106,12 +116,15 @@
                     tools:text="旺旺"/>
             </RelativeLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/custom_gray"/>
+
             <RelativeLayout
                 android:id="@+id/rl_user_age"
+                style="@style/UserInfoRelativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
                 android:background="@drawable/ripple_bg"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp">
@@ -124,9 +137,10 @@
                     android:layout_centerVertical="true"
                     android:text="年龄"
                     android:textColor="#000000"
-                    android:textSize="16sp"/>
+                    style="@style/UserInfoTextView"/>
 
                 <TextView
+                    style="@style/UserInfoTextView"
                     android:id="@+id/tv_user_age"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -136,12 +150,15 @@
                     tools:text="旺旺"/>
             </RelativeLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/custom_gray"/>
+
             <RelativeLayout
                 android:id="@+id/rl_user_address"
+                style="@style/UserInfoRelativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
                 android:background="@drawable/ripple_bg"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp">
@@ -154,9 +171,10 @@
                     android:layout_centerVertical="true"
                     android:text="地区"
                     android:textColor="#000000"
-                    android:textSize="16sp"/>
+                    style="@style/UserInfoTextView"/>
 
                 <TextView
+                    style="@style/UserInfoTextView"
                     android:id="@+id/tv_user_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -165,12 +183,18 @@
                     tools:text="旺旺"/>
             </RelativeLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/custom_gray"/>
+
             <RelativeLayout
                 android:id="@+id/rl_user_benming"
+                style="@style/UserInfoRelativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
+
+                android:layout_marginBottom="3dp"
+
                 android:background="@drawable/ripple_bg"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp">
@@ -183,9 +207,10 @@
                     android:layout_centerVertical="true"
                     android:text="本命"
                     android:textColor="#000000"
-                    android:textSize="16sp"/>
+                    style="@style/UserInfoTextView"/>
 
                 <TextView
+                    style="@style/UserInfoTextView"
                     android:id="@+id/tv_user_benming"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -196,10 +221,11 @@
 
             <RelativeLayout
                 android:id="@+id/rl_user_signatures"
+                style="@style/UserInfoRelativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
+
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
                 android:background="@drawable/ripple_bg"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp">
@@ -212,9 +238,10 @@
                     android:layout_centerVertical="true"
                     android:text="签名"
                     android:textColor="#000000"
-                    android:textSize="16sp"/>
+                    style="@style/UserInfoTextView"/>
 
                 <TextView
+                    style="@style/UserInfoTextView"
                     android:id="@+id/tv_user_signatures"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -222,17 +249,20 @@
                     android:layout_centerVertical="true"
                     tools:text="旺旺"/>
             </RelativeLayout>
+
             <RelativeLayout
                 android:id="@+id/rl_user_detail_address"
+                style="@style/UserInfoRelativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="58dp"
+
                 android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
                 android:background="@drawable/ripple_bg"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp">
 
                 <TextView
+                    android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -240,17 +270,17 @@
                     android:layout_centerVertical="true"
                     android:text="收货地址"
                     android:textColor="#000000"
-                    android:textSize="16sp"
-                    android:id="@+id/textView2"/>
+                    style="@style/UserInfoTextView"/>
 
                 <TextView
+                    style="@style/UserInfoTextView"
                     android:id="@+id/tv_user_detail_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="旺旺"
                     android:layout_alignBottom="@+id/textView2"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"/>
+                    tools:text="旺旺"/>
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

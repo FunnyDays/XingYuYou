@@ -9,20 +9,26 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         >
-
+        <View
+            android:id="@+id/line"
+            android:background="@color/custom_gray"
+            android:layout_width="match_parent"
+            android:layout_height="1px"/>
         <LinearLayout
+            android:layout_below="@+id/line"
+            android:layout_marginLeft="@dimen/x20"
             android:id="@+id/ll_edit_parent"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:visibility="visible"
             >
 
             <EditText
                 android:id="@+id/bottom_edit_text"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="4"
+                android:layout_height="@dimen/x28"
+                android:layout_margin="@dimen/x6"
+                android:layout_weight="5"
                 android:background="@drawable/edittext_bg"
                 android:drawableLeft="@drawable/ic_action_edit"
                 android:drawablePadding="10dp"
@@ -30,37 +36,47 @@
                 android:paddingLeft="5dp"
                 android:textColor="@color/black"
                 android:textSize="14sp"/>
-
-            <TextView
-                android:id="@+id/tv_collect_num"
+            <LinearLayout
+                android:layout_marginLeft="@dimen/x15"
+                android:orientation="horizontal"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:layout_weight="1"
-                android:drawableTop="@mipmap/shoucang"
-                android:gravity="center"
-                tools:text="7766"/>
+                android:layout_weight="2"
+                android:layout_marginRight="10dp"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_margin="@dimen/x7"
+                    android:id="@+id/tv_collect_num"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawableTop="@mipmap/shoucang"
+                    android:gravity="center"
+                    android:textSize="@dimen/x8"
+                    tools:text="7766"/>
 
-            <TextView
-                android:id="@+id/tv_comm_num"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:layout_weight="1"
-                android:drawableTop="@mipmap/pinglun"
-                android:gravity="center"
-                android:visibility="gone"
-                tools:text="7766"/>
+                <TextView
+                    android:id="@+id/tv_comm_num"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:layout_weight="1"
+                    android:drawableTop="@mipmap/pinglun"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    tools:text="7766"/>
 
-            <TextView
-                android:id="@+id/tv_jiaonang_num"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:layout_weight="1"
-                android:drawableTop="@mipmap/ic_zan"
-                android:gravity="center"
-                tools:text="7766"/>
+                <TextView
+                    android:layout_margin="@dimen/x7"
+                    android:id="@+id/tv_jiaonang_num"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawableTop="@mipmap/ic_zan"
+                    android:gravity="center"
+                    android:textSize="@dimen/x8"
+                    tools:text="7766"/>
+            </LinearLayout>
+
 
         </LinearLayout>
         <!-- <LinearLayout

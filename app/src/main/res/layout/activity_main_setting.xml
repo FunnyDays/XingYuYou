@@ -177,10 +177,11 @@
 
     </RelativeLayout>
     <Button
+        android:textColor="@color/blue"
         android:layout_margin="10dp"
         android:text="退出登录"
         android:padding="10dp"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/button_blue_bg"
         android:id="@+id/bt_login_out"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

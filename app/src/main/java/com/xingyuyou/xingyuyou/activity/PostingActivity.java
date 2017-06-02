@@ -1,6 +1,8 @@
 package com.xingyuyou.xingyuyou.activity;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,12 +10,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,7 +61,15 @@ public class PostingActivity extends AppCompatActivity {
     private String mPostCommId;
     private Map map = new HashMap<String, String>();
     private String[] mPostTagsLists;
-
+    private PopupWindow mPopWindow;
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 2) {
+                mPopWindow.showAtLocation(mRecyclerView, Gravity.CENTER, 0, 0);
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +84,23 @@ public class PostingActivity extends AppCompatActivity {
         initToolbar();
         initTagMore();
         initCommMore();
+        popupWin();
+    }
+
+    private void popupWin() {
+        View popupView = LayoutInflater.from(this).inflate(R.layout.popup_post_announcement_layout, null);
+        mPopWindow = new PopupWindow(popupView,
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        mPopWindow.setBackgroundDrawable(getResources().getDrawable(R.color.custom_dark_gray));
+        mPopWindow.setOutsideTouchable(true);
+        ImageView iv_post_announcement = (ImageView) popupView.findViewById(R.id.iv_post_announcement);
+        iv_post_announcement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPopWindow.dismiss();
+            }
+        });
+        mHandler.sendEmptyMessageDelayed(2, 200);
     }
 
     private void initCommMore() {

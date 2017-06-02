@@ -5,8 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorControlNormal"
     >
     <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
@@ -15,8 +17,8 @@
 
         <ImageView
             android:id="@+id/civ_user_photo"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/x25"
+            android:layout_height="@dimen/x25"
             android:layout_centerVertical="true"
             android:layout_margin="2dp"
             android:scaleType="centerInside"
@@ -38,7 +40,7 @@
                     android:id="@+id/tv_user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/x12"
                     tools:text="7766"/>
 
                 <TextView
@@ -48,9 +50,9 @@
                     android:layout_marginLeft="5dp"
                     android:background="@drawable/textview_bg"
                     android:padding="1dp"
-                    android:text="楼主"
+                    android:text="UP主"
                     android:textColor="@color/white"
-                    android:textSize="8sp"
+                    android:textSize="@dimen/x8"
                     />
             </LinearLayout>
 
@@ -59,19 +61,20 @@
                 android:id="@+id/tv_post_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:textSize="@dimen/x8"
                 tools:text="7766"/>
         </LinearLayout>
 
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/tv_content"
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
+        android:textSize="@dimen/x14"
         tools:text="ahhaahahahhahaahhaha"/>
 
     <LinearLayout
@@ -82,7 +85,15 @@
         android:orientation="vertical">
 
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:textSize="@dimen/x12"
+        tools:text="ahhaahahahhahaahhaha"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

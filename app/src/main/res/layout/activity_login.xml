@@ -41,13 +41,12 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@mipmap/ic_login_user"
                 android:hint="手机号"
-
                 android:inputType="number"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@android:color/black"
                 android:textColorHint="@color/colorPrimary"
-                android:textSize="12sp"
+                android:textSize="@dimen/x14"
                 android:theme="@style/MyEditText"/>
 
             <EditText
@@ -60,38 +59,38 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@android:color/black"
-                android:textSize="12sp"
+                android:textSize="@dimen/x14"
                 android:theme="@style/MyEditText"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
+                android:layout_height="@dimen/x30"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/bt_register"
                     style="?android:textAppearanceSmall"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/x30"
                     android:layout_marginRight="3dp"
                     android:layout_weight="1"
                     android:background="@drawable/login_button_bg_line"
                     android:text="注册账号"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/x12"
                     android:textStyle="bold"/>
 
                 <Button
                     android:id="@+id/bt_login_button"
                     style="?android:textAppearanceSmall"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/x30"
                     android:layout_marginLeft="3dp"
                     android:layout_weight="1"
-                    android:background="@drawable/login_ripple_bg_button"
+                    android:background="@drawable/login_button_bg_solid"
                     android:text="登录"
                     android:textColor="@color/textColorPrimary"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/x12"
                     android:textStyle="bold"/>
 
                 <Button

@@ -158,12 +158,21 @@ public class ManagementActivity extends AppCompatActivity {
         //显示用户信息
         if (UserUtils.logined()) {
             mTvNickName.setText(UserUtils.getNickName());
-            Glide.with(getApplication())
-                    .load(UserUtils.getUserPhoto())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .transform(new GlideCircleTransform(getApplication()))
-                    .dontAnimate()
-                    .into(mUserPhoto);
+            if (UserUtils.getUserPhoto().equals("userPhoto")){
+                Glide.with(getApplication())
+                        .load(R.drawable.ic_user_defalut)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .transform(new GlideCircleTransform(getApplication()))
+                        .dontAnimate()
+                        .into(mUserPhoto);
+            }else {
+                Glide.with(getApplication())
+                        .load(UserUtils.getUserPhoto())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .transform(new GlideCircleTransform(getApplication()))
+                        .dontAnimate()
+                        .into(mUserPhoto);
+            }
         }else {
             mTvNickName.setText("点击登陆");
             Glide.with(getApplication())

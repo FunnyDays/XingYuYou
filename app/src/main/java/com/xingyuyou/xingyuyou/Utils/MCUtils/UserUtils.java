@@ -78,7 +78,7 @@ public class UserUtils {
     public static String getUserPhoto() {
         if (logined()) {
             user_data = new SPUtils("user_data");
-            String userPhoto = user_data.getString("userPhoto");
+            String userPhoto = user_data.getString("userPhoto","userPhoto");
             return userPhoto;
         }
         return "未登录";

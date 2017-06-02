@@ -7,6 +7,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="darker_gray">#aaa</color>
     <color name="custom_gray">#22787777</color>
+    <color name="custom_dark_gray">#66787777</color>
 
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="colorControlNormal">#FFFFFF</color>
@@ -19,8 +20,10 @@
     <color name="light_white">#88FFFFFF</color>
     <color name="white">#FFFFFF</color>
     <color name="white_55">#55FFFFFF</color>
+    <color name="white_88">#88FFFFFF</color>
     <color name="brown">#8D6E63</color>
-    <color name="blue">#2196F3</color>
+    <color name="blue">#94c1f1</color>
+    <color name="real_blue">#2196F3</color>
     <color name="blue_light">#222196F3</color>
     <color name="grey">#607D8B</color>
     <color name="black">#000000</color>

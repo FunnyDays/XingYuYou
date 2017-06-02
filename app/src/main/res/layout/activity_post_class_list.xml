@@ -20,11 +20,19 @@
     </android.support.v4.widget.SwipeRefreshLayout>
     <android.support.design.widget.FloatingActionButton
         app:rippleColor="#56abe4"
+        android:visibility="gone"
         app:backgroundTint="#56abe4"
-        android:id="@+id/fab_add_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:src="@drawable/ic_send"/>
+    <ImageView
+        android:id="@+id/fab_add_comment"
+        android:visibility="visible"
+        android:layout_margin="@dimen/x10"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_send_with_bg"
+        android:layout_width="@dimen/x60"
+        android:layout_height="@dimen/x60"/>
 </android.support.design.widget.CoordinatorLayout>

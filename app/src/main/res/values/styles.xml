@@ -14,7 +14,8 @@
         <!--itemBackground设置menu菜单背景色-->
         <item name="android:itemBackground">@color/colorPrimary</item>
         <item name="overlapAnchor">false</item>
-       <!-- <item name="android:actionMenuTextAppearance">@style/MenuTextStyle</item>-->
+        <item name="actionMenuTextAppearance">@style/MenuTextStyle</item>
+        <item name="actionMenuTextColor">@color/white</item>
         <!-- <item name="actionOverflowMenuStyle">@style/MenuStyle</item>-->
     </style>
     <style name="MyEditText" parent="Theme.AppCompat.Light">
@@ -23,9 +24,11 @@
     </style>
     <style name="MenuTextStyle" parent="@style/Theme.AppCompat.NoActionBar">
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">@dimen/x16</item>
     </style>
-
+    <style name="AppTheme.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionMenuTextColor">@color/white</item>
+    </style>
     <style name="AppTheme.PopupOverlay" parent="@style/Theme.AppCompat.NoActionBar">
         <!-- 用于控件popmenu的宽度-->
         <item name="android:width">50dp</item>
@@ -151,7 +154,16 @@
         <item name="android:paddingLeft">20dp</item>
         <item name="android:layout_height">@dimen/x40</item>
     </style>
+    <!--个人资料-->
+    <style name="UserInfoRelativeLayout">
+       <!-- <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:layout_marginRight">40dp</item> -->
+        <item name="android:layout_height">@dimen/x40</item>
+    </style>
+    <style name="UserInfoTextView">
+        <item name="android:textSize">@dimen/x14</item>
 
+    </style>
   <!--  星星评价-->
     <style name="startRatingBar" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/shape_game_detail_star_bg</item>

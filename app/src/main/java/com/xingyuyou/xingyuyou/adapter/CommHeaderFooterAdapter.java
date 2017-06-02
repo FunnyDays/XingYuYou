@@ -63,6 +63,7 @@ public class CommHeaderFooterAdapter extends RecyclerView.Adapter {
                     intent.putExtra("class_virtual_image",mListData.get(position).getClass_virtual_image());
                     intent.putExtra("describe",mListData.get(position).getDescribe());
                     intent.putExtra("posts_num",mListData.get(position).getPosts_num());
+                    intent.putExtra("posts_class_name",mListData.get(position).getClass_name());
                     mActivity.startActivity(intent);
                 }
             });

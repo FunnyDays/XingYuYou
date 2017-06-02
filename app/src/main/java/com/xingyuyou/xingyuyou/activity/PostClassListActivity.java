@@ -118,7 +118,7 @@ public class PostClassListActivity extends AppCompatActivity {
     }
     private void initView() {
         //发帖
-        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab_add_comment);
+        ImageView floatingActionButton = (ImageView) findViewById(R.id.fab_add_comment);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,6 +140,7 @@ public class PostClassListActivity extends AppCompatActivity {
         ImageView ivLabel = (ImageView) headerView.findViewById(R.id.iv_class_label);
         TextView tvPostNum = (TextView) headerView.findViewById(R.id.tv_post_num);
         TextView tvPostDes = (TextView) headerView.findViewById(R.id.tv_post_describe);
+        TextView tv_class_name = (TextView) headerView.findViewById(R.id.tv_class_name);
         Glide.with(getApplication())
                 .load(getIntent().getStringExtra("class_virtual_image"))
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
@@ -149,9 +150,9 @@ public class PostClassListActivity extends AppCompatActivity {
                 .transform(new GlideCircleTransform(PostClassListActivity.this))
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(ivLabel);
-        tvPostNum.setText(getIntent().getStringExtra("posts_num"));
+        tvPostNum.setText("帖子："+getIntent().getStringExtra("posts_num"));
         tvPostDes.setText(getIntent().getStringExtra("describe"));
-
+        tv_class_name.setText(getIntent().getStringExtra("posts_class_name"));
 
         mCommHotAdapter.setHeaderView(headerView);
         mCommHotAdapter.setFooterView(loadingData);

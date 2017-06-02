@@ -173,6 +173,7 @@ public class PostDetailActivity extends BaseActivity {
     private PostCommoListAdapter mPostCommoListAdapter;
     private ProgressBar mPbNodata;
     private TextView mTvNodata;
+    private TextView mTvTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,6 +189,7 @@ public class PostDetailActivity extends BaseActivity {
     //********************************************以下是初始化代码**************************************************
     private void initToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("帖子详情");
         mToolbar.inflateMenu(R.menu.post_share_menu);
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -225,6 +227,7 @@ public class PostDetailActivity extends BaseActivity {
 
     private void initView() {
         View headerView = View.inflate(PostDetailActivity.this, R.layout.part_post_header, null);
+        mTvTitle = (TextView) headerView.findViewById(R.id.tv_title);
         mTvContent = (TextView) headerView.findViewById(R.id.tv_content);
         mUserName = (TextView) headerView.findViewById(R.id.tv_user_name);
         mPostTime = (TextView) headerView.findViewById(R.id.tv_post_time);
@@ -244,6 +247,7 @@ public class PostDetailActivity extends BaseActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.rl_all_image);
         initRecyclerView();
         mCommoListView = (ListView) findViewById(R.id.listView);
+        mCommoListView.setDividerHeight(0);
         mCommoListView.addHeaderView(headerView);
         mCommoListView.addFooterView(loadingData);
         initCommoListView();
@@ -504,7 +508,7 @@ public class PostDetailActivity extends BaseActivity {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .transform(new GlideCircleTransform(PostDetailActivity.this))
                 .into(mIvUserPhoto);
-        mToolbar.setTitle(mPostDetailBean.getSubject());
+        mTvTitle.setText(mPostDetailBean.getSubject());
         mUserName.setText(mPostDetailBean.getNickname());
         mPostTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mPostDetailBean.getDateline() + "000")));
         mTvContent.setText(mPostDetailBean.getMessage());

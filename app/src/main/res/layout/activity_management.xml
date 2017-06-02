@@ -17,7 +17,7 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:navigationIcon="?android:attr/homeAsUpIndicator"
+        app:navigationIcon="@drawable/ic_action_back"
         app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
 

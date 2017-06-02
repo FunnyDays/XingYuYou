@@ -60,11 +60,11 @@
                 android:background="@android:color/white">
 
                 <ImageView
-                    android:layout_centerInParent="true"
                     android:id="@+id/iv_one"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_alignParentLeft="true"
+                    android:layout_centerInParent="true"
                     android:layout_margin="4dp"
                     android:padding="10dp"
                     android:src="@mipmap/ic_tag"/>
@@ -85,63 +85,63 @@
                     android:layout_toRightOf="@+id/iv_one">
 
                     <TextView
-                        android:paddingLeft="@dimen/x2"
-                        android:paddingRight="@dimen/x2"
-                        android:background="@drawable/tag_textview_bg"
-                        android:lines="1"
-                        android:visibility="gone"
                         android:id="@+id/tv_tag_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
+                        android:background="@drawable/tag_textview_bg"
+                        android:lines="1"
+                        android:paddingLeft="@dimen/x2"
+                        android:paddingRight="@dimen/x2"
+                        android:visibility="gone"
                         />
 
                     <TextView
-                        android:paddingLeft="@dimen/x2"
-                        android:paddingRight="@dimen/x2"
-                        android:background="@drawable/tag_textview_bg"
-                        android:lines="1"
-                        android:visibility="gone"
                         android:id="@+id/tv_tag_two"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
+                        android:background="@drawable/tag_textview_bg"
+                        android:lines="1"
+                        android:paddingLeft="@dimen/x2"
+                        android:paddingRight="@dimen/x2"
+                        android:visibility="gone"
                         />
 
                     <TextView
-                        android:paddingLeft="@dimen/x2"
-                        android:paddingRight="@dimen/x2"
-                        android:background="@drawable/tag_textview_bg"
-                        android:lines="1"
-                        android:visibility="gone"
                         android:id="@+id/tv_tag_three"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
+                        android:background="@drawable/tag_textview_bg"
+                        android:lines="1"
+                        android:paddingLeft="@dimen/x2"
+                        android:paddingRight="@dimen/x2"
+                        android:visibility="gone"
                         />
 
                     <TextView
-                        android:paddingLeft="@dimen/x2"
-                        android:paddingRight="@dimen/x2"
-                        android:background="@drawable/tag_textview_bg"
-                        android:lines="1"
-                        android:visibility="gone"
                         android:id="@+id/tv_tag_four"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
+                        android:background="@drawable/tag_textview_bg"
+                        android:lines="1"
+                        android:paddingLeft="@dimen/x2"
+                        android:paddingRight="@dimen/x2"
+                        android:visibility="gone"
                         />
 
                     <TextView
-                        android:paddingLeft="@dimen/x2"
-                        android:paddingRight="@dimen/x2"
-                        android:background="@drawable/tag_textview_bg"
-                        android:lines="1"
-                        android:visibility="gone"
                         android:id="@+id/tv_tag_five"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
+                        android:background="@drawable/tag_textview_bg"
+                        android:lines="1"
+                        android:paddingLeft="@dimen/x2"
+                        android:paddingRight="@dimen/x2"
+                        android:visibility="gone"
                         />
 
                 </LinearLayout>
@@ -166,15 +166,14 @@
                 android:background="@android:color/white">
 
                 <ImageView
-                    android:layout_centerInParent="true"
                     android:id="@+id/iv_one1"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:padding="10dp"
-                    android:src="@mipmap/ic_tag"
-                    android:layout_alignTop="@+id/imageView2"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"/>
+                     android:layout_centerVertical="true"
+                    android:layout_margin="4dp"
+                    android:padding="10dp"
+                    android:src="@mipmap/ic_tag"/>
 
                 <TextView
                     android:id="@+id/tv_select_commu"
@@ -185,20 +184,21 @@
                     android:text="选择社区"/>
 
                 <TextView
-                    android:paddingLeft="@dimen/x2"
-                    android:paddingRight="@dimen/x2"
-                    android:background="@drawable/tag_textview_bg"
-                    android:visibility="gone"
-                    android:layout_marginLeft="@dimen/x10"
                     android:id="@+id/tv_tag_commu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/tv_select_commu">
+                    android:layout_marginLeft="@dimen/x10"
+                    android:layout_toRightOf="@+id/tv_select_commu"
+                    android:background="@drawable/tag_textview_bg"
+                    android:paddingLeft="@dimen/x2"
+                    android:paddingRight="@dimen/x2"
+                    android:visibility="gone">
 
                 </TextView>
 
                 <ImageView
+                    android:id="@+id/imageView2"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_alignParentRight="true"
@@ -206,8 +206,7 @@
                     android:layout_margin="4dp"
                     android:padding="5dp"
                     android:src="@mipmap/ic_right_tag"
-                    android:tint="#ffd6d7d7"
-                    android:id="@+id/imageView2"/>
+                    android:tint="#ffd6d7d7"/>
 
             </RelativeLayout>
         </LinearLayout>

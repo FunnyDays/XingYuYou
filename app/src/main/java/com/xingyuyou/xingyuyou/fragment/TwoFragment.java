@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.xingyuyou.xingyuyou.R;
@@ -93,7 +94,7 @@ public class TwoFragment extends BaseFragment {
         mTab = (TabLayout) getView().findViewById(R.id.tabs);
         mContent = (ViewPager) getView().findViewById(R.id.viewpager);
 
-        FloatingActionButton floatingActionButton = (FloatingActionButton) getView().findViewById(R.id.fab_add_comment);
+        ImageView floatingActionButton = (ImageView) getView().findViewById(R.id.fab_add_comment);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

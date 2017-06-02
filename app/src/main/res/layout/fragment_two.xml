@@ -33,21 +33,30 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
     <ImageView
         android:id="@+id/iv"
+        android:visibility="gone"
         android:layout_gravity="end|bottom"
         android:layout_marginBottom="120dp"
         android:src="@color/blue"
         android:layout_width="0dp"
         android:layout_height="0dp"/>
+    <!--android:layout_margin="10dp"如果使用的话其他margin属性就会失效-->
     <android.support.design.widget.FloatingActionButton
         app:rippleColor="#56abe4"
+        android:visibility="gone"
         app:backgroundTint="#56abe4"
         app:layout_anchor="@id/iv"
-
-        android:id="@+id/fab_add_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="10dp"
         android:src="@drawable/ic_send"/>
-
+    <ImageView
+        android:id="@+id/fab_add_comment"
+        android:visibility="visible"
+        android:layout_marginRight="@dimen/x10"
+        android:layout_marginBottom="@dimen/x60"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_send_with_bg"
+        android:layout_width="@dimen/x60"
+        android:layout_height="@dimen/x60"/>
 </android.support.design.widget.CoordinatorLayout>

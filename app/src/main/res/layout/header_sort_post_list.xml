@@ -17,15 +17,15 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_height="22dp"
         android:layout_marginTop="25dp"
         android:layout_marginRight="25dp"
         android:layout_alignParentRight="true"
-        android:background="@drawable/tag_text_view_bg"
+        android:background="@drawable/activity_postclasslist_tag_text_view_bg"
         android:gravity="center"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:text="攻略"
+       android:id="@+id/tv_class_name"
         android:textColor="@color/white"
         android:textSize="15sp"/>
     <ImageView

@@ -1,5 +1,6 @@
 package com.xingyuyou.xingyuyou.activity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -63,7 +64,39 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         initToolBar();
         mUserName = (EditText) findViewById(R.id.et_username);
+        mUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b){
+                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_login_user);
+                    drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    mUserName.setCompoundDrawables(drawable,null,null,null);
+                    mUserName.setHintTextColor(getResources().getColor(R.color.colorPrimary));
+                }else {
+                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_user_login_gery);
+                    drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    mUserName.setCompoundDrawables(drawable,null,null,null);
+                    mUserName.setHintTextColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
         mPassword = (EditText) findViewById(R.id.et_password);
+        mPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b){
+                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_login_password);
+                    drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    mPassword.setCompoundDrawables(drawable,null,null,null);
+                    mPassword.setHintTextColor(getResources().getColor(R.color.colorPrimary));
+                }else {
+                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_login_password_grey);
+                    drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    mPassword.setCompoundDrawables(drawable,null,null,null);
+                    mPassword.setHintTextColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
         mLogin = (Button) findViewById(R.id.bt_login_button);
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +170,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFinished() {
-
                 Log.e("POST错误信息","onFinished" );
             }
 
@@ -146,6 +178,7 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     String result = new String(android.util.Base64.decode(json, android.util.Base64.DEFAULT), "utf-8");
                     if (code==0){
+                        Log.e("weiwei", "onSuccess: "+result );
                         mHandler.obtainMessage(0, result).sendToTarget();
                     }
                 } catch (Exception e) {

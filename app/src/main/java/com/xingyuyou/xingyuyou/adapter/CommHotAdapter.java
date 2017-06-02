@@ -317,6 +317,8 @@ public class CommHotAdapter extends RecyclerView.Adapter {
         private TextView mPostContent;
         private TextView mUserName;
         private TextView mPostTime;
+        private TextView tv_class_name;
+        private LinearLayout ll_root_text;
         private LinearLayout mLinearLayout;
         private RelativeLayout mRlCollect;
         private RelativeLayout mRlComm;
@@ -349,6 +351,9 @@ public class CommHotAdapter extends RecyclerView.Adapter {
             mRlCollect = (RelativeLayout) itemView.findViewById(R.id.rl_collect);
             mRlComm = (RelativeLayout) itemView.findViewById(R.id.rl_comm);
             mRlJiaonang = (RelativeLayout) itemView.findViewById(R.id.rl_jiaonang);
+            //来自和标签
+            tv_class_name = (TextView) itemView.findViewById(R.id.tv_class_name);
+            ll_root_text = (LinearLayout) itemView.findViewById(R.id.ll_root_text);
         }
     }
 }

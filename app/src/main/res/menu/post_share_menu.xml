@@ -4,5 +4,6 @@
     <item
         android:id="@+id/ab_share"
         android:title="分享"
-        app:showAsAction="never"/>
+        android:icon="@mipmap/ic_share"
+        app:showAsAction="always"/>
 </menu>
