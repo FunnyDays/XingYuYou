@@ -44,7 +44,7 @@
                     android:id="@+id/tv_user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="10sp"
+                    android:textSize="@dimen/x12"
                     tools:text="7766"/>
 
                 <TextView
@@ -92,7 +92,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
+            android:layout_marginTop="@dimen/x5"
             android:layout_marginLeft="40dp"
+            android:layout_marginRight="10dp"
             tools:text="平路的对方的soils的开发"/>
 
         <LinearLayout
@@ -106,6 +108,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/x5"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="5dp"
             android:background="@color/custom_gray"/>

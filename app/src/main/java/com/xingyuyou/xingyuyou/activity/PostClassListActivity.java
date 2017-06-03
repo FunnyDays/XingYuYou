@@ -1,16 +1,13 @@
 package com.xingyuyou.xingyuyou.activity;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -23,18 +20,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
-import com.xingyuyou.xingyuyou.Utils.glide.BlurTransformation;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
-import com.xingyuyou.xingyuyou.adapter.CommHeaderFooterAdapter;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
-import com.xingyuyou.xingyuyou.adapter.CommSortAdapter;
-import com.xingyuyou.xingyuyou.bean.community.PostBean;
-import com.xingyuyou.xingyuyou.bean.community.PostDetailBean;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
 import com.xingyuyou.xingyuyou.bean.community.PostTopAndWellBean;
-import com.xingyuyou.xingyuyou.bean.community.SortPostListBean;
-import com.xingyuyou.xingyuyou.fragment.CommHotFragment;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -51,9 +41,9 @@ public class PostClassListActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private int  PAGENUMBER = 1;
-    private List<SortPostListBean> mPostList=new ArrayList();
+    private List<PostListBean> mPostList=new ArrayList();
     private List<PostTopAndWellBean> mPostTopWellList=new ArrayList();
-    private List<SortPostListBean> mPostAdapterList=new ArrayList();
+    private List<PostListBean> mPostAdapterList=new ArrayList();
     boolean isLoading = false;
     Handler handler = new Handler() {
         @Override
@@ -74,7 +64,7 @@ public class PostClassListActivity extends AppCompatActivity {
                  //   Log.e("post", "解析数据："+  ja.toString());
                     Gson gson = new Gson();
                     mPostList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<SortPostListBean>>() {
+                            new TypeToken<List<PostListBean>>() {
                             }.getType());
                     mPostAdapterList.addAll(mPostList);
                     ja = jo.getJSONArray("top_well");
@@ -91,7 +81,7 @@ public class PostClassListActivity extends AppCompatActivity {
             }
         }
     };
-    private CommSortAdapter mCommHotAdapter;
+    private CommHotAdapter mCommHotAdapter;
     private ProgressBar mPbNodata;
     private TextView mTvNodata;
     private SwipeRefreshLayout mRefreshLayout;
@@ -129,7 +119,7 @@ public class PostClassListActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mCommHotAdapter = new CommSortAdapter(this, mPostAdapterList);
+        mCommHotAdapter = new CommHotAdapter(this, mPostAdapterList);
         //底部布局
         View loadingData = View.inflate(this, R.layout.default_loading, null);
         mPbNodata = (ProgressBar) loadingData.findViewById(R.id.pb_loading);

@@ -9,14 +9,6 @@
     <include
         layout="@layout/toolbar"/>
     <!-- Login progress -->
-    <ProgressBar
-        android:id="@+id/login_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone"/>
-
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
@@ -53,7 +45,7 @@
                 android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@mipmap/ic_login_password"
+                android:drawableLeft="@mipmap/ic_login_password_grey"
                 android:hint="密码"
                 android:inputType="textPassword"
                 android:maxLines="1"
@@ -112,5 +104,13 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"/>
 
 </LinearLayout>

@@ -152,9 +152,11 @@ public class SortGameListActivity extends AppCompatActivity {
 
         //头布局
         ImageView imageView = new ImageView(SortGameListActivity.this);
-        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ConvertUtils.dp2px(150));
+        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         imageView.setLayoutParams(lp);
-        imageView.setBackgroundResource(R.drawable.shape_rectangle_post_cover);
+        Glide.with(getApplicationContext())
+                .load(getIntent().getStringExtra("icon"))
+                .into(imageView);
         mListView.addHeaderView(imageView);
 
         //设置底部布局
@@ -168,7 +170,7 @@ public class SortGameListActivity extends AppCompatActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(SortGameListActivity.this,HotGameDetailActivity.class);
+                Intent intent = new Intent(SortGameListActivity.this,GameDetailActivity.class);
                 intent.putExtra("game_id",mDatas.get(i-1).getId());
                 intent.putExtra("game_name",mDatas.get(i-1).getGame_name());
                 startActivity(intent);

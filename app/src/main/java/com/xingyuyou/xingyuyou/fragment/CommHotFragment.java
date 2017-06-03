@@ -24,6 +24,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
+import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
+import com.xingyuyou.xingyuyou.Utils.glide.GlideRoundTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
@@ -115,7 +117,7 @@ public class CommHotFragment extends BaseFragment {
     private ProgressBar mPbNodata;
     private TextView mTvNodata;
     private SwipeRefreshLayout mRefreshLayout;
-    private WrapContentLinearLayoutManager mLinearLayoutManager;
+    private LinearLayoutManager mLinearLayoutManager;
     private ImageView mIvOne;
     private ImageView mIvTwo;
     private ImageView mIvThree;
@@ -203,10 +205,14 @@ public class CommHotFragment extends BaseFragment {
     }
 
     private void setValues() {
-        Glide.with(mActivity).load(mRecommAdapterList.get(0).getRe_image()).into(mIvOne);
-        Glide.with(mActivity).load(mRecommAdapterList.get(1).getRe_image()).into(mIvTwo);
-        Glide.with(mActivity).load(mRecommAdapterList.get(2).getRe_image()).into(mIvThree);
-        Glide.with(mActivity).load(mRecommAdapterList.get(3).getRe_image()).into(mIvFour);
+        Glide.with(mActivity).load(mRecommAdapterList.get(0).getRe_image())
+                .transform(new GlideRoundTransform(mActivity,5)).into(mIvOne);
+        Glide.with(mActivity).load(mRecommAdapterList.get(1).getRe_image())
+                .transform(new GlideRoundTransform(mActivity,5)).into(mIvTwo);
+        Glide.with(mActivity).load(mRecommAdapterList.get(2).getRe_image())
+                .transform(new GlideRoundTransform(mActivity,5)).into(mIvThree);
+        Glide.with(mActivity).load(mRecommAdapterList.get(3).getRe_image())
+                .transform(new GlideRoundTransform(mActivity,5)).into(mIvFour);
         mIvOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -253,7 +259,7 @@ public class CommHotFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        mLinearLayoutManager = new WrapContentLinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
+        mLinearLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mCommHotAdapter = new CommHotAdapter(mActivity, mPostAdapterList);
         View loadingData = View.inflate(mActivity, R.layout.default_loading, null);

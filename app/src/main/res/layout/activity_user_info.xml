@@ -33,12 +33,13 @@
             <RelativeLayout
                 android:id="@+id/rl_user_photo"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/x160"
-                android:background="@color/colorPrimary"
+                android:layout_height="@dimen/x180"
+                android:background="@drawable/ic_user_info_bg"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp">
 
                 <TextView
+                    android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -51,11 +52,12 @@
 
                 <ImageView
                     android:id="@+id/iv_user_photo"
-                    android:layout_width="@dimen/x70"
-                    android:layout_height="@dimen/x70"
+                    android:layout_width="@dimen/x80"
+                    android:layout_height="@dimen/x80"
+                    android:layout_below="@+id/textView4"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/x10"
-                    android:src="@mipmap/profile_picture"/>
+                    android:layout_marginTop="@dimen/x40"
+                    android:src="@drawable/ic_user_defalut"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -64,8 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginBottom="3dp"
                 android:background="@drawable/ripple_bg"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp">
+               >
 
                 <TextView
                     style="@style/UserInfoTextView"
@@ -93,8 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="3dp"
                 android:background="@drawable/ripple_bg"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -126,8 +126,7 @@
                 style="@style/UserInfoRelativeLayout"
                 android:layout_width="match_parent"
                 android:background="@drawable/ripple_bg"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -160,8 +159,7 @@
                 style="@style/UserInfoRelativeLayout"
                 android:layout_width="match_parent"
                 android:background="@drawable/ripple_bg"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp">
+               >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -192,12 +190,9 @@
                 android:id="@+id/rl_user_benming"
                 style="@style/UserInfoRelativeLayout"
                 android:layout_width="match_parent"
-
                 android:layout_marginBottom="3dp"
-
                 android:background="@drawable/ripple_bg"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp">
+              >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -223,12 +218,10 @@
                 android:id="@+id/rl_user_signatures"
                 style="@style/UserInfoRelativeLayout"
                 android:layout_width="match_parent"
-
                 android:layout_marginBottom="3dp"
                 android:layout_marginTop="3dp"
                 android:background="@drawable/ripple_bg"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp">
+               >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -254,12 +247,10 @@
                 android:id="@+id/rl_user_detail_address"
                 style="@style/UserInfoRelativeLayout"
                 android:layout_width="match_parent"
-
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="3dp"
                 android:background="@drawable/ripple_bg"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp">
+                >
 
                 <TextView
                     android:id="@+id/textView2"

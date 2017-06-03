@@ -185,7 +185,7 @@ public class HotGameDetailActivity extends AppCompatActivity {
     private void initView() {
         mGameIcon = (ImageView) findViewById(R.id.iv_game_pic);
         mGameName = (TextView) findViewById(R.id.tv_game_name);
-        mGameType = (TextView) findViewById(R.id.tv_game_type);
+       // mGameType = (TextView) findViewById(R.id.tv_game_type);
         mGameVersion = (TextView) findViewById(R.id.tv_game_version);
         mGameSize = (TextView) findViewById(R.id.tv_game_size);
         mGameIntro = (TextView) findViewById(R.id.tv_content);
@@ -215,7 +215,7 @@ public class HotGameDetailActivity extends AppCompatActivity {
     private void setValues() {
         Glide.with(this).load(mGameDetailList.get(0).getIcon()).into(mGameIcon);
         mGameName.setText(mGameDetailList.get(0).getGame_name());
-        mGameType.setText(mGameDetailList.get(0).getGame_type_id());
+        //mGameType.setText(mGameDetailList.get(0).getGame_type_id());
         mGameVersion.setText("版本：" + mGameDetailList.get(0).getVersion());
         mGameSize.setText("大小：" + mGameDetailList.get(0).getGame_size());
         mGameIntro.setText(mGameDetailList.get(0).getIntroduction());

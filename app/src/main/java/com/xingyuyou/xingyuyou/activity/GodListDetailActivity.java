@@ -378,10 +378,10 @@ public class GodListDetailActivity extends AppCompatActivity {
         Glide.with(getApplication())
                 .load(values.getPosts_image())
                 .into(mIv_god_content);
-
-        mEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mEditText.setFocusable(false);
+        mEditText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View view, boolean b) {
+            public void onClick(View view) {
                 if (!UserUtils.logined()){
                     IntentUtils.startActivity(GodListDetailActivity.this,LoginActivity.class);
                     return;
@@ -392,8 +392,6 @@ public class GodListDetailActivity extends AppCompatActivity {
                 KeyboardUtils.showSoftInput(edittext);
             }
         });
-
-
     }
     /**
      * 点赞
@@ -603,10 +601,10 @@ public class GodListDetailActivity extends AppCompatActivity {
      * 回帖
      */
     private void sendReply() {
-        if (StringUtils.isEmpty(edittext.getText().toString().trim())) {
+       /* if (StringUtils.isEmpty(edittext.getText().toString().trim())) {
             Toast.makeText(this, "评论内容为空", Toast.LENGTH_SHORT).show();
             return;
-        }
+        }*/
         //关闭键盘
         KeyboardUtils.hideSoftInput(this);
         mDialog = new CustomDialog(GodListDetailActivity.this, "正在回帖中...");
@@ -616,7 +614,7 @@ public class GodListDetailActivity extends AppCompatActivity {
         params.put("pid", "0");
         params.put("uid", UserUtils.getUserId());
         params.put("tid", mGodDetailBean.getId());
-        params.put("replies_content", edittext.getText().toString().trim());
+        params.put("replies_content", StringUtils.isEmpty(edittext.getText().toString().trim())==true?"":edittext.getText().toString().trim());
         //隐藏键盘
         emotionKeyboard.interceptBackPress();
         PostFormBuilder post = OkHttpUtils.post();
@@ -669,7 +667,7 @@ public class GodListDetailActivity extends AppCompatActivity {
                         }
                         MultiImageSelector.create(GodListDetailActivity.this)
                                 .showCamera(true)
-                                .single()
+                                .count(5)
                                 .start(GodListDetailActivity.this, REQUEST_IMAGE);
                     }
                 });

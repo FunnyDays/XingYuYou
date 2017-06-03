@@ -16,8 +16,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
+import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
@@ -149,12 +151,29 @@ public class CommHotAdapter extends RecyclerView.Adapter {
                 ((ItemViewHolder) holder).mPostLuad.setImageResource(R.mipmap.ic_zan);
             }
             ((ItemViewHolder) holder).mUserName.setText(mListData.get(position - 1).getNickname());
+            if (StringUtils.isEmpty(mListData.get(position - 1).getClass_name())){
+                ((ItemViewHolder) holder).tv_class_name_tag.setVisibility(View.GONE);
+            }else {
+                ((ItemViewHolder) holder).tv_class_name_tag.setVisibility(View.VISIBLE);
+            }
+            ((ItemViewHolder) holder).tv_class_name.setText(mListData.get(position - 1).getClass_name());
             ((ItemViewHolder) holder).mPostTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mListData.get(position - 1).getDateline() + "000")));
             ((ItemViewHolder) holder).mPostName.setText(mListData.get(position - 1).getSubject());
             ((ItemViewHolder) holder).mPostContent.setText(mListData.get(position - 1).getMessage());
             ((ItemViewHolder) holder).mCollectNum.setText(mListData.get(position - 1).getPosts_collect());
             ((ItemViewHolder) holder).mCommNum.setText(mListData.get(position - 1).getPosts_forums());
             ((ItemViewHolder) holder).mJiaoNangNum.setText(mListData.get(position - 1).getPosts_laud());
+
+            ((ItemViewHolder) holder).ll_root_text.removeAllViews();
+            for (int i = 0; i <mListData.get(position - 1).getPosts_class().size() ; i++) {
+                TextView textView = new TextView(mActivity);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(ConvertUtils.dp2px(5), 0, ConvertUtils.dp2px(5),0);
+                textView.setLayoutParams(lp);
+                textView.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
+                textView.setText(mListData.get(position - 1).getPosts_class().get(i).getLabel_name());
+                ((ItemViewHolder) holder).ll_root_text.addView(textView);
+            }
             Glide.with(mActivity)
                     .load(mListData.get(position - 1).getHead_image())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -318,6 +337,7 @@ public class CommHotAdapter extends RecyclerView.Adapter {
         private TextView mUserName;
         private TextView mPostTime;
         private TextView tv_class_name;
+        private TextView tv_class_name_tag;
         private LinearLayout ll_root_text;
         private LinearLayout mLinearLayout;
         private RelativeLayout mRlCollect;
@@ -353,6 +373,7 @@ public class CommHotAdapter extends RecyclerView.Adapter {
             mRlJiaonang = (RelativeLayout) itemView.findViewById(R.id.rl_jiaonang);
             //来自和标签
             tv_class_name = (TextView) itemView.findViewById(R.id.tv_class_name);
+            tv_class_name_tag = (TextView) itemView.findViewById(R.id.tv_class_name_tag);
             ll_root_text = (LinearLayout) itemView.findViewById(R.id.ll_root_text);
         }
     }

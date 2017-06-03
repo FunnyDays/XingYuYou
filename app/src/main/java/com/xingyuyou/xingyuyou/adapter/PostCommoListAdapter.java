@@ -97,7 +97,7 @@ public class PostCommoListAdapter extends BaseAdapter {
         holder.tv_commo_time.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mCommoBeanList.get(i).getDateline() + "000")));
         Glide.with(mActivity)
                 .load(mCommoBeanList.get(i).getHead_image())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .transform(new GlideCircleTransform(mActivity))
                 .into(holder.iv_user_photo);
         holder.ll_root_image_item.removeAllViews();
@@ -106,7 +106,7 @@ public class PostCommoListAdapter extends BaseAdapter {
             for (int j = 0; j < mCommoBeanList.get(i).getImgarr().size(); j++) {
                 ImageView imageView = new ImageView(mActivity);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                lp.setMargins(ConvertUtils.dp2px(10), 0, ConvertUtils.dp2px(10), ConvertUtils.dp2px(5));
+                lp.setMargins(ConvertUtils.dp2px(0), ConvertUtils.dp2px(5), ConvertUtils.dp2px(0), ConvertUtils.dp2px(5));
                 imageView.setLayoutParams(lp);
                 imageView.setAdjustViewBounds(true);
                 Glide.with(mActivity)

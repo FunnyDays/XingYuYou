@@ -9,28 +9,40 @@ import java.util.List;
 public class GameDetailBean {
 
     /**
-     * id : 20
-     * game_name : 地铁跑酷(安卓版)
-     * version : 2.47.0
-     * icon : http://xingyuyou.com/Uploads/Picture/2017-03-08/58bfa615a6f3c.png
-     * screenshot : ["http://xingyuyou.com/Uploads/Picture/2017-03-08/58bfa6d4ac093.jpg","http://xingyuyou.com/Uploads/Picture/2017-03-08/58bfa6d8c8d0a.jpg","http://xingyuyou.com/Uploads/Picture/2017-03-08/58bfa6dd4233e.jpg","http://xingyuyou.com/Uploads/Picture/2017-03-08/58bfa6e0a0f27.jpg","http://xingyuyou.com/Uploads/Picture/2017-03-08/58bfa6e3e49d3.jpg"]
-     * game_type_id : 28
-     * game_size : 61.95MB
-     * dow_num : 0
-     * and_dow_address : http://xingyuyou.com./Uploads/SourcePack/20170308144303_918.apk
-     * add_game_address : http://xingyuyou.com./Uploads/SourcePack/20170308144303_918.apk
-     * introduction : 地铁跑酷是一款超炫酷的3D竖版跑酷手游，总注册用户高达2.4亿，游戏画面绚丽精致，色彩丰富让人感觉舒服，操作上非常流畅，本次版本更新来到南半球非洲国度马达加斯加，一起来畅游这自然风光美美的非洲大岛吧！破解的游戏版本是无限金币和无限钥匙，叫上小伙伴来下载随意玩吧。
-     * recommend_status : 2
+     * id : 144
+     * create_time : 1491376685
+     * language :
+     * game_name : 萌萌找茬
+     * cover : http://xingyuyou.com
+     * version : 1.0.1
+     * icon : http://xingyuyou.com/Uploads/Picture/2017-04-05/58e49a1de675c.png
+     * game_baoming : jp.yukienterprise.mistake
+     * screenshot : ["http://xingyuyou.com/Uploads/Picture/2017-04-05/58e49a214ffe2.jpg","http://xingyuyou.com/Uploads/Picture/2017-04-05/58e49a250d73f.jpg","http://xingyuyou.com/Uploads/Picture/2017-04-05/58e49a2814e2d.jpg","http://xingyuyou.com/Uploads/Picture/2017-04-05/58e49a2b08d27.jpg"]
+     * game_type_name : 休闲益智
+     * game_size : 22M
+     * dow_num : 9
+     * and_dow_address : http://xingyuyou.com
+     * add_game_address : http://xingyuhuyu1916.oss-cn-beijing.aliyuncs.com/a%E5%8D%95%E6%9C%BA2/%E8%90%8C%E8%90%8C%E6%89%BE%E8%8C%AC.apk
+     * introduction : 你需要找到两张图之间的区别，完成关卡来解锁妹子的CG。
+
+     图是会动的，有些不同点需要结合动图来找，比如第一关大腿根部的痣（痴汉脸）
+
+     每一关能犯的错误是有限的，但是不同点是一样的，可以重复某关直到通关为止
+
+     话说，只有我一个人觉得这个妹子长得像某校园里番的主角么？
+     * recommend_status : 0
      * open_name : null
      */
 
     private String id;
+    private String create_time;
+    private String language;
     private String game_name;
+    private String cover;
     private String version;
     private String icon;
-    private String cover;
     private String game_baoming;
-    private String game_type_id;
+    private String game_type_name;
     private String game_size;
     private String dow_num;
     private String and_dow_address;
@@ -48,6 +60,22 @@ public class GameDetailBean {
         this.id = id;
     }
 
+    public String getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(String create_time) {
+        this.create_time = create_time;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     public String getGame_name() {
         return game_name;
     }
@@ -55,24 +83,19 @@ public class GameDetailBean {
     public void setGame_name(String game_name) {
         this.game_name = game_name;
     }
-    public String getAdd_game_address() {
-        return add_game_address;
+
+    public String getCover() {
+        return cover;
     }
 
-    public void setAdd_game_address(String add_game_address) {
-        this.add_game_address = add_game_address;
+    public void setCover(String cover) {
+        this.cover = cover;
     }
+
     public String getVersion() {
         return version;
     }
 
-    public String getGame_baoming() {
-        return game_baoming;
-    }
-
-    public void setGame_baoming(String game_baoming) {
-        this.game_baoming = game_baoming;
-    }
     public void setVersion(String version) {
         this.version = version;
     }
@@ -84,19 +107,21 @@ public class GameDetailBean {
     public void setIcon(String icon) {
         this.icon = icon;
     }
-    public String getCover() {
-        return cover;
+
+    public String getGame_baoming() {
+        return game_baoming;
     }
 
-    public void setCover(String cover) {
-        this.cover = cover;
-    }
-    public String getGame_type_id() {
-        return game_type_id;
+    public void setGame_baoming(String game_baoming) {
+        this.game_baoming = game_baoming;
     }
 
-    public void setGame_type_id(String game_type_id) {
-        this.game_type_id = game_type_id;
+    public String getGame_type_name() {
+        return game_type_name;
+    }
+
+    public void setGame_type_name(String game_type_name) {
+        this.game_type_name = game_type_name;
     }
 
     public String getGame_size() {
@@ -121,6 +146,14 @@ public class GameDetailBean {
 
     public void setAnd_dow_address(String and_dow_address) {
         this.and_dow_address = and_dow_address;
+    }
+
+    public String getAdd_game_address() {
+        return add_game_address;
+    }
+
+    public void setAdd_game_address(String add_game_address) {
+        this.add_game_address = add_game_address;
     }
 
     public String getIntroduction() {
@@ -153,25 +186,5 @@ public class GameDetailBean {
 
     public void setScreenshot(List<String> screenshot) {
         this.screenshot = screenshot;
-    }
-
-    @Override
-    public String toString() {
-        return "GameDetailBean{" +
-                "id='" + id + '\'' +
-                ", game_name='" + game_name + '\'' +
-                ", version='" + version + '\'' +
-                ", icon='" + icon + '\'' +
-                ", game_baoming='" + game_baoming + '\'' +
-                ", game_type_id='" + game_type_id + '\'' +
-                ", game_size='" + game_size + '\'' +
-                ", dow_num='" + dow_num + '\'' +
-                ", and_dow_address='" + and_dow_address + '\'' +
-                ", add_game_address='" + add_game_address + '\'' +
-                ", introduction='" + introduction + '\'' +
-                ", recommend_status='" + recommend_status + '\'' +
-                ", open_name=" + open_name +
-                ", screenshot=" + screenshot +
-                '}';
     }
 }

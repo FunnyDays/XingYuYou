@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:text="游戏介绍："
-            android:textSize="16sp"/>
+            android:textSize="@dimen/x16"/>
 
         <ImageView
             android:id="@+id/iv_game_intro_more"
@@ -81,9 +81,10 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/x10"
         android:ellipsize="end"
         android:lines="3"
+        android:textSize="@dimen/x12"
         tools:text="游戏介绍游戏介绍游戏介绍游戏介绍"/>
 
     <View
@@ -119,15 +120,7 @@
 
         </View>
 
-        <!--      <TextView
-                  android:id="@+id/tv_game_name"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:ellipsize="end"
-                  android:lines="1"
-                  android:text="@string/app_name"
-                  android:textColor="@android:color/black"
-                  android:textSize="24sp"/>-->
+
         <TextView
             android:id="@+id/tv_game_name"
             android:layout_width="wrap_content"
@@ -135,17 +128,9 @@
             android:layout_marginTop="20dp"
             android:ellipsize="end"
             android:lines="1"
+            android:layout_marginBottom="@dimen/x10"
             android:text="详细信息"
-            android:textSize="16sp"/>
-
-        <!--  <TextView
-              android:layout_marginLeft="10dp"
-              android:id="@+id/tv_game_type"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_below="@id/tv_game_name"
-              android:text="game_type_id"
-              android:textSize="12sp"/>-->
+            android:textSize="@dimen/x16"/>
 
         <TextView
             android:id="@+id/tv_game_version"
@@ -153,14 +138,14 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="2.8"
-            android:textSize="12sp"/>
+            android:textSize="@dimen/x12"/>
 
         <TextView
             android:id="@+id/tv_game_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:textSize="12sp"
+            android:textSize="@dimen/x12"
             tools:text="67M"/>
 
         <TextView
@@ -168,8 +153,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:textSize="12sp"
+            android:textSize="@dimen/x12"
             tools:text="6744"/>
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:id="@+id/tv_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/x12"
+            tools:text="语言"/>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:id="@+id/tv_game_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/x12"
+            tools:text="类型"/>
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:id="@+id/tv_game_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/x12"
+            tools:text="时间"/>
     </LinearLayout>
 
 
@@ -187,7 +194,7 @@
         android:ellipsize="end"
         android:lines="1"
         android:text="综合评估"
-        android:textSize="16sp"/>
+        android:textSize="@dimen/x16"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -385,7 +392,7 @@
             android:layout_toRightOf="@+id/image"
             android:gravity="center_vertical"
             android:text="精彩评论"
-            android:textSize="20sp"/>
+            android:textSize="@dimen/x16"/>
     </RelativeLayout>
 
     <TextView

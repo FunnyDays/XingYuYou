@@ -254,11 +254,12 @@ public class MyReplyPostActivity extends AppCompatActivity {
                     ((ItemViewHolder) holder).mItemOnclick.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            Log.e("weiwei", "onClick: "+mDatas.get(position - 1).getUid().equals("206"));
                             if (mDatas.get(position - 1).getUid().equals("206")) {
                                 MyReplyPostActivity.this.startActivity(new Intent(MyReplyPostActivity.this, GodListDetailActivity.class)
                                         .putExtra("activity_id", mDatas.get(position - 1).getTid()));
                             } else {
-                                MyReplyPostActivity.this.startActivity(new Intent(MyReplyPostActivity.this, GodListDetailActivity.class)
+                                MyReplyPostActivity.this.startActivity(new Intent(MyReplyPostActivity.this, PostDetailActivity.class)
                                         .putExtra("post_id", mDatas.get(position - 1).getTid()));
                             }
                         }

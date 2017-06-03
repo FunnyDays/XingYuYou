@@ -147,6 +147,7 @@ public class CommSortAdapter extends RecyclerView.Adapter {
             }
 
             ((ItemViewHolder) holder).mUserName.setText(mListData.get(position - 1).getNickname());
+         //   ((ItemViewHolder) holder).tv_class_name.setText(mListData.get(position - 1).getClass_name());
             ((ItemViewHolder) holder).mPostTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mListData.get(position - 1).getDateline() + "000")));
             ((ItemViewHolder) holder).mPostName.setText(mListData.get(position - 1).getSubject());
             ((ItemViewHolder) holder).mPostContent.setText(mListData.get(position - 1).getMessage());
@@ -321,6 +322,8 @@ public class CommSortAdapter extends RecyclerView.Adapter {
         private TextView mPostContent;
         private TextView mUserName;
         private TextView mPostTime;
+        private TextView tv_class_name;
+        private LinearLayout ll_root_text;
         private LinearLayout mLinearLayout;
         private RelativeLayout mRlCollect;
         private RelativeLayout mRlComm;

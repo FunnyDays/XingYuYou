@@ -527,15 +527,14 @@ public class PostDetailActivity extends BaseActivity {
                     .into(imageView);
             mRootImage.addView(imageView);
         }
-
-        mEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mEditText.setFocusable(false);
+        mEditText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View view, boolean b) {
+            public void onClick(View view) {
                 if (!UserUtils.logined()){
                     IntentUtils.startActivity(PostDetailActivity.this,LoginActivity.class);
                     return;
                 }
-                // Toast.makeText(PostDetailActivity.this, "gaaaaa", Toast.LENGTH_SHORT).show();
                 mLinearLayout.setVisibility(View.GONE);
                 mLinearLayout2.setVisibility(View.VISIBLE);
                 //开启软键盘
@@ -665,10 +664,10 @@ public class PostDetailActivity extends BaseActivity {
      * 回帖
      */
     private void sendReply() {
-        if (StringUtils.isEmpty(edittext.getText().toString().trim())) {
+        /*if (StringUtils.isEmpty(edittext.getText().toString().trim())) {
             Toast.makeText(this, "评论内容为空", Toast.LENGTH_SHORT).show();
             return;
-        }
+        }*/
         //关闭键盘
         KeyboardUtils.hideSoftInput(this);
         mDialog = new CustomDialog(PostDetailActivity.this, "正在回帖中...");
@@ -678,7 +677,7 @@ public class PostDetailActivity extends BaseActivity {
         params.put("pid", "0");
         params.put("uid", UserUtils.getUserId());
         params.put("tid", mPostDetailBean.getId());
-        params.put("replies_content", edittext.getText().toString().trim());
+        params.put("replies_content", StringUtils.isEmpty(edittext.getText().toString().trim())==true?"":edittext.getText().toString().trim());
         //隐藏键盘
         emotionKeyboard.interceptBackPress();
         PostFormBuilder post = OkHttpUtils.post();
@@ -703,6 +702,7 @@ public class PostDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        Log.e("weiwei", "onResponse: "+response );
                         mDialog.dismissDialog();
                         PostCommoBean postCommoBean = new PostCommoBean();
                         postCommoBean.setNickname(UserUtils.getNickName());
@@ -744,7 +744,7 @@ public class PostDetailActivity extends BaseActivity {
                         }
                         MultiImageSelector.create(PostDetailActivity.this)
                                 .showCamera(true)
-                                .single()
+                                .count(5)
                                 .start(PostDetailActivity.this, REQUEST_IMAGE);
                     }
                 });

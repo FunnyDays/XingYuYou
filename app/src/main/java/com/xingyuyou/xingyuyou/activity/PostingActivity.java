@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.bean.community.TagBean;
@@ -207,10 +208,10 @@ public class PostingActivity extends AppCompatActivity {
             Toast.makeText(this, "请输入标题", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (StringUtils.isEmpty(mEtContent.getText().toString().trim())) {
+       /* if (StringUtils.isEmpty(mEtContent.getText().toString().trim())) {
             Toast.makeText(this, "请输入内容", Toast.LENGTH_SHORT).show();
             return;
-        }
+        }*/
 
         if (StringUtils.isEmpty((String) map.get("PostTags"))) {
             Toast.makeText(this, "请选择标签", Toast.LENGTH_SHORT).show();
@@ -230,9 +231,9 @@ public class PostingActivity extends AppCompatActivity {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("fid", (String) map.get("PostCommId"));
-        params.put("uid", "105");
+        params.put("uid", UserUtils.getUserId());
         params.put("subject", mStTitle.getText().toString().trim());
-        params.put("message", mEtContent.getText().toString().trim());
+        params.put("message",StringUtils.isEmpty(mEtContent.getText().toString().trim())==true?"":mEtContent.getText().toString().trim());
         params.put("tags", (String) map.get("PostTags"));
 
         PostFormBuilder post = OkHttpUtils.post();

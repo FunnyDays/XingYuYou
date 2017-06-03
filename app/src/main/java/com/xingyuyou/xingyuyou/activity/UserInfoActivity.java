@@ -161,7 +161,7 @@ public class UserInfoActivity extends AppCompatActivity {
         if (mUserBean.getNickname()!=null)
         mTvNickname.setText(mUserBean.getNickname());
         if (mUserBean.getSex()!=null)
-        mTvUserSex.setText((mUserBean.getSex().equals("0")?"男":"女"));
+        mTvUserSex.setText((mUserBean.getSex().equals("2")?"男":"女"));
         if (mUserBean.getUser_age()!=null)
         mTvUserAge.setText(mUserBean.getUser_age());
         if (mUserBean.getArea()!=null)
@@ -203,7 +203,7 @@ public class UserInfoActivity extends AppCompatActivity {
      * 保存用户信息
      */
     private void saveUserData() {
-        //检查数据完成性
+       /* //检查数据完成性
         if (StringUtils.isEmpty(mTvNickname.getText().toString().trim())) {
             Toast.makeText(this, "请填写昵称", Toast.LENGTH_SHORT).show();
             return;
@@ -225,7 +225,7 @@ public class UserInfoActivity extends AppCompatActivity {
         }if (StringUtils.isEmpty(mTvUserDetailAddress.getText().toString().trim())) {
             Toast.makeText(this, "请填写收获地址", Toast.LENGTH_SHORT).show();
             return;
-        }
+        }*/
         mDialog = new CustomDialog(UserInfoActivity.this, "正在上传，请稍等");
         mDialog.showDialog();
 
@@ -233,14 +233,14 @@ public class UserInfoActivity extends AppCompatActivity {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("user_id", mUserId);
-        params.put("sex",(mTvUserSex.getText().toString().trim().equals("男")?"0":"1"));
+        params.put("sex",(mTvUserSex.getText().toString().trim().equals("男")?"2":"1"));
         params.put("nickname", mTvNickname.getText().toString().trim());
         params.put("user_age", mTvUserAge.getText().toString().trim());
         params.put("explain", mTvUserSignatures.getText().toString().trim());
         params.put("hobby", mTvUserBenming.getText().toString().trim());
         params.put("area", mTvUserAddress.getText().toString().trim());
         params.put("address_info", mTvUserDetailAddress.getText().toString().trim());
-
+        Log.e("weiwei", "saveUserData: "+ params.toString());
         PostFormBuilder post = OkHttpUtils.post();
         if (mImageList.size()!=0){
             File file = new File(mImageList.get(0));
@@ -314,7 +314,6 @@ public class UserInfoActivity extends AppCompatActivity {
                 mLoadingDialog.RadioDialog(UserInfoActivity.this, "修改性别", new EditTextValuesCallback() {
                     @Override
                     public void editValues(String result) {
-                        Log.e("sex",result);
                         mTvUserSex.setText(result);
                     }
                 });

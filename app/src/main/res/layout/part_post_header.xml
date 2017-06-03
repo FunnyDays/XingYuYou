@@ -37,6 +37,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:textColor="@color/black"
                     android:id="@+id/tv_user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -68,6 +69,7 @@
     </RelativeLayout>
 
     <TextView
+        android:textColor="@color/black"
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -76,15 +78,6 @@
         android:layout_marginTop="5dp"
         android:textSize="@dimen/x14"
         tools:text="ahhaahahahhahaahhaha"/>
-
-    <LinearLayout
-        android:id="@+id/ll_root_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="vertical">
-
-    </LinearLayout>
     <TextView
         android:id="@+id/tv_content"
         android:layout_width="match_parent"
@@ -94,6 +87,15 @@
         android:layout_marginTop="5dp"
         android:textSize="@dimen/x12"
         tools:text="ahhaahahahhahaahhaha"/>
+    <LinearLayout
+        android:id="@+id/ll_root_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

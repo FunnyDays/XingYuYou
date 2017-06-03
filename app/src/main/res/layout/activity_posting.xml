@@ -20,10 +20,9 @@
 
             <EditText
                 android:id="@+id/et_title"
-
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/x50"
-                android:layout_marginBottom="5dp"
+                android:layout_height="@dimen/x40"
+                android:layout_marginBottom="1dp"
                 android:background="@android:color/white"
                 android:hint="标题（必填）"
                 android:lines="1"
@@ -39,23 +38,24 @@
                 android:background="@android:color/white"
                 android:gravity="left"
                 android:hint="请输入内容（必填）"
-                android:lines="8"
+                android:lines="10"
                 android:paddingLeft="20dp"
                 android:paddingTop="10dp"
                 android:textColor="@android:color/black"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
+                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/x140"
-                android:layout_marginTop="5dp">
+               >
 
             </android.support.v7.widget.RecyclerView>
 
             <RelativeLayout
                 android:id="@+id/rl_tag_more"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/x50"
+                android:layout_height="@dimen/x40"
                 android:layout_marginTop="5dp"
                 android:background="@android:color/white">
 
@@ -161,8 +161,8 @@
             <RelativeLayout
                 android:id="@+id/rl_comm_more"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/x50"
-                android:layout_marginTop="5dp"
+                android:layout_height="@dimen/x40"
+                android:layout_marginTop="1dp"
                 android:background="@android:color/white">
 
                 <ImageView

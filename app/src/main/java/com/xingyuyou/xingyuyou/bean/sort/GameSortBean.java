@@ -18,6 +18,7 @@ public class GameSortBean {
     private String id;
     private String type_name;
     private String icon;
+    private String cover;
     private String introduce;
     private String download_num;
     private String hot_num;
@@ -45,7 +46,13 @@ public class GameSortBean {
     public void setIcon(String icon) {
         this.icon = icon;
     }
+    public String getCover() {
+        return cover;
+    }
 
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
     public String getIntroduce() {
         return introduce;
     }

@@ -3,19 +3,20 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/item_commo_detail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ripple_bg"
+                android:layout_height="@dimen/x15"
+
     >
 
 
     <TextView
+        android:layout_centerVertical="true"
         android:id="@+id/tv_user2_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:gravity="start"
-        android:textSize="12sp"
+        android:textSize="@dimen/x10"
         android:textColor="@color/blue"
         tools:text="昵称："/>
 
@@ -28,7 +29,7 @@
         android:layout_marginRight="70dp"
         android:maxLines="10"
         android:layout_centerVertical="true"
-
+        android:textSize="@dimen/x10"
         tools:text="平路的对方的soils的开发"/>
 
     <TextView
@@ -39,7 +40,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
-        android:textSize="12sp"
+        android:textSize="@dimen/x10"
         android:text="18:15"
         />
 </RelativeLayout>

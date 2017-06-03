@@ -38,6 +38,7 @@ public class PostListBean {
     private String uid;
     private String nickname;
     private String head_image;
+    private String class_name;
     private int laud_status;
     private int collect_status;
     private List<String> posts_image;
@@ -90,7 +91,13 @@ public class PostListBean {
     public void setPosts_forums(String posts_forums) {
         this.posts_forums = posts_forums;
     }
+    public String getClass_name() {
+        return class_name;
+    }
 
+    public void setClass_name(String class_name) {
+        this.class_name = class_name;
+    }
     public String getPosts_collect() {
         return posts_collect;
     }
@@ -202,6 +209,7 @@ public class PostListBean {
                 ", uid='" + uid + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", head_image='" + head_image + '\'' +
+                ", class_name='" + class_name + '\'' +
                 ", laud_status=" + laud_status +
                 ", collect_status=" + collect_status +
                 ", posts_image=" + posts_image +

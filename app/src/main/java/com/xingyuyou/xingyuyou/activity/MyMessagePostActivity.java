@@ -249,7 +249,7 @@ public class MyMessagePostActivity extends AppCompatActivity {
                                 MyMessagePostActivity.this.startActivity(new Intent(MyMessagePostActivity.this, GodListDetailActivity.class)
                                         .putExtra("activity_id", mDatas.get(position - 1).getTid()));
                             } else {
-                                MyMessagePostActivity.this.startActivity(new Intent(MyMessagePostActivity.this, GodListDetailActivity.class)
+                                MyMessagePostActivity.this.startActivity(new Intent(MyMessagePostActivity.this, PostDetailActivity.class)
                                         .putExtra("post_id", mDatas.get(position - 1).getTid()));
                             }
                         }

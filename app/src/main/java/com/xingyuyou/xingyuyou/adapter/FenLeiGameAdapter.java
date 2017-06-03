@@ -102,7 +102,7 @@ public class FenLeiGameAdapter extends RecyclerView.Adapter {
                 ((ItemViewHolder) holder).mGameNum.setText("下载量："+mListData.get(position-1).getDownload_num());
                 ((ItemViewHolder) holder).mGameHot.setText("热度："+mListData.get(position-1).getHot_num());
                 Glide.with(mActivity)
-                        .load(mListData.get(position-1).getIcon())
+                        .load(mListData.get(position-1).getCover())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
 
                         .into(((ItemViewHolder) holder).mSortGamePic);
@@ -111,6 +111,7 @@ public class FenLeiGameAdapter extends RecyclerView.Adapter {
                     public void onClick(View view) {
                         Intent intent = new Intent(mActivity,SortGameListActivity.class);
                         intent.putExtra("type_id",mListData.get(position-1).getId());
+                        intent.putExtra("icon",mListData.get(position-1).getIcon());
                         mActivity.startActivity(intent);
                     }
                 });

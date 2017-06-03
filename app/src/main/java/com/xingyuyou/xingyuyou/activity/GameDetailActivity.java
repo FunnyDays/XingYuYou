@@ -33,6 +33,7 @@ import com.xingyuyou.xingyuyou.Utils.AppUtils;
 import com.xingyuyou.xingyuyou.Utils.FileUtils;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
+import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
@@ -61,6 +62,7 @@ import org.xutils.ex.DbException;
 import org.xutils.x;
 
 import java.io.File;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
@@ -197,6 +199,12 @@ public class GameDetailActivity extends AppCompatActivity {
     private RelativeLayout mRl_top_image;
     private RelativeLayout mRl_top_game_detail;
     private boolean mState=false;
+    private TextView mTv_language;
+    private TextView mTv_game_type;
+    private TextView mTv_game_time;
+    private TextView mTv_languageTop;
+    private TextView mTv_game_typeTop;
+    private TextView mTv_game_timeTop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -321,11 +329,17 @@ public class GameDetailActivity extends AppCompatActivity {
         mGameVersionTop = (TextView) view.findViewById(R.id.tv_game_version_top);
         mGameSizeTop = (TextView) view.findViewById(R.id.tv_game_size_top);
         mDownNumberTop = (TextView) view.findViewById(R.id.tv_down_number_top);
-
+        mTv_languageTop = (TextView) view.findViewById(R.id.tv_language_top);
+        mTv_game_typeTop = (TextView) view.findViewById(R.id.tv_game_type_top);
+        mTv_game_timeTop = (TextView) view.findViewById(R.id.tv_game_time_top);
+        //下面的详细信息
         mGameCoverIcon = (ImageView) view.findViewById(R.id.iv_game_cover_pic);
         mGameVersion = (TextView) view.findViewById(R.id.tv_game_version);
         mGameSize = (TextView) view.findViewById(R.id.tv_game_size);
         mDownNumber = (TextView) view.findViewById(R.id.tv_down_number);
+        mTv_language = (TextView) view.findViewById(R.id.tv_language);
+        mTv_game_type = (TextView) view.findViewById(R.id.tv_game_type);
+        mTv_game_time = (TextView) view.findViewById(R.id.tv_game_time);
         mGameIntro = (TextView) view.findViewById(R.id.tv_content);
         mNoData = (TextView) view.findViewById(R.id.tv_no_data);
         //礼包按钮
@@ -417,6 +431,10 @@ public class GameDetailActivity extends AppCompatActivity {
             mGameVersionTop.setText("版本：" + mGameDetailList.get(0).getVersion());
             mGameSizeTop.setText("大小：" + mGameDetailList.get(0).getGame_size());
             mDownNumberTop.setText("下载次数：" + mGameDetailList.get(0).getDow_num());
+            mTv_languageTop.setText("语言：" + (StringUtils.isEmpty(mGameDetailList.get(0).getLanguage())==true?"中文":mGameDetailList.get(0).getLanguage()));
+            mTv_game_typeTop.setText("游戏类型：" + mGameDetailList.get(0).getGame_type_name());
+            mTv_game_timeTop.setText("更新日期：" + TimeUtils.millis2String(Long.parseLong(mGameDetailList.get(0).getCreate_time()+"000"),"yyyy-MM-dd"));
+
             mRl_top_image.setVisibility(View.GONE);
         } else {
             Glide.with(this).load(mGameDetailList.get(0).getCover()).into(mGameCoverIcon);
@@ -427,7 +445,9 @@ public class GameDetailActivity extends AppCompatActivity {
         mGameSize.setText("大小：" + mGameDetailList.get(0).getGame_size());
         mGameIntro.setText(mGameDetailList.get(0).getIntroduction());
         mDownNumber.setText("下载次数：" + mGameDetailList.get(0).getDow_num());
-
+        mTv_language.setText("语言：" + (StringUtils.isEmpty(mGameDetailList.get(0).getLanguage())==true?"中文":mGameDetailList.get(0).getLanguage()));
+        mTv_game_type.setText("游戏类型：" + mGameDetailList.get(0).getGame_type_name());
+        mTv_game_time.setText("更新日期：" + TimeUtils.millis2String(Long.parseLong(mGameDetailList.get(0).getCreate_time()+"000"),"yyyy-MM-dd"));
         //游戏介绍图
         gamePics.addAll(mGameDetailList.get(0).getScreenshot());
         mGameDetailPicAdapter.notifyDataSetChanged();

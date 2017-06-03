@@ -23,7 +23,7 @@
             android:layout_toRightOf="@+id/image"
             android:gravity="center_vertical"
             android:text="玩家评论"
-            android:textSize="20sp"/>
+            android:textSize="@dimen/x16"/>
     </RelativeLayout>
     <TextView
         android:id="@+id/tv_player_no_data"
