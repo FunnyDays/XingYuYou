@@ -196,7 +196,7 @@ public class PostDetailActivity extends BaseActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.ab_share:
-                        Toast.makeText(PostDetailActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(PostDetailActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         break;
@@ -258,6 +258,7 @@ public class PostDetailActivity extends BaseActivity {
      */
     @Override
     public void initData() {
+        Log.e("post", "initData: "+getIntent().getStringExtra("post_id"));
         OkHttpUtils.post()//
                 .addParams("pid", getIntent().getStringExtra("post_id"))
                 .addParams("uid", UserUtils.getUserId())
@@ -273,6 +274,7 @@ public class PostDetailActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         handler.obtainMessage(1, response).sendToTarget();
+                        Log.e("post", "initData: "+response);
                     }
                 });
 
@@ -484,6 +486,9 @@ public class PostDetailActivity extends BaseActivity {
    }
     //*********************************************以下是赋值代码***************************************************
     private void setValues() {
+        //更新楼主
+        mPostCommoListAdapter.setUid(mPostDetailBean.getUid());
+        mPostCommoListAdapter.notifyDataSetChanged();
         //收藏状态
         if (mPostDetailBean.getCollect_status().equals("1")){
             Drawable drawable= getResources().getDrawable(R.mipmap.ic_collect_fill);
@@ -517,7 +522,7 @@ public class PostDetailActivity extends BaseActivity {
         mJiaonangNum.setText(mPostDetailBean.getPosts_laud());
         for (int i = 0; i < mPostDetailBean.getPosts_image().size(); i++) {
             ImageView imageView = new ImageView(PostDetailActivity.this);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(ConvertUtils.dp2px(10), ConvertUtils.dp2px(10), ConvertUtils.dp2px(10), ConvertUtils.dp2px(10));
             imageView.setLayoutParams(lp);
             imageView.setAdjustViewBounds(true);
@@ -664,10 +669,10 @@ public class PostDetailActivity extends BaseActivity {
      * 回帖
      */
     private void sendReply() {
-        /*if (StringUtils.isEmpty(edittext.getText().toString().trim())) {
-            Toast.makeText(this, "评论内容为空", Toast.LENGTH_SHORT).show();
+        if (mImageList.size()==0) {
+            Toast.makeText(this, "评论内容为空,至少一张图片", Toast.LENGTH_SHORT).show();
             return;
-        }*/
+        }
         //关闭键盘
         KeyboardUtils.hideSoftInput(this);
         mDialog = new CustomDialog(PostDetailActivity.this, "正在回帖中...");
@@ -702,7 +707,6 @@ public class PostDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.e("weiwei", "onResponse: "+response );
                         mDialog.dismissDialog();
                         PostCommoBean postCommoBean = new PostCommoBean();
                         postCommoBean.setNickname(UserUtils.getNickName());
@@ -713,6 +717,7 @@ public class PostDetailActivity extends BaseActivity {
                          mPostCommoListAdapter.notifyDataSetChanged();
                         mImageList.clear();
                         //待优化
+                        edittext.setText("");
                     }
                 });
     }

@@ -4,17 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_gray"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp">
+        android:layout_marginLeft="@dimen/x2"
+        android:layout_marginTop="@dimen/x10">
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_marginRight="@dimen/x2"
             android:src="@drawable/ic_pen"/>
 
         <TextView
@@ -23,8 +26,10 @@
             android:layout_toRightOf="@+id/image"
             android:gravity="center_vertical"
             android:text="玩家评论"
-            android:textSize="@dimen/x16"/>
+            android:textColor="@color/black"
+            android:textSize="@dimen/x14"/>
     </RelativeLayout>
+
     <TextView
         android:id="@+id/tv_player_no_data"
         android:text="暂无数据"

@@ -13,6 +13,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.media.ExifInterface;
+import android.util.Log;
 
 /**
  * JNI图片压缩工具类
@@ -98,7 +99,7 @@ public class NativeUtil {
 	 */
 	public static void compressBitmap(String curFilePath, String targetFilePath) {
 		// 最大图片大小 150KB
-		int maxSize = 150;
+		int maxSize = 550;
 		//根据地址获取bitmap
 		Bitmap result = getBitmapFromFile(curFilePath);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -106,14 +107,14 @@ public class NativeUtil {
 		int quality = 100;
 		result.compress(Bitmap.CompressFormat.JPEG, quality, baos);
 		// 循环判断如果压缩后图片是否大于100kb,大于继续压缩
-		while (baos.toByteArray().length / 1024 > maxSize) {
+		/*while (baos.toByteArray().length / 1024 > maxSize) {
 			// 重置baos即清空baos
 			baos.reset();
 			// 每次都减少10
 			quality -= 10;
 			// 这里压缩quality，把压缩后的数据存放到baos中
-			result.compress(Bitmap.CompressFormat.JPEG, quality, baos);
-		}
+			result.compress(Bitmap.CompressFormat.JPEG, Math.abs(quality), baos);
+		}*/
 		// JNI保存图片到SD卡 这个关键
 		NativeUtil.saveBitmap(result, quality, targetFilePath, true);
 		// 释放Bitmap
@@ -134,7 +135,7 @@ public class NativeUtil {
 	 */
 	public static int getRatioSize(int bitWidth, int bitHeight) {
 		// 图片最大分辨率
-		int imageHeight = 1280;
+		int imageHeight = 128000;
 		int imageWidth = 960;
 		// 缩放比
 		int ratio = 1;

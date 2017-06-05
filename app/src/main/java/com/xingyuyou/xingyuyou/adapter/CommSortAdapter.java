@@ -16,15 +16,17 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
+import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.activity.GodListDetailActivity;
 import com.xingyuyou.xingyuyou.activity.LoginActivity;
 import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
-import com.xingyuyou.xingyuyou.bean.community.SortPostListBean;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -37,7 +39,7 @@ import okhttp3.Call;
  */
 public class CommSortAdapter extends RecyclerView.Adapter {
     //数据
-    private List<SortPostListBean> mListData;
+    private List<PostListBean> mListData;
     private Activity mActivity;
 
     public static final int TYPE_HEADER = 0;  //说明是带有Header的
@@ -46,17 +48,18 @@ public class CommSortAdapter extends RecyclerView.Adapter {
     public static final int TYPE_ONE_PIC = 3;  //一张图
     public static final int TYPE_TWO_PIC = 4;  //二张图
     public static final int TYPE_THREE_PIC = 5;  //三张图
+    public static final int TYPE_TOP_WELL = 6;  //置顶或精华
 
     //HeaderView, FooterView
     private View mHeaderView;
     private View mFooterView;
 
-    public CommSortAdapter(Activity activity, List<SortPostListBean> listData) {
+    public CommSortAdapter(Activity activity, List<PostListBean> listData) {
         mListData = listData;
         mActivity = activity;
     }
 
-    public void setDatas(List<SortPostListBean> listData) {
+    public void setDatas(List<PostListBean> listData) {
         mListData = listData;
     }
 
@@ -94,6 +97,9 @@ public class CommSortAdapter extends RecyclerView.Adapter {
             return TYPE_FOOTER;
         }
 
+        if (mListData.get(position - 1).getIs_well().equals("1") || mListData.get(position - 1).getIs_top().equals("1")) {
+            return TYPE_TOP_WELL;
+        }
         if (mListData.get(position - 1).getPosts_image().size() == 1) {
             return TYPE_ONE_PIC;
         }
@@ -125,6 +131,9 @@ public class CommSortAdapter extends RecyclerView.Adapter {
             case 5:
                 View layout2 = LayoutInflater.from(mActivity).inflate(R.layout.item_comm_list2, parent, false);
                 return new ItemViewHolder(layout2);
+            case 6:
+                View layout3 = LayoutInflater.from(mActivity).inflate(R.layout.item_comm_top_well_list, parent, false);
+                return new ItemTopWellViewHolder(layout3);
         }
         return null;
     }
@@ -132,114 +141,139 @@ public class CommSortAdapter extends RecyclerView.Adapter {
     @Override
 
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        if (holder instanceof ItemTopWellViewHolder && (getItemViewType(position) == TYPE_TOP_WELL)) {
+            ((ItemTopWellViewHolder) holder).mPostName.setText(mListData.get(position - 1).getSubject());
+            if (mListData.get(position - 1).getIs_well().equals("1")) {
+                ((ItemTopWellViewHolder) holder).tv_top_well.setText("精品");
+            }
+            if (mListData.get(position - 1).getIs_top().equals("1")) {
+                ((ItemTopWellViewHolder) holder).tv_top_well.setText("置顶");
+            }
+        }
         if (holder instanceof ItemViewHolder && (getItemViewType(position) == TYPE_ONE_PIC
                 || getItemViewType(position) == TYPE_TWO_PIC
                 || getItemViewType(position) == TYPE_THREE_PIC)) {
-            if (mListData.get(position - 1).getCollect_status()==1){
+
+            if (mListData.get(position - 1).getCollect_status() == 1) {
                 ((ItemViewHolder) holder).mPostCollect.setImageResource(R.mipmap.ic_collect_fill);
-            }else {
+            } else {
                 ((ItemViewHolder) holder).mPostCollect.setImageResource(R.mipmap.shoucang);
             }
-            if (mListData.get(position - 1).getLaud_status()==1){
+            if (mListData.get(position - 1).getLaud_status() == 1) {
                 ((ItemViewHolder) holder).mPostLuad.setImageResource(R.mipmap.ic_zan_fill);
-            }else {
+            } else {
                 ((ItemViewHolder) holder).mPostLuad.setImageResource(R.mipmap.ic_zan);
             }
-
             ((ItemViewHolder) holder).mUserName.setText(mListData.get(position - 1).getNickname());
-         //   ((ItemViewHolder) holder).tv_class_name.setText(mListData.get(position - 1).getClass_name());
+            if (StringUtils.isEmpty(mListData.get(position - 1).getClass_name())) {
+                ((ItemViewHolder) holder).tv_class_name_tag.setVisibility(View.GONE);
+            } else {
+                ((ItemViewHolder) holder).tv_class_name_tag.setVisibility(View.VISIBLE);
+            }
+            ((ItemViewHolder) holder).tv_class_name.setText(mListData.get(position - 1).getClass_name());
             ((ItemViewHolder) holder).mPostTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mListData.get(position - 1).getDateline() + "000")));
             ((ItemViewHolder) holder).mPostName.setText(mListData.get(position - 1).getSubject());
             ((ItemViewHolder) holder).mPostContent.setText(mListData.get(position - 1).getMessage());
             ((ItemViewHolder) holder).mCollectNum.setText(mListData.get(position - 1).getPosts_collect());
             ((ItemViewHolder) holder).mCommNum.setText(mListData.get(position - 1).getPosts_forums());
             ((ItemViewHolder) holder).mJiaoNangNum.setText(mListData.get(position - 1).getPosts_laud());
+
+            ((ItemViewHolder) holder).ll_root_text.removeAllViews();
+            for (int i = 0; i < mListData.get(position - 1).getPosts_class().size(); i++) {
+                TextView textView = new TextView(mActivity);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(ConvertUtils.dp2px(5), 0, ConvertUtils.dp2px(5), 0);
+                textView.setLayoutParams(lp);
+                textView.setBackgroundResource(R.drawable.tag_textview_bg);
+                // textView.setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.tag_textview_bg));
+                textView.setPadding(ConvertUtils.dp2px(2), 0, ConvertUtils.dp2px(2), 0);
+                textView.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
+                textView.setText(mListData.get(position - 1).getPosts_class().get(i).getLabel_name());
+                ((ItemViewHolder) holder).ll_root_text.addView(textView);
+            }
             Glide.with(mActivity)
-                    .load(mListData.get(position - 1).getPosts_image().get(0))
+                    .load(mListData.get(position - 1).getHead_image())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(new GlideCircleTransform(mActivity))
-                    .dontAnimate()
                     .into(((ItemViewHolder) holder).mUserPhoto);
             Glide.with(mActivity)
                     .load(mListData.get(position - 1).getPosts_image().get(0))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .dontAnimate()
                     .into(((ItemViewHolder) holder).mPostCover0);
             if (getItemViewType(position) == TYPE_TWO_PIC || getItemViewType(position) == TYPE_THREE_PIC) {
                 Glide.with(mActivity)
                         .load(mListData.get(position - 1).getPosts_image().get(1))
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .dontAnimate()
                         .into(((ItemViewHolder) holder).mPostCover1);
             }
             if (getItemViewType(position) == TYPE_THREE_PIC) {
-
                 Glide.with(mActivity)
                         .load(mListData.get(position - 1).getPosts_image().get(2))
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .dontAnimate()
                         .into(((ItemViewHolder) holder).mPostCover2);
             }
             ((ItemViewHolder) holder).mLinearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(mActivity, PostDetailActivity.class);
-                    intent.putExtra("post_id", mListData.get(position - 1).getId());
-                    mActivity.startActivity(intent);
+                    if (mListData.get(position - 1).getUid().equals("206")) {
+                        mActivity.startActivity(new Intent(mActivity, GodListDetailActivity.class)
+                                .putExtra("activity_id", mListData.get(position - 1).getId()));
+                    } else {
+                        Intent intent = new Intent(mActivity, PostDetailActivity.class);
+                        intent.putExtra("post_id", mListData.get(position - 1).getId());
+                        mActivity.startActivity(intent);
+                    }
                 }
             });
             ((ItemViewHolder) holder).mRlCollect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!UserUtils.logined()){
+                    if (!UserUtils.logined()) {
                         IntentUtils.startActivity(mActivity, LoginActivity.class);
                         return;
                     }
                     getCollect(mListData.get(position - 1).getId());
-                    if (mListData.get(position - 1).getCollect_status()==1){
-                        ((ItemViewHolder) holder).mCollectNum.setText(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_collect())-1)));
-                        mListData.get(position - 1).setPosts_collect(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_collect())-1)));
+                    if (mListData.get(position - 1).getCollect_status() == 1) {
+                        ((ItemViewHolder) holder).mCollectNum.setText(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_collect()) - 1)));
+                        mListData.get(position - 1).setPosts_collect(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_collect()) - 1)));
                         mListData.get(position - 1).setCollect_status(0);
                         Toast.makeText(mActivity, "取消收藏", Toast.LENGTH_SHORT).show();
                         ((ItemViewHolder) holder).mPostCollect.setImageResource(R.mipmap.shoucang);
-                    }else {
-                        ((ItemViewHolder) holder).mCollectNum.setText(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_collect())+1)));
-                        mListData.get(position - 1).setPosts_collect(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_collect())+1)));
+                    } else {
+                        ((ItemViewHolder) holder).mCollectNum.setText(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_collect()) + 1)));
+                        mListData.get(position - 1).setPosts_collect(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_collect()) + 1)));
                         mListData.get(position - 1).setCollect_status(1);
                         Toast.makeText(mActivity, "收藏成功", Toast.LENGTH_SHORT).show();
                         ((ItemViewHolder) holder).mPostCollect.setImageResource(R.mipmap.ic_collect_fill);
 
                     }
-
                 }
             });
             ((ItemViewHolder) holder).mRlComm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(mActivity, PostDetailActivity.class);
+                   /* Intent intent = new Intent(mActivity, PostDetailActivity.class);
                     intent.putExtra("post_id", mListData.get(position - 1).getId());
-                    mActivity.startActivity(intent);
+                    mActivity.startActivity(intent);*/
                 }
             });
             ((ItemViewHolder) holder).mRlJiaonang.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!UserUtils.logined()){
+                    if (!UserUtils.logined()) {
                         IntentUtils.startActivity(mActivity, LoginActivity.class);
                         return;
                     }
                     getLaud(mListData.get(position - 1).getId());
-                    if (mListData.get(position - 1).getLaud_status()==1){
-                        ((ItemViewHolder) holder).mJiaoNangNum.setText(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_laud())-1)));
-                        mListData.get(position - 1).setPosts_laud(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_laud())-1)));
-
+                    if (mListData.get(position - 1).getLaud_status() == 1) {
+                        ((ItemViewHolder) holder).mJiaoNangNum.setText(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_laud()) - 1)));
+                        mListData.get(position - 1).setPosts_laud(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_laud()) - 1)));
                         mListData.get(position - 1).setLaud_status(0);
                         Toast.makeText(mActivity, "取消点赞", Toast.LENGTH_SHORT).show();
                         ((ItemViewHolder) holder).mPostLuad.setImageResource(R.mipmap.ic_zan);
-                    }else {
-                        ((ItemViewHolder) holder).mJiaoNangNum.setText(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_laud())+1)));
-                        mListData.get(position - 1).setPosts_laud(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_laud())+1)));
-
+                    } else {
+                        ((ItemViewHolder) holder).mJiaoNangNum.setText(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_laud()) + 1)));
+                        mListData.get(position - 1).setPosts_laud(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_laud()) + 1)));
                         mListData.get(position - 1).setLaud_status(1);
                         Toast.makeText(mActivity, "点赞成功", Toast.LENGTH_SHORT).show();
                         ((ItemViewHolder) holder).mPostLuad.setImageResource(R.mipmap.ic_zan_fill);
@@ -252,6 +286,46 @@ public class CommSortAdapter extends RecyclerView.Adapter {
         } else {
             return;
         }
+
+    }
+
+    public void getCollect(String tid) {
+        OkHttpUtils.post()//
+                .addParams("tid", tid)
+                .addParams("uid", UserUtils.getUserId())
+                .url(XingYuInterface.GET_COLLECT)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        // Log.e("hot", e.toString() + ":e");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                    }
+                });
+
+    }
+
+    public void getLaud(String tid) {
+        OkHttpUtils.post()//
+                .addParams("tid", tid)
+                .addParams("uid", UserUtils.getUserId())
+                .url(XingYuInterface.GET_LAUD)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Log.e("hot", e.toString() + ":e");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                    }
+                });
 
     }
 
@@ -268,43 +342,16 @@ public class CommSortAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void getCollect( String tid) {
-        OkHttpUtils.post()//
-                .addParams("tid",tid)
-                .addParams("uid",UserUtils.getUserId())
-                .url(XingYuInterface.GET_COLLECT)
-                .tag(this)//
-                .build()//
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        // Log.e("hot", e.toString() + ":e");
-                    }
-                    @Override
-                    public void onResponse(String response, int id) {
-                    }
-                });
+    class ItemTopWellViewHolder extends RecyclerView.ViewHolder {
+        private TextView tv_top_well;
+        private TextView mPostName;
 
+        public ItemTopWellViewHolder(View itemView) {
+            super(itemView);
+            tv_top_well = (TextView) itemView.findViewById(R.id.tv_top_well);
+            mPostName = (TextView) itemView.findViewById(R.id.tv_post_name);
+        }
     }
-    public void getLaud( String tid) {
-        OkHttpUtils.post()//
-                .addParams("tid",tid)
-                .addParams("uid",UserUtils.getUserId())
-                .url(XingYuInterface.GET_LAUD)
-                .tag(this)//
-                .build()//
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        // Log.e("hot", e.toString() + ":e");
-                    }
-                    @Override
-                    public void onResponse(String response, int id) {
-                    }
-                });
-
-    }
-
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
 
@@ -316,6 +363,7 @@ public class CommSortAdapter extends RecyclerView.Adapter {
         private ImageView mPostLuad;
         private ImageView mUserPhoto;
         private TextView mPostName;
+
         private TextView mCollectNum;
         private TextView mCommNum;
         private TextView mJiaoNangNum;
@@ -323,6 +371,7 @@ public class CommSortAdapter extends RecyclerView.Adapter {
         private TextView mUserName;
         private TextView mPostTime;
         private TextView tv_class_name;
+        private TextView tv_class_name_tag;
         private LinearLayout ll_root_text;
         private LinearLayout mLinearLayout;
         private RelativeLayout mRlCollect;
@@ -356,6 +405,10 @@ public class CommSortAdapter extends RecyclerView.Adapter {
             mRlCollect = (RelativeLayout) itemView.findViewById(R.id.rl_collect);
             mRlComm = (RelativeLayout) itemView.findViewById(R.id.rl_comm);
             mRlJiaonang = (RelativeLayout) itemView.findViewById(R.id.rl_jiaonang);
+            //来自和标签
+            tv_class_name = (TextView) itemView.findViewById(R.id.tv_class_name);
+            tv_class_name_tag = (TextView) itemView.findViewById(R.id.tv_class_name_tag);
+            ll_root_text = (LinearLayout) itemView.findViewById(R.id.ll_root_text);
         }
     }
 }

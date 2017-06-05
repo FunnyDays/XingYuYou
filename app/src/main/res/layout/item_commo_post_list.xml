@@ -38,10 +38,10 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:textColor="@color/black"
                     android:id="@+id/tv_user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/x12"
                     tools:text="7766"/>
 
@@ -94,9 +94,9 @@
 
         <ImageView
             android:id="@+id/iv_love"
-            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/tv_floor_num"
             android:padding="@dimen/x6"
             android:src="@mipmap/ic_zan"/>
@@ -109,9 +109,11 @@
             android:id="@+id/tv_commo_content"
             android:layout_width="match_parent"
             android:textSize="@dimen/x12"
+            android:textColor="@color/black"
             android:layout_centerVertical="true"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="@dimen/x10"
+            android:layout_marginTop="@dimen/x10"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="10dp"
             tools:text="平路的对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soi对方的soils的开发"/>

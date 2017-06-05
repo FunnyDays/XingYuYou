@@ -93,7 +93,7 @@ public class TwoFragment extends BaseFragment {
         initToolbar();
         mTab = (TabLayout) getView().findViewById(R.id.tabs);
         mContent = (ViewPager) getView().findViewById(R.id.viewpager);
-
+        mContent.setOffscreenPageLimit(2);
         ImageView floatingActionButton = (ImageView) getView().findViewById(R.id.fab_add_comment);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override

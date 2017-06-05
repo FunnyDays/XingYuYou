@@ -5,18 +5,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
@@ -30,6 +31,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.AppUtils;
+import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
 import com.xingyuyou.xingyuyou.Utils.FileUtils;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
@@ -37,10 +39,8 @@ import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
-import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.adapter.GameDetailListViewAdapter;
 import com.xingyuyou.xingyuyou.adapter.GameDetailPicAdapter;
-import com.xingyuyou.xingyuyou.bean.community.PostListBean;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameDetailBean;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameDetailCommoBean;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameStartBean;
@@ -49,6 +49,7 @@ import com.xingyuyou.xingyuyou.download.DownloadInfo;
 import com.xingyuyou.xingyuyou.download.DownloadManager;
 import com.xingyuyou.xingyuyou.download.DownloadState;
 import com.xingyuyou.xingyuyou.download.DownloadViewHolder;
+import com.xingyuyou.xingyuyou.weight.CollapsedTextView;
 import com.xingyuyou.xingyuyou.weight.ProgressButton;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -62,10 +63,8 @@ import org.xutils.ex.DbException;
 import org.xutils.x;
 
 import java.io.File;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
 
 import okhttp3.Call;
 
@@ -198,7 +197,7 @@ public class GameDetailActivity extends AppCompatActivity {
     private TextView mTvStarRatio;
     private RelativeLayout mRl_top_image;
     private RelativeLayout mRl_top_game_detail;
-    private boolean mState=false;
+    private boolean mState = false;
     private TextView mTv_language;
     private TextView mTv_game_type;
     private TextView mTv_game_time;
@@ -298,7 +297,7 @@ public class GameDetailActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.listView);
         View view = View.inflate(GameDetailActivity.this, R.layout.part_game_detail_header, null);
         mListView.addHeaderView(view);
-
+        mListView.setDividerHeight(0);
         mListViewAdapter = new GameDetailListViewAdapter(GameDetailActivity.this, mCommoAdapterList);
         mListView.setAdapter(mListViewAdapter);
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -431,9 +430,9 @@ public class GameDetailActivity extends AppCompatActivity {
             mGameVersionTop.setText("版本：" + mGameDetailList.get(0).getVersion());
             mGameSizeTop.setText("大小：" + mGameDetailList.get(0).getGame_size());
             mDownNumberTop.setText("下载次数：" + mGameDetailList.get(0).getDow_num());
-            mTv_languageTop.setText("语言：" + (StringUtils.isEmpty(mGameDetailList.get(0).getLanguage())==true?"中文":mGameDetailList.get(0).getLanguage()));
+            mTv_languageTop.setText("语言：" + (StringUtils.isEmpty(mGameDetailList.get(0).getLanguage()) == true ? "中文" : mGameDetailList.get(0).getLanguage()));
             mTv_game_typeTop.setText("游戏类型：" + mGameDetailList.get(0).getGame_type_name());
-            mTv_game_timeTop.setText("更新日期：" + TimeUtils.millis2String(Long.parseLong(mGameDetailList.get(0).getCreate_time()+"000"),"yyyy-MM-dd"));
+            mTv_game_timeTop.setText("更新日期：" + TimeUtils.millis2String(Long.parseLong(mGameDetailList.get(0).getCreate_time() + "000"), "yyyy-MM-dd"));
 
             mRl_top_image.setVisibility(View.GONE);
         } else {
@@ -445,13 +444,12 @@ public class GameDetailActivity extends AppCompatActivity {
         mGameSize.setText("大小：" + mGameDetailList.get(0).getGame_size());
         mGameIntro.setText(mGameDetailList.get(0).getIntroduction());
         mDownNumber.setText("下载次数：" + mGameDetailList.get(0).getDow_num());
-        mTv_language.setText("语言：" + (StringUtils.isEmpty(mGameDetailList.get(0).getLanguage())==true?"中文":mGameDetailList.get(0).getLanguage()));
+        mTv_language.setText("语言：" + (StringUtils.isEmpty(mGameDetailList.get(0).getLanguage()) == true ? "中文" : mGameDetailList.get(0).getLanguage()));
         mTv_game_type.setText("游戏类型：" + mGameDetailList.get(0).getGame_type_name());
-        mTv_game_time.setText("更新日期：" + TimeUtils.millis2String(Long.parseLong(mGameDetailList.get(0).getCreate_time()+"000"),"yyyy-MM-dd"));
+        mTv_game_time.setText("更新日期：" + TimeUtils.millis2String(Long.parseLong(mGameDetailList.get(0).getCreate_time() + "000"), "yyyy-MM-dd"));
         //游戏介绍图
         gamePics.addAll(mGameDetailList.get(0).getScreenshot());
         mGameDetailPicAdapter.notifyDataSetChanged();
-
 
     }
 
@@ -478,12 +476,12 @@ public class GameDetailActivity extends AppCompatActivity {
                 final ImageView iv_zan = (ImageView) commo.findViewById(R.id.iv_zan);
                 TextView tv_user_name = (TextView) commo.findViewById(R.id.tv_user_name);
                 final TextView tv_zan_num = (TextView) commo.findViewById(R.id.tv_zan_num);
-                TextView tv_reply_content = (TextView) commo.findViewById(R.id.tv_reply_content);
+                final TextView tv_reply_content = (TextView) commo.findViewById(R.id.tv_reply_content);
                 TextView tv_commo_time = (TextView) commo.findViewById(R.id.tv_commo_time);
                 RatingBar rb_score = (RatingBar) commo.findViewById(R.id.rb_score);
                 Glide.with(getApplication())
                         .load(mHotCommoAdapterList.get(i).getHead_image())
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .transform(new GlideCircleTransform(getApplication()))
                         .into(iv_user_photo);
                 tv_user_name.setText(mHotCommoAdapterList.get(i).getNickname());
@@ -518,17 +516,59 @@ public class GameDetailActivity extends AppCompatActivity {
                     }
                 });
                 tv_reply_content.setText(mHotCommoAdapterList.get(i).getComment());
+
                 tv_commo_time.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mHotCommoAdapterList.get(i).getDateline() + "000")));
                 rb_score.setRating(Integer.parseInt(mHotCommoAdapterList.get(i).getStar_num()));
                 mListView.addHeaderView(commo);
+                //介绍文字动画控制
+                final ImageView iv_game_intro_more = (ImageView) commo.findViewById(R.id.iv_game_intro_more);
+                iv_game_intro_more.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (mState) {
+                            mState = false;
+                            tv_reply_content.setEllipsize(TextUtils.TruncateAt.END);
+                            tv_reply_content.setMaxLines(2);
+                            ObjectAnimator animator3 = ObjectAnimator.ofFloat(iv_game_intro_more, "rotation", 180f, 360f);
+                            animator3.setDuration(500).start();
+                        } else {
+                            mState = true;
+                            tv_reply_content.setEllipsize(null);
+                            tv_reply_content.setMaxLines(Integer.MAX_VALUE);
+                            ObjectAnimator animator3 = ObjectAnimator.ofFloat(iv_game_intro_more, "rotation", 0f, 180f);
+                            animator3.setDuration(500).start();
+                        }
+                    }
+                });
+                tv_reply_content.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (mState) {
+                            mState = false;
+                            tv_reply_content.setEllipsize(TextUtils.TruncateAt.END);
+                            tv_reply_content.setMaxLines(2);
+                            ObjectAnimator animator3 = ObjectAnimator.ofFloat(iv_game_intro_more, "rotation", 180f, 360f);
+                            animator3.setDuration(500).start();
+                        } else {
+                            mState = true;
+                            tv_reply_content.setEllipsize(null);
+                            tv_reply_content.setMaxLines(Integer.MAX_VALUE);
+                            ObjectAnimator animator3 = ObjectAnimator.ofFloat(iv_game_intro_more, "rotation", 0f, 180f);
+                            animator3.setDuration(500).start();
+                        }
+                    }
+                });
             }
         }
+        View view1 = View.inflate(GameDetailActivity.this, R.layout.one_line_layout, null);
+        mListView.addHeaderView(view1);
         View view = View.inflate(GameDetailActivity.this, R.layout.part_game_detail_commo_header, null);
         TextView textView = (TextView) view.findViewById(R.id.tv_player_no_data);
         if (mCommoAdapterList.size() != 0) {
             textView.setVisibility(View.GONE);
         }
         mListView.addHeaderView(view);
+
 
     }
 
@@ -719,12 +759,12 @@ public class GameDetailActivity extends AppCompatActivity {
 
         public void refresh() {
             mBtInstallGame.setText(x.app().getString(R.string.stop));
-           // mBtInstallGame.setProgress(downloadInfo.getProgress());
+            // mBtInstallGame.setProgress(downloadInfo.getProgress());
             DownloadState state = downloadInfo.getState();
             switch (state) {
                 case WAITING:
                 case STARTED:
-                    mBtInstallGame.setText(downloadInfo.getProgress()+"%");
+                    mBtInstallGame.setText(downloadInfo.getProgress() + "%");
                     break;
                 case ERROR:
                 case STOPPED:

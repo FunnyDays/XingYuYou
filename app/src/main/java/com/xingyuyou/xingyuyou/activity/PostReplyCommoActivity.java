@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
 import com.xingyuyou.xingyuyou.Utils.KeyboardUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.EmotionAdapter;
@@ -80,7 +81,7 @@ public class PostReplyCommoActivity extends AppCompatActivity {
     private RadioButton rbPoint;
     private static final int emsNumOfEveryFragment = 20;//每页的表情数量
     private FrameLayout extendView, emotionView;
-    private LinearLayout contentView;
+    private NestedScrollView contentView;
     private ImageView extendButton, emotionButton;
     private EditText edittext;
     private Button btnSend;
@@ -149,6 +150,21 @@ public class PostReplyCommoActivity extends AppCompatActivity {
     }
 
     private void setValues() {
+        if (!(mPostCommoBean.getImgarr()==null)&&!mPostCommoBean.getImgarr().get(0).toString().equals("")) {
+            for (int j = 0; j < mPostCommoBean.getImgarr().size(); j++) {
+                ImageView imageView = new ImageView(PostReplyCommoActivity.this);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(ConvertUtils.dp2px(0), ConvertUtils.dp2px(5), ConvertUtils.dp2px(0), ConvertUtils.dp2px(20));
+                imageView.setLayoutParams(lp);
+                imageView.setAdjustViewBounds(true);
+                Glide.with(getApplication())
+                        .load(mPostCommoBean.getImgarr().get(j))
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .into(imageView);
+                mLlRootImage.addView(imageView);
+            }
+        }
+
         Glide.with(getApplication())
                 .load(mPostCommoBean.getHead_image())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -168,7 +184,7 @@ public class PostReplyCommoActivity extends AppCompatActivity {
 
     //*****************************************软键盘*****************************************************
     private void initKeyBoardView() {
-        contentView = (LinearLayout) findViewById(R.id.txt_main_content);
+        contentView = (NestedScrollView) findViewById(R.id.txt_main_content);
         extendButton = (ImageView) findViewById(R.id.bt_add_image);
         emotionButton = (ImageView) findViewById(R.id.img_reply_layout_emotion);
         edittext = (EditText) findViewById(R.id.edit_text);
@@ -359,6 +375,7 @@ public class PostReplyCommoActivity extends AppCompatActivity {
                         childBean.setDateline(String.valueOf(TimeUtils.getNowTimeMills()).substring(0, String.valueOf(TimeUtils.getNowTimeMills()).length() - 3));
                         mCommoAdapterList.add(childBean);
                         mToCommoAdapter.notifyDataSetChanged();
+                        edittext.setText("");
                     }
                 });
     }

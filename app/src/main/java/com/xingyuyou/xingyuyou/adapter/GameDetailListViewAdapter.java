@@ -1,12 +1,11 @@
 package com.xingyuyou.xingyuyou.adapter;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -20,9 +19,9 @@ import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
-import com.xingyuyou.xingyuyou.activity.GameDetailActivity;
 import com.xingyuyou.xingyuyou.activity.LoginActivity;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameDetailCommoBean;
+import com.xingyuyou.xingyuyou.weight.CollapsedTextView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -37,7 +36,7 @@ import okhttp3.Call;
 public class GameDetailListViewAdapter extends BaseAdapter {
     private Activity mActivity;
     private List<GameDetailCommoBean> mList;
-
+    private boolean mState = false;
     public GameDetailListViewAdapter(Activity activity, List<GameDetailCommoBean> list) {
         mActivity = activity;
         mList = list;
@@ -67,6 +66,7 @@ public class GameDetailListViewAdapter extends BaseAdapter {
             view = View.inflate(mActivity,R.layout.item_game_commo_list, null);
             holder.iv_user_photo = (ImageView)view.findViewById(R.id.iv_user_photo);
             holder.iv_zan = (ImageView)view.findViewById(R.id.iv_zan);
+            holder.iv_game_intro_more = (ImageView)view.findViewById(R.id.iv_game_intro_more);
             holder.tv_user_name = (TextView)view.findViewById(R.id.tv_user_name);
             holder.tv_zan_num = (TextView)view.findViewById(R.id.tv_zan_num);
             holder.tv_reply_content = (TextView)view.findViewById(R.id.tv_reply_content);
@@ -116,6 +116,44 @@ public class GameDetailListViewAdapter extends BaseAdapter {
                 }
             }
         });
+
+        //介绍文字动画控制
+        holder.iv_game_intro_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mState) {
+                    mState = false;
+                    holder.tv_reply_content.setEllipsize(TextUtils.TruncateAt.END);
+                    holder.tv_reply_content.setMaxLines(2);
+                    ObjectAnimator animator3 = ObjectAnimator.ofFloat(holder.iv_game_intro_more, "rotation", 180f, 360f);
+                    animator3.setDuration(500).start();
+                } else {
+                    mState = true;
+                    holder.tv_reply_content.setEllipsize(null);
+                    holder.tv_reply_content.setMaxLines(Integer.MAX_VALUE);
+                    ObjectAnimator animator3 = ObjectAnimator.ofFloat(holder.iv_game_intro_more, "rotation", 0f, 180f);
+                    animator3.setDuration(500).start();
+                }
+            }
+        });
+        holder.tv_reply_content.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mState) {
+                    mState = false;
+                    holder.tv_reply_content.setEllipsize(TextUtils.TruncateAt.END);
+                    holder.tv_reply_content.setMaxLines(2);
+                    ObjectAnimator animator3 = ObjectAnimator.ofFloat(holder.iv_game_intro_more, "rotation", 180f, 360f);
+                    animator3.setDuration(500).start();
+                } else {
+                    mState = true;
+                    holder.tv_reply_content.setEllipsize(null);
+                    holder.tv_reply_content.setMaxLines(Integer.MAX_VALUE);
+                    ObjectAnimator animator3 = ObjectAnimator.ofFloat(holder.iv_game_intro_more, "rotation", 0f, 180f);
+                    animator3.setDuration(500).start();
+                }
+            }
+        });
         return view;
     }
     /*存放控件 的ViewHolder*/
@@ -126,6 +164,7 @@ public class GameDetailListViewAdapter extends BaseAdapter {
         public TextView tv_commo_time;
         public ImageView iv_user_photo;
         public ImageView iv_zan;
+        public ImageView iv_game_intro_more;
         public RatingBar rb_score;
     }
     private void getLuad(String eid) {

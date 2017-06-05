@@ -170,18 +170,20 @@ public class CommHotAdapter extends RecyclerView.Adapter {
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 lp.setMargins(ConvertUtils.dp2px(5), 0, ConvertUtils.dp2px(5),0);
                 textView.setLayoutParams(lp);
+                textView.setBackgroundResource(R.drawable.tag_textview_bg);
+                textView.setPadding(ConvertUtils.dp2px(2),0,ConvertUtils.dp2px(2),0);
                 textView.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
                 textView.setText(mListData.get(position - 1).getPosts_class().get(i).getLabel_name());
                 ((ItemViewHolder) holder).ll_root_text.addView(textView);
             }
             Glide.with(mActivity)
                     .load(mListData.get(position - 1).getHead_image())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .transform(new GlideCircleTransform(mActivity))
                     .into(((ItemViewHolder) holder).mUserPhoto);
             Glide.with(mActivity)
                     .load(mListData.get(position - 1).getPosts_image().get(0))
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(((ItemViewHolder) holder).mPostCover0);
             if (getItemViewType(position) == TYPE_TWO_PIC || getItemViewType(position) == TYPE_THREE_PIC) {
                 Glide.with(mActivity)

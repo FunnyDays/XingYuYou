@@ -34,6 +34,13 @@ public class UserUtils {
         user_data.putString("account", account);
         user_data.putString("nickname", nickname);
     }
+    public static void Login(String id, String account, String nickname,String userPhoto) {
+        user_data = new SPUtils("user_data");
+        user_data.putString("id", id);
+        user_data.putString("account", account);
+        user_data.putString("nickname", nickname);
+        user_data.putString("userPhoto", userPhoto);
+    }
 
     public static String getUserId() {
         if (logined()) {

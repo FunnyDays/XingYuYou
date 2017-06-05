@@ -37,7 +37,7 @@ import okhttp3.Call;
 public class PostCommoListAdapter extends BaseAdapter {
     private Activity mActivity;
     private List<PostCommoBean> mCommoBeanList;
-    private String Uid;
+    private String Uid="";
 
     public PostCommoListAdapter(Activity activity, List<PostCommoBean> commoBeanList) {
         this.mActivity = activity;
@@ -84,12 +84,13 @@ public class PostCommoListAdapter extends BaseAdapter {
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
+            Log.e("weiwei", "getView: "+holder.toString());
         }
-      /*  if (Uid.equals(mCommoBeanList.get(i).getUid())){
+        if (Uid.equals(mCommoBeanList.get(i).getUid())){
             holder.tv_louzhu.setVisibility(View.VISIBLE);
         }else {
             holder.tv_louzhu.setVisibility(View.GONE);
-        }*/
+        }
         holder.tv_floor_num.setText(mCommoBeanList.get(i).getFloor_num()==null?"正在抢楼":mCommoBeanList.get(i).getFloor_num() + "楼");
         holder.tv_user_name.setText(mCommoBeanList.get(i).getNickname());
         holder.tv_zan_num.setText(mCommoBeanList.get(i).getLaud_count());
@@ -105,8 +106,8 @@ public class PostCommoListAdapter extends BaseAdapter {
         if (!(mCommoBeanList.get(i).getImgarr()==null)&&!mCommoBeanList.get(i).getImgarr().get(0).toString().equals("")) {
             for (int j = 0; j < mCommoBeanList.get(i).getImgarr().size(); j++) {
                 ImageView imageView = new ImageView(mActivity);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                lp.setMargins(ConvertUtils.dp2px(0), ConvertUtils.dp2px(5), ConvertUtils.dp2px(0), ConvertUtils.dp2px(5));
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(ConvertUtils.dp2px(0), ConvertUtils.dp2px(5), ConvertUtils.dp2px(0), ConvertUtils.dp2px(20));
                 imageView.setLayoutParams(lp);
                 imageView.setAdjustViewBounds(true);
                 Glide.with(mActivity)

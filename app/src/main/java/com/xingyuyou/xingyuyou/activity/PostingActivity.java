@@ -71,6 +71,7 @@ public class PostingActivity extends AppCompatActivity {
             }
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,7 +142,15 @@ public class PostingActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.ab_send:
-                        dealEditData();
+                        mDialog = new CustomDialog(PostingActivity.this, "正在上传，请稍等");
+                        mDialog.showDialog();
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dealEditData();
+                            }
+                        }, 200);
+
                         break;
                     default:
                         break;
@@ -206,6 +215,7 @@ public class PostingActivity extends AppCompatActivity {
     protected void dealEditData() {
         if (StringUtils.isEmpty(mStTitle.getText().toString().trim())) {
             Toast.makeText(this, "请输入标题", Toast.LENGTH_SHORT).show();
+            mDialog.dismissDialog();
             return;
         }
        /* if (StringUtils.isEmpty(mEtContent.getText().toString().trim())) {
@@ -215,27 +225,27 @@ public class PostingActivity extends AppCompatActivity {
 
         if (StringUtils.isEmpty((String) map.get("PostTags"))) {
             Toast.makeText(this, "请选择标签", Toast.LENGTH_SHORT).show();
+            mDialog.dismissDialog();
             return;
         }
         if (StringUtils.isEmpty((String) map.get("PostCommId"))) {
             Toast.makeText(this, "请选发帖社区", Toast.LENGTH_SHORT).show();
+            mDialog.dismissDialog();
             return;
         }
         if (mImageList.size() == 0) {
             Toast.makeText(this, "请至少选择一张图片", Toast.LENGTH_SHORT).show();
+            mDialog.dismissDialog();
             return;
         }
-        mDialog = new CustomDialog(PostingActivity.this, "正在上传，请稍等");
-        mDialog.showDialog();
-
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("fid", (String) map.get("PostCommId"));
         params.put("uid", UserUtils.getUserId());
         params.put("subject", mStTitle.getText().toString().trim());
-        params.put("message",StringUtils.isEmpty(mEtContent.getText().toString().trim())==true?"":mEtContent.getText().toString().trim());
+        params.put("message", StringUtils.isEmpty(mEtContent.getText().toString().trim()) == true ? "" : mEtContent.getText().toString().trim());
         params.put("tags", (String) map.get("PostTags"));
-
+       // Log.e("weiwei", "dealEditData: "+params.toString() );
         PostFormBuilder post = OkHttpUtils.post();
         for (int i = 0; i < mImageList.size(); i++) {
             File file = new File(mImageList.get(i));
@@ -342,6 +352,7 @@ public class PostingActivity extends AppCompatActivity {
 
             private ImageView mClosePic;
             private ImageView mPostImage;
+
             public ItemViewHolder(View itemView) {
                 super(itemView);
                /* if (itemView == mFooterView) {

@@ -8,14 +8,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -25,13 +23,8 @@ import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
-import com.xingyuyou.xingyuyou.adapter.CommSortAdapter;
-import com.xingyuyou.xingyuyou.bean.community.SortPostListBean;
-import com.xingyuyou.xingyuyou.bean.god.GodBean;
 import com.xingyuyou.xingyuyou.bean.god.GodDetailBean;
 import com.xingyuyou.xingyuyou.bean.god.GodListBean;
-import com.xingyuyou.xingyuyou.weight.infiniteViewPager.ImagePagerAdapter;
-import com.xingyuyou.xingyuyou.weight.infiniteViewPager.InfinitePagerAdapter;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -43,8 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
-
-import static com.xingyuyou.xingyuyou.Utils.net.XingYuInterface.GET_GODINFO;
 
 public class GodDeatilActivity extends AppCompatActivity {
     private List<GodListBean> mGodList = new ArrayList<>();

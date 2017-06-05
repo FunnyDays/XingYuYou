@@ -51,7 +51,7 @@
             android:text="下载"
             android:textColor="#ffffff"
             app:buttonCornerRadius="20dp"
-            app:buttonNormalColor="@color/colorPrimaryDark"
+            app:buttonNormalColor="@color/colorPrimary"
             app:buttonPressedColor="@color/colorPrimary"
             app:progressBgColor="@color/colorPrimary"
             app:progressColor="@color/colorAccent"

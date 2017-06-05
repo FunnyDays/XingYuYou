@@ -23,6 +23,7 @@ import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
+import com.xingyuyou.xingyuyou.adapter.CommSortAdapter;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
 import com.xingyuyou.xingyuyou.bean.community.PostTopAndWellBean;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -81,7 +82,7 @@ public class PostClassListActivity extends AppCompatActivity {
             }
         }
     };
-    private CommHotAdapter mCommHotAdapter;
+    private CommSortAdapter mCommHotAdapter;
     private ProgressBar mPbNodata;
     private TextView mTvNodata;
     private SwipeRefreshLayout mRefreshLayout;
@@ -119,7 +120,7 @@ public class PostClassListActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mCommHotAdapter = new CommHotAdapter(this, mPostAdapterList);
+        mCommHotAdapter = new CommSortAdapter(this, mPostAdapterList);
         //底部布局
         View loadingData = View.inflate(this, R.layout.default_loading, null);
         mPbNodata = (ProgressBar) loadingData.findViewById(R.id.pb_loading);
@@ -153,16 +154,16 @@ public class PostClassListActivity extends AppCompatActivity {
                 switch (newState) {
                     case RecyclerView.SCROLL_STATE_SETTLING:
                         //   Log.i("Main", "用户在手指离开屏幕之前，由于滑了一下，视图仍然依靠惯性继续滑动");
-                        Glide.with(PostClassListActivity.this).pauseRequests();
+                        Glide.with(getApplication()).pauseRequests();
                         //刷新
                         break;
                     case RecyclerView.SCROLL_STATE_IDLE:
                         //  Log.i("Main", "视图已经停止滑动");
-                        Glide.with(PostClassListActivity.this).resumeRequests();
+                        Glide.with(getApplication()).resumeRequests();
                         break;
                     case RecyclerView.SCROLL_STATE_DRAGGING:
                         //  Log.i("Main", "手指没有离开屏幕，视图正在滑动");
-                        Glide.with(PostClassListActivity.this).resumeRequests();
+                        Glide.with(getApplication()).resumeRequests();
                         break;
                 }
 

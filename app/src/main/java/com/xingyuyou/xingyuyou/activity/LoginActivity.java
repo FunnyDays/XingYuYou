@@ -43,13 +43,12 @@ public class LoginActivity extends AppCompatActivity {
                 String result = (String) msg.obj;
                 JSONObject jsonObject = null;
                 try {
-                    Log.e("value", result.toString());
                     jsonObject = new JSONObject(result);
                     Toast.makeText(LoginActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
                     if (!jsonObject.getString("status").equals("1"))
                         return;
                     JSONObject list = jsonObject.getJSONObject("list");
-                    UserUtils.Login(list.getString("id"),list.getString("account"),list.getString("nickname"));
+                    UserUtils.Login(list.getString("id"),list.getString("account"),list.getString("nickname"),list.getString("head_image"));
                     mLoadingDialog.CancelDialog();
                     finish();
                 } catch (JSONException e) {
@@ -164,7 +163,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onError(Throwable arg0, boolean arg1) {
-                Log.e("POST错误信息", arg0.toString());
                 mLoadingDialog.dismissDialog();
             }
 
@@ -178,11 +176,10 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     String result = new String(android.util.Base64.decode(json, android.util.Base64.DEFAULT), "utf-8");
                     if (code==0){
-                        Log.e("weiwei", "onSuccess: "+result );
+                       // Log.e("login", "onSuccess: "+result );
                         mHandler.obtainMessage(0, result).sendToTarget();
                     }
                 } catch (Exception e) {
-                    Log.e("login+json成功回调出错：", e.toString());
                 }
             }
             @Override

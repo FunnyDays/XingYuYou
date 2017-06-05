@@ -187,7 +187,7 @@ public class CommHotFragment extends BaseFragment {
                 });
 
         OkHttpUtils.post()//
-                .addParams("type", String.valueOf(1))
+                .addParams("type", getArguments().getString("ARGS"))
                 .url(XingYuInterface.GET_RECOMMEND)
                 .tag(this)//
                 .build()//
@@ -206,7 +206,7 @@ public class CommHotFragment extends BaseFragment {
 
     private void setValues() {
         Glide.with(mActivity).load(mRecommAdapterList.get(0).getRe_image())
-                .transform(new GlideRoundTransform(mActivity,5)).into(mIvOne);
+               .into(mIvOne);
         Glide.with(mActivity).load(mRecommAdapterList.get(1).getRe_image())
                 .transform(new GlideRoundTransform(mActivity,5)).into(mIvTwo);
         Glide.with(mActivity).load(mRecommAdapterList.get(2).getRe_image())

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_gray"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -60,9 +61,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="游戏介绍："
-            android:textSize="@dimen/x16"/>
+            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/x10"
+            android:text="游戏介绍"
+            android:textSize="@dimen/x14"/>
 
         <ImageView
             android:id="@+id/iv_game_intro_more"
@@ -79,7 +81,7 @@
         android:id="@+id/tv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="@dimen/x20"
         android:layout_marginRight="10dp"
         android:layout_marginTop="@dimen/x10"
         android:ellipsize="end"
@@ -109,7 +111,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="@dimen/x10"
         android:orientation="vertical">
 
         <View
@@ -125,12 +127,13 @@
             android:id="@+id/tv_game_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/x10"
             android:layout_marginTop="20dp"
             android:ellipsize="end"
             android:lines="1"
-            android:layout_marginBottom="@dimen/x10"
             android:text="详细信息"
-            android:textSize="@dimen/x16"/>
+            android:textColor="@color/black"
+            android:textSize="@dimen/x14"/>
 
         <TextView
             android:id="@+id/tv_game_version"
@@ -155,26 +158,28 @@
             android:layout_marginLeft="10dp"
             android:textSize="@dimen/x12"
             tools:text="6744"/>
+
         <TextView
-            android:layout_marginLeft="10dp"
             android:id="@+id/tv_language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:textSize="@dimen/x12"
             tools:text="语言"/>
 
         <TextView
-            android:layout_marginLeft="10dp"
             android:id="@+id/tv_game_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:textSize="@dimen/x12"
             tools:text="类型"/>
+
         <TextView
-            android:layout_marginLeft="10dp"
             android:id="@+id/tv_game_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:textSize="@dimen/x12"
             tools:text="时间"/>
     </LinearLayout>
@@ -190,11 +195,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="@dimen/x10"
         android:ellipsize="end"
         android:lines="1"
+        android:textColor="@color/black"
         android:text="综合评估"
-        android:textSize="@dimen/x16"/>
+        android:textSize="@dimen/x14"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -378,21 +384,23 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp">
+        android:layout_marginLeft="@dimen/x2">
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="30dp"
+            android:layout_marginRight="@dimen/x2"
             android:layout_height="30dp"
             android:src="@drawable/ic_huangguan"/>
 
         <TextView
+            android:textColor="@color/black"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_toRightOf="@+id/image"
             android:gravity="center_vertical"
             android:text="精彩评论"
-            android:textSize="@dimen/x16"/>
+            android:textSize="@dimen/x14"/>
     </RelativeLayout>
 
     <TextView

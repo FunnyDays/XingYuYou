@@ -7,26 +7,21 @@ import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.activity.GodDeatilActivity;
-import com.xingyuyou.xingyuyou.activity.PostClassListActivity;
 import com.xingyuyou.xingyuyou.adapter.CommSortAdapter;
-import com.xingyuyou.xingyuyou.adapter.FenLeiGameAdapter;
-import com.xingyuyou.xingyuyou.adapter.GodAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
+import com.xingyuyou.xingyuyou.bean.community.PostListBean;
 import com.xingyuyou.xingyuyou.bean.community.SortPostListBean;
 import com.xingyuyou.xingyuyou.bean.god.GodBean;
-import com.xingyuyou.xingyuyou.bean.sort.GameSortBean;
 import com.xingyuyou.xingyuyou.weight.infiniteViewPager.GalleryTransformer;
 import com.xingyuyou.xingyuyou.weight.infiniteViewPager.ImagePagerAdapter;
 import com.xingyuyou.xingyuyou.weight.infiniteViewPager.InfinitePagerAdapter;
@@ -50,10 +45,10 @@ import okhttp3.Call;
 public class GodFragment extends BaseFragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
-    private List<SortPostListBean> mDatas = new ArrayList<>();
+    private List<PostListBean> mDatas = new ArrayList<>();
     private CommSortAdapter mAdapter;
     private int  PAGENUMBER = 1;
-    private List<SortPostListBean> mGodPostList=new ArrayList<>();
+    private List<PostListBean> mGodPostList=new ArrayList<>();
     private List<GodBean> mGodList=new ArrayList<>();
     private List<GodBean> mGodListDatas=new ArrayList<>();
     private Handler mHandler=new Handler(){
@@ -77,7 +72,7 @@ public class GodFragment extends BaseFragment {
                         //Log.e("hot", "解析数据："+  ja.toString());
                         Gson gson = new Gson();
                         mGodPostList = gson.fromJson(ja.toString(),
-                                new TypeToken<List<SortPostListBean>>() {
+                                new TypeToken<List<PostListBean>>() {
                                 }.getType());
                         mDatas.addAll(mGodPostList);
                         mAdapter.notifyDataSetChanged();
