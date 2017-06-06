@@ -44,6 +44,7 @@ public class XingYuInterface {
     public static final String REPLIES_LAUD=Host+"Community/replies_laud";
     public static final String USER_SIGN=Host+"Community/user_sign";//用户签到
     public static final String GET_SEARCH_POPULAR_TAGS=Host+"Community/get_search_popular_tags";//社区热门标签搜索
+    public static final String DELETE_MY_POSTS=Host+"Community/delete_posts";//我的帖子删除帖子
 
     public static final String UPDATE_INFORMATION=Host+"UserCenter/update_information";
     public static final String GET_USER_INFO=Host+"UserCenter/get_user_info";

@@ -248,7 +248,7 @@ public class MyReplyPostActivity extends AppCompatActivity {
                     ((ItemViewHolder) holder).mTvReplyFloor.setText(mDatas.get(position - 1).getFloor() + "楼");
                     Glide.with(getApplication())
                             .load(mDatas.get(position - 1).getHead_image())
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .diskCacheStrategy(DiskCacheStrategy.RESULT)
                             .transform(new GlideCircleTransform(MyReplyPostActivity.this))
                             .into(((ItemViewHolder) holder).mIvUserPhoto);
                     ((ItemViewHolder) holder).mItemOnclick.setOnClickListener(new View.OnClickListener() {

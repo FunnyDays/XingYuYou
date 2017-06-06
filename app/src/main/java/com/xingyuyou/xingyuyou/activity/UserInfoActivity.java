@@ -285,7 +285,7 @@ public class UserInfoActivity extends AppCompatActivity {
                         .start(UserInfoActivity.this, REQUEST_IMAGE);
                /* Glide.with(UserInfoActivity.this)
                         .load(mImageList.get(0))
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .transform(new GlideCircleTransform(UserInfoActivity.this))
                         .into(mUserPhoto);*/
             }

@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
@@ -44,7 +45,7 @@ public class PostClassListActivity extends AppCompatActivity {
     private int  PAGENUMBER = 1;
     private List<PostListBean> mPostList=new ArrayList();
     private List<PostTopAndWellBean> mPostTopWellList=new ArrayList();
-    private List<PostListBean> mPostAdapterList=new ArrayList();
+    private List mPostAdapterList=new ArrayList();
     boolean isLoading = false;
     Handler handler = new Handler() {
         @Override
@@ -67,12 +68,14 @@ public class PostClassListActivity extends AppCompatActivity {
                     mPostList = gson.fromJson(ja.toString(),
                             new TypeToken<List<PostListBean>>() {
                             }.getType());
-                    mPostAdapterList.addAll(mPostList);
+
                     ja = jo.getJSONArray("top_well");
                     gson = new Gson();
                     mPostTopWellList = gson.fromJson(ja.toString(),
                             new TypeToken<List<PostTopAndWellBean>>() {
                             }.getType());
+                    mPostAdapterList.addAll(mPostTopWellList);
+                    mPostAdapterList.addAll(mPostList);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -113,7 +116,11 @@ public class PostClassListActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(PostClassListActivity.this, PostingActivity.class);
+                if (UserUtils.logined()) {
+                    IntentUtils.startActivity(PostClassListActivity.this, PostingActivity.class);
+                } else {
+                    IntentUtils.startActivity(PostClassListActivity.this, LoginActivity.class);
+                }
             }
         });
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);

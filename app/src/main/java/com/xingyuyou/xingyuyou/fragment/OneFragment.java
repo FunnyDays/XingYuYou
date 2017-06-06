@@ -137,7 +137,7 @@ public class OneFragment extends BaseFragment {
             mTvUserAccount.setText(UserUtils.getNickName());
             Glide.with(mActivity)
                     .load(UserUtils.getUserPhoto())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .transform(new GlideCircleTransform(mActivity))
                     .dontAnimate()
                     .into(mIvManage);
@@ -145,7 +145,7 @@ public class OneFragment extends BaseFragment {
             mTvUserAccount.setText("未登陆");
             Glide.with(mActivity)
                     .load(R.drawable.ic_user_defalut)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .transform(new GlideCircleTransform(mActivity))
                     .dontAnimate()
                     .into(mIvManage);

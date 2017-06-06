@@ -83,7 +83,7 @@ public class GameDetailListViewAdapter extends BaseAdapter {
         holder.tv_commo_time.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mList.get(i).getDateline() + "000")));
         Glide.with(mActivity)
                 .load(mList.get(i).getHead_image())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .transform(new GlideCircleTransform(mActivity))
                 .into(holder.iv_user_photo);
         holder.rb_score.setRating(Integer.parseInt(mList.get(i).getStar_num()));

@@ -167,7 +167,7 @@ public class PostReplyCommoActivity extends AppCompatActivity {
 
         Glide.with(getApplication())
                 .load(mPostCommoBean.getHead_image())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .transform(new GlideCircleTransform(getApplication()))
                 .into(mIvUserPhoto);
         mUserName.setText(mPostCommoBean.getNickname());

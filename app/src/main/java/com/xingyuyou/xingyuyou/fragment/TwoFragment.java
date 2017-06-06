@@ -20,7 +20,9 @@ import android.widget.Toast;
 
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.activity.DownLoadActivity;
+import com.xingyuyou.xingyuyou.activity.LoginActivity;
 import com.xingyuyou.xingyuyou.activity.PostingActivity;
 import com.xingyuyou.xingyuyou.activity.SearchActivity;
 import com.xingyuyou.xingyuyou.activity.SearchCommuActivity;
@@ -98,7 +100,11 @@ public class TwoFragment extends BaseFragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(mActivity, PostingActivity.class);
+                if (UserUtils.logined()) {
+                    IntentUtils.startActivity(mActivity, PostingActivity.class);
+                } else {
+                    IntentUtils.startActivity(mActivity, LoginActivity.class);
+                }
             }
         });
     }

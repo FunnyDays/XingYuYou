@@ -37,15 +37,17 @@ import okhttp3.Call;
 public class PostCommoListAdapter extends BaseAdapter {
     private Activity mActivity;
     private List<PostCommoBean> mCommoBeanList;
-    private String Uid="";
+    private String Uid = "";
 
     public PostCommoListAdapter(Activity activity, List<PostCommoBean> commoBeanList) {
         this.mActivity = activity;
         this.mCommoBeanList = commoBeanList;
     }
-    public void setUid(String uid){
-        this.Uid=uid;
+
+    public void setUid(String uid) {
+        this.Uid = uid;
     }
+
     @Override
     public int getCount() {
         return mCommoBeanList.size();
@@ -84,14 +86,13 @@ public class PostCommoListAdapter extends BaseAdapter {
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
-            Log.e("weiwei", "getView: "+holder.toString());
         }
-        if (Uid.equals(mCommoBeanList.get(i).getUid())){
+        if (Uid.equals(mCommoBeanList.get(i).getUid())) {
             holder.tv_louzhu.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             holder.tv_louzhu.setVisibility(View.GONE);
         }
-        holder.tv_floor_num.setText(mCommoBeanList.get(i).getFloor_num()==null?"正在抢楼":mCommoBeanList.get(i).getFloor_num() + "楼");
+        holder.tv_floor_num.setText(mCommoBeanList.get(i).getFloor_num() == null ? "正在抢楼" : mCommoBeanList.get(i).getFloor_num() + "楼");
         holder.tv_user_name.setText(mCommoBeanList.get(i).getNickname());
         holder.tv_zan_num.setText(mCommoBeanList.get(i).getLaud_count());
         holder.tv_reply_content.setText(SpanStringUtils.getEmotionContent(mActivity, holder.tv_reply_content, mCommoBeanList.get(i).getReplies_content()));
@@ -102,8 +103,8 @@ public class PostCommoListAdapter extends BaseAdapter {
                 .transform(new GlideCircleTransform(mActivity))
                 .into(holder.iv_user_photo);
         holder.ll_root_image_item.removeAllViews();
-
-        if (!(mCommoBeanList.get(i).getImgarr()==null)&&!mCommoBeanList.get(i).getImgarr().get(0).toString().equals("")) {
+        Log.e("post", "getView: "+mCommoBeanList.get(i).toString() );
+        if (!(mCommoBeanList.get(i).getImgarr() == null) &&mCommoBeanList.get(i).getImgarr().size()>=1&& !mCommoBeanList.get(i).getImgarr().get(0).toString().equals("")) {
             for (int j = 0; j < mCommoBeanList.get(i).getImgarr().size(); j++) {
                 ImageView imageView = new ImageView(mActivity);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -118,7 +119,7 @@ public class PostCommoListAdapter extends BaseAdapter {
             }
         }
         //点赞
-        if (mCommoBeanList.get(i).getLaud_status()!=null&&mCommoBeanList.get(i).getLaud_status().equals("1")) {
+        if (mCommoBeanList.get(i).getLaud_status() != null && mCommoBeanList.get(i).getLaud_status().equals("1")) {
             holder.iv_zan.setImageResource(R.mipmap.ic_zan_fill);
         } else {
             holder.iv_zan.setImageResource(R.mipmap.ic_zan);

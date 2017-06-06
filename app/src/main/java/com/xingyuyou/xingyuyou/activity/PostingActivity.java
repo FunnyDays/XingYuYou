@@ -250,10 +250,11 @@ public class PostingActivity extends AppCompatActivity {
         for (int i = 0; i < mImageList.size(); i++) {
             File file = new File(mImageList.get(i));
             if (file.exists()) {
-                File file1 = new File(getExternalCacheDir() + "/tempCompress" + i + ".jpg");
-                NativeUtil.compressBitmap(mImageList.get(i), file1.getAbsolutePath());
+               // File file1 = new File(getExternalCacheDir() + "/tempCompress" + i + ".jpg");
+               // NativeUtil.compressBitmap(mImageList.get(i), file1.getAbsolutePath());
+                //以上是压缩代码
                 String s = "posts_image";
-                post.addFile(s + i, file1.getName(), file1);
+                post.addFile(s + i, file.getName(), file);
             }
 
         }

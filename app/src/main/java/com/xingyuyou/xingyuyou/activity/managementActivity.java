@@ -91,7 +91,7 @@ public class ManagementActivity extends AppCompatActivity {
        // mTvUserIntegral.setText("积分："+mUserBean.getUser_integral());
         Glide.with(ManagementActivity.this)
                 .load(mUserBean.getHead_image())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .transform(new GlideCircleTransform(ManagementActivity.this))
                 .dontAnimate()
                 .into(mUserPhoto);
@@ -161,14 +161,14 @@ public class ManagementActivity extends AppCompatActivity {
             if (UserUtils.getUserPhoto().equals("userPhoto")){
                 Glide.with(getApplication())
                         .load(R.drawable.ic_user_defalut)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .transform(new GlideCircleTransform(getApplication()))
                         .dontAnimate()
                         .into(mUserPhoto);
             }else {
                 Glide.with(getApplication())
                         .load(UserUtils.getUserPhoto())
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .transform(new GlideCircleTransform(getApplication()))
                         .dontAnimate()
                         .into(mUserPhoto);
@@ -177,7 +177,7 @@ public class ManagementActivity extends AppCompatActivity {
             mTvNickName.setText("点击登陆");
             Glide.with(getApplication())
                     .load(R.drawable.ic_user_defalut)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .transform(new GlideCircleTransform(getApplication()))
                     .dontAnimate()
                     .into(mUserPhoto);
@@ -223,7 +223,7 @@ public class ManagementActivity extends AppCompatActivity {
         mUserPhoto = (ImageView) findViewById(R.id.user_photo);
         Glide.with(ManagementActivity.this)
                 .load(R.mipmap.profile_picture)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .transform(new GlideCircleTransform(ManagementActivity.this))
                 .dontAnimate()
                 .into(mUserPhoto);

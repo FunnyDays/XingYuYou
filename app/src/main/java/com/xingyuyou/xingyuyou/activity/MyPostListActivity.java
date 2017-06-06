@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -17,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.SPUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
@@ -36,10 +39,9 @@ import okhttp3.Call;
 
 public class MyPostListActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
-    private int  PAGENUMBER = 1;
-    private List<PostListBean> mPostList=new ArrayList();
-    private List<PostTopAndWellBean> mPostTopWellList=new ArrayList();
-    private List<PostListBean> mPostAdapterList=new ArrayList();
+    private int PAGENUMBER = 1;
+    private List<PostListBean> mPostList = new ArrayList();
+    private List<PostListBean> mPostAdapterList = new ArrayList();
     boolean isLoading = false;
     Handler handler = new Handler() {
         @Override
@@ -64,7 +66,7 @@ public class MyPostListActivity extends AppCompatActivity {
                             }.getType());
                     mPostAdapterList.addAll(mPostList);
 
-                    if (mPostList.size()<20){
+                    if (mPostList.size() < 20) {
                         Toast.makeText(MyPostListActivity.this, "已经没有更多数据", Toast.LENGTH_SHORT).show();
                         mPbNodata.setVisibility(View.GONE);
                         mTvNodata.setText("已经没有更多数据");
@@ -76,6 +78,9 @@ public class MyPostListActivity extends AppCompatActivity {
                 if (mCommHotAdapter != null)
                     mCommHotAdapter.notifyDataSetChanged();
             }
+            if (msg.what == 2) {
+
+            }
         }
     };
     private CommHotAdapter mCommHotAdapter;
@@ -84,6 +89,7 @@ public class MyPostListActivity extends AppCompatActivity {
     private SwipeRefreshLayout mRefreshLayout;
     private LinearLayoutManager mLinearLayoutManager;
     private Toolbar mToolbar;
+    private AlertDialog mAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +99,7 @@ public class MyPostListActivity extends AppCompatActivity {
         initToolBar();
         initData(1);
     }
+
     private void initToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar_collect_list);
         mToolbar.setTitle("我的帖子");
@@ -103,8 +110,8 @@ public class MyPostListActivity extends AppCompatActivity {
             }
         });
     }
-    private void initView() {
 
+    private void initView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -117,6 +124,37 @@ public class MyPostListActivity extends AppCompatActivity {
         mCommHotAdapter.setHeaderView(textView);
         mCommHotAdapter.setFooterView(loadingData);
         mRecyclerView.setAdapter(mCommHotAdapter);
+        mCommHotAdapter.setOnItemLongClickLitener(new CommHotAdapter.OnItemLongClickLitener() {
+            @Override
+            public void onItemClick(View view, final int position) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MyPostListActivity.this);
+                View view1 = LayoutInflater.from(MyPostListActivity.this).inflate(R.layout.dialog_delete_post, null);
+                TextView tv_delete = (TextView) view1.findViewById(R.id.tv_delete);
+                tv_delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mAlertDialog.dismiss();
+                        deletePost(mPostAdapterList.get(position - 1).getId());
+                        mPostAdapterList.remove(position - 1);
+                        Toast.makeText(MyPostListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                        //更新UI
+                        if (mCommHotAdapter != null)
+                            mCommHotAdapter.notifyDataSetChanged();
+                    }
+                });
+                TextView tv_cancel = (TextView) view1.findViewById(R.id.tv_cancel);
+                tv_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mAlertDialog.dismiss();
+                    }
+                });
+                builder.setView(view1);
+                mAlertDialog = builder.create();
+                mAlertDialog.show();
+                //mAlertDialog.setCancelable(false);
+            }
+        });
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -171,15 +209,39 @@ public class MyPostListActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 删除帖子
+     *
+     * @param tid
+     */
+    private void deletePost(final String tid) {
+        OkHttpUtils.post()//
+                .addParams("tid", tid)
+                .addParams("uid", UserUtils.getUserId())
+                .url(XingYuInterface.DELETE_MY_POSTS)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        // Log.e("hot", e.toString() + ":e");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+
+                    }
+                });
+    }
+
 
     /**
      * 初始化数据
      */
     public void initData(int PAGENUMBER) {
-        SPUtils user_data = new SPUtils("user_data");
         OkHttpUtils.post()//
-                .addParams("page",String.valueOf(PAGENUMBER))
-                .addParams("uid",user_data.getString("id"))
+                .addParams("page", String.valueOf(PAGENUMBER))
+                .addParams("uid", UserUtils.getUserId())
                 .url(XingYuInterface.OWN_POST_LIST)
                 .tag(this)//
                 .build()//
@@ -188,6 +250,7 @@ public class MyPostListActivity extends AppCompatActivity {
                     public void onError(Call call, Exception e, int id) {
                         // Log.e("hot", e.toString() + ":e");
                     }
+
                     @Override
                     public void onResponse(String response, int id) {
                         handler.obtainMessage(1, response).sendToTarget();

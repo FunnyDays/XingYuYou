@@ -41,6 +41,7 @@ import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.GameDetailListViewAdapter;
 import com.xingyuyou.xingyuyou.adapter.GameDetailPicAdapter;
+import com.xingyuyou.xingyuyou.bean.GameDetail;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameDetailBean;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameDetailCommoBean;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameStartBean;
@@ -375,12 +376,16 @@ public class GameDetailActivity extends AppCompatActivity {
         mCommoGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GameDetailActivity.this, GameCommoActivity.class);
-                intent.putExtra("game_id", mIntent.getStringExtra("game_id"));
-                intent.putExtra("game_name", mIntent.getStringExtra("game_name"));
-                intent.putExtra("game_cover_pic", mIntent.getStringExtra("game_cover_pic"));
-                startActivity(intent);
-                finish();
+                if (UserUtils.logined()) {
+                    Intent intent = new Intent(GameDetailActivity.this, GameCommoActivity.class);
+                    intent.putExtra("game_id", mIntent.getStringExtra("game_id"));
+                    intent.putExtra("game_name", mIntent.getStringExtra("game_name"));
+                    intent.putExtra("game_cover_pic", mIntent.getStringExtra("game_cover_pic"));
+                    startActivity(intent);
+                    finish();
+                } else {
+                    IntentUtils.startActivity(GameDetailActivity.this, LoginActivity.class);
+                }
             }
         });
 

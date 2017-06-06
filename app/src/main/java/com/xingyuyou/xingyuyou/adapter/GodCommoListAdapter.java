@@ -99,7 +99,7 @@ public class GodCommoListAdapter extends BaseAdapter {
         holder.tv_commo_time.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mCommoBeanList.get(i).getDateline() + "000")));
         Glide.with(mActivity)
                 .load(mCommoBeanList.get(i).getHead_image())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .transform(new GlideCircleTransform(mActivity))
                 .into(holder.iv_user_photo);
         holder.ll_root_image_item.removeAllViews();

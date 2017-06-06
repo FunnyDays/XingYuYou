@@ -15,8 +15,12 @@ import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.DiffCallBack;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
+import com.xingyuyou.xingyuyou.activity.LoginActivity;
+import com.xingyuyou.xingyuyou.activity.ManagementActivity;
 import com.xingyuyou.xingyuyou.activity.PostingActivity;
+import com.xingyuyou.xingyuyou.activity.UserInfoActivity;
 import com.xingyuyou.xingyuyou.adapter.CommHeaderFooterAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.community.LabelClassBean;
@@ -109,7 +113,12 @@ public class CommunityFragment extends BaseFragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(mActivity, PostingActivity.class);
+                if (UserUtils.logined()) {
+                    IntentUtils.startActivity(mActivity, PostingActivity.class);
+                } else {
+                    IntentUtils.startActivity(mActivity, LoginActivity.class);
+                }
+
             }
         });
 

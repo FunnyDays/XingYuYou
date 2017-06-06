@@ -103,7 +103,7 @@ public class FenLeiGameAdapter extends RecyclerView.Adapter {
                 ((ItemViewHolder) holder).mGameHot.setText("热度："+mListData.get(position-1).getHot_num());
                 Glide.with(mActivity)
                         .load(mListData.get(position-1).getCover())
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
 
                         .into(((ItemViewHolder) holder).mSortGamePic);
                 ((ItemViewHolder) holder).mItemOnclick.setOnClickListener(new View.OnClickListener() {

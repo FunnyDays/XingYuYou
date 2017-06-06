@@ -111,6 +111,7 @@ public class PostDetailActivity extends BaseActivity {
                 if (response.contains("\"data\":null")) {
                     mPbNodata.setVisibility(View.GONE);
                     mTvNodata.setText("已经没有更多数据");
+                   // isLoading = true;
                     return;
                 }
                 JSONObject jo = null;
@@ -157,7 +158,7 @@ public class PostDetailActivity extends BaseActivity {
     private int PAGENUM = 1;
     private static final int REQUEST_IMAGE = 2;
     private static final int TYPE_FOOTER = 21;
-    private ArrayList<String> mImageList = new ArrayList();
+    private List<String> mImageList = new ArrayList();
     private CustomDialog mDialog;
     private ListView mCommoListView;
     private ImageView mAddExpression;
@@ -258,7 +259,7 @@ public class PostDetailActivity extends BaseActivity {
      */
     @Override
     public void initData() {
-        Log.e("post", "initData: "+getIntent().getStringExtra("post_id"));
+        Log.e("post", "initData: " + getIntent().getStringExtra("post_id"));
         OkHttpUtils.post()//
                 .addParams("pid", getIntent().getStringExtra("post_id"))
                 .addParams("uid", UserUtils.getUserId())
@@ -274,7 +275,7 @@ public class PostDetailActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         handler.obtainMessage(1, response).sendToTarget();
-                        Log.e("post", "initData: "+response);
+                        Log.e("post", "initData: " + response);
                     }
                 });
 
@@ -439,13 +440,13 @@ public class PostDetailActivity extends BaseActivity {
 
     //***********************************************以下是评论列表****************************************************
     private void initCommoListView() {
-        mPostCommoListAdapter = new PostCommoListAdapter(PostDetailActivity.this,mCommoAdapterList);
+        mPostCommoListAdapter = new PostCommoListAdapter(PostDetailActivity.this, mCommoAdapterList);
         mCommoListView.setAdapter(mPostCommoListAdapter);
         mCommoListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i!=0)
-                    startActivityToPostReplyCommo(i-1);
+                if (i != 0)
+                    startActivityToPostReplyCommo(i - 1);
             }
         });
         mCommoListView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -456,7 +457,7 @@ public class PostDetailActivity extends BaseActivity {
 
             @Override
             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                if (i+i1==i2){
+                if (i + i1 == i2) {
                     if (!isLoading) {
                         isLoading = true;
                         handler.postDelayed(new Runnable() {
@@ -465,6 +466,7 @@ public class PostDetailActivity extends BaseActivity {
                                 PAGENUM++;
                                 initCommoData(PAGENUM);
                                 isLoading = false;
+                               // Toast.makeText(PostDetailActivity.this, "正在滑动", Toast.LENGTH_SHORT).show();
                             }
                         }, 200);
                     }
@@ -474,43 +476,44 @@ public class PostDetailActivity extends BaseActivity {
 
     }
 
-   private void startActivityToPostReplyCommo(int position) {
-       if (mCommoAdapterList.get(position).getFloor_num()!=null){
-           Gson gson = new Gson();
-           String json = gson.toJson(mCommoAdapterList.get(position), PostCommoBean.class);
-           Intent intent = new Intent(PostDetailActivity.this, PostReplyCommoActivity.class);
-           intent.putExtra("item_list", json);
-           PostDetailActivity.this.startActivity(intent);
-       }
+    private void startActivityToPostReplyCommo(int position) {
+        if (mCommoAdapterList.get(position).getFloor_num() != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(mCommoAdapterList.get(position), PostCommoBean.class);
+            Intent intent = new Intent(PostDetailActivity.this, PostReplyCommoActivity.class);
+            intent.putExtra("item_list", json);
+            PostDetailActivity.this.startActivity(intent);
+        }
 
-   }
+    }
+
     //*********************************************以下是赋值代码***************************************************
     private void setValues() {
         //更新楼主
         mPostCommoListAdapter.setUid(mPostDetailBean.getUid());
         mPostCommoListAdapter.notifyDataSetChanged();
         //收藏状态
-        if (mPostDetailBean.getCollect_status().equals("1")){
-            Drawable drawable= getResources().getDrawable(R.mipmap.ic_collect_fill);
-            drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            mCollectNum.setCompoundDrawables(null,drawable,null,null);
-        }else {
-            Drawable drawable= getResources().getDrawable(R.mipmap.shoucang);
-            drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            mCollectNum.setCompoundDrawables(null,drawable,null,null);
+        if (mPostDetailBean.getCollect_status().equals("1")) {
+            Drawable drawable = getResources().getDrawable(R.mipmap.ic_collect_fill);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mCollectNum.setCompoundDrawables(null, drawable, null, null);
+        } else {
+            Drawable drawable = getResources().getDrawable(R.mipmap.shoucang);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mCollectNum.setCompoundDrawables(null, drawable, null, null);
         }
-        if (mPostDetailBean.getLaud_status().equals("1")){
-            Drawable drawable= getResources().getDrawable(R.mipmap.ic_zan_fill);
-            drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            mJiaonangNum.setCompoundDrawables(null,drawable,null,null);
-        }else {
-            Drawable drawable= getResources().getDrawable(R.mipmap.ic_zan);
-            drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            mJiaonangNum.setCompoundDrawables(null,drawable,null,null);
+        if (mPostDetailBean.getLaud_status().equals("1")) {
+            Drawable drawable = getResources().getDrawable(R.mipmap.ic_zan_fill);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mJiaonangNum.setCompoundDrawables(null, drawable, null, null);
+        } else {
+            Drawable drawable = getResources().getDrawable(R.mipmap.ic_zan);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mJiaonangNum.setCompoundDrawables(null, drawable, null, null);
         }
         Glide.with(getApplication())
                 .load(mPostDetailBean.getHead_image())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .transform(new GlideCircleTransform(PostDetailActivity.this))
                 .into(mIvUserPhoto);
         mTvTitle.setText(mPostDetailBean.getSubject());
@@ -536,8 +539,8 @@ public class PostDetailActivity extends BaseActivity {
         mEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!UserUtils.logined()){
-                    IntentUtils.startActivity(PostDetailActivity.this,LoginActivity.class);
+                if (!UserUtils.logined()) {
+                    IntentUtils.startActivity(PostDetailActivity.this, LoginActivity.class);
                     return;
                 }
                 mLinearLayout.setVisibility(View.GONE);
@@ -555,27 +558,27 @@ public class PostDetailActivity extends BaseActivity {
         mCollectNum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!UserUtils.logined()){
+                if (!UserUtils.logined()) {
                     IntentUtils.startActivity(PostDetailActivity.this, LoginActivity.class);
                     return;
                 }
                 getCollect(mPostDetailBean.getId());
-                if (mPostDetailBean.getCollect_status().equals("1")){
-                    mCollectNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect())-1)));
-                    mPostDetailBean.setPosts_collect(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect())-1)));
+                if (mPostDetailBean.getCollect_status().equals("1")) {
+                    mCollectNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect()) - 1)));
+                    mPostDetailBean.setPosts_collect(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect()) - 1)));
                     mPostDetailBean.setCollect_status("0");
                     Toast.makeText(PostDetailActivity.this, "取消收藏", Toast.LENGTH_SHORT).show();
-                    Drawable drawable= getResources().getDrawable(R.mipmap.shoucang);
-                    drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    mCollectNum.setCompoundDrawables(null,drawable,null,null);
-                }else {
-                    mCollectNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect())+1)));
-                    mPostDetailBean.setPosts_collect(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect())+1)));
+                    Drawable drawable = getResources().getDrawable(R.mipmap.shoucang);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    mCollectNum.setCompoundDrawables(null, drawable, null, null);
+                } else {
+                    mCollectNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect()) + 1)));
+                    mPostDetailBean.setPosts_collect(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect()) + 1)));
                     mPostDetailBean.setCollect_status("1");
                     Toast.makeText(PostDetailActivity.this, "收藏", Toast.LENGTH_SHORT).show();
-                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_collect_fill);
-                    drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    mCollectNum.setCompoundDrawables(null,drawable,null,null);
+                    Drawable drawable = getResources().getDrawable(R.mipmap.ic_collect_fill);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    mCollectNum.setCompoundDrawables(null, drawable, null, null);
 
                 }
 
@@ -591,27 +594,27 @@ public class PostDetailActivity extends BaseActivity {
         mJiaonangNum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!UserUtils.logined()){
+                if (!UserUtils.logined()) {
                     IntentUtils.startActivity(PostDetailActivity.this, LoginActivity.class);
                     return;
                 }
                 getLaud(mPostDetailBean.getId());
-                if (mPostDetailBean.getLaud_status().equals("1")){
-                    mJiaonangNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status())-1)));
-                    mPostDetailBean.setLaud_status(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status())-1)));
+                if (mPostDetailBean.getLaud_status().equals("1")) {
+                    mJiaonangNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status()) - 1)));
+                    mPostDetailBean.setLaud_status(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status()) - 1)));
                     mPostDetailBean.setLaud_status("0");
                     Toast.makeText(PostDetailActivity.this, "取消点赞", Toast.LENGTH_SHORT).show();
-                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_zan);
-                    drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    mJiaonangNum.setCompoundDrawables(null,drawable,null,null);
-                }else {
-                    mJiaonangNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status())+1)));
-                    mPostDetailBean.setLaud_status(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status())+1)));
+                    Drawable drawable = getResources().getDrawable(R.mipmap.ic_zan);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    mJiaonangNum.setCompoundDrawables(null, drawable, null, null);
+                } else {
+                    mJiaonangNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status()) + 1)));
+                    mPostDetailBean.setLaud_status(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status()) + 1)));
                     mPostDetailBean.setLaud_status("1");
                     Toast.makeText(PostDetailActivity.this, "点赞", Toast.LENGTH_SHORT).show();
-                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_zan_fill);
-                    drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    mJiaonangNum.setCompoundDrawables(null,drawable,null,null);
+                    Drawable drawable = getResources().getDrawable(R.mipmap.ic_zan_fill);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    mJiaonangNum.setCompoundDrawables(null, drawable, null, null);
 
                 }
 
@@ -622,12 +625,13 @@ public class PostDetailActivity extends BaseActivity {
 
     /**
      * 点赞
+     *
      * @param tid
      */
-    public void getLaud( String tid) {
+    public void getLaud(String tid) {
         OkHttpUtils.post()//
-                .addParams("tid",tid)
-                .addParams("uid",UserUtils.getUserId())
+                .addParams("tid", tid)
+                .addParams("uid", UserUtils.getUserId())
                 .url(XingYuInterface.GET_LAUD)
                 .tag(this)//
                 .build()//
@@ -636,20 +640,23 @@ public class PostDetailActivity extends BaseActivity {
                     public void onError(Call call, Exception e, int id) {
                         Log.e("hot", e.toString() + ":e");
                     }
+
                     @Override
                     public void onResponse(String response, int id) {
                     }
                 });
 
     }
+
     /**
      * 收藏
+     *
      * @param tid
      */
     public void getCollect(final String tid) {
         OkHttpUtils.post()//
-                .addParams("tid",tid)
-                .addParams("uid",UserUtils.getUserId())
+                .addParams("tid", tid)
+                .addParams("uid", UserUtils.getUserId())
                 .url(XingYuInterface.GET_COLLECT)
                 .tag(this)//
                 .build()//
@@ -658,18 +665,20 @@ public class PostDetailActivity extends BaseActivity {
                     public void onError(Call call, Exception e, int id) {
                         // Log.e("hot", e.toString() + ":e");
                     }
+
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.e("weiwei","hahah"+UserUtils.getUserId()+tid+response);
+                        Log.e("weiwei", "hahah" + UserUtils.getUserId() + tid + response);
                     }
                 });
 
     }
+
     /**
      * 回帖
      */
     private void sendReply() {
-        if (mImageList.size()==0) {
+        if (StringUtils.isEmpty(edittext.getText().toString().trim()) && mImageList.size() == 0) {
             Toast.makeText(this, "评论内容为空,至少一张图片", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -682,7 +691,7 @@ public class PostDetailActivity extends BaseActivity {
         params.put("pid", "0");
         params.put("uid", UserUtils.getUserId());
         params.put("tid", mPostDetailBean.getId());
-        params.put("replies_content", StringUtils.isEmpty(edittext.getText().toString().trim())==true?"":edittext.getText().toString().trim());
+        params.put("replies_content", StringUtils.isEmpty(edittext.getText().toString().trim()) == true ? "" : edittext.getText().toString().trim());
         //隐藏键盘
         emotionKeyboard.interceptBackPress();
         PostFormBuilder post = OkHttpUtils.post();
@@ -708,13 +717,9 @@ public class PostDetailActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         mDialog.dismissDialog();
-                        PostCommoBean postCommoBean = new PostCommoBean();
-                        postCommoBean.setNickname(UserUtils.getNickName());
-                        postCommoBean.setHead_image(UserUtils.getUserPhoto());
-                        postCommoBean.setDateline(String.valueOf(TimeUtils.getNowTimeMills()).substring(0, String.valueOf(TimeUtils.getNowTimeMills()).length() - 3));
-                        postCommoBean.setReplies_content( edittext.getText().toString().trim());
-                        mCommoAdapterList.add(postCommoBean);
-                         mPostCommoListAdapter.notifyDataSetChanged();
+                        mCommoAdapterList.clear();
+                        PAGENUM=1;
+                        initCommoData(PAGENUM);
                         mImageList.clear();
                         //待优化
                         edittext.setText("");
@@ -759,6 +764,7 @@ public class PostDetailActivity extends BaseActivity {
                     if (getItemViewType(position) != TYPE_FOOTER) {
                         Glide.with(PostDetailActivity.this)
                                 .load(mImageList.get(position))
+                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                                 .into(((ImageAdapter.ItemViewHolder) holder).mPostImage);
                         ((ImageAdapter.ItemViewHolder) holder).mClosePic.setOnClickListener(new View.OnClickListener() {
                             @Override

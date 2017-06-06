@@ -75,6 +75,10 @@ public class GodFragment extends BaseFragment {
                                 new TypeToken<List<PostListBean>>() {
                                 }.getType());
                         mDatas.addAll(mGodPostList);
+                        if (mDatas.size()<=20){
+                            mPbNodata.setVisibility(View.GONE);
+                            mTvNodata.setText("已经没有更多数据");
+                        }
                         mAdapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e) {

@@ -83,6 +83,20 @@ public class CommHotAdapter extends RecyclerView.Adapter {
         notifyItemInserted(getItemCount() - 1);
     }
 
+    /**
+     * ItemClick的回调接口
+     */
+    public interface OnItemLongClickLitener {
+        void onItemClick(View view, int position);
+    }
+
+    private OnItemLongClickLitener mOnItemLongClickLitener;
+
+    public void setOnItemLongClickLitener(OnItemLongClickLitener mOnItemLongClickLitener) {
+        this.mOnItemLongClickLitener = mOnItemLongClickLitener;
+    }
+
+
 
     @Override
     public int getItemViewType(int position) {
@@ -188,13 +202,13 @@ public class CommHotAdapter extends RecyclerView.Adapter {
             if (getItemViewType(position) == TYPE_TWO_PIC || getItemViewType(position) == TYPE_THREE_PIC) {
                 Glide.with(mActivity)
                         .load(mListData.get(position - 1).getPosts_image().get(1))
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .into(((ItemViewHolder) holder).mPostCover1);
             }
             if (getItemViewType(position) == TYPE_THREE_PIC) {
                 Glide.with(mActivity)
                         .load(mListData.get(position - 1).getPosts_image().get(2))
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .into(((ItemViewHolder) holder).mPostCover2);
             }
             ((ItemViewHolder) holder).mLinearLayout.setOnClickListener(new View.OnClickListener() {
@@ -210,6 +224,20 @@ public class CommHotAdapter extends RecyclerView.Adapter {
                     }
                 }
             });
+            //长按事件
+
+
+            //如果设置了回调，则设置点击事件
+            if (mOnItemLongClickLitener != null) {
+                ((ItemViewHolder) holder).mLinearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        mOnItemLongClickLitener.onItemClick(((ItemViewHolder) holder).mLinearLayout, position);
+                        return true;
+                    }
+                });
+
+            }
             ((ItemViewHolder) holder).mRlCollect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

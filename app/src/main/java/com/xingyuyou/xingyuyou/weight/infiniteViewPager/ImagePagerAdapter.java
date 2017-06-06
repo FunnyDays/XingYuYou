@@ -35,7 +35,7 @@ public class ImagePagerAdapter extends PagerAdapter {
         view.setScaleType(ImageView.ScaleType.FIT_XY);
         Glide.with(mActivity)
                 .load(imgRes.get(position).getGod_image())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(view);
         container.addView(view);
         return view;
