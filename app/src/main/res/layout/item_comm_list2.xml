@@ -232,7 +232,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_centerVertical="true"
-                        android:src="@mipmap/ic_zan"/>
+                        android:src="@drawable/ic_zan"/>
 
                     <TextView
                         android:id="@+id/tv_jiaonang_num"

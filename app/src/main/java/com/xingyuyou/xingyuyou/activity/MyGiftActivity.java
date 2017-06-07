@@ -82,7 +82,7 @@ public class MyGiftActivity extends AppCompatActivity {
                         if (status.equals("1")){
 
                                 JSONArray ja = jsonObject.getJSONArray("msg");
-                                Log.e("mygift", "解析数据："+  ja.toString());
+                              //  Log.e("mygift", "解析数据："+  ja.toString());
                                 Gson gson = new Gson();
                                 mMyGiftList = gson.fromJson(ja.toString(),
                                         new TypeToken<List<MyGameGift>>() {

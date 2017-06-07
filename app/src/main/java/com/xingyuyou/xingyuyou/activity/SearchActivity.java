@@ -77,13 +77,13 @@ public class SearchActivity extends AppCompatActivity {
                 try {
                     jo = new JSONObject(response);
                     JSONArray ja = jo.getJSONArray("list");
-                    Log.e("hot", "解析数据：" + ja.toString());
+                   // Log.e("hot", "解析数据：" + ja.toString());
                     Gson gson = new Gson();
                     mGameDetailList = gson.fromJson(ja.toString(),
                             new TypeToken<List<GameDetailBean>>() {
                             }.getType());
                     mGameDetailAdapterList.addAll(mGameDetailList);
-                    Log.e("hot", "解析数据：" + mGameDetailAdapterList.toString());
+                  //  Log.e("hot", "解析数据：" + mGameDetailAdapterList.toString());
                     mSearchListAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -175,6 +175,25 @@ public class SearchActivity extends AppCompatActivity {
         mSearchListAdapter = new SearchListAdapter();
         mSearchList.setAdapter(mSearchListAdapter);
         mSearchList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                switch (newState) {
+                    case RecyclerView.SCROLL_STATE_SETTLING:
+                        //   Log.i("Main", "用户在手指离开屏幕之前，由于滑了一下，视图仍然依靠惯性继续滑动");
+                        Glide.with(SearchActivity.this).pauseRequests();
+                        //刷新
+                        break;
+                    case RecyclerView.SCROLL_STATE_IDLE:
+                        //  Log.i("Main", "视图已经停止滑动");
+                        Glide.with(SearchActivity.this).resumeRequests();
+                        break;
+                    case RecyclerView.SCROLL_STATE_DRAGGING:
+                        //  Log.i("Main", "手指没有离开屏幕，视图正在滑动");
+                        Glide.with(SearchActivity.this).resumeRequests();
+                        break;
+                }
+
+            }
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);

@@ -495,7 +495,7 @@ public class GameDetailActivity extends AppCompatActivity {
                 if (mHotCommoAdapterList.get(i).getLaud_status() == 1) {
                     iv_zan.setImageResource(R.mipmap.ic_zan_fill);
                 } else {
-                    iv_zan.setImageResource(R.mipmap.ic_zan);
+                    iv_zan.setImageResource(R.drawable.ic_zan);
                 }
                 iv_zan.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -510,7 +510,7 @@ public class GameDetailActivity extends AppCompatActivity {
                             mHotCommoAdapterList.get(finalI).setLaud_num(String.valueOf((Integer.parseInt(mHotCommoAdapterList.get(finalI).getLaud_num()) - 1)));
                             mHotCommoAdapterList.get(finalI).setLaud_status(0);
                             Toast.makeText(GameDetailActivity.this, "取消点赞", Toast.LENGTH_SHORT).show();
-                            iv_zan.setImageResource(R.mipmap.ic_zan);
+                            iv_zan.setImageResource(R.drawable.ic_zan);
                         } else {
                             tv_zan_num.setText(String.valueOf((Integer.parseInt(mHotCommoAdapterList.get(finalI).getLaud_num()) + 1)));
                             mHotCommoAdapterList.get(finalI).setLaud_num(String.valueOf((Integer.parseInt(mHotCommoAdapterList.get(finalI).getLaud_num()) + 1)));

@@ -75,7 +75,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
                     android:layout_toLeftOf="@+id/tv_love_num"
-                    android:src="@mipmap/ic_zan"/>
+                    android:src="@drawable/ic_zan"/>
 
                 <TextView
                     android:id="@+id/tv_floor_num"

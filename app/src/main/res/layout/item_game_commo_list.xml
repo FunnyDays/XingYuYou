@@ -50,7 +50,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x5"
             android:layout_toLeftOf="@+id/tv_zan_num"
-            android:src="@mipmap/ic_zan"/>
+            android:src="@drawable/ic_zan"/>
 
         <TextView
             android:id="@+id/tv_zan_num"

@@ -306,7 +306,7 @@ public class GodListDetailActivity extends AppCompatActivity {
             drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
             mJiaonangNum.setCompoundDrawables(null,drawable,null,null);
         }else {
-            Drawable drawable= getResources().getDrawable(R.mipmap.ic_zan);
+            Drawable drawable= getResources().getDrawable(R.drawable.ic_zan);
             drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
             mJiaonangNum.setCompoundDrawables(null,drawable,null,null);
         }
@@ -355,7 +355,7 @@ public class GodListDetailActivity extends AppCompatActivity {
                     mGodDetailBean.setLaud_status(String.valueOf((Integer.parseInt(mGodDetailBean.getLaud_status())-1)));
                     mGodDetailBean.setLaud_status("0");
                     Toast.makeText(GodListDetailActivity.this, "取消点赞", Toast.LENGTH_SHORT).show();
-                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_zan);
+                    Drawable drawable= getResources().getDrawable(R.drawable.ic_zan);
                     drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     mJiaonangNum.setCompoundDrawables(null,drawable,null,null);
                 }else {

@@ -99,7 +99,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/tv_floor_num"
             android:padding="@dimen/x6"
-            android:src="@mipmap/ic_zan"/>
+            android:src="@drawable/ic_zan"/>
     </RelativeLayout>
 
     <RelativeLayout

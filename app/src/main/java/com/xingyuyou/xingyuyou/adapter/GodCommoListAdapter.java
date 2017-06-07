@@ -121,7 +121,7 @@ public class GodCommoListAdapter extends BaseAdapter {
         if (mCommoBeanList.get(i).getLaud_status() == 1) {
             holder.iv_zan.setImageResource(R.mipmap.ic_zan_fill);
         } else {
-            holder.iv_zan.setImageResource(R.mipmap.ic_zan);
+            holder.iv_zan.setImageResource(R.drawable.ic_zan);
         }
         holder.iv_zan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +136,7 @@ public class GodCommoListAdapter extends BaseAdapter {
                     mCommoBeanList.get(i).setForum_laud(String.valueOf((Integer.parseInt(mCommoBeanList.get(i).getForum_laud()) - 1)));
                     mCommoBeanList.get(i).setLaud_status(0);
                     Toast.makeText(mActivity, "取消点赞", Toast.LENGTH_SHORT).show();
-                    holder.iv_zan.setImageResource(R.mipmap.ic_zan);
+                    holder.iv_zan.setImageResource(R.drawable.ic_zan);
                 } else {
                     holder.tv_zan_num.setText(String.valueOf((Integer.parseInt(mCommoBeanList.get(i).getForum_laud()) + 1)));
                     mCommoBeanList.get(i).setForum_laud(String.valueOf((Integer.parseInt(mCommoBeanList.get(i).getForum_laud()) + 1)));

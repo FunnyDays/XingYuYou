@@ -162,7 +162,7 @@ public class CommHotAdapter extends RecyclerView.Adapter {
             if (mListData.get(position - 1).getLaud_status()==1){
                 ((ItemViewHolder) holder).mPostLuad.setImageResource(R.mipmap.ic_zan_fill);
             }else {
-                ((ItemViewHolder) holder).mPostLuad.setImageResource(R.mipmap.ic_zan);
+                ((ItemViewHolder) holder).mPostLuad.setImageResource(R.drawable.ic_zan);
             }
             ((ItemViewHolder) holder).mUserName.setText(mListData.get(position - 1).getNickname());
             if (StringUtils.isEmpty(mListData.get(position - 1).getClass_name())){
@@ -283,7 +283,7 @@ public class CommHotAdapter extends RecyclerView.Adapter {
                         mListData.get(position - 1).setPosts_laud(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_laud())-1)));
                         mListData.get(position - 1).setLaud_status(0);
                         Toast.makeText(mActivity, "取消点赞", Toast.LENGTH_SHORT).show();
-                        ((ItemViewHolder) holder).mPostLuad.setImageResource(R.mipmap.ic_zan);
+                        ((ItemViewHolder) holder).mPostLuad.setImageResource(R.drawable.ic_zan);
                     }else {
                         ((ItemViewHolder) holder).mJiaoNangNum.setText(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_laud())+1)));
                         mListData.get(position - 1).setPosts_laud(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_laud())+1)));

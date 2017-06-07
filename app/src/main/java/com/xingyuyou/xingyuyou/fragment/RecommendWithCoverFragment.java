@@ -70,7 +70,7 @@ public class RecommendWithCoverFragment extends BaseFragment {
                             new TypeToken<List<HotGameBean>>() {
                             }.getType());
                     for (int i = 0; i < mHotGameList.size(); i++) {
-                        Log.e("hotgame", "解析数据："+ mHotGameList.toString());
+                      //  Log.e("hotgame", "解析数据："+ mHotGameList.toString());
                     }
                     mGameAdapterList.addAll(mHotGameList);
                     //如果还有数据把加载更多值为0

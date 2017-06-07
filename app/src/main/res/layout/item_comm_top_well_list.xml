@@ -14,8 +14,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/x7"
+            android:layout_height="@dimen/x30"
+            android:layout_marginLeft="@dimen/x7"
             >
 
             <TextView
@@ -25,13 +25,12 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/x7"
                 android:background="@drawable/button_blue_bg"
-                android:paddingBottom="@dimen/x3"
-                android:paddingLeft="@dimen/x10"
-                android:paddingRight="@dimen/x10"
-                android:paddingTop="@dimen/x3"
+                android:paddingBottom="@dimen/x1"
+                android:paddingLeft="@dimen/x6"
+                android:paddingRight="@dimen/x6"
+                android:paddingTop="@dimen/x1"
                 android:text="置顶"
-                android:textSize="@dimen/x14"
-                android:textStyle="bold"
+                android:textSize="@dimen/x10"
                 android:textColor="@color/blue"/>
 
             <TextView

@@ -50,6 +50,7 @@ import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.GlobalOnItemClickManager;
 import com.xingyuyou.xingyuyou.Utils.SoftKeyBoart.SpanStringUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.TimeUtils;
+import com.xingyuyou.xingyuyou.Utils.UIThreadUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
@@ -111,7 +112,7 @@ public class PostDetailActivity extends BaseActivity {
                 if (response.contains("\"data\":null")) {
                     mPbNodata.setVisibility(View.GONE);
                     mTvNodata.setText("已经没有更多数据");
-                   // isLoading = true;
+                    // isLoading = true;
                     return;
                 }
                 JSONObject jo = null;
@@ -466,7 +467,7 @@ public class PostDetailActivity extends BaseActivity {
                                 PAGENUM++;
                                 initCommoData(PAGENUM);
                                 isLoading = false;
-                               // Toast.makeText(PostDetailActivity.this, "正在滑动", Toast.LENGTH_SHORT).show();
+                                // Toast.makeText(PostDetailActivity.this, "正在滑动", Toast.LENGTH_SHORT).show();
                             }
                         }, 200);
                     }
@@ -507,15 +508,17 @@ public class PostDetailActivity extends BaseActivity {
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             mJiaonangNum.setCompoundDrawables(null, drawable, null, null);
         } else {
-            Drawable drawable = getResources().getDrawable(R.mipmap.ic_zan);
+            Drawable drawable = getResources().getDrawable(R.drawable.ic_zan);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             mJiaonangNum.setCompoundDrawables(null, drawable, null, null);
         }
-        Glide.with(getApplication())
-                .load(mPostDetailBean.getHead_image())
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .transform(new GlideCircleTransform(PostDetailActivity.this))
-                .into(mIvUserPhoto);
+        if (UIThreadUtils.isMainThread())
+            Glide.with(PostDetailActivity.this)
+                    .load(mPostDetailBean.getHead_image())
+                    .thumbnail(0.1f)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .transform(new GlideCircleTransform(PostDetailActivity.this))
+                    .into(mIvUserPhoto);
         mTvTitle.setText(mPostDetailBean.getSubject());
         mUserName.setText(mPostDetailBean.getNickname());
         mPostTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mPostDetailBean.getDateline() + "000")));
@@ -529,10 +532,12 @@ public class PostDetailActivity extends BaseActivity {
             lp.setMargins(ConvertUtils.dp2px(10), ConvertUtils.dp2px(10), ConvertUtils.dp2px(10), ConvertUtils.dp2px(10));
             imageView.setLayoutParams(lp);
             imageView.setAdjustViewBounds(true);
-            Glide.with(getApplication())
-                    .load(mPostDetailBean.getPosts_image().get(i))
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .into(imageView);
+            if (UIThreadUtils.isMainThread())
+                Glide.with(PostDetailActivity.this)
+                        .load(mPostDetailBean.getPosts_image().get(i))
+                        .thumbnail(0.1f)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .into(imageView);
             mRootImage.addView(imageView);
         }
         mEditText.setFocusable(false);
@@ -604,7 +609,7 @@ public class PostDetailActivity extends BaseActivity {
                     mPostDetailBean.setLaud_status(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status()) - 1)));
                     mPostDetailBean.setLaud_status("0");
                     Toast.makeText(PostDetailActivity.this, "取消点赞", Toast.LENGTH_SHORT).show();
-                    Drawable drawable = getResources().getDrawable(R.mipmap.ic_zan);
+                    Drawable drawable = getResources().getDrawable(R.drawable.ic_zan);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     mJiaonangNum.setCompoundDrawables(null, drawable, null, null);
                 } else {
@@ -718,7 +723,7 @@ public class PostDetailActivity extends BaseActivity {
                     public void onResponse(String response, int id) {
                         mDialog.dismissDialog();
                         mCommoAdapterList.clear();
-                        PAGENUM=1;
+                        PAGENUM = 1;
                         initCommoData(PAGENUM);
                         mImageList.clear();
                         //待优化
@@ -764,6 +769,7 @@ public class PostDetailActivity extends BaseActivity {
                     if (getItemViewType(position) != TYPE_FOOTER) {
                         Glide.with(PostDetailActivity.this)
                                 .load(mImageList.get(position))
+                                .thumbnail(0.1f)
                                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                                 .into(((ImageAdapter.ItemViewHolder) holder).mPostImage);
                         ((ImageAdapter.ItemViewHolder) holder).mClosePic.setOnClickListener(new View.OnClickListener() {
@@ -823,5 +829,9 @@ public class PostDetailActivity extends BaseActivity {
         }
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Glide.with(this).pauseRequests();
+    }
 }

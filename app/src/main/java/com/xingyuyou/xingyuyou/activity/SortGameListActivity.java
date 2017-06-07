@@ -154,7 +154,7 @@ public class SortGameListActivity extends AppCompatActivity {
         ImageView imageView = new ImageView(SortGameListActivity.this);
         AbsListView.LayoutParams lp = new AbsListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         imageView.setLayoutParams(lp);
-        Glide.with(getApplicationContext())
+        Glide.with(getApplication())
                 .load(getIntent().getStringExtra("icon"))
                 .into(imageView);
         mListView.addHeaderView(imageView);
@@ -170,6 +170,9 @@ public class SortGameListActivity extends AppCompatActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i==0){
+                    return;
+                }
                 Intent intent = new Intent(SortGameListActivity.this,GameDetailActivity.class);
                 intent.putExtra("game_id",mDatas.get(i-1).getId());
                 intent.putExtra("game_name",mDatas.get(i-1).getGame_name());

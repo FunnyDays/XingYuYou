@@ -91,7 +91,7 @@ public class GameDetailListViewAdapter extends BaseAdapter {
         if (mList.get(i).getLaud_status() == 1) {
             holder.iv_zan.setImageResource(R.mipmap.ic_zan_fill);
         } else {
-            holder.iv_zan.setImageResource(R.mipmap.ic_zan);
+            holder.iv_zan.setImageResource(R.drawable.ic_zan);
         }
         holder.iv_zan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +106,7 @@ public class GameDetailListViewAdapter extends BaseAdapter {
                     mList.get(i).setLaud_num(String.valueOf((Integer.parseInt(mList.get(i).getLaud_num()) - 1)));
                     mList.get(i).setLaud_status(0);
                     Toast.makeText(mActivity, "取消点赞", Toast.LENGTH_SHORT).show();
-                    holder.iv_zan.setImageResource(R.mipmap.ic_zan);
+                    holder.iv_zan.setImageResource(R.drawable.ic_zan);
                 } else {
                     holder.tv_zan_num.setText(String.valueOf((Integer.parseInt(mList.get(i).getLaud_num()) + 1)));
                     mList.get(i).setLaud_num(String.valueOf((Integer.parseInt(mList.get(i).getLaud_num()) + 1)));
