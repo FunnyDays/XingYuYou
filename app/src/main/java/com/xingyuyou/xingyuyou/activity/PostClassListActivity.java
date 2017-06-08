@@ -244,6 +244,7 @@ public class PostClassListActivity extends AppCompatActivity {
         OkHttpUtils.post()//
                 .addParams("page",String.valueOf(PAGENUMBER))
                 .addParams("fid",getIntent().getStringExtra("list_id"))
+                .addParams("uid",UserUtils.getUserId())
                 .url(XingYuInterface.GET_POSTS_CLASS_LIST)
                 .tag(this)//
                 .build()//

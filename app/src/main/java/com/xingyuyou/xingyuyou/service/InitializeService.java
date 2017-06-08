@@ -74,8 +74,8 @@ public class InitializeService extends IntentService {
     private void initOkhttp() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
 //                .addInterceptor(new LoggerInterceptor("TAG"))
-                .connectTimeout(30000L, TimeUnit.MILLISECONDS)
-                .readTimeout(30000L, TimeUnit.MILLISECONDS)
+                .connectTimeout(90000L, TimeUnit.MILLISECONDS)
+                .readTimeout(90000L, TimeUnit.MILLISECONDS)
                 //其他配置
                 .build();
         OkHttpUtils.initClient(okHttpClient);

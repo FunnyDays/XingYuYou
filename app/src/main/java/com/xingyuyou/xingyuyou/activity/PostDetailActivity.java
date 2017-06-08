@@ -1,6 +1,8 @@
 package com.xingyuyou.xingyuyou.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
@@ -516,6 +518,7 @@ public class PostDetailActivity extends BaseActivity {
             Glide.with(PostDetailActivity.this)
                     .load(mPostDetailBean.getHead_image())
                     .thumbnail(0.1f)
+                    .placeholder(new ColorDrawable(Color.GRAY))
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .transform(new GlideCircleTransform(PostDetailActivity.this))
                     .into(mIvUserPhoto);
@@ -536,6 +539,7 @@ public class PostDetailActivity extends BaseActivity {
                 Glide.with(PostDetailActivity.this)
                         .load(mPostDetailBean.getPosts_image().get(i))
                         .thumbnail(0.1f)
+                        .placeholder(new ColorDrawable(Color.GRAY))
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .into(imageView);
             mRootImage.addView(imageView);

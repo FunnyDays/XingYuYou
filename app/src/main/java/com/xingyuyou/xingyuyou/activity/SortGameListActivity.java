@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
@@ -107,6 +108,7 @@ public class SortGameListActivity extends AppCompatActivity {
     };
     private ListView mListView;
     private Toolbar mToolbar;
+    private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,13 +153,14 @@ public class SortGameListActivity extends AppCompatActivity {
         downloadListAdapter = new DownloadListAdapter();
 
         //头布局
-        ImageView imageView = new ImageView(SortGameListActivity.this);
+        mImageView = new ImageView(SortGameListActivity.this);
         AbsListView.LayoutParams lp = new AbsListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        imageView.setLayoutParams(lp);
-        Glide.with(getApplication())
+        mImageView.setLayoutParams(lp);
+        Glide.with(SortGameListActivity.this)
                 .load(getIntent().getStringExtra("icon"))
-                .into(imageView);
-        mListView.addHeaderView(imageView);
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .into(mImageView);
+        mListView.addHeaderView(mImageView);
 
         //设置底部布局
         mLoading = View.inflate(SortGameListActivity.this, R.layout.default_loading, null);
@@ -401,7 +404,7 @@ public class SortGameListActivity extends AppCompatActivity {
             gameSize.setText(downloadInfo.getGameSize());
             label.setText(downloadInfo.getLabel());
             gameIntro.setText(downloadInfo.getGameIntro());
-            Glide.with(getApplicationContext()).load(downloadInfo.getGamePicUrl()).transform(new GlideRoundTransform(SortGameListActivity.this,5)).into(gamePic);
+            Glide.with(SortGameListActivity.this).load(downloadInfo.getGamePicUrl()).transform(new GlideRoundTransform(SortGameListActivity.this,5)).into(gamePic);
             stopBtn.setProgress(downloadInfo.getProgress());
             DownloadState state = downloadInfo.getState();
             switch (state) {
@@ -427,5 +430,16 @@ public class SortGameListActivity extends AppCompatActivity {
                     break;
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Glide.clear(mImageView);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }

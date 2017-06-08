@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.activity.GodDeatilActivity;
 import com.xingyuyou.xingyuyou.adapter.CommSortAdapter;
@@ -132,6 +133,7 @@ public class GodFragment extends BaseFragment {
         OkHttpUtils.post()//
                 .addParams("page",String.valueOf(PAGENUMBER))
                 .addParams("fid","0")
+                .addParams("uid", UserUtils.getUserId())
                 .url(XingYuInterface.GET_POSTS_CLASS_LIST)
                 .tag(this)//
                 .build()//

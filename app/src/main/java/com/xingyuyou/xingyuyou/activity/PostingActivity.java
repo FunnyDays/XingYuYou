@@ -142,7 +142,8 @@ public class PostingActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.ab_send:
-                        mDialog = new CustomDialog(PostingActivity.this, "正在上传，请稍等");
+                        mDialog = new CustomDialog(PostingActivity.this);
+                        mDialog.ProgressDialog(PostingActivity.this,"正在上传，请稍后");
                         mDialog.showDialog();
                         mHandler.postDelayed(new Runnable() {
                             @Override
@@ -275,6 +276,13 @@ public class PostingActivity extends AppCompatActivity {
                                 .sendBroadcast(intent);
                         Toast.makeText(PostingActivity.this, "发帖成功", Toast.LENGTH_SHORT).show();
                         PostingActivity.this.finish();
+                    }
+
+                    @Override
+                    public void inProgress(float progress, long total, int id) {
+                        super.inProgress(progress, total, id);
+                        mDialog.setProgressDialog(((int)(progress*100)));
+                        Log.e("post", "inProgress: "+"progress:"+((int)(progress*100))+ "total:"+total+"id:"+id);
                     }
                 });
 

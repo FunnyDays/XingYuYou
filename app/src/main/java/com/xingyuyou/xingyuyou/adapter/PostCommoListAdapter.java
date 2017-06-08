@@ -1,6 +1,8 @@
 package com.xingyuyou.xingyuyou.adapter;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,6 +103,7 @@ public class PostCommoListAdapter extends BaseAdapter {
                 .load(mCommoBeanList.get(i).getHead_image())
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .transform(new GlideCircleTransform(mActivity))
+
                 .into(holder.iv_user_photo);
         holder.ll_root_image_item.removeAllViews();
         Log.e("post", "getView: "+mCommoBeanList.get(i).toString() );
@@ -113,6 +116,7 @@ public class PostCommoListAdapter extends BaseAdapter {
                 imageView.setAdjustViewBounds(true);
                 Glide.with(mActivity)
                         .load(mCommoBeanList.get(i).getImgarr().get(j))
+                        .placeholder(new ColorDrawable(Color.GRAY))
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .into(imageView);
                 holder.ll_root_image_item.addView(imageView);

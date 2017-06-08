@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ public class CustomDialog {
     private Context context;
     private AlertDialog mAlertDialog;
     private ValueAnimator mValueAnimator;
+    private ProgressBar mProgressBar;
 
 
     public CustomDialog(Context context) {
@@ -80,6 +82,19 @@ public class CustomDialog {
             mValueAnimator.cancel();
     }
 
+    public void ProgressDialog(Activity activity, String title) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        View view = LayoutInflater.from(activity).inflate(R.layout.dialog_progress_loding, null);
+        builder.setView(view);
+        mAlertDialog = builder.create();
+        TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        tvTitle.setText(title);
+
+    }
+   public void  setProgressDialog(int progressDialog){
+       mProgressBar.setProgress(progressDialog);
+    }
     public void EditTextDialog(Activity activity, String title, final UserInfoActivity.EditTextValuesCallback callback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         View view = LayoutInflater.from(activity).inflate(R.layout.dialog_edittext, null);
