@@ -497,16 +497,16 @@ public class PostDetailActivity extends BaseActivity {
         mPostCommoListAdapter.notifyDataSetChanged();
         //收藏状态
         if (mPostDetailBean.getCollect_status().equals("1")) {
-            Drawable drawable = getResources().getDrawable(R.mipmap.ic_collect_fill);
+            Drawable drawable = getResources().getDrawable(R.drawable.ic_action_love);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             mCollectNum.setCompoundDrawables(null, drawable, null, null);
         } else {
-            Drawable drawable = getResources().getDrawable(R.mipmap.shoucang);
+            Drawable drawable = getResources().getDrawable(R.drawable.ic_action_love_empty);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             mCollectNum.setCompoundDrawables(null, drawable, null, null);
         }
         if (mPostDetailBean.getLaud_status().equals("1")) {
-            Drawable drawable = getResources().getDrawable(R.mipmap.ic_zan_fill);
+            Drawable drawable = getResources().getDrawable(R.drawable.ic_zan_fill);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             mJiaonangNum.setCompoundDrawables(null, drawable, null, null);
         } else {
@@ -577,7 +577,7 @@ public class PostDetailActivity extends BaseActivity {
                     mPostDetailBean.setPosts_collect(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect()) - 1)));
                     mPostDetailBean.setCollect_status("0");
                     Toast.makeText(PostDetailActivity.this, "取消收藏", Toast.LENGTH_SHORT).show();
-                    Drawable drawable = getResources().getDrawable(R.mipmap.shoucang);
+                    Drawable drawable = getResources().getDrawable(R.drawable.ic_action_love_empty);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     mCollectNum.setCompoundDrawables(null, drawable, null, null);
                 } else {
@@ -585,7 +585,7 @@ public class PostDetailActivity extends BaseActivity {
                     mPostDetailBean.setPosts_collect(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect()) + 1)));
                     mPostDetailBean.setCollect_status("1");
                     Toast.makeText(PostDetailActivity.this, "收藏", Toast.LENGTH_SHORT).show();
-                    Drawable drawable = getResources().getDrawable(R.mipmap.ic_collect_fill);
+                    Drawable drawable = getResources().getDrawable(R.drawable.ic_action_love);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     mCollectNum.setCompoundDrawables(null, drawable, null, null);
 
@@ -621,7 +621,7 @@ public class PostDetailActivity extends BaseActivity {
                     mPostDetailBean.setLaud_status(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status()) + 1)));
                     mPostDetailBean.setLaud_status("1");
                     Toast.makeText(PostDetailActivity.this, "点赞", Toast.LENGTH_SHORT).show();
-                    Drawable drawable = getResources().getDrawable(R.mipmap.ic_zan_fill);
+                    Drawable drawable = getResources().getDrawable(R.drawable.ic_zan_fill);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     mJiaonangNum.setCompoundDrawables(null, drawable, null, null);
 

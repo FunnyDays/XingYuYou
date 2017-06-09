@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/colorControlNormal"
+    android:orientation="vertical"
     >
+
     <RelativeLayout
 
         android:layout_width="match_parent"
@@ -36,10 +37,10 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:textColor="@color/black"
                     android:id="@+id/tv_user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/x12"
                     tools:text="7766"/>
 
@@ -68,15 +69,16 @@
     </RelativeLayout>
 
     <TextView
-        android:textColor="@color/black"
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
+        android:textColor="@color/black"
         android:textSize="@dimen/x14"
         tools:text="ahhaahahahhahaahhaha"/>
+
     <TextView
         android:id="@+id/tv_content"
         android:layout_width="match_parent"
@@ -84,39 +86,48 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
+        android:lineSpacingMultiplier="1.2"
         android:textSize="@dimen/x12"
         tools:text="ahhaahahahhahaahhaha"/>
+
     <LinearLayout
         android:id="@+id/ll_root_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:orientation="vertical">
-
     </LinearLayout>
 
-    <RelativeLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/x8"
+        android:layout_centerVertical="true"
+        android:background="@color/custom_gray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x30"
         android:background="@color/colorControlNormal">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_centerVertical="true"
-            android:background="@color/base_text_color_light"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/x5"
+            android:paddingTop="@dimen/x5"
+            android:src="@drawable/pinglun"/>
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_centerInParent="true"
-            android:background="@color/colorControlNormal"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
             android:text="全部评论"
-            android:textColor="@color/base_text_color_light"/>
+            android:textColor="@color/base_text_color_light"
+            android:textSize="@dimen/x12"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/custom_gray"/>
 </LinearLayout>

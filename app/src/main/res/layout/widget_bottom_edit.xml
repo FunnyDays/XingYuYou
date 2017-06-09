@@ -7,6 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/x3"
         android:layout_alignParentBottom="true"
         >
         <View
@@ -15,8 +16,9 @@
             android:layout_width="match_parent"
             android:layout_height="1px"/>
         <LinearLayout
+            android:layout_marginTop="@dimen/x2"
+            android:layout_marginLeft="@dimen/x10"
             android:layout_below="@+id/line"
-            android:layout_marginLeft="@dimen/x20"
             android:id="@+id/ll_edit_parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,29 +29,29 @@
                 android:id="@+id/bottom_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/x28"
-                android:layout_margin="@dimen/x6"
-                android:layout_weight="5"
+                android:layout_marginLeft="@dimen/x5"
+                android:layout_marginBottom="@dimen/x5"
+                android:layout_marginTop="@dimen/x5"
+                android:layout_weight="6"
                 android:background="@drawable/edittext_bg"
                 android:drawableLeft="@drawable/ic_action_edit"
                 android:drawablePadding="10dp"
                 android:hint="说点什么吧！"
-                android:paddingLeft="5dp"
+                android:paddingLeft="@dimen/x5"
                 android:textColor="@color/black"
                 android:textSize="14sp"/>
             <LinearLayout
-                android:layout_marginLeft="@dimen/x15"
                 android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:layout_weight="2"
-                android:layout_marginRight="10dp"
                 android:layout_height="match_parent">
                 <TextView
-                    android:layout_margin="@dimen/x7"
                     android:id="@+id/tv_collect_num"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:drawableTop="@mipmap/shoucang"
+                    android:drawableTint="@color/colorPrimary"
+                    android:drawableTop="@drawable/ic_action_love_empty"
                     android:gravity="center"
                     android:textSize="@dimen/x8"
                     tools:text="7766"/>
@@ -60,13 +62,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
                     android:layout_weight="1"
-                    android:drawableTop="@mipmap/pinglun"
+                    android:drawableTop="@drawable/pinglun"
                     android:gravity="center"
                     android:visibility="gone"
                     tools:text="7766"/>
 
                 <TextView
-                    android:layout_margin="@dimen/x7"
                     android:id="@+id/tv_jiaonang_num"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"

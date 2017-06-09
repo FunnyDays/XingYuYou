@@ -119,7 +119,7 @@ public class GodCommoListAdapter extends BaseAdapter {
         }
         //点赞
         if (mCommoBeanList.get(i).getLaud_status() == 1) {
-            holder.iv_zan.setImageResource(R.mipmap.ic_zan_fill);
+            holder.iv_zan.setImageResource(R.drawable.ic_zan_fill);
         } else {
             holder.iv_zan.setImageResource(R.drawable.ic_zan);
         }
@@ -142,7 +142,7 @@ public class GodCommoListAdapter extends BaseAdapter {
                     mCommoBeanList.get(i).setForum_laud(String.valueOf((Integer.parseInt(mCommoBeanList.get(i).getForum_laud()) + 1)));
                     mCommoBeanList.get(i).setLaud_status(1);
                     Toast.makeText(mActivity, "点赞", Toast.LENGTH_SHORT).show();
-                    holder.iv_zan.setImageResource(R.mipmap.ic_zan_fill);
+                    holder.iv_zan.setImageResource(R.drawable.ic_zan_fill);
                 }
             }
         });

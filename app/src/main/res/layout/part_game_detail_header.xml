@@ -45,7 +45,6 @@
 
     </RelativeLayout>
 
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
@@ -223,7 +222,7 @@
             android:gravity="center"
             android:paddingBottom="10dp"
             android:text="8.5"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorPrimary"
             android:textSize="40sp"/>
 
 
@@ -247,7 +246,7 @@
                     android:layout_marginRight="5dp"
                     android:gravity="end"
                     android:text="SSS"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:textColor="@color/colorPrimary"/>
 
                 <ProgressBar
                     android:id="@+id/pb_sss"
@@ -276,7 +275,7 @@
                     android:layout_marginRight="5dp"
                     android:gravity="end"
                     android:text="SSR"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:textColor="@color/colorPrimary"/>
 
                 <ProgressBar
                     android:id="@+id/pb_ssr"
@@ -303,7 +302,7 @@
                     android:layout_marginRight="5dp"
                     android:gravity="end"
                     android:text="SR"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:textColor="@color/colorPrimary"/>
 
                 <ProgressBar
                     android:id="@+id/pb_sr"
@@ -330,7 +329,7 @@
                     android:layout_marginRight="5dp"
                     android:gravity="end"
                     android:text="R"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:textColor="@color/colorPrimary"/>
 
                 <ProgressBar
                     android:id="@+id/pb_r"
@@ -357,7 +356,7 @@
                     android:layout_marginRight="5dp"
                     android:gravity="end"
                     android:text="N"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:textColor="@color/colorPrimary"/>
 
                 <ProgressBar
                     android:id="@+id/pb_n"

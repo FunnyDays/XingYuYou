@@ -85,6 +85,7 @@ public class PostCommoListAdapter extends BaseAdapter {
             holder.ll_root_image_item = (LinearLayout) view.findViewById(R.id.ll_root_image_item);
             //更多评论
             holder.ll_more_commo_item = (LinearLayout) view.findViewById(R.id.ll_more_commo_item);
+            holder.tv_commo2_more = (TextView) view.findViewById(R.id.tv_commo2_more);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
@@ -106,8 +107,7 @@ public class PostCommoListAdapter extends BaseAdapter {
 
                 .into(holder.iv_user_photo);
         holder.ll_root_image_item.removeAllViews();
-        Log.e("post", "getView: "+mCommoBeanList.get(i).toString() );
-        if (!(mCommoBeanList.get(i).getImgarr() == null) &&mCommoBeanList.get(i).getImgarr().size()>=1&& !mCommoBeanList.get(i).getImgarr().get(0).toString().equals("")) {
+        if (!(mCommoBeanList.get(i).getImgarr() == null) && mCommoBeanList.get(i).getImgarr().size() >= 1 && !mCommoBeanList.get(i).getImgarr().get(0).toString().equals("")) {
             for (int j = 0; j < mCommoBeanList.get(i).getImgarr().size(); j++) {
                 ImageView imageView = new ImageView(mActivity);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -124,7 +124,7 @@ public class PostCommoListAdapter extends BaseAdapter {
         }
         //点赞
         if (mCommoBeanList.get(i).getLaud_status() != null && mCommoBeanList.get(i).getLaud_status().equals("1")) {
-            holder.iv_zan.setImageResource(R.mipmap.ic_zan_fill);
+            holder.iv_zan.setImageResource(R.drawable.ic_zan_fill);
         } else {
             holder.iv_zan.setImageResource(R.drawable.ic_zan);
         }
@@ -147,7 +147,7 @@ public class PostCommoListAdapter extends BaseAdapter {
                     mCommoBeanList.get(i).setLaud_status(String.valueOf((Integer.parseInt(mCommoBeanList.get(i).getLaud_status()) + 1)));
                     mCommoBeanList.get(i).setLaud_status("1");
                     Toast.makeText(mActivity, "点赞", Toast.LENGTH_SHORT).show();
-                    holder.iv_zan.setImageResource(R.mipmap.ic_zan_fill);
+                    holder.iv_zan.setImageResource(R.drawable.ic_zan_fill);
                 }
             }
         });
@@ -155,9 +155,14 @@ public class PostCommoListAdapter extends BaseAdapter {
         if (mCommoBeanList.get(i).getChild() != null) {
         }
         if (mCommoBeanList.get(i).getChild() != null && mCommoBeanList.get(i).getChild().size() > 0) {
+            if (mCommoBeanList.get(i).getChild().size() == 1) {
+                holder.tv_commo2_more.setVisibility(View.INVISIBLE);
+            } else {
+                holder.tv_commo2_more.setVisibility(View.VISIBLE);
+            }
             holder.ll_more_commo_item.setVisibility(View.VISIBLE);
             holder.tv_commo2_name
-                    .setText(mCommoBeanList.get(i).getChild().get(0).getNickname() + ":");
+                    .setText(SpanStringUtils.getEmotionContent(mActivity, holder.tv_commo2_name, mCommoBeanList.get(i).getChild().get(0).getNickname() + ":"));
             holder.tv_commo2_content
                     .setText(SpanStringUtils.getEmotionContent(mActivity, holder.tv_commo2_content, mCommoBeanList.get(i).getChild().get(0).getReplies_content()));
             holder.tv_commo2_time
@@ -181,6 +186,7 @@ public class PostCommoListAdapter extends BaseAdapter {
         public ImageView iv_user_photo;
         public ImageView iv_zan;
         public TextView tv_floor_num;
+        public TextView tv_commo2_more;
         public LinearLayout ll_root_image_item;
         public LinearLayout ll_more_commo_item;
     }

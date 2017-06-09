@@ -32,7 +32,8 @@
 
                 <LinearLayout
                     android:layout_marginLeft="5dp"
-                    android:layout_width="wrap_content"
+                    android:layout_marginRight="@dimen/x50"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/civ_user_photo"
@@ -48,8 +49,10 @@
 
                     <TextView
                         android:id="@+id/tv_content"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:lines="1"
+                        android:ellipsize="end"
                         android:text="222"
                         android:textSize="@dimen/x12"/>
                 </LinearLayout>

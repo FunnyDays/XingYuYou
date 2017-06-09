@@ -493,7 +493,7 @@ public class GameDetailActivity extends AppCompatActivity {
                 tv_zan_num.setText(mHotCommoAdapterList.get(i).getLaud_num());
                 final int finalI = i;
                 if (mHotCommoAdapterList.get(i).getLaud_status() == 1) {
-                    iv_zan.setImageResource(R.mipmap.ic_zan_fill);
+                    iv_zan.setImageResource(R.drawable.ic_zan_fill);
                 } else {
                     iv_zan.setImageResource(R.drawable.ic_zan);
                 }
@@ -516,7 +516,7 @@ public class GameDetailActivity extends AppCompatActivity {
                             mHotCommoAdapterList.get(finalI).setLaud_num(String.valueOf((Integer.parseInt(mHotCommoAdapterList.get(finalI).getLaud_num()) + 1)));
                             mHotCommoAdapterList.get(finalI).setLaud_status(1);
                             Toast.makeText(GameDetailActivity.this, "点赞", Toast.LENGTH_SHORT).show();
-                            iv_zan.setImageResource(R.mipmap.ic_zan_fill);
+                            iv_zan.setImageResource(R.drawable.ic_zan_fill);
                         }
                     }
                 });

@@ -19,7 +19,7 @@
     <RelativeLayout
         android:id="@+id/rl_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/x30"
         android:layout_marginTop="@dimen/x10"
         android:layout_toRightOf="@+id/iv_user_photo"
         >
@@ -48,8 +48,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x5"
             android:layout_toLeftOf="@+id/tv_zan_num"
+            android:paddingBottom="@dimen/x5"
+            android:paddingTop="@dimen/x5"
             android:src="@drawable/ic_zan"/>
 
         <TextView
@@ -76,37 +77,38 @@
         android:max="5"/>
 
     <RelativeLayout
-        android:layout_below="@+id/rb_score"
-        android:background="@drawable/bg_game_detail_commo_text"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rb_score"
         android:layout_marginLeft="@dimen/x50"
         android:layout_marginRight="@dimen/x10"
         android:layout_marginTop="@dimen/x10"
-        android:paddingTop="@dimen/x10"
-        android:paddingRight="@dimen/x10"
+        android:background="@drawable/bg_game_detail_commo_text"
         android:paddingLeft="@dimen/x10"
-        android:layout_height="wrap_content">
+        android:paddingRight="@dimen/x10"
+        android:paddingTop="@dimen/x10">
+
         <TextView
             android:id="@+id/tv_reply_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:textSize="@dimen/x12"
-            android:lines="2"
             android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:lines="1"
             android:textColor="@color/grey"
+            android:textSize="@dimen/x12"
             />
+
         <ImageView
-            android:layout_below="@+id/tv_reply_content"
             android:id="@+id/iv_game_intro_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-             android:layout_centerHorizontal="true"
+            android:layout_below="@+id/tv_reply_content"
+            android:layout_centerHorizontal="true"
             android:tint="@color/colorPrimary"
             app:srcCompat="@drawable/ic_expand_more_black_24dp"
             />
     </RelativeLayout>
-
 
 
     <!--  <View

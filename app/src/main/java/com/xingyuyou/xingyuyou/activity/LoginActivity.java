@@ -67,12 +67,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b){
-                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_login_user);
+                    Drawable drawable= getResources().getDrawable(R.drawable.ic_login_user);
                     drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     mUserName.setCompoundDrawables(drawable,null,null,null);
                     mUserName.setHintTextColor(getResources().getColor(R.color.colorPrimary));
                 }else {
-                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_user_login_gery);
+                    Drawable drawable= getResources().getDrawable(R.drawable.ic_login_user_gery);
                     drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     mUserName.setCompoundDrawables(drawable,null,null,null);
                     mUserName.setHintTextColor(getResources().getColor(R.color.grey));
@@ -84,12 +84,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b){
-                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_login_password);
+                    Drawable drawable= getResources().getDrawable(R.drawable.ic_login_password);
                     drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     mPassword.setCompoundDrawables(drawable,null,null,null);
                     mPassword.setHintTextColor(getResources().getColor(R.color.colorPrimary));
                 }else {
-                    Drawable drawable= getResources().getDrawable(R.mipmap.ic_login_password_grey);
+                    Drawable drawable= getResources().getDrawable(R.drawable.ic_login_password_grey);
                     drawable.setBounds( 0 ,  0 , drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     mPassword.setCompoundDrawables(drawable,null,null,null);
                     mPassword.setHintTextColor(getResources().getColor(R.color.grey));

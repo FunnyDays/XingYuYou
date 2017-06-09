@@ -155,12 +155,12 @@ public class CommHotAdapter extends RecyclerView.Adapter {
                 || getItemViewType(position) == TYPE_THREE_PIC)) {
 
             if (mListData.get(position - 1).getCollect_status()==1){
-                ((ItemViewHolder) holder).mPostCollect.setImageResource(R.mipmap.ic_collect_fill);
+                ((ItemViewHolder) holder).mPostCollect.setImageResource(R.drawable.ic_action_love);
             }else {
-                ((ItemViewHolder) holder).mPostCollect.setImageResource(R.mipmap.shoucang);
+                ((ItemViewHolder) holder).mPostCollect.setImageResource(R.drawable.ic_action_love_empty);
             }
             if (mListData.get(position - 1).getLaud_status()==1){
-                ((ItemViewHolder) holder).mPostLuad.setImageResource(R.mipmap.ic_zan_fill);
+                ((ItemViewHolder) holder).mPostLuad.setImageResource(R.drawable.ic_zan_fill);
             }else {
                 ((ItemViewHolder) holder).mPostLuad.setImageResource(R.drawable.ic_zan);
             }
@@ -251,13 +251,13 @@ public class CommHotAdapter extends RecyclerView.Adapter {
                         mListData.get(position - 1).setPosts_collect(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_collect())-1)));
                         mListData.get(position - 1).setCollect_status(0);
                         Toast.makeText(mActivity, "取消收藏", Toast.LENGTH_SHORT).show();
-                        ((ItemViewHolder) holder).mPostCollect.setImageResource(R.mipmap.shoucang);
+                        ((ItemViewHolder) holder).mPostCollect.setImageResource(R.drawable.ic_action_love_empty);
                     }else {
                         ((ItemViewHolder) holder).mCollectNum.setText(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_collect())+1)));
                         mListData.get(position - 1).setPosts_collect(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_collect())+1)));
                         mListData.get(position - 1).setCollect_status(1);
                         Toast.makeText(mActivity, "收藏成功", Toast.LENGTH_SHORT).show();
-                        ((ItemViewHolder) holder).mPostCollect.setImageResource(R.mipmap.ic_collect_fill);
+                        ((ItemViewHolder) holder).mPostCollect.setImageResource(R.drawable.ic_action_love);
 
                     }
                 }
@@ -289,7 +289,7 @@ public class CommHotAdapter extends RecyclerView.Adapter {
                         mListData.get(position - 1).setPosts_laud(String.valueOf((Integer.parseInt(mListData.get(position - 1).getPosts_laud())+1)));
                         mListData.get(position - 1).setLaud_status(1);
                         Toast.makeText(mActivity, "点赞成功", Toast.LENGTH_SHORT).show();
-                        ((ItemViewHolder) holder).mPostLuad.setImageResource(R.mipmap.ic_zan_fill);
+                        ((ItemViewHolder) holder).mPostLuad.setImageResource(R.drawable.ic_zan_fill);
 
                     }
                 }

@@ -171,7 +171,7 @@
                     android:gravity="center"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:text="番外"
+                    android:text="番剧"
                     android:textColor="@android:color/white"
                     android:textSize="10sp"/>
 
