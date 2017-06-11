@@ -216,7 +216,7 @@ public class GameDetailActivity extends AppCompatActivity {
         initView();
         getDownloadInfo();
         initDownload();
-        initButtonDownload();
+
 
     }
 
@@ -430,6 +430,8 @@ public class GameDetailActivity extends AppCompatActivity {
     }
 
     private void setValues() {
+        //初始化下载按钮
+        initButtonDownload();
         if (mGameDetailList.get(0).getCover().equals("http://xingyuyou.com")) {
             Glide.with(this).load(mGameDetailList.get(0).getIcon()).into(mGameIcon);
             mGameVersionTop.setText("版本：" + mGameDetailList.get(0).getVersion());
@@ -484,7 +486,7 @@ public class GameDetailActivity extends AppCompatActivity {
                 final TextView tv_reply_content = (TextView) commo.findViewById(R.id.tv_reply_content);
                 TextView tv_commo_time = (TextView) commo.findViewById(R.id.tv_commo_time);
                 RatingBar rb_score = (RatingBar) commo.findViewById(R.id.rb_score);
-                Glide.with(getApplication())
+                Glide.with(this)
                         .load(mHotCommoAdapterList.get(i).getHead_image())
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .transform(new GlideCircleTransform(getApplication()))

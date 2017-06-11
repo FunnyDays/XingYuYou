@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.xingyuyou.xingyuyou.R;
@@ -153,10 +154,11 @@ public class UserInfoActivity extends AppCompatActivity {
     //从服务器获取信息赋值到当前界面
     private void setValues() {
         if (mUserBean.getHead_image()!=null)
-        Glide.with(UserInfoActivity.this)
+        Glide.with(getApplication())
                 .load(mUserBean.getHead_image())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .transform(new GlideCircleTransform(UserInfoActivity.this))
+                .priority(Priority.HIGH)
                 .into(mUserPhoto);
         if (mUserBean.getNickname()!=null)
         mTvNickname.setText(mUserBean.getNickname());

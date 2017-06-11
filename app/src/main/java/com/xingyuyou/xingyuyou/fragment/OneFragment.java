@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
@@ -46,6 +47,7 @@ public class OneFragment extends BaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     /**
      * 初始化数据
      */
@@ -53,6 +55,7 @@ public class OneFragment extends BaseFragment {
     public void initData() {
 
     }
+
     @Override
     protected View initView() {
         View view = View.inflate(mActivity, R.layout.fragment_one, null);
@@ -76,7 +79,7 @@ public class OneFragment extends BaseFragment {
         mTvUserAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(mActivity,ManagementActivity.class);
+                IntentUtils.startActivity(mActivity, ManagementActivity.class);
                 mActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
@@ -84,7 +87,7 @@ public class OneFragment extends BaseFragment {
         mIvManage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(mActivity,ManagementActivity.class);
+                IntentUtils.startActivity(mActivity, ManagementActivity.class);
                 mActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
@@ -101,6 +104,7 @@ public class OneFragment extends BaseFragment {
 */
         return view;
     }
+
     private void initToolbar() {
         mToolbar.inflateMenu(R.menu.all_tab_fragment_menu);
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -133,21 +137,21 @@ public class OneFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (UserUtils.logined()){
+        if (UserUtils.logined()) {
             mTvUserAccount.setText(UserUtils.getNickName());
             Glide.with(mActivity)
                     .load(UserUtils.getUserPhoto())
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .transform(new GlideCircleTransform(mActivity))
-                    .dontAnimate()
+                    .priority(Priority.HIGH)
                     .into(mIvManage);
-        }else {
+        } else {
             mTvUserAccount.setText("未登陆");
             Glide.with(mActivity)
                     .load(R.drawable.ic_user_defalut)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .transform(new GlideCircleTransform(mActivity))
-                    .dontAnimate()
+                    .priority(Priority.HIGH)
                     .into(mIvManage);
         }
     }

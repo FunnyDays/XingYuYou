@@ -51,7 +51,8 @@ public class CommHeaderFooterAdapter extends RecyclerView.Adapter {
             ((ItemViewHolder) holder).mGameName.setText(mListData.get(position).getClass_name());
             Glide.with(mActivity)
                     .load(mListData.get(position).getClass_image())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .placeholder(R.mipmap.icon)
                     .into(((ItemViewHolder) holder).mGamePic);
             ((ItemViewHolder) holder).mGamePic.setOnClickListener(new View.OnClickListener() {
                 @Override

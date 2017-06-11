@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.umeng.socialize.ShareAction;
@@ -89,11 +90,11 @@ public class ManagementActivity extends AppCompatActivity {
         UserUtils.setUserPhoto(mUserBean.getHead_image());
         mTvNickName.setText(mUserBean.getNickname());
        // mTvUserIntegral.setText("积分："+mUserBean.getUser_integral());
-        Glide.with(ManagementActivity.this)
+        Glide.with(getApplication())
                 .load(mUserBean.getHead_image())
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .transform(new GlideCircleTransform(ManagementActivity.this))
-                .dontAnimate()
+                .priority(Priority.HIGH )
                 .into(mUserPhoto);
     }
 
