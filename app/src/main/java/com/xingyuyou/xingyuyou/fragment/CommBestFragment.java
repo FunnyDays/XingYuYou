@@ -24,16 +24,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
-import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideRoundTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
-import com.xingyuyou.xingyuyou.bean.community.SortPostListBean;
 import com.xingyuyou.xingyuyou.bean.community.TopViewRecommBean;
-import com.xingyuyou.xingyuyou.weight.WrapContentLinearLayoutManager;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -49,7 +46,7 @@ import okhttp3.Call;
 /**
  * Created by Administrator on 2016/6/28.
  */
-public class CommHotFragment extends BaseFragment {
+public class CommBestFragment extends BaseFragment {
 
     private static boolean CLEAR_DATA = false;
     private RecyclerView mRecyclerView;
@@ -123,10 +120,10 @@ public class CommHotFragment extends BaseFragment {
     private ImageView mIvThree;
     private ImageView mIvFour;
 
-    public static CommHotFragment newInstance(String content) {
+    public static CommBestFragment newInstance(String content) {
         Bundle args = new Bundle();
         args.putString("ARGS", content);
-        CommHotFragment fragment = new CommHotFragment();
+        CommBestFragment fragment = new CommBestFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -258,7 +255,6 @@ public class CommHotFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        updatePost();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -342,7 +338,7 @@ public class CommHotFragment extends BaseFragment {
     }
 
     private void updatePost() {
-        Log.e("updatePost", "2?updatePost: ");
+        Log.e("updatePost", "3333332?updatePost: ");
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getActivity());
         IntentFilter intentFilter = new IntentFilter();
@@ -352,8 +348,8 @@ public class CommHotFragment extends BaseFragment {
             public void onReceive(Context context, Intent intent) {
                 Toast.makeText(context, intent.getStringExtra("cancelCollect")+"position:"+intent.getIntExtra("position",0)
                         +"---"+mPostAdapterList.size(), Toast.LENGTH_SHORT).show();
-                mPostAdapterList.get(intent.getIntExtra("position",0)-1).setNickname("haha");
-                mCommHotAdapter.notifyItemChanged(intent.getIntExtra("position",0));
+               // mPostAdapterList.get(intent.getIntExtra("position",0)-1).setNickname("haha");
+               // mCommHotAdapter.notifyItemChanged(intent.getIntExtra("position",0));
             }
 
         };

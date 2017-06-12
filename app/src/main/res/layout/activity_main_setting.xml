@@ -7,144 +7,182 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.xingyuyou.xingyuyou.activity.SettingActivity">
+
     <include layout="@layout/toolbar"></include>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/custom_gray"/>
+
     <RelativeLayout
         android:id="@+id/rl_user_info"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        android:background="@drawable/ripple_bg"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:background="@drawable/ripple_bg"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
 
         <TextView
-            android:textColor="#000000"
-            android:text="个人资料"
-            android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="个人资料"
+            android:textColor="#000000"
+            android:textSize="14sp"/>
 
     </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/custom_gray"/>
+
     <RelativeLayout
         android:id="@+id/rl_feed_back"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        android:background="@drawable/ripple_bg"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:background="@drawable/ripple_bg"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
 
         <TextView
-            android:textColor="#000000"
-            android:text="应用反馈"
-            android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="应用反馈"
+            android:textColor="#000000"
+            android:textSize="14sp"/>
 
 
     </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/custom_gray"/>
+
     <RelativeLayout
         android:id="@+id/rl_clean_cache"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        android:background="@drawable/ripple_bg"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:background="@drawable/ripple_bg"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
 
         <TextView
-            android:textColor="#000000"
-            android:text="清除缓存"
-            android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="清除缓存"
+            android:textColor="#000000"
+            android:textSize="14sp"/>
 
     </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/custom_gray"/>
+
     <RelativeLayout
         android:id="@+id/rl_version_code"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        android:background="@drawable/ripple_bg"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:background="@drawable/ripple_bg"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
 
         <TextView
-            android:textColor="#000000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
             android:text="版本号"
-            android:textSize="14sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
-
-    </RelativeLayout> <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/custom_gray"/>
-    <RelativeLayout
-        android:id="@+id/rl_user_rule"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        android:background="@drawable/ripple_bg"
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
-
-        <TextView
             android:textColor="#000000"
-            android:text="用户公约"
-            android:textSize="14sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+            android:textSize="14sp"/>
 
     </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/custom_gray"/>
+
     <RelativeLayout
-        android:id="@+id/rl_check_update"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        android:background="@drawable/ripple_bg"
+        android:id="@+id/rl_user_rule"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:background="@drawable/ripple_bg"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
 
         <TextView
-            android:textColor="#000000"
-            android:text="检查更新"
-            android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="用户公约"
+            android:textColor="#000000"
+            android:textSize="14sp"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/custom_gray"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_change_password"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/ripple_bg"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="修改密码"
+            android:textColor="#000000"
+            android:textSize="14sp"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/custom_gray"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_check_update"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/ripple_bg"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="检查更新"
+            android:textColor="#000000"
+            android:textSize="14sp"/>
 
         <!--<Switch
               android:layout_width="wrap_content"
@@ -153,37 +191,40 @@
               android:layout_alignParentRight="true"
               android:id="@+id/toggleButton"/>-->
     </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/custom_gray"/>
+
     <RelativeLayout
         android:id="@+id/rl_about_us"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        android:background="@drawable/ripple_bg"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:background="@drawable/ripple_bg"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
 
         <TextView
-            android:textColor="#000000"
-            android:text="关于我们"
-            android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="关于我们"
+            android:textColor="#000000"
+            android:textSize="14sp"/>
 
     </RelativeLayout>
+
     <Button
-        android:textColor="@color/blue"
-        android:layout_margin="10dp"
-        android:text="退出登录"
-        android:padding="10dp"
-        android:background="@drawable/button_blue_bg"
         android:id="@+id/bt_login_out"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/button_blue_bg"
+        android:padding="10dp"
+        android:text="退出登录"
+        android:textColor="@color/blue"/>
 
 </LinearLayout>

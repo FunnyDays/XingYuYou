@@ -25,6 +25,7 @@ public class SettingActivity extends AppCompatActivity {
     private RelativeLayout mVersionCode;
     private RelativeLayout mUserRule;
     private RelativeLayout mAboutUs;
+    private RelativeLayout mRl_change_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +91,18 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 IntentUtils.startActivity(SettingActivity.this, ExemptionActivity.class);
+            }
+        });
+        //用户公约
+        mRl_change_password = (RelativeLayout) findViewById(R.id.rl_change_password);
+        mRl_change_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (UserUtils.logined()) {
+                    IntentUtils.startActivity(SettingActivity.this, ChangePasswordActivity.class);
+                } else {
+                    IntentUtils.startActivity(SettingActivity.this, LoginActivity.class);
+                }
             }
         });
         //检查更新

@@ -134,7 +134,7 @@ public class TwoFragment extends BaseFragment {
         mFragments = new ArrayList<BaseFragment>();
         mTitles = new ArrayList<String>();
         CommHotFragment hf = CommHotFragment.newInstance("1");
-        CommHotFragment hf1 = CommHotFragment.newInstance("2");
+        CommBestFragment hf1 = CommBestFragment.newInstance("2");
         CommNewFragment hf2 = CommNewFragment.newInstance("3");
         mFragments.add(hf);
         mFragments.add(hf1);

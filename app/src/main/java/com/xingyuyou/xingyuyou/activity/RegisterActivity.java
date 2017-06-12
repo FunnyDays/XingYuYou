@@ -86,6 +86,8 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
     };
+    private EditText mEt_password_again;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         //注册
         mPassword = (EditText) findViewById(R.id.et_password);
+        mEt_password_again = (EditText) findViewById(R.id.et_password_again);
         mPhoneCode = (EditText) findViewById(R.id.et_phone_code);
         mBtRegister = (Button) findViewById(R.id.bt_register_button);
         mBtRegister.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +137,6 @@ public class RegisterActivity extends AppCompatActivity {
      */
     public void getPhoneCode(int code) {
         String phoneCodeText = mPhoneNumber.getText().toString().trim();
-        Log.e("phonecode",phoneCodeText+ "：电话号码");
         if (RegexUtils.isMobileExact(phoneCodeText)) {
             JSONObject jsonObject = new JSONObject();
             try {
@@ -153,9 +155,12 @@ public class RegisterActivity extends AppCompatActivity {
     private void toRegister(int code) {
         String phoneNumberText = mPhoneNumber.getText().toString().trim();
         String passwordText = mPassword.getText().toString().trim();
+        String password_again = mEt_password_again.getText().toString().trim();
+        if (!passwordText.equals(password_again)){
+            Toast.makeText(this, "两次密码不一致", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String phoneCodeText = mPhoneCode.getText().toString().trim();
-        Log.e("phonecode", "电话号码："+phoneNumberText+
-                "密码："+passwordText+"验证码："+phoneCodeText);
         if (RegexUtils.isMobileExact(phoneNumberText)&& !StringUtils.isEmpty(passwordText)
                 && !StringUtils.isEmpty(phoneCodeText)) {
             JSONObject jsonObject = new JSONObject();

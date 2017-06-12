@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
 import android.sax.RootElement;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -573,6 +574,13 @@ public class PostDetailActivity extends BaseActivity {
                 }
                 getCollect(mPostDetailBean.getId());
                 if (mPostDetailBean.getCollect_status().equals("1")) {
+                    //更新列表界面收藏状态
+                    Intent intent = new Intent("updateCollectStatus");
+                    intent.putExtra("cancelCollect", "取消收藏啦");
+                    intent.putExtra("position", getIntent().getIntExtra("position",0));
+                    LocalBroadcastManager.getInstance(PostDetailActivity.this)
+                            .sendBroadcast(intent);
+
                     mCollectNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect()) - 1)));
                     mPostDetailBean.setPosts_collect(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect()) - 1)));
                     mPostDetailBean.setCollect_status("0");
@@ -581,6 +589,12 @@ public class PostDetailActivity extends BaseActivity {
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     mCollectNum.setCompoundDrawables(null, drawable, null, null);
                 } else {
+                   /* //更新列表界面收藏状态
+                    Intent intent = new Intent("updateCollectStatus");
+                    intent.putExtra("cancelCollect", "收藏啦");
+                    intent.putExtra("position", getIntent().getIntExtra("position",0));
+                    LocalBroadcastManager.getInstance(PostDetailActivity.this)
+                            .sendBroadcast(intent);*/
                     mCollectNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect()) + 1)));
                     mPostDetailBean.setPosts_collect(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect()) + 1)));
                     mPostDetailBean.setCollect_status("1");
@@ -609,16 +623,16 @@ public class PostDetailActivity extends BaseActivity {
                 }
                 getLaud(mPostDetailBean.getId());
                 if (mPostDetailBean.getLaud_status().equals("1")) {
-                    mJiaonangNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status()) - 1)));
-                    mPostDetailBean.setLaud_status(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status()) - 1)));
+                    mJiaonangNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_laud()) - 1)));
+                    mPostDetailBean.setPosts_laud(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_laud()) - 1)));
                     mPostDetailBean.setLaud_status("0");
                     Toast.makeText(PostDetailActivity.this, "取消点赞", Toast.LENGTH_SHORT).show();
                     Drawable drawable = getResources().getDrawable(R.drawable.ic_zan);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     mJiaonangNum.setCompoundDrawables(null, drawable, null, null);
                 } else {
-                    mJiaonangNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status()) + 1)));
-                    mPostDetailBean.setLaud_status(String.valueOf((Integer.parseInt(mPostDetailBean.getLaud_status()) + 1)));
+                    mJiaonangNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_laud()) + 1)));
+                    mPostDetailBean.setPosts_laud(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_laud()) + 1)));
                     mPostDetailBean.setLaud_status("1");
                     Toast.makeText(PostDetailActivity.this, "点赞", Toast.LENGTH_SHORT).show();
                     Drawable drawable = getResources().getDrawable(R.drawable.ic_zan_fill);

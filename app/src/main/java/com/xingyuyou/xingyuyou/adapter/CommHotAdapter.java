@@ -220,6 +220,7 @@ public class CommHotAdapter extends RecyclerView.Adapter {
                     }else {
                         Intent intent = new Intent(mActivity, PostDetailActivity.class);
                         intent.putExtra("post_id", mListData.get(position - 1).getId());
+                        intent.putExtra("position",(position));
                         mActivity.startActivity(intent);
                     }
                 }

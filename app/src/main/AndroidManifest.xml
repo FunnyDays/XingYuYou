@@ -185,6 +185,7 @@
         </activity>
         <activity android:name=".activity.PrivateLetterDetailActivity"/>
         <activity android:name=".activity.SearchCommuActivity"/>
+        <activity android:name=".activity.ChangePasswordActivity"/>
         <activity android:name=".activity.SearchCommuListActivity">
         </activity>
     </application>
