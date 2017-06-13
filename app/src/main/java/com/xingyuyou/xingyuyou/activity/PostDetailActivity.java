@@ -249,8 +249,6 @@ public class PostDetailActivity extends BaseActivity {
         mEditText = (EditText) findViewById(R.id.bottom_edit_text);
         mLinearLayout = (LinearLayout) findViewById(R.id.ll_edit_parent);
         mLinearLayout2 = (LinearLayout) findViewById(R.id.ll_emotion_parent);
-        mRecyclerView = (RecyclerView) findViewById(R.id.rl_all_image);
-        initRecyclerView();
         mCommoListView = (ListView) findViewById(R.id.listView);
         mCommoListView.setDividerHeight(0);
         mCommoListView.addHeaderView(headerView);
@@ -454,14 +452,40 @@ public class PostDetailActivity extends BaseActivity {
             }
         });
         mCommoListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            private int mLvIndext;
+            boolean scrollStatus;
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
+                switch (i) {
+                    // 滚动之前,手还在屏幕上  记录滚动前的下标
+                    case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
+                        //view.getLastVisiblePosition()得到当前屏幕可见的第一个item在整个listview中的下标
+                        mLvIndext = absListView.getLastVisiblePosition();
+                        break;
 
+                    //滚动停止
+                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                        //记录滚动停止后 记录当前item的位置
+                        int scrolled = absListView.getLastVisiblePosition();
+                        //滚动后下标大于滚动前 向下滚动了
+
+                        if (scrolled > mLvIndext) {
+                            scrollStatus = false;
+                            Log.e("weiwei", "onScrollStateChanged: "+scrollStatus );
+                        }
+                        //向上滚动了
+                        else {
+                            scrollStatus = true;
+                            Log.e("weiwei", "onScrollStateChanged: "+scrollStatus );
+                        }
+                        break;
+                }
             }
 
             @Override
             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                if (i + i1 == i2) {
+                if (i + i1 == i2&&scrollStatus) {
                     if (!isLoading) {
                         isLoading = true;
                         handler.postDelayed(new Runnable() {
@@ -481,6 +505,8 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     private void startActivityToPostReplyCommo(int position) {
+        if (mCommoAdapterList.size()==position)
+            return;
         if (mCommoAdapterList.get(position).getFloor_num() != null) {
             Gson gson = new Gson();
             String json = gson.toJson(mCommoAdapterList.get(position), PostCommoBean.class);
@@ -575,9 +601,25 @@ public class PostDetailActivity extends BaseActivity {
                 getCollect(mPostDetailBean.getId());
                 if (mPostDetailBean.getCollect_status().equals("1")) {
                     //更新列表界面收藏状态
-                    Intent intent = new Intent("updateCollectStatus");
-                    intent.putExtra("cancelCollect", "取消收藏啦");
-                    intent.putExtra("position", getIntent().getIntExtra("position",0));
+                    Intent intent = new Intent();
+                    switch (getIntent().getIntExtra("fragmentType",0)){
+                        case 0:
+                            break;
+                        case 1:
+                            intent.setAction("HotFragmentUpdateCollectStatus");
+                            break;
+                        case 2:
+                            intent.setAction("BestFragmentUpdateCollectStatus");
+                            break;
+                        case 3:
+                            intent.setAction("NewFragmentUpdateCollectStatus");
+                            break;
+                        case 8:
+                            intent.setAction("SortPostUpdateCollectStatus");
+                            break;
+                    }
+                    intent.putExtra("cancelCollect", 0);
+                    intent.putExtra("position", getIntent().getIntExtra("position", 0));
                     LocalBroadcastManager.getInstance(PostDetailActivity.this)
                             .sendBroadcast(intent);
 
@@ -589,12 +631,28 @@ public class PostDetailActivity extends BaseActivity {
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     mCollectNum.setCompoundDrawables(null, drawable, null, null);
                 } else {
-                   /* //更新列表界面收藏状态
-                    Intent intent = new Intent("updateCollectStatus");
-                    intent.putExtra("cancelCollect", "收藏啦");
+                    //更新列表界面收藏状态
+                    Intent intent = new Intent();
+                    switch (getIntent().getIntExtra("fragmentType",0)){
+                        case 0:
+                            break;
+                        case 1:
+                            intent.setAction("HotFragmentUpdateCollectStatus");
+                            break;
+                        case 2:
+                            intent.setAction("BestFragmentUpdateCollectStatus");
+                            break;
+                        case 3:
+                            intent.setAction("NewFragmentUpdateCollectStatus");
+                            break;
+                        case 8:
+                            intent.setAction("SortPostUpdateCollectStatus");
+                            break;
+                    }
+                    intent.putExtra("cancelCollect", 1);
                     intent.putExtra("position", getIntent().getIntExtra("position",0));
                     LocalBroadcastManager.getInstance(PostDetailActivity.this)
-                            .sendBroadcast(intent);*/
+                            .sendBroadcast(intent);
                     mCollectNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect()) + 1)));
                     mPostDetailBean.setPosts_collect(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect()) + 1)));
                     mPostDetailBean.setCollect_status("1");
@@ -623,6 +681,28 @@ public class PostDetailActivity extends BaseActivity {
                 }
                 getLaud(mPostDetailBean.getId());
                 if (mPostDetailBean.getLaud_status().equals("1")) {
+                    //更新列表界面点赞状态
+                    Intent intent = new Intent();
+                    switch (getIntent().getIntExtra("fragmentType",0)){
+                        case 0:
+                            break;
+                        case 1:
+                            intent.setAction("HotFragmentUpdateZanStatus");
+                            break;
+                        case 2:
+                            intent.setAction("BestFragmentUpdateZanStatus");
+                            break;
+                        case 3:
+                            intent.setAction("NewFragmentUpdateZanStatus");
+                            break;
+                        case 8:
+                            intent.setAction("SortPostUpdateZanStatus");
+                            break;
+                    }
+                    intent.putExtra("cancelZan", 0);
+                    intent.putExtra("position", getIntent().getIntExtra("position", 0));
+                    LocalBroadcastManager.getInstance(PostDetailActivity.this)
+                            .sendBroadcast(intent);
                     mJiaonangNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_laud()) - 1)));
                     mPostDetailBean.setPosts_laud(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_laud()) - 1)));
                     mPostDetailBean.setLaud_status("0");
@@ -631,6 +711,28 @@ public class PostDetailActivity extends BaseActivity {
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     mJiaonangNum.setCompoundDrawables(null, drawable, null, null);
                 } else {
+                    //更新列表界面点赞状态
+                    Intent intent = new Intent();
+                    switch (getIntent().getIntExtra("fragmentType",0)){
+                        case 0:
+                            break;
+                        case 1:
+                            intent.setAction("HotFragmentUpdateZanStatus");
+                            break;
+                        case 2:
+                            intent.setAction("BestFragmentUpdateZanStatus");
+                            break;
+                        case 3:
+                            intent.setAction("NewFragmentUpdateZanStatus");
+                            break;
+                        case 8:
+                            intent.setAction("SortPostUpdateZanStatus");
+                            break;
+                    }
+                    intent.putExtra("cancelZan", 1);
+                    intent.putExtra("position", getIntent().getIntExtra("position", 0));
+                    LocalBroadcastManager.getInstance(PostDetailActivity.this)
+                            .sendBroadcast(intent);
                     mJiaonangNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_laud()) + 1)));
                     mPostDetailBean.setPosts_laud(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_laud()) + 1)));
                     mPostDetailBean.setLaud_status("1");
@@ -744,6 +846,7 @@ public class PostDetailActivity extends BaseActivity {
                         PAGENUM = 1;
                         initCommoData(PAGENUM);
                         mImageList.clear();
+                        mImageAdapter.notifyDataSetChanged();
                         //待优化
                         edittext.setText("");
                     }
@@ -751,11 +854,7 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     //**********************************************以下是回复图片设置代码****************************************************
-    private void initRecyclerView() {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(PostDetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
-        mImageAdapter = new ImageAdapter();
-        mRecyclerView.setAdapter(mImageAdapter);
-    }
+
 
     private class ImageAdapter extends RecyclerView.Adapter {
         @Override

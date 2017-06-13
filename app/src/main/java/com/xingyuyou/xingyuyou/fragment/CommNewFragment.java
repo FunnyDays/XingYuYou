@@ -53,7 +53,7 @@ public class CommNewFragment extends BaseFragment {
     private boolean IS_FIRST_INIT_DATA = true;
     private int PAGENUMBER = 1;
     private List mPostList = new ArrayList();
-    private List mPostAdapterList = new ArrayList();
+    private List<PostListBean> mPostAdapterList = new ArrayList();
     boolean isLoading = false;
     private List<TopViewRecommBean> mRecommList;
     private List<TopViewRecommBean> mRecommAdapterList = new ArrayList<>();
@@ -283,10 +283,11 @@ public class CommNewFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        updateStatus();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mLinearLayoutManager = new WrapContentLinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mCommHotAdapter = new CommHotAdapter(mActivity, mPostAdapterList);
+        mCommHotAdapter = new CommHotAdapter(3,mActivity, mPostAdapterList);
         View loadingData = View.inflate(mActivity, R.layout.default_loading, null);
         mPbNodata = (ProgressBar) loadingData.findViewById(R.id.pb_loading);
         mTvNodata = (TextView) loadingData.findViewById(R.id.loading_text);
@@ -364,7 +365,47 @@ public class CommNewFragment extends BaseFragment {
             //不可见时不执行操作
         }
     }
+    private void updateStatus() {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getActivity());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("NewFragmentUpdateCollectStatus");
+        intentFilter.addAction("NewFragmentUpdateZanStatus");
+        BroadcastReceiver br1 = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals("NewFragmentUpdateCollectStatus")) {
+                    if (intent.getIntExtra("cancelCollect", 0) == 0) {
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).setCollect_status(0);
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)
+                                .setPosts_collect(String.valueOf((Integer.parseInt(
+                                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).getPosts_collect())) - 1));
+                    } else {
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).setCollect_status(1);
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)
+                                .setPosts_collect(String.valueOf((Integer.parseInt(
+                                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).getPosts_collect())) +1));
+                    }
+                }
+                if (intent.getAction().equals("NewFragmentUpdateZanStatus")) {
+                    if (intent.getIntExtra("cancelZan", 0) == 0) {
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).setLaud_status(0);
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)
+                                .setPosts_laud(String.valueOf((Integer.parseInt(
+                                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).getPosts_laud())) - 1));
+                    } else {
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).setLaud_status(1);
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)
+                                .setPosts_laud(String.valueOf((Integer.parseInt(
+                                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).getPosts_laud())) +1));
+                    }
+                }
+                mCommHotAdapter.notifyItemChanged(intent.getIntExtra("position", 0));
+            }
 
+        };
+        localBroadcastManager.registerReceiver(br1, intentFilter);
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();

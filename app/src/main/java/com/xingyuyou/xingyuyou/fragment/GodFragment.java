@@ -1,13 +1,21 @@
 package com.xingyuyou.xingyuyou.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -170,6 +178,7 @@ public class GodFragment extends BaseFragment {
     }
     @Override
     protected View initView() {
+
         View view = View.inflate(mActivity, R.layout.fragment_god, null);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.SwipeRefreshLayout);
         initSwipeRefreshLayout();
@@ -230,6 +239,13 @@ public class GodFragment extends BaseFragment {
         });
         return view;
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        updateStatus();
+    }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -270,6 +286,46 @@ public class GodFragment extends BaseFragment {
         });
 
     }
+    private void updateStatus() {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getActivity());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("SortPostUpdateCollectStatus");
+        intentFilter.addAction("SortPostUpdateZanStatus");
+        BroadcastReceiver br2 = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals("SortPostUpdateCollectStatus")) {
+                    if (intent.getIntExtra("cancelCollect", 0) == 0) {
+                        mDatas.get(intent.getIntExtra("position", 0) - 1).setCollect_status(0);
+                        mDatas.get(intent.getIntExtra("position", 0) - 1)
+                                .setPosts_collect(String.valueOf((Integer.parseInt(
+                                        mDatas.get(intent.getIntExtra("position", 0) - 1).getPosts_collect())) - 1));
+                    } else {
+                        mDatas.get(intent.getIntExtra("position", 0) - 1).setCollect_status(1);
+                        mDatas.get(intent.getIntExtra("position", 0) - 1)
+                                .setPosts_collect(String.valueOf((Integer.parseInt(
+                                        mDatas.get(intent.getIntExtra("position", 0) - 1).getPosts_collect())) +1));
+                    }
+                }
+                if (intent.getAction().equals("SortPostUpdateZanStatus")) {
+                    if (intent.getIntExtra("cancelZan", 0) == 0) {
+                        mDatas.get(intent.getIntExtra("position", 0) - 1).setLaud_status(0);
+                        mDatas.get(intent.getIntExtra("position", 0) - 1)
+                                .setPosts_laud(String.valueOf((Integer.parseInt(
+                                        mDatas.get(intent.getIntExtra("position", 0) - 1).getPosts_laud())) - 1));
+                    } else {
+                        mDatas.get(intent.getIntExtra("position", 0) - 1).setLaud_status(1);
+                        mDatas.get(intent.getIntExtra("position", 0) - 1)
+                                .setPosts_laud(String.valueOf((Integer.parseInt(
+                                        mDatas.get(intent.getIntExtra("position", 0) - 1).getPosts_laud())) +1));
+                    }
+                }
+                mAdapter.notifyItemChanged(intent.getIntExtra("position", 0));
+            }
 
+        };
+        localBroadcastManager.registerReceiver(br2, intentFilter);
+    }
 
 }

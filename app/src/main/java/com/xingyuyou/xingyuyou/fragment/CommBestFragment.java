@@ -12,7 +12,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -255,10 +254,11 @@ public class CommBestFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        updateStatus();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mCommHotAdapter = new CommHotAdapter(mActivity, mPostAdapterList);
+        mCommHotAdapter = new CommHotAdapter(2,mActivity, mPostAdapterList);
         View loadingData = View.inflate(mActivity, R.layout.default_loading, null);
         mPbNodata = (ProgressBar) loadingData.findViewById(R.id.pb_loading);
         mTvNodata = (TextView) loadingData.findViewById(R.id.loading_text);
@@ -337,23 +337,46 @@ public class CommBestFragment extends BaseFragment {
         }
     }
 
-    private void updatePost() {
-        Log.e("updatePost", "3333332?updatePost: ");
+    private void updateStatus() {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getActivity());
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("updateCollectStatus");
-        BroadcastReceiver br = new BroadcastReceiver() {
+        intentFilter.addAction("BestFragmentUpdateCollectStatus");
+        intentFilter.addAction("BestFragmentUpdateZanStatus");
+        BroadcastReceiver br1 = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Toast.makeText(context, intent.getStringExtra("cancelCollect")+"position:"+intent.getIntExtra("position",0)
-                        +"---"+mPostAdapterList.size(), Toast.LENGTH_SHORT).show();
-               // mPostAdapterList.get(intent.getIntExtra("position",0)-1).setNickname("haha");
-               // mCommHotAdapter.notifyItemChanged(intent.getIntExtra("position",0));
+                if (intent.getAction().equals("BestFragmentUpdateCollectStatus")) {
+                    if (intent.getIntExtra("cancelCollect", 0) == 0) {
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).setCollect_status(0);
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)
+                                .setPosts_collect(String.valueOf((Integer.parseInt(
+                                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).getPosts_collect())) - 1));
+                    } else {
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).setCollect_status(1);
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)
+                                .setPosts_collect(String.valueOf((Integer.parseInt(
+                                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).getPosts_collect())) +1));
+                    }
+                }
+                if (intent.getAction().equals("BestFragmentUpdateZanStatus")) {
+                    if (intent.getIntExtra("cancelZan", 0) == 0) {
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).setLaud_status(0);
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)
+                                .setPosts_laud(String.valueOf((Integer.parseInt(
+                                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).getPosts_laud())) - 1));
+                    } else {
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).setLaud_status(1);
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)
+                                .setPosts_laud(String.valueOf((Integer.parseInt(
+                                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).getPosts_laud())) +1));
+                    }
+                }
+                mCommHotAdapter.notifyItemChanged(intent.getIntExtra("position", 0));
             }
 
         };
-        localBroadcastManager.registerReceiver(br, intentFilter);
+        localBroadcastManager.registerReceiver(br1, intentFilter);
     }
 
     @Override

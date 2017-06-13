@@ -1,8 +1,13 @@
 package com.xingyuyou.xingyuyou.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -100,6 +105,7 @@ public class PostClassListActivity extends AppCompatActivity {
         initToolBar();
         initSwipeRefreshLayout();
         initData(1);
+        updateStatus();
     }
     private void initToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -260,7 +266,47 @@ public class PostClassListActivity extends AppCompatActivity {
                 });
     }
 
+    private void updateStatus() {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("SortPostUpdateCollectStatus");
+        intentFilter.addAction("SortPostUpdateZanStatus");
+        BroadcastReceiver br1 = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals("SortPostUpdateCollectStatus")) {
+                    if (intent.getIntExtra("cancelCollect", 0) == 0) {
+                        ((PostListBean)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).setCollect_status(0);
+                        ((PostListBean)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1))
+                                .setPosts_collect(String.valueOf((Integer.parseInt(
+                                        ((PostListBean) mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).getPosts_collect())) - 1));
+                    } else {
+                        ((PostListBean)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).setCollect_status(1);
+                        ((PostListBean)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1))
+                                .setPosts_collect(String.valueOf((Integer.parseInt(
+                                        ((PostListBean)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).getPosts_collect())) +1));
+                    }
+                }
+                if (intent.getAction().equals("SortPostUpdateZanStatus")) {
+                    if (intent.getIntExtra("cancelZan", 0) == 0) {
+                        ((PostListBean)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).setLaud_status(0);
+                        ((PostListBean) mPostAdapterList.get(intent.getIntExtra("position", 0) - 1))
+                                .setPosts_laud(String.valueOf((Integer.parseInt(
+                                        ((PostListBean) mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).getPosts_laud())) - 1));
+                    } else {
+                        ((PostListBean)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).setLaud_status(1);
+                        ((PostListBean)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1))
+                                .setPosts_laud(String.valueOf((Integer.parseInt(
+                                        ((PostListBean) mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).getPosts_laud())) +1));
+                    }
+                }
+                mCommHotAdapter.notifyItemChanged(intent.getIntExtra("position", 0));
+            }
 
+        };
+        localBroadcastManager.registerReceiver(br1, intentFilter);
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();

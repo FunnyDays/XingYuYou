@@ -251,11 +251,11 @@ public class PostingActivity extends AppCompatActivity {
         for (int i = 0; i < mImageList.size(); i++) {
             File file = new File(mImageList.get(i));
             if (file.exists()) {
-               // File file1 = new File(getExternalCacheDir() + "/tempCompress" + i + ".jpg");
-               // NativeUtil.compressBitmap(mImageList.get(i), file1.getAbsolutePath());
+                File file1 = new File(getExternalCacheDir() + "/tempCompress" + i + ".jpg");
+                NativeUtil.compressBitmap(mImageList.get(i), file1.getAbsolutePath());
                 //以上是压缩代码
                 String s = "posts_image";
-                post.addFile(s + i, file.getName(), file);
+                post.addFile(s + i, file1.getName(), file1);
             }
 
         }
@@ -282,7 +282,6 @@ public class PostingActivity extends AppCompatActivity {
                     public void inProgress(float progress, long total, int id) {
                         super.inProgress(progress, total, id);
                         mDialog.setProgressDialog(((int)(progress*100)));
-                        Log.e("post", "inProgress: "+"progress:"+((int)(progress*100))+ "total:"+total+"id:"+id);
                     }
                 });
 

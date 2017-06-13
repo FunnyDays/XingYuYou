@@ -181,7 +181,7 @@ public class SearchCommuActivity extends AppCompatActivity {
         mSearchList = (RecyclerView) findViewById(R.id.rv_search_list);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mSearchList.setLayoutManager(mLinearLayoutManager);
-        mAdapter = new CommHotAdapter(SearchCommuActivity.this, mPostAdapterList);
+        mAdapter = new CommHotAdapter(7,SearchCommuActivity.this, mPostAdapterList);
         mAdapter.setHeaderView(new View(SearchCommuActivity.this));
         mAdapter.setFooterView(loadingData);
         mSearchList.setAdapter(mAdapter);

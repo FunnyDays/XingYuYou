@@ -98,16 +98,16 @@ public class CommSortAdapter extends RecyclerView.Adapter {
             return TYPE_FOOTER;
         }
 
-        if (mListData.get(position - 1)instanceof PostTopAndWellBean) {
+        if (mListData.get(position - 1) instanceof PostTopAndWellBean) {
             return TYPE_TOP_WELL;
         }
-        if (((PostListBean)mListData.get(position - 1)).getPosts_image().size() == 1) {
+        if (((PostListBean) mListData.get(position - 1)).getPosts_image().size() == 1) {
             return TYPE_ONE_PIC;
         }
-        if (((PostListBean)mListData.get(position - 1)).getPosts_image().size() == 2) {
+        if (((PostListBean) mListData.get(position - 1)).getPosts_image().size() == 2) {
             return TYPE_TWO_PIC;
         }
-        if (((PostListBean)mListData.get(position - 1)).getPosts_image().size() >= 3) {
+        if (((PostListBean) mListData.get(position - 1)).getPosts_image().size() >= 3) {
             return TYPE_THREE_PIC;
         }
 
@@ -143,18 +143,18 @@ public class CommSortAdapter extends RecyclerView.Adapter {
 
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ItemTopWellViewHolder && (getItemViewType(position) == TYPE_TOP_WELL)) {
-            ((ItemTopWellViewHolder) holder).mPostName.setText(((PostTopAndWellBean)mListData.get(position - 1)).getSubject());
-            if (((PostTopAndWellBean)mListData.get(position - 1)).getIs_well().equals("1")) {
+            ((ItemTopWellViewHolder) holder).mPostName.setText(((PostTopAndWellBean) mListData.get(position - 1)).getSubject());
+            if (((PostTopAndWellBean) mListData.get(position - 1)).getIs_well().equals("1")) {
                 ((ItemTopWellViewHolder) holder).tv_top_well.setText("精品");
             }
-            if (((PostTopAndWellBean)mListData.get(position - 1)).getIs_top().equals("1")) {
+            if (((PostTopAndWellBean) mListData.get(position - 1)).getIs_top().equals("1")) {
                 ((ItemTopWellViewHolder) holder).tv_top_well.setText("置顶");
             }
             ((ItemTopWellViewHolder) holder).mPostName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(mActivity, PostDetailActivity.class);
-                    intent.putExtra("post_id", ((PostTopAndWellBean)mListData.get(position - 1)).getId());
+                    intent.putExtra("post_id", ((PostTopAndWellBean) mListData.get(position - 1)).getId());
                     mActivity.startActivity(intent);
                 }
             });
@@ -163,32 +163,32 @@ public class CommSortAdapter extends RecyclerView.Adapter {
                 || getItemViewType(position) == TYPE_TWO_PIC
                 || getItemViewType(position) == TYPE_THREE_PIC)) {
 
-            if (((PostListBean)mListData.get(position - 1)).getCollect_status() == 1) {
+            if (((PostListBean) mListData.get(position - 1)).getCollect_status() == 1) {
                 ((ItemViewHolder) holder).mPostCollect.setImageResource(R.drawable.ic_action_love);
             } else {
                 ((ItemViewHolder) holder).mPostCollect.setImageResource(R.drawable.ic_action_love_empty);
             }
-            if (((PostListBean)mListData.get(position - 1)).getLaud_status() == 1) {
+            if (((PostListBean) mListData.get(position - 1)).getLaud_status() == 1) {
                 ((ItemViewHolder) holder).mPostLuad.setImageResource(R.drawable.ic_zan_fill);
             } else {
                 ((ItemViewHolder) holder).mPostLuad.setImageResource(R.drawable.ic_zan);
             }
-            ((ItemViewHolder) holder).mUserName.setText(((PostListBean)mListData.get(position - 1)).getNickname());
-            if (StringUtils.isEmpty(((PostListBean)mListData.get(position - 1)).getClass_name())) {
+            ((ItemViewHolder) holder).mUserName.setText(((PostListBean) mListData.get(position - 1)).getNickname());
+            if (StringUtils.isEmpty(((PostListBean) mListData.get(position - 1)).getClass_name())) {
                 ((ItemViewHolder) holder).tv_class_name_tag.setVisibility(View.GONE);
             } else {
                 ((ItemViewHolder) holder).tv_class_name_tag.setVisibility(View.VISIBLE);
             }
-            ((ItemViewHolder) holder).tv_class_name.setText(((PostListBean)mListData.get(position - 1)).getClass_name());
-            ((ItemViewHolder) holder).mPostTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(((PostListBean)mListData.get(position - 1)).getDateline() + "000")));
-            ((ItemViewHolder) holder).mPostName.setText(((PostListBean)mListData.get(position - 1)).getSubject());
-            ((ItemViewHolder) holder).mPostContent.setText(((PostListBean)mListData.get(position - 1)).getMessage());
-            ((ItemViewHolder) holder).mCollectNum.setText(((PostListBean)mListData.get(position - 1)).getPosts_collect());
-            ((ItemViewHolder) holder).mCommNum.setText(((PostListBean)mListData.get(position - 1)).getPosts_forums());
-            ((ItemViewHolder) holder).mJiaoNangNum.setText(((PostListBean)mListData.get(position - 1)).getPosts_laud());
+            ((ItemViewHolder) holder).tv_class_name.setText(((PostListBean) mListData.get(position - 1)).getClass_name());
+            ((ItemViewHolder) holder).mPostTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(((PostListBean) mListData.get(position - 1)).getDateline() + "000")));
+            ((ItemViewHolder) holder).mPostName.setText(((PostListBean) mListData.get(position - 1)).getSubject());
+            ((ItemViewHolder) holder).mPostContent.setText(((PostListBean) mListData.get(position - 1)).getMessage());
+            ((ItemViewHolder) holder).mCollectNum.setText(((PostListBean) mListData.get(position - 1)).getPosts_collect());
+            ((ItemViewHolder) holder).mCommNum.setText(((PostListBean) mListData.get(position - 1)).getPosts_forums());
+            ((ItemViewHolder) holder).mJiaoNangNum.setText(((PostListBean) mListData.get(position - 1)).getPosts_laud());
 
             ((ItemViewHolder) holder).ll_root_text.removeAllViews();
-            for (int i = 0; i < ((PostListBean)mListData.get(position - 1)).getPosts_class().size(); i++) {
+            for (int i = 0; i < ((PostListBean) mListData.get(position - 1)).getPosts_class().size(); i++) {
                 TextView textView = new TextView(mActivity);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 lp.setMargins(ConvertUtils.dp2px(5), 0, ConvertUtils.dp2px(5), 0);
@@ -197,39 +197,42 @@ public class CommSortAdapter extends RecyclerView.Adapter {
                 // textView.setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.tag_textview_bg));
                 textView.setPadding(ConvertUtils.dp2px(2), 0, ConvertUtils.dp2px(2), 0);
                 textView.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
-                textView.setText(((PostListBean)mListData.get(position - 1)).getPosts_class().get(i).getLabel_name());
+                textView.setText(((PostListBean) mListData.get(position - 1)).getPosts_class().get(i).getLabel_name());
                 ((ItemViewHolder) holder).ll_root_text.addView(textView);
             }
             Glide.with(mActivity)
-                    .load(((PostListBean)mListData.get(position - 1)).getHead_image())
+                    .load(((PostListBean) mListData.get(position - 1)).getHead_image())
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .transform(new GlideCircleTransform(mActivity))
                     .into(((ItemViewHolder) holder).mUserPhoto);
             Glide.with(mActivity)
-                    .load(((PostListBean)mListData.get(position - 1)).getPosts_image().get(0))
+                    .load(((PostListBean) mListData.get(position - 1)).getPosts_image().get(0))
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(((ItemViewHolder) holder).mPostCover0);
             if (getItemViewType(position) == TYPE_TWO_PIC || getItemViewType(position) == TYPE_THREE_PIC) {
                 Glide.with(mActivity)
-                        .load(((PostListBean)mListData.get(position - 1)).getPosts_image().get(1))
+                        .load(((PostListBean) mListData.get(position - 1)).getPosts_image().get(1))
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .into(((ItemViewHolder) holder).mPostCover1);
             }
             if (getItemViewType(position) == TYPE_THREE_PIC) {
                 Glide.with(mActivity)
-                        .load(((PostListBean)mListData.get(position - 1)).getPosts_image().get(2))
+                        .load(((PostListBean) mListData.get(position - 1)).getPosts_image().get(2))
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .into(((ItemViewHolder) holder).mPostCover2);
             }
             ((ItemViewHolder) holder).mLinearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (((PostListBean)mListData.get(position - 1)).getUid().equals("206")) {
-                        mActivity.startActivity(new Intent(mActivity, GodListDetailActivity.class)
-                                .putExtra("activity_id", ((PostListBean)mListData.get(position - 1)).getId()));
+                    if (((PostListBean) mListData.get(position - 1)).getUid().equals("206")) {
+                        Intent intent = new Intent(mActivity, GodListDetailActivity.class);
+                        intent.putExtra("activity_id", ((PostListBean) mListData.get(position - 1)).getId());
+                        mActivity.startActivity(intent);
                     } else {
                         Intent intent = new Intent(mActivity, PostDetailActivity.class);
-                        intent.putExtra("post_id", ((PostListBean)mListData.get(position - 1)).getId());
+                        intent.putExtra("post_id", ((PostListBean) mListData.get(position - 1)).getId());
+                        intent.putExtra("position", (position));
+                        intent.putExtra("fragmentType", 8);
                         mActivity.startActivity(intent);
                     }
                 }
@@ -241,17 +244,17 @@ public class CommSortAdapter extends RecyclerView.Adapter {
                         IntentUtils.startActivity(mActivity, LoginActivity.class);
                         return;
                     }
-                    getCollect(((PostListBean)mListData.get(position - 1)).getId());
-                    if (((PostListBean)mListData.get(position - 1)).getCollect_status() == 1) {
-                        ((ItemViewHolder) holder).mCollectNum.setText(String.valueOf((Integer.parseInt(((PostListBean)mListData.get(position - 1)).getPosts_collect()) - 1)));
-                        ((PostListBean)mListData.get(position - 1)).setPosts_collect(String.valueOf((Integer.parseInt(((PostListBean)mListData.get(position - 1)).getPosts_collect()) - 1)));
-                        ((PostListBean)mListData.get(position - 1)).setCollect_status(0);
+                    getCollect(((PostListBean) mListData.get(position - 1)).getId());
+                    if (((PostListBean) mListData.get(position - 1)).getCollect_status() == 1) {
+                        ((ItemViewHolder) holder).mCollectNum.setText(String.valueOf((Integer.parseInt(((PostListBean) mListData.get(position - 1)).getPosts_collect()) - 1)));
+                        ((PostListBean) mListData.get(position - 1)).setPosts_collect(String.valueOf((Integer.parseInt(((PostListBean) mListData.get(position - 1)).getPosts_collect()) - 1)));
+                        ((PostListBean) mListData.get(position - 1)).setCollect_status(0);
                         Toast.makeText(mActivity, "取消收藏", Toast.LENGTH_SHORT).show();
                         ((ItemViewHolder) holder).mPostCollect.setImageResource(R.drawable.ic_action_love_empty);
                     } else {
-                        ((ItemViewHolder) holder).mCollectNum.setText(String.valueOf((Integer.parseInt(((PostListBean)mListData.get(position - 1)).getPosts_collect()) + 1)));
-                        ((PostListBean)mListData.get(position - 1)).setPosts_collect(String.valueOf((Integer.parseInt(((PostListBean)mListData.get(position - 1)).getPosts_collect()) + 1)));
-                        ((PostListBean)mListData.get(position - 1)).setCollect_status(1);
+                        ((ItemViewHolder) holder).mCollectNum.setText(String.valueOf((Integer.parseInt(((PostListBean) mListData.get(position - 1)).getPosts_collect()) + 1)));
+                        ((PostListBean) mListData.get(position - 1)).setPosts_collect(String.valueOf((Integer.parseInt(((PostListBean) mListData.get(position - 1)).getPosts_collect()) + 1)));
+                        ((PostListBean) mListData.get(position - 1)).setCollect_status(1);
                         Toast.makeText(mActivity, "收藏成功", Toast.LENGTH_SHORT).show();
                         ((ItemViewHolder) holder).mPostCollect.setImageResource(R.drawable.ic_action_love);
 
@@ -273,17 +276,17 @@ public class CommSortAdapter extends RecyclerView.Adapter {
                         IntentUtils.startActivity(mActivity, LoginActivity.class);
                         return;
                     }
-                    getLaud(((PostListBean)mListData.get(position - 1)).getId());
-                    if (((PostListBean)mListData.get(position - 1)).getLaud_status() == 1) {
-                        ((ItemViewHolder) holder).mJiaoNangNum.setText(String.valueOf((Integer.parseInt(((PostListBean)mListData.get(position - 1)).getPosts_laud()) - 1)));
-                        ((PostListBean)mListData.get(position - 1)).setPosts_laud(String.valueOf((Integer.parseInt(((PostListBean)mListData.get(position - 1)).getPosts_laud()) - 1)));
-                        ((PostListBean)mListData.get(position - 1)).setLaud_status(0);
+                    getLaud(((PostListBean) mListData.get(position - 1)).getId());
+                    if (((PostListBean) mListData.get(position - 1)).getLaud_status() == 1) {
+                        ((ItemViewHolder) holder).mJiaoNangNum.setText(String.valueOf((Integer.parseInt(((PostListBean) mListData.get(position - 1)).getPosts_laud()) - 1)));
+                        ((PostListBean) mListData.get(position - 1)).setPosts_laud(String.valueOf((Integer.parseInt(((PostListBean) mListData.get(position - 1)).getPosts_laud()) - 1)));
+                        ((PostListBean) mListData.get(position - 1)).setLaud_status(0);
                         Toast.makeText(mActivity, "取消点赞", Toast.LENGTH_SHORT).show();
                         ((ItemViewHolder) holder).mPostLuad.setImageResource(R.drawable.ic_zan);
                     } else {
-                        ((ItemViewHolder) holder).mJiaoNangNum.setText(String.valueOf((Integer.parseInt(((PostListBean)mListData.get(position - 1)).getPosts_laud()) + 1)));
-                        ((PostListBean)mListData.get(position - 1)).setPosts_laud(String.valueOf((Integer.parseInt(((PostListBean)mListData.get(position - 1)).getPosts_laud()) + 1)));
-                        ((PostListBean)mListData.get(position - 1)).setLaud_status(1);
+                        ((ItemViewHolder) holder).mJiaoNangNum.setText(String.valueOf((Integer.parseInt(((PostListBean) mListData.get(position - 1)).getPosts_laud()) + 1)));
+                        ((PostListBean) mListData.get(position - 1)).setPosts_laud(String.valueOf((Integer.parseInt(((PostListBean) mListData.get(position - 1)).getPosts_laud()) + 1)));
+                        ((PostListBean) mListData.get(position - 1)).setLaud_status(1);
                         Toast.makeText(mActivity, "点赞成功", Toast.LENGTH_SHORT).show();
                         ((ItemViewHolder) holder).mPostLuad.setImageResource(R.drawable.ic_zan_fill);
 

@@ -12,7 +12,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -24,16 +23,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
-import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideRoundTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
-import com.xingyuyou.xingyuyou.bean.community.SortPostListBean;
 import com.xingyuyou.xingyuyou.bean.community.TopViewRecommBean;
-import com.xingyuyou.xingyuyou.weight.WrapContentLinearLayoutManager;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -258,11 +254,11 @@ public class CommHotFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        updatePost();
+        updateStatus();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mCommHotAdapter = new CommHotAdapter(mActivity, mPostAdapterList);
+        mCommHotAdapter = new CommHotAdapter(1,mActivity, mPostAdapterList);
         View loadingData = View.inflate(mActivity, R.layout.default_loading, null);
         mPbNodata = (ProgressBar) loadingData.findViewById(R.id.pb_loading);
         mTvNodata = (TextView) loadingData.findViewById(R.id.loading_text);
@@ -341,19 +337,42 @@ public class CommHotFragment extends BaseFragment {
         }
     }
 
-    private void updatePost() {
-        Log.e("updatePost", "2?updatePost: ");
+    private void updateStatus() {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getActivity());
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("updateCollectStatus");
+        intentFilter.addAction("HotFragmentUpdateCollectStatus");
+        intentFilter.addAction("HotFragmentUpdateZanStatus");
         BroadcastReceiver br = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Toast.makeText(context, intent.getStringExtra("cancelCollect")+"position:"+intent.getIntExtra("position",0)
-                        +"---"+mPostAdapterList.size(), Toast.LENGTH_SHORT).show();
-                mPostAdapterList.get(intent.getIntExtra("position",0)-1).setNickname("haha");
-                mCommHotAdapter.notifyItemChanged(intent.getIntExtra("position",0));
+                if (intent.getAction().equals("HotFragmentUpdateCollectStatus")) {
+                    if (intent.getIntExtra("cancelCollect", 0) == 0) {
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).setCollect_status(0);
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)
+                                .setPosts_collect(String.valueOf((Integer.parseInt(
+                                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).getPosts_collect())) - 1));
+                    } else {
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).setCollect_status(1);
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)
+                                .setPosts_collect(String.valueOf((Integer.parseInt(
+                                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).getPosts_collect())) +1));
+                    }
+                }
+                if (intent.getAction().equals("HotFragmentUpdateZanStatus")) {
+                    if (intent.getIntExtra("cancelZan", 0) == 0) {
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).setLaud_status(0);
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)
+                                .setPosts_laud(String.valueOf((Integer.parseInt(
+                                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).getPosts_laud())) - 1));
+                    } else {
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).setLaud_status(1);
+                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)
+                                .setPosts_laud(String.valueOf((Integer.parseInt(
+                                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).getPosts_laud())) +1));
+                    }
+                }
+                mCommHotAdapter.notifyItemChanged(intent.getIntExtra("position", 0));
             }
 
         };

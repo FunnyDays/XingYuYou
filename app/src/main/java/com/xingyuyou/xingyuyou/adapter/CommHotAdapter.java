@@ -43,6 +43,7 @@ public class CommHotAdapter extends RecyclerView.Adapter {
     //数据
     private List<PostListBean> mListData;
     private Activity mActivity;
+    private int fragmentType;
 
     public static final int TYPE_HEADER = 0;  //说明是带有Header的
     public static final int TYPE_FOOTER = 1;  //说明是带有Footer的
@@ -55,9 +56,10 @@ public class CommHotAdapter extends RecyclerView.Adapter {
     private View mHeaderView;
     private View mFooterView;
 
-    public CommHotAdapter(Activity activity, List<PostListBean> listData) {
+    public CommHotAdapter(int i,Activity activity, List<PostListBean> listData) {
         mListData = listData;
         mActivity = activity;
+        fragmentType=i;
     }
 
     public void setDatas(List<PostListBean> listData) {
@@ -179,16 +181,19 @@ public class CommHotAdapter extends RecyclerView.Adapter {
             ((ItemViewHolder) holder).mJiaoNangNum.setText(mListData.get(position - 1).getPosts_laud());
 
             ((ItemViewHolder) holder).ll_root_text.removeAllViews();
-            for (int i = 0; i <mListData.get(position - 1).getPosts_class().size() ; i++) {
-                TextView textView = new TextView(mActivity);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                lp.setMargins(ConvertUtils.dp2px(5), 0, ConvertUtils.dp2px(5),0);
-                textView.setLayoutParams(lp);
-                textView.setBackgroundResource(R.drawable.tag_textview_bg);
-                textView.setPadding(ConvertUtils.dp2px(2),0,ConvertUtils.dp2px(2),0);
-                textView.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
-                textView.setText(mListData.get(position - 1).getPosts_class().get(i).getLabel_name());
-                ((ItemViewHolder) holder).ll_root_text.addView(textView);
+            if (mListData.get(position - 1).getPosts_class()!=null){
+                for (int i = 0; i <mListData.get(position - 1).getPosts_class().size() ; i++) {
+                    TextView textView = new TextView(mActivity);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    lp.setMargins(ConvertUtils.dp2px(5), 0, ConvertUtils.dp2px(5),0);
+                    textView.setLayoutParams(lp);
+                    textView.setBackgroundResource(R.drawable.tag_textview_bg);
+                    textView.setPadding(ConvertUtils.dp2px(2),0,ConvertUtils.dp2px(2),0);
+                    textView.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
+                    textView.setText(mListData.get(position - 1).getPosts_class().get(i).getLabel_name());
+                    ((ItemViewHolder) holder).ll_root_text.addView(textView);
+                }
+
             }
             Glide.with(mActivity)
                     .load(mListData.get(position - 1).getHead_image())
@@ -221,6 +226,7 @@ public class CommHotAdapter extends RecyclerView.Adapter {
                         Intent intent = new Intent(mActivity, PostDetailActivity.class);
                         intent.putExtra("post_id", mListData.get(position - 1).getId());
                         intent.putExtra("position",(position));
+                        intent.putExtra("fragmentType",fragmentType);
                         mActivity.startActivity(intent);
                     }
                 }
