@@ -120,6 +120,13 @@ public class PostCommoListAdapter extends BaseAdapter {
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .into(imageView);
                 holder.ll_root_image_item.addView(imageView);
+                final int finalJ = j;
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(mActivity, "图片位置"+i+"里面位置"+ finalJ, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         }
         //点赞

@@ -85,7 +85,7 @@ public class GameDetailPicAdapter extends RecyclerView.Adapter {
         } else if (holder instanceof ItemViewHolder) {
             Glide.with(mActivity)
                     .load(arrayList.get(position))
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(((ItemViewHolder) holder).imageView);
 
         }

@@ -472,12 +472,10 @@ public class PostDetailActivity extends BaseActivity {
 
                         if (scrolled > mLvIndext) {
                             scrollStatus = false;
-                            Log.e("weiwei", "onScrollStateChanged: "+scrollStatus );
                         }
                         //向上滚动了
                         else {
                             scrollStatus = true;
-                            Log.e("weiwei", "onScrollStateChanged: "+scrollStatus );
                         }
                         break;
                 }

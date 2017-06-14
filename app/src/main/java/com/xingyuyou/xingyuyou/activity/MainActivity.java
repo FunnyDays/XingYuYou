@@ -33,6 +33,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.umeng.socialize.UMShareAPI;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.AppUtils;
+import com.xingyuyou.xingyuyou.Utils.FileUtils;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.PermissionsChecker;
@@ -343,7 +344,7 @@ public class MainActivity extends BaseActivity {
                 .get()//
                 .url(mAppDownload)//
                 .build()//http://xingyuhuyu1916.oss-cn-beijing.aliyuncs.com/%E5%8D%95%E6%9C%BA/Iter.apk
-                .execute(new FileCallBack(Environment.getExternalStorageDirectory().getAbsolutePath(), "xingyu.apk")//
+                .execute(new FileCallBack(FileUtils.fileSavePath ,"xingyuyou.apk")//
                 {
                     @Override
                     public void onError(Call call, Exception e, int id) {
@@ -362,7 +363,7 @@ public class MainActivity extends BaseActivity {
 
                     @Override
                     public void onAfter(int id) {
-                        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/xingyu.apk";
+                        String path = FileUtils.fileSavePath + "xingyuyou" + ".apk";
                         AppUtils.installApp(MainActivity.this, path);
                         Toast.makeText(MainActivity.this, "下载完成", Toast.LENGTH_SHORT).show();
                     }
