@@ -1,6 +1,7 @@
 package com.xingyuyou.xingyuyou.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -40,6 +41,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
@@ -451,10 +455,17 @@ public class PostDetailActivity extends BaseActivity {
                     startActivityToPostReplyCommo(i - 1);
             }
         });
+        mPostCommoListAdapter.setOnItemClickLitener(new PostCommoListAdapter.OnImageItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position_i, int position_j) {
+                Toast.makeText(PostDetailActivity.this, "位置i:"+position_i+"位置j:"+position_j, Toast.LENGTH_SHORT).show();
+            }
+        });
         mCommoListView.setOnScrollListener(new AbsListView.OnScrollListener() {
 
             private int mLvIndext;
             boolean scrollStatus;
+
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
                 switch (i) {
@@ -483,7 +494,7 @@ public class PostDetailActivity extends BaseActivity {
 
             @Override
             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                if (i + i1 == i2&&scrollStatus) {
+                if (i + i1 == i2 && scrollStatus) {
                     if (!isLoading) {
                         isLoading = true;
                         handler.postDelayed(new Runnable() {
@@ -503,7 +514,7 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     private void startActivityToPostReplyCommo(int position) {
-        if (mCommoAdapterList.size()==position)
+        if (mCommoAdapterList.size() == position)
             return;
         if (mCommoAdapterList.get(position).getFloor_num() != null) {
             Gson gson = new Gson();
@@ -543,7 +554,6 @@ public class PostDetailActivity extends BaseActivity {
             Glide.with(PostDetailActivity.this)
                     .load(mPostDetailBean.getHead_image())
                     .thumbnail(0.1f)
-                    .placeholder(new ColorDrawable(Color.GRAY))
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .transform(new GlideCircleTransform(PostDetailActivity.this))
                     .into(mIvUserPhoto);
@@ -555,18 +565,22 @@ public class PostDetailActivity extends BaseActivity {
         //mCommNum.setText(mPostDetailBean.getPosts_forums());
         mJiaonangNum.setText(mPostDetailBean.getPosts_laud());
         for (int i = 0; i < mPostDetailBean.getPosts_image().size(); i++) {
-            ImageView imageView = new ImageView(PostDetailActivity.this);
+            final ImageView imageView = new ImageView(PostDetailActivity.this);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(ConvertUtils.dp2px(10), ConvertUtils.dp2px(10), ConvertUtils.dp2px(10), ConvertUtils.dp2px(10));
             imageView.setLayoutParams(lp);
             imageView.setAdjustViewBounds(true);
-            if (UIThreadUtils.isMainThread())
-                Glide.with(PostDetailActivity.this)
-                        .load(mPostDetailBean.getPosts_image().get(i))
-                        .thumbnail(0.1f)
-                        .placeholder(new ColorDrawable(Color.GRAY))
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                        .into(imageView);
+
+            Glide.with(PostDetailActivity.this)
+                    .load(mPostDetailBean.getPosts_image().get(i))
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            imageView.setImageBitmap(resource);
+                        }
+                    });
             mRootImage.addView(imageView);
         }
         mEditText.setFocusable(false);
@@ -600,7 +614,7 @@ public class PostDetailActivity extends BaseActivity {
                 if (mPostDetailBean.getCollect_status().equals("1")) {
                     //更新列表界面收藏状态
                     Intent intent = new Intent();
-                    switch (getIntent().getIntExtra("fragmentType",0)){
+                    switch (getIntent().getIntExtra("fragmentType", 0)) {
                         case 0:
                             break;
                         case 1:
@@ -631,7 +645,7 @@ public class PostDetailActivity extends BaseActivity {
                 } else {
                     //更新列表界面收藏状态
                     Intent intent = new Intent();
-                    switch (getIntent().getIntExtra("fragmentType",0)){
+                    switch (getIntent().getIntExtra("fragmentType", 0)) {
                         case 0:
                             break;
                         case 1:
@@ -648,7 +662,7 @@ public class PostDetailActivity extends BaseActivity {
                             break;
                     }
                     intent.putExtra("cancelCollect", 1);
-                    intent.putExtra("position", getIntent().getIntExtra("position",0));
+                    intent.putExtra("position", getIntent().getIntExtra("position", 0));
                     LocalBroadcastManager.getInstance(PostDetailActivity.this)
                             .sendBroadcast(intent);
                     mCollectNum.setText(String.valueOf((Integer.parseInt(mPostDetailBean.getPosts_collect()) + 1)));
@@ -681,7 +695,7 @@ public class PostDetailActivity extends BaseActivity {
                 if (mPostDetailBean.getLaud_status().equals("1")) {
                     //更新列表界面点赞状态
                     Intent intent = new Intent();
-                    switch (getIntent().getIntExtra("fragmentType",0)){
+                    switch (getIntent().getIntExtra("fragmentType", 0)) {
                         case 0:
                             break;
                         case 1:
@@ -711,7 +725,7 @@ public class PostDetailActivity extends BaseActivity {
                 } else {
                     //更新列表界面点赞状态
                     Intent intent = new Intent();
-                    switch (getIntent().getIntExtra("fragmentType",0)){
+                    switch (getIntent().getIntExtra("fragmentType", 0)) {
                         case 0:
                             break;
                         case 1:
@@ -791,7 +805,6 @@ public class PostDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.e("weiwei", "hahah" + UserUtils.getUserId() + tid + response);
                     }
                 });
 

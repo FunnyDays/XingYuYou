@@ -1,6 +1,7 @@
 package com.xingyuyou.xingyuyou.adapter;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
@@ -44,6 +47,19 @@ public class PostCommoListAdapter extends BaseAdapter {
     public PostCommoListAdapter(Activity activity, List<PostCommoBean> commoBeanList) {
         this.mActivity = activity;
         this.mCommoBeanList = commoBeanList;
+    }
+
+    /**
+     * ItemClick的回调接口
+     */
+    public interface OnImageItemClickLitener {
+        void onItemClick(View view, int position_i,int position_j);
+    }
+
+    private OnImageItemClickLitener mOnImageItemClickLitener;
+
+    public void setOnItemClickLitener(OnImageItemClickLitener mOnImageItemClickLitener) {
+        this.mOnImageItemClickLitener = mOnImageItemClickLitener;
     }
 
     public void setUid(String uid) {
@@ -104,29 +120,42 @@ public class PostCommoListAdapter extends BaseAdapter {
                 .load(mCommoBeanList.get(i).getHead_image())
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .transform(new GlideCircleTransform(mActivity))
-
                 .into(holder.iv_user_photo);
         holder.ll_root_image_item.removeAllViews();
         if (!(mCommoBeanList.get(i).getImgarr() == null) && mCommoBeanList.get(i).getImgarr().size() >= 1 && !mCommoBeanList.get(i).getImgarr().get(0).toString().equals("")) {
             for (int j = 0; j < mCommoBeanList.get(i).getImgarr().size(); j++) {
-                ImageView imageView = new ImageView(mActivity);
+                final int finalJ = j;
+                final ImageView imageView = new ImageView(mActivity);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 lp.setMargins(ConvertUtils.dp2px(0), ConvertUtils.dp2px(5), ConvertUtils.dp2px(0), ConvertUtils.dp2px(20));
                 imageView.setLayoutParams(lp);
                 imageView.setAdjustViewBounds(true);
-                Glide.with(mActivity)
-                        .load(mCommoBeanList.get(i).getImgarr().get(j))
-                        .placeholder(new ColorDrawable(Color.GRAY))
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                        .into(imageView);
+                Log.e("weiwei", "setValues: "+imageView.getLayoutParams().width);
+                if (!mCommoBeanList.get(i).getImgarr().get(j).equals(imageView.getTag())){
+                    Glide.with(mActivity)
+                            .load(mCommoBeanList.get(i).getImgarr().get(j))
+                            .asBitmap()
+                            .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                    imageView.setImageBitmap(resource);
+                                }
+                            });
+                    imageView.setTag(mCommoBeanList.get(i).getImgarr().get(j));
+                }
                 holder.ll_root_image_item.addView(imageView);
-                final int finalJ = j;
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(mActivity, "图片位置"+i+"里面位置"+ finalJ, Toast.LENGTH_SHORT).show();
-                    }
-                });
+
+                //如果设置了回调，则设置点击事件
+                if (mOnImageItemClickLitener != null) {
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mOnImageItemClickLitener.onItemClick(imageView, i,finalJ);
+                        }
+                    });
+
+                }
             }
         }
         //点赞

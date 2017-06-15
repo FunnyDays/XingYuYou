@@ -130,7 +130,6 @@ public class GameAdapter extends RecyclerView.Adapter {
                     mOnItemClickLitener.onItemClick(holder.itemView, position);
                 }
             });
-
         }
 
     }
