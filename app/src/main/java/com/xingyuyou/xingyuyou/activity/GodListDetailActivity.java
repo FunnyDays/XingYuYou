@@ -434,7 +434,6 @@ public class GodListDetailActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.e("weiwei","hahah"+UserUtils.getUserId()+tid+response);
                     }
                 });
 

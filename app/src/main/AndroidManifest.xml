@@ -191,6 +191,7 @@
         <activity android:name=".activity.ChangePasswordActivity"/>
         <activity android:name=".activity.SearchCommuListActivity">
         </activity>
+        <activity android:name=".activity.PhotoViewPostDetailActivity"/>
     </application>
 
 </manifest>

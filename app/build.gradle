@@ -62,4 +62,6 @@ dependencies {
     compile 'com.github.lovetuzitong:MultiImageSelector:1.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.bm.photoview:library:1.4.1'
+    //dataeye
+    compile 'com.dataeye.sdk.appsdk:appsdk:2.5.5'
 }

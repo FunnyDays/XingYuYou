@@ -27,8 +27,10 @@ import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.activity.GodDeatilActivity;
 import com.xingyuyou.xingyuyou.adapter.CommSortAdapter;
+import com.xingyuyou.xingyuyou.adapter.GodFragmentAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
+import com.xingyuyou.xingyuyou.bean.community.PostListBeanTest;
 import com.xingyuyou.xingyuyou.bean.community.SortPostListBean;
 import com.xingyuyou.xingyuyou.bean.god.GodBean;
 import com.xingyuyou.xingyuyou.weight.infiniteViewPager.GalleryTransformer;
@@ -54,10 +56,10 @@ import okhttp3.Call;
 public class GodFragment extends BaseFragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
-    private List<PostListBean> mDatas = new ArrayList<>();
-    private CommSortAdapter mAdapter;
+    private List<PostListBeanTest> mDatas = new ArrayList<>();
+    private GodFragmentAdapter mAdapter;
     private int  PAGENUMBER = 1;
-    private List<PostListBean> mGodPostList=new ArrayList<>();
+    private List<PostListBeanTest> mGodPostList=new ArrayList<>();
     private List<GodBean> mGodList=new ArrayList<>();
     private List<GodBean> mGodListDatas=new ArrayList<>();
     private Handler mHandler=new Handler(){
@@ -81,7 +83,7 @@ public class GodFragment extends BaseFragment {
                         //Log.e("hot", "解析数据："+  ja.toString());
                         Gson gson = new Gson();
                         mGodPostList = gson.fromJson(ja.toString(),
-                                new TypeToken<List<PostListBean>>() {
+                                new TypeToken<List<PostListBeanTest>>() {
                                 }.getType());
                         mDatas.addAll(mGodPostList);
                         if (mDatas.size()<=20){
@@ -139,10 +141,14 @@ public class GodFragment extends BaseFragment {
      */
     public void initData(int PAGENUMBER) {
         OkHttpUtils.post()//
-                .addParams("page",String.valueOf(PAGENUMBER))
-                .addParams("fid","0")
+                .addParams("page", String.valueOf(PAGENUMBER))
                 .addParams("uid", UserUtils.getUserId())
-                .url(XingYuInterface.GET_POSTS_CLASS_LIST)
+                .addParams("type", "6")
+                .addParams("attribute", "1")
+                .addParams("fid","0")
+                .addParams("keyword", "1")
+                .addParams("bid", "1")
+                .url(XingYuInterface.GET_POSTS_LIST)
                 .tag(this)//
                 .build()//
                 .execute(new StringCallback() {
@@ -185,7 +191,7 @@ public class GodFragment extends BaseFragment {
         mRecyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(mActivity);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mAdapter = new CommSortAdapter(mActivity, mDatas);
+        mAdapter = new GodFragmentAdapter(mActivity, mDatas);
         //神轮播图
         View view2 = View.inflate(mActivity, R.layout.part_god_fragment_header, null);
         mViewPager = (InfiniteViewPager) view2.findViewById(R.id.id_viewpager);
@@ -290,12 +296,12 @@ public class GodFragment extends BaseFragment {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getActivity());
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("SortPostUpdateCollectStatus");
-        intentFilter.addAction("SortPostUpdateZanStatus");
+        intentFilter.addAction("GodPostUpdateCollectStatus");
+        intentFilter.addAction("GodPostUpdateZanStatus");
         BroadcastReceiver br2 = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals("SortPostUpdateCollectStatus")) {
+                if (intent.getAction().equals("GodPostUpdateCollectStatus")) {
                     if (intent.getIntExtra("cancelCollect", 0) == 0) {
                         mDatas.get(intent.getIntExtra("position", 0) - 1).setCollect_status(0);
                         mDatas.get(intent.getIntExtra("position", 0) - 1)
@@ -308,7 +314,7 @@ public class GodFragment extends BaseFragment {
                                         mDatas.get(intent.getIntExtra("position", 0) - 1).getPosts_collect())) +1));
                     }
                 }
-                if (intent.getAction().equals("SortPostUpdateZanStatus")) {
+                if (intent.getAction().equals("GodPostUpdateZanStatus")) {
                     if (intent.getIntExtra("cancelZan", 0) == 0) {
                         mDatas.get(intent.getIntExtra("position", 0) - 1).setLaud_status(0);
                         mDatas.get(intent.getIntExtra("position", 0) - 1)

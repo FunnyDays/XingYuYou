@@ -27,11 +27,13 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.glide.GlideRoundTransform;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
+import com.xingyuyou.xingyuyou.bean.community.PostListBeanTest;
 import com.xingyuyou.xingyuyou.bean.community.SearchPopularTags;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameDetailBean;
 import com.xingyuyou.xingyuyou.bean.hotgame.GameTag;
@@ -53,7 +55,7 @@ import okhttp3.Call;
 public class SearchCommuActivity extends AppCompatActivity {
     private static boolean CLEAR_DATA = false;
     private List mPostList = new ArrayList();
-    private List mPostAdapterList = new ArrayList();
+    private List<PostListBeanTest> mPostAdapterList=new ArrayList();
     private int PAGENUMBER = 1;
     boolean isLoading = false;
     private int GAMEPAGENUMBER = 1;
@@ -83,7 +85,7 @@ public class SearchCommuActivity extends AppCompatActivity {
                     JSONArray ja = jo.getJSONArray("data");
                     Gson gson = new Gson();
                     mPostList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<PostListBean>>() {
+                            new TypeToken<List<PostListBeanTest>>() {
                             }.getType());
                     mPostAdapterList.addAll(mPostList);
                     if (mPostAdapterList.size()<=20){
@@ -98,6 +100,10 @@ public class SearchCommuActivity extends AppCompatActivity {
                     mAdapter.notifyDataSetChanged();
             }
             if (msg.what == 2) {
+                if (msg.obj.toString().contains("\"data\":null")) {
+                    Toast.makeText(SearchCommuActivity.this, "已经没有更多数据", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String response = (String) msg.obj;
                 JSONObject jo = null;
                 try {
@@ -127,15 +133,16 @@ public class SearchCommuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        initData();
+        initData(PAGENUMBER);
         initToolbar();
         initView();
     }
 
-    private void initData() {
+    private void initData(int PAGENUMBER) {
         //获取游戏标签
         OkHttpUtils.post()//
-                .url(XingYuInterface.GET_SEARCH_POPULAR_TAGS)
+                .url(XingYuInterface.POPULAR_TAGS)
+                .addParams("page", String.valueOf(PAGENUMBER))
                 .tag(this)//
                 .build()//
                 .execute(new StringCallback() {
@@ -158,7 +165,8 @@ public class SearchCommuActivity extends AppCompatActivity {
         mTvChangeData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                initData();
+                PAGENUMBER++;
+                initData(PAGENUMBER);
             }
         });
         //游戏tag
@@ -236,8 +244,7 @@ public class SearchCommuActivity extends AppCompatActivity {
             //点击搜索按钮的监听
             @Override
             public boolean onQueryTextSubmit(String query) {
-                //跳转到查询结果详情界面
-                displayResult();
+
                 return false;
             }
 
@@ -277,8 +284,13 @@ public class SearchCommuActivity extends AppCompatActivity {
         //获取游戏标签
         OkHttpUtils.post()//
                 .addParams("keyword", query)
+                .addParams("type", "5")
+                .addParams("bid", "1")
+                .addParams("attribute", "1")
+                .addParams("fid", "1")
+                .addParams("uid", UserUtils.getUserId())
                 .addParams("page", String.valueOf(GAMEPAGENUMBER))
-                .url(XingYuInterface.GET_SEARCH_FORUMS)
+                .url(XingYuInterface.GET_POSTS_LIST)
                 .tag(this)//
                 .build()//
                 .execute(new StringCallback() {

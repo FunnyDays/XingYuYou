@@ -12,6 +12,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -29,6 +30,7 @@ import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
+import com.xingyuyou.xingyuyou.bean.community.PostListBeanTest;
 import com.xingyuyou.xingyuyou.bean.community.TopViewRecommBean;
 import com.xingyuyou.xingyuyou.weight.WrapContentLinearLayoutManager;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -53,7 +55,7 @@ public class CommNewFragment extends BaseFragment {
     private boolean IS_FIRST_INIT_DATA = true;
     private int PAGENUMBER = 1;
     private List mPostList = new ArrayList();
-    private List<PostListBean> mPostAdapterList = new ArrayList();
+    private List<PostListBeanTest> mPostAdapterList = new ArrayList();
     boolean isLoading = false;
     private List<TopViewRecommBean> mRecommList;
     private List<TopViewRecommBean> mRecommAdapterList = new ArrayList<>();
@@ -75,7 +77,7 @@ public class CommNewFragment extends BaseFragment {
                     JSONArray ja = jo.getJSONArray("data");
                     Gson gson = new Gson();
                     mPostList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<PostListBean>>() {
+                            new TypeToken<List<PostListBeanTest>>() {
                             }.getType());
                     if (CLEAR_DATA == true) {
                         mPostAdapterList.clear();
@@ -108,13 +110,11 @@ public class CommNewFragment extends BaseFragment {
             }
         }
     };
-
-
     private CommHotAdapter mCommHotAdapter;
     private ProgressBar mPbNodata;
     private TextView mTvNodata;
     private SwipeRefreshLayout mRefreshLayout;
-    private WrapContentLinearLayoutManager mLinearLayoutManager;
+    private LinearLayoutManager mLinearLayoutManager;
     private ImageView mIvOne;
     private ImageView mIvTwo;
     private ImageView mIvThree;
@@ -193,8 +193,12 @@ public class CommNewFragment extends BaseFragment {
     public void initData(int PAGENUMBER) {
         OkHttpUtils.post()//
                 .addParams("page", String.valueOf(PAGENUMBER))
-                .addParams("type", getArguments().getString("ARGS"))
+                .addParams("type", "1")
+                .addParams("attribute", getArguments().getString("ARGS"))
                 .addParams("uid", UserUtils.getUserId())
+                .addParams("fid","1")
+                .addParams("keyword", "1")
+                .addParams("bid", "1")
                 .url(XingYuInterface.GET_POSTS_LIST)
                 .tag(this)//
                 .build()//
@@ -285,7 +289,7 @@ public class CommNewFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         updateStatus();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        mLinearLayoutManager = new WrapContentLinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
+        mLinearLayoutManager = new LinearLayoutManager(mActivity);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mCommHotAdapter = new CommHotAdapter(3,mActivity, mPostAdapterList);
         View loadingData = View.inflate(mActivity, R.layout.default_loading, null);

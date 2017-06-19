@@ -24,6 +24,7 @@ import com.xingyuyou.xingyuyou.Utils.SPUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
+import com.xingyuyou.xingyuyou.bean.community.PostListBeanTest;
 import com.xingyuyou.xingyuyou.bean.community.PostTopAndWellBean;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -40,8 +41,8 @@ import okhttp3.Call;
 public class MyPostListActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private int PAGENUMBER = 1;
-    private List<PostListBean> mPostList = new ArrayList();
-    private List<PostListBean> mPostAdapterList = new ArrayList();
+    private List<PostListBeanTest> mPostList = new ArrayList();
+    private List<PostListBeanTest> mPostAdapterList = new ArrayList();
     boolean isLoading = false;
     Handler handler = new Handler() {
         @Override
@@ -62,7 +63,7 @@ public class MyPostListActivity extends AppCompatActivity {
                     //   Log.e("post", "解析数据："+  ja.toString());
                     Gson gson = new Gson();
                     mPostList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<PostListBean>>() {
+                            new TypeToken<List<PostListBeanTest>>() {
                             }.getType());
                     mPostAdapterList.addAll(mPostList);
 
@@ -242,7 +243,12 @@ public class MyPostListActivity extends AppCompatActivity {
         OkHttpUtils.post()//
                 .addParams("page", String.valueOf(PAGENUMBER))
                 .addParams("uid", UserUtils.getUserId())
-                .url(XingYuInterface.OWN_POST_LIST)
+                .addParams("type", "3")
+                .addParams("attribute", "1")
+                .addParams("fid","1")
+                .addParams("keyword", "1")
+                .addParams("bid", "1")
+                .url(XingYuInterface.GET_POSTS_LIST)
                 .tag(this)//
                 .build()//
                 .execute(new StringCallback() {

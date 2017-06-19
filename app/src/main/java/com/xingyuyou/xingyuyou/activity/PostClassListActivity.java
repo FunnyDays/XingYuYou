@@ -31,6 +31,7 @@ import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.adapter.CommSortAdapter;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
+import com.xingyuyou.xingyuyou.bean.community.PostListBeanTest;
 import com.xingyuyou.xingyuyou.bean.community.PostTopAndWellBean;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -48,7 +49,7 @@ public class PostClassListActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private int  PAGENUMBER = 1;
-    private List<PostListBean> mPostList=new ArrayList();
+    private List<PostListBeanTest> mPostList=new ArrayList();
     private List<PostTopAndWellBean> mPostTopWellList=new ArrayList();
     private List mPostAdapterList=new ArrayList();
     boolean isLoading = false;
@@ -71,7 +72,7 @@ public class PostClassListActivity extends AppCompatActivity {
                  //   Log.e("post", "解析数据："+  ja.toString());
                     Gson gson = new Gson();
                     mPostList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<PostListBean>>() {
+                            new TypeToken<List<PostListBeanTest>>() {
                             }.getType());
 
                     ja = jo.getJSONArray("top_well");
@@ -249,9 +250,13 @@ public class PostClassListActivity extends AppCompatActivity {
     public void initData(int PAGENUMBER) {
         OkHttpUtils.post()//
                 .addParams("page",String.valueOf(PAGENUMBER))
+                .addParams("type", "2")
                 .addParams("fid",getIntent().getStringExtra("list_id"))
                 .addParams("uid",UserUtils.getUserId())
-                .url(XingYuInterface.GET_POSTS_CLASS_LIST)
+                .addParams("keyword", "1")
+                .addParams("bid", "1")
+                .addParams("attribute", "1")
+                .url(XingYuInterface.GET_POSTS_LIST)
                 .tag(this)//
                 .build()//
                 .execute(new StringCallback() {
@@ -277,28 +282,28 @@ public class PostClassListActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals("SortPostUpdateCollectStatus")) {
                     if (intent.getIntExtra("cancelCollect", 0) == 0) {
-                        ((PostListBean)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).setCollect_status(0);
-                        ((PostListBean)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1))
+                        ((PostListBeanTest)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).setCollect_status(0);
+                        ((PostListBeanTest)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1))
                                 .setPosts_collect(String.valueOf((Integer.parseInt(
-                                        ((PostListBean) mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).getPosts_collect())) - 1));
+                                        ((PostListBeanTest) mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).getPosts_collect())) - 1));
                     } else {
-                        ((PostListBean)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).setCollect_status(1);
-                        ((PostListBean)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1))
+                        ((PostListBeanTest)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).setCollect_status(1);
+                        ((PostListBeanTest)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1))
                                 .setPosts_collect(String.valueOf((Integer.parseInt(
-                                        ((PostListBean)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).getPosts_collect())) +1));
+                                        ((PostListBeanTest)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).getPosts_collect())) +1));
                     }
                 }
                 if (intent.getAction().equals("SortPostUpdateZanStatus")) {
                     if (intent.getIntExtra("cancelZan", 0) == 0) {
-                        ((PostListBean)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).setLaud_status(0);
-                        ((PostListBean) mPostAdapterList.get(intent.getIntExtra("position", 0) - 1))
+                        ((PostListBeanTest)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).setLaud_status(0);
+                        ((PostListBeanTest) mPostAdapterList.get(intent.getIntExtra("position", 0) - 1))
                                 .setPosts_laud(String.valueOf((Integer.parseInt(
-                                        ((PostListBean) mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).getPosts_laud())) - 1));
+                                        ((PostListBeanTest) mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).getPosts_laud())) - 1));
                     } else {
-                        ((PostListBean)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).setLaud_status(1);
-                        ((PostListBean)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1))
+                        ((PostListBeanTest)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).setLaud_status(1);
+                        ((PostListBeanTest)mPostAdapterList.get(intent.getIntExtra("position", 0) - 1))
                                 .setPosts_laud(String.valueOf((Integer.parseInt(
-                                        ((PostListBean) mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).getPosts_laud())) +1));
+                                        ((PostListBeanTest) mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)).getPosts_laud())) +1));
                     }
                 }
                 mCommHotAdapter.notifyItemChanged(intent.getIntExtra("position", 0));

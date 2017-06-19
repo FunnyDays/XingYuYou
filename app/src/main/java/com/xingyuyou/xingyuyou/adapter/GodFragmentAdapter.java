@@ -26,7 +26,6 @@ import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.activity.GodListDetailActivity;
 import com.xingyuyou.xingyuyou.activity.LoginActivity;
 import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
-import com.xingyuyou.xingyuyou.bean.community.PostListBean;
 import com.xingyuyou.xingyuyou.bean.community.PostListBeanTest;
 import com.xingyuyou.xingyuyou.bean.community.PostTopAndWellBean;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -39,7 +38,7 @@ import okhttp3.Call;
 /**
  * Created by Administrator on 2017/4/21.
  */
-public class CommSortAdapter extends RecyclerView.Adapter {
+public class GodFragmentAdapter extends RecyclerView.Adapter {
     //数据
     private List mListData;
     private Activity mActivity;
@@ -56,7 +55,7 @@ public class CommSortAdapter extends RecyclerView.Adapter {
     private View mHeaderView;
     private View mFooterView;
 
-    public CommSortAdapter(Activity activity, List listData) {
+    public GodFragmentAdapter(Activity activity, List listData) {
         mListData = listData;
         mActivity = activity;
     }
@@ -200,35 +199,33 @@ public class CommSortAdapter extends RecyclerView.Adapter {
             ((ItemViewHolder) holder).mCommNum.setText(((PostListBeanTest) mListData.get(position - 1)).getPosts_forums());
             ((ItemViewHolder) holder).mJiaoNangNum.setText(((PostListBeanTest) mListData.get(position - 1)).getPosts_laud());
 
-            ((ItemViewHolder) holder).ll_root_text.removeAllViews();
-            if (((PostListBeanTest) mListData.get(position - 1)).getLabel_name() != null) {
-                for (int i = 0; i < ((PostListBeanTest) mListData.get(position - 1)).getLabel_name().size(); i++) {
-                    TextView textView = new TextView(mActivity);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    lp.setMargins(ConvertUtils.dp2px(5), 0, ConvertUtils.dp2px(5), 0);
-                    textView.setLayoutParams(lp);
-                    textView.setBackgroundResource(R.drawable.tag_textview_bg);
-                    // textView.setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.tag_textview_bg));
-                    textView.setPadding(ConvertUtils.dp2px(2), 0, ConvertUtils.dp2px(2), 0);
-                    textView.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
-                    textView.setText(((PostListBeanTest) mListData.get(position - 1)).getLabel_name().get(i).getLabel_name());
-                    ((ItemViewHolder) holder).ll_root_text.addView(textView);
-                }
-            }
+           /* ((ItemViewHolder) holder).ll_root_text.removeAllViews();
+            for (int i = 0; i < ((PostListBeanTest) mListData.get(position - 1)).getPosts_class().size(); i++) {
+                TextView textView = new TextView(mActivity);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(ConvertUtils.dp2px(5), 0, ConvertUtils.dp2px(5), 0);
+                textView.setLayoutParams(lp);
+                textView.setBackgroundResource(R.drawable.tag_textview_bg);
+                // textView.setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.tag_textview_bg));
+                textView.setPadding(ConvertUtils.dp2px(2), 0, ConvertUtils.dp2px(2), 0);
+                textView.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
+                textView.setText(((PostListBeanTest) mListData.get(position - 1)).getPosts_class().get(i).getLabel_name());
+                ((ItemViewHolder) holder).ll_root_text.addView(textView);
+            }*/
             Glide.with(mActivity)
                     .load(((PostListBeanTest) mListData.get(position - 1)).getHead_image())
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .transform(new GlideCircleTransform(mActivity))
                     .into(((ItemViewHolder) holder).mUserPhoto);
             Glide.with(mActivity)
-                    .load(((PostListBeanTest) mListData.get(position - 1)).getThumbnail_image().size() != 0 ?
+                    .load(((PostListBeanTest) mListData.get(position - 1)).getThumbnail_image().size()!=0?
                             ((PostListBeanTest) mListData.get(position - 1)).getThumbnail_image().get(0).getThumbnail_image()
                             : ((PostListBeanTest) mListData.get(position - 1)).getPosts_image().get(0))
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(((ItemViewHolder) holder).mPostCover0);
             if (getItemViewType(position) == TYPE_TWO_PIC || getItemViewType(position) == TYPE_THREE_PIC) {
                 Glide.with(mActivity)
-                        .load(((PostListBeanTest) mListData.get(position - 1)).getThumbnail_image().size() != 0 ?
+                        .load(((PostListBeanTest) mListData.get(position - 1)).getThumbnail_image().size()!=0?
                                 ((PostListBeanTest) mListData.get(position - 1)).getThumbnail_image().get(1).getThumbnail_image()
                                 : ((PostListBeanTest) mListData.get(position - 1)).getPosts_image().get(1))
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
@@ -236,7 +233,7 @@ public class CommSortAdapter extends RecyclerView.Adapter {
             }
             if (getItemViewType(position) == TYPE_THREE_PIC) {
                 Glide.with(mActivity)
-                        .load(((PostListBeanTest) mListData.get(position - 1)).getThumbnail_image().size() != 0 ?
+                        .load(((PostListBeanTest) mListData.get(position - 1)).getThumbnail_image().size()!=0?
                                 ((PostListBeanTest) mListData.get(position - 1)).getThumbnail_image().get(2).getThumbnail_image()
                                 : ((PostListBeanTest) mListData.get(position - 1)).getPosts_image().get(2))
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
@@ -246,14 +243,14 @@ public class CommSortAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View view) {
                     if (((PostListBeanTest) mListData.get(position - 1)).getUid().equals("206")) {
-                       /* Intent intent = new Intent(mActivity, GodListDetailActivity.class);
+                        Intent intent = new Intent(mActivity, GodListDetailActivity.class);
                         intent.putExtra("activity_id", ((PostListBeanTest) mListData.get(position - 1)).getId());
-                        mActivity.startActivity(intent);*/
+                        mActivity.startActivity(intent);
                     } else {
                         Intent intent = new Intent(mActivity, PostDetailActivity.class);
                         intent.putExtra("post_id", ((PostListBeanTest) mListData.get(position - 1)).getId());
                         intent.putExtra("position", (position));
-                        intent.putExtra("fragmentType", 8);
+                        intent.putExtra("fragmentType", 9);
                         mActivity.startActivity(intent);
                     }
                 }

@@ -46,8 +46,8 @@ public class CommunityFragment extends BaseFragment {
     private RecyclerView mRecyclerView;
     private List<LabelClassBean> mDatas = new ArrayList<>();
     private CommHeaderFooterAdapter mAdapter;
-    private List<LabelClassBean> mLabelClassList=new ArrayList<>();
-    private Handler mHandler=new Handler(){
+    private List<LabelClassBean> mLabelClassList = new ArrayList<>();
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -57,7 +57,7 @@ public class CommunityFragment extends BaseFragment {
                 try {
                     jo = new JSONObject(response);
                     String string = jo.getString("status");
-                    if (string.equals("1")){
+                    if (string.equals("1")) {
                         JSONArray ja = jo.getJSONArray("data");
                         //Log.e("hot", "解析数据："+  ja.toString());
                         Gson gson = new Gson();
@@ -66,7 +66,7 @@ public class CommunityFragment extends BaseFragment {
                                 }.getType());
                         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffCallBack(mDatas, mLabelClassList), true);
                         diffResult.dispatchUpdatesTo(mAdapter);
-                        mDatas=mLabelClassList;
+                        mDatas = mLabelClassList;
                         mAdapter.setDatas(mDatas);
 
                     }
@@ -100,12 +100,14 @@ public class CommunityFragment extends BaseFragment {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                     }
+
                     @Override
                     public void onResponse(String response, int id) {
                         mHandler.obtainMessage(1, response).sendToTarget();
                     }
                 });
     }
+
     @Override
     protected View initView() {
         View view = View.inflate(mActivity, R.layout.fragment_community, null);
@@ -124,12 +126,13 @@ public class CommunityFragment extends BaseFragment {
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.SwipeRefreshLayout);
         initSwipeRefreshLayout();
-        mRecyclerView = (RecyclerView)view.findViewById(R.id.id_recyclerview);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(mActivity,3));
-        mAdapter = new CommHeaderFooterAdapter(mActivity,mDatas);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.id_recyclerview);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(mActivity, 3));
+        mAdapter = new CommHeaderFooterAdapter(mActivity, mDatas);
         mRecyclerView.setAdapter(mAdapter);
         return view;
     }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);

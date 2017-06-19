@@ -79,10 +79,10 @@ public class FeedBackActivity extends AppCompatActivity {
     }
 
     private void submitData() {
-        if (StringUtils.isEmpty(mEtContactWay.getText().toString().trim())) {
+        /*if (StringUtils.isEmpty(mEtContactWay.getText().toString().trim())) {
             Toast.makeText(this, "请填写上您的联系方式", Toast.LENGTH_SHORT).show();
             return;
-        }
+        }*/
         if (StringUtils.isEmpty(mEtContact.getText().toString().trim())) {
             Toast.makeText(this, "请填写上您的建议或意见", Toast.LENGTH_SHORT).show();
             return;
@@ -91,7 +91,7 @@ public class FeedBackActivity extends AppCompatActivity {
         OkHttpUtils.post()//
                 .url(XingYuInterface.USER_FEEDBACK)
                 .addParams("uid", user_data.getString("id"))
-                .addParams("contact_method", mEtContactWay.getText().toString().trim())
+                .addParams("contact_method", "反馈需求不用")
                 .addParams("feedback_info", mEtContact.getText().toString().trim())
                 .addParams("errorinfo", "无")
                 .tag(this)//

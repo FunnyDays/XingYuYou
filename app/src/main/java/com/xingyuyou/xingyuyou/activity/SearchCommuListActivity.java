@@ -16,9 +16,11 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
+import com.xingyuyou.xingyuyou.bean.community.PostListBeanTest;
 import com.xingyuyou.xingyuyou.bean.community.PostTopAndWellBean;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -35,9 +37,8 @@ import okhttp3.Call;
 public class SearchCommuListActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private int  PAGENUMBER = 1;
-    private List<PostListBean> mPostList=new ArrayList();
-    private List<PostTopAndWellBean> mPostTopWellList=new ArrayList();
-    private List<PostListBean> mPostAdapterList=new ArrayList();
+    private List<PostListBeanTest> mPostList=new ArrayList();
+    private List<PostListBeanTest> mPostAdapterList=new ArrayList();
     boolean isLoading = false;
     private CommHotAdapter mCommHotAdapter;
     private ProgressBar mPbNodata;
@@ -63,7 +64,7 @@ public class SearchCommuListActivity extends AppCompatActivity {
                     //   Log.e("post", "解析数据："+  ja.toString());
                     Gson gson = new Gson();
                     mPostList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<PostListBean>>() {
+                            new TypeToken<List<PostListBeanTest>>() {
                             }.getType());
                     if (mPostAdapterList.size()<=20){
                         mPbNodata.setVisibility(View.GONE);
@@ -93,8 +94,13 @@ public class SearchCommuListActivity extends AppCompatActivity {
     public void initData(int PAGENUMBER) {
         OkHttpUtils.post()//
                 .addParams("page",String.valueOf(PAGENUMBER))
+                .addParams("type", "5")
                 .addParams("bid",getIntent().getStringExtra("bid"))
-                .url(XingYuInterface.LABEL_SEARCH)
+                .addParams("uid", UserUtils.getUserId())
+                .addParams("attribute", "1")
+                .addParams("fid","1")
+                .addParams("keyword", "1")
+                .url(XingYuInterface.GET_POSTS_LIST)
                 .tag(this)//
                 .build()//
                 .execute(new StringCallback() {

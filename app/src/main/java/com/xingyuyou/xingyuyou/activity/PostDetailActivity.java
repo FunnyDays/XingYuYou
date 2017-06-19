@@ -82,6 +82,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -102,13 +103,14 @@ public class PostDetailActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1) {
-                String response = (String) msg.obj;
+                mResponse = (String) msg.obj;
                 JSONObject jo = null;
                 try {
-                    jo = new JSONObject(response);
+                    jo = new JSONObject(mResponse);
                     JSONObject ja = jo.getJSONObject("data");
                     Gson gson = new Gson();
                     mPostDetailBean = gson.fromJson(ja.toString(), PostDetailBean.class);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -183,6 +185,8 @@ public class PostDetailActivity extends BaseActivity {
     private ProgressBar mPbNodata;
     private TextView mTvNodata;
     private TextView mTvTitle;
+    private ArrayList<String> mPost_images;
+    private String mResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -529,7 +533,7 @@ public class PostDetailActivity extends BaseActivity {
     //*********************************************以下是赋值代码***************************************************
     private void setValues() {
         //更新楼主
-        mPostCommoListAdapter.setUid(mPostDetailBean.getUid());
+      //  mPostCommoListAdapter.setUid(mPostDetailBean.getUid());
         mPostCommoListAdapter.notifyDataSetChanged();
         //收藏状态
         if (mPostDetailBean.getCollect_status().equals("1")) {
@@ -564,15 +568,15 @@ public class PostDetailActivity extends BaseActivity {
         mCollectNum.setText(mPostDetailBean.getPosts_collect());
         //mCommNum.setText(mPostDetailBean.getPosts_forums());
         mJiaonangNum.setText(mPostDetailBean.getPosts_laud());
-        for (int i = 0; i < mPostDetailBean.getPosts_image().size(); i++) {
+        for (int i = 0; i < mPostDetailBean.getThumbnail_image().size(); i++) {
+            final int finalI = i;
             final ImageView imageView = new ImageView(PostDetailActivity.this);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(ConvertUtils.dp2px(10), ConvertUtils.dp2px(10), ConvertUtils.dp2px(10), ConvertUtils.dp2px(10));
             imageView.setLayoutParams(lp);
             imageView.setAdjustViewBounds(true);
-
             Glide.with(PostDetailActivity.this)
-                    .load(mPostDetailBean.getPosts_image().get(i))
+                    .load(mPostDetailBean.getThumbnail_image().get(i).getThumbnail_image())
                     .asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(new SimpleTarget<Bitmap>() {
@@ -581,6 +585,15 @@ public class PostDetailActivity extends BaseActivity {
                             imageView.setImageBitmap(resource);
                         }
                     });
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(PostDetailActivity.this, PhotoViewPostDetailActivity.class);
+                    intent.putExtra("position",finalI);
+                    intent.putExtra("postDetailBean",mResponse);
+                    startActivity(intent);
+                }
+            });
             mRootImage.addView(imageView);
         }
         mEditText.setFocusable(false);
@@ -629,6 +642,9 @@ public class PostDetailActivity extends BaseActivity {
                         case 8:
                             intent.setAction("SortPostUpdateCollectStatus");
                             break;
+                        case 9:
+                            intent.setAction("GodPostUpdateCollectStatus");
+                            break;
                     }
                     intent.putExtra("cancelCollect", 0);
                     intent.putExtra("position", getIntent().getIntExtra("position", 0));
@@ -659,6 +675,9 @@ public class PostDetailActivity extends BaseActivity {
                             break;
                         case 8:
                             intent.setAction("SortPostUpdateCollectStatus");
+                            break;
+                        case 9:
+                            intent.setAction("GodPostUpdateCollectStatus");
                             break;
                     }
                     intent.putExtra("cancelCollect", 1);
@@ -710,6 +729,9 @@ public class PostDetailActivity extends BaseActivity {
                         case 8:
                             intent.setAction("SortPostUpdateZanStatus");
                             break;
+                        case 9:
+                            intent.setAction("GodPostUpdateZanStatus");
+                            break;
                     }
                     intent.putExtra("cancelZan", 0);
                     intent.putExtra("position", getIntent().getIntExtra("position", 0));
@@ -739,6 +761,9 @@ public class PostDetailActivity extends BaseActivity {
                             break;
                         case 8:
                             intent.setAction("SortPostUpdateZanStatus");
+                            break;
+                        case 9:
+                            intent.setAction("GodPostUpdateZanStatus");
                             break;
                     }
                     intent.putExtra("cancelZan", 1);
@@ -960,6 +985,5 @@ public class PostDetailActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Glide.with(this).pauseRequests();
     }
 }

@@ -53,7 +53,7 @@ public class PostCommoListAdapter extends BaseAdapter {
      * ItemClick的回调接口
      */
     public interface OnImageItemClickLitener {
-        void onItemClick(View view, int position_i,int position_j);
+        void onItemClick(View view, int position_i, int position_j);
     }
 
     private OnImageItemClickLitener mOnImageItemClickLitener;
@@ -122,18 +122,17 @@ public class PostCommoListAdapter extends BaseAdapter {
                 .transform(new GlideCircleTransform(mActivity))
                 .into(holder.iv_user_photo);
         holder.ll_root_image_item.removeAllViews();
-        if (!(mCommoBeanList.get(i).getImgarr() == null) && mCommoBeanList.get(i).getImgarr().size() >= 1 && !mCommoBeanList.get(i).getImgarr().get(0).toString().equals("")) {
-            for (int j = 0; j < mCommoBeanList.get(i).getImgarr().size(); j++) {
+        if (!(mCommoBeanList.get(i).getThumbnail_image() == null) && mCommoBeanList.get(i).getThumbnail_image().size() >= 1 && !mCommoBeanList.get(i).getThumbnail_image().get(0).toString().equals("")) {
+            for (int j = 0; j < mCommoBeanList.get(i).getThumbnail_image().size(); j++) {
                 final int finalJ = j;
                 final ImageView imageView = new ImageView(mActivity);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 lp.setMargins(ConvertUtils.dp2px(0), ConvertUtils.dp2px(5), ConvertUtils.dp2px(0), ConvertUtils.dp2px(20));
                 imageView.setLayoutParams(lp);
                 imageView.setAdjustViewBounds(true);
-                Log.e("weiwei", "setValues: "+imageView.getLayoutParams().width);
-                if (!mCommoBeanList.get(i).getImgarr().get(j).equals(imageView.getTag())){
+                if (!mCommoBeanList.get(i).getThumbnail_image().get(j).equals(imageView.getTag())) {
                     Glide.with(mActivity)
-                            .load(mCommoBeanList.get(i).getImgarr().get(j))
+                            .load(mCommoBeanList.get(i).getThumbnail_image().get(j).getThumbnail_image())
                             .asBitmap()
                             .diskCacheStrategy(DiskCacheStrategy.RESULT)
                             .into(new SimpleTarget<Bitmap>() {
@@ -142,7 +141,7 @@ public class PostCommoListAdapter extends BaseAdapter {
                                     imageView.setImageBitmap(resource);
                                 }
                             });
-                    imageView.setTag(mCommoBeanList.get(i).getImgarr().get(j));
+                    imageView.setTag(mCommoBeanList.get(i).getThumbnail_image().get(j));
                 }
                 holder.ll_root_image_item.addView(imageView);
 
@@ -151,7 +150,7 @@ public class PostCommoListAdapter extends BaseAdapter {
                     imageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mOnImageItemClickLitener.onItemClick(imageView, i,finalJ);
+                            mOnImageItemClickLitener.onItemClick(imageView, i, finalJ);
                         }
                     });
 
@@ -159,7 +158,7 @@ public class PostCommoListAdapter extends BaseAdapter {
             }
         }
         //点赞
-        if (mCommoBeanList.get(i).getLaud_status() != null && mCommoBeanList.get(i).getLaud_status().equals("1")) {
+        if ( mCommoBeanList.get(i).getLaud_status()==1) {
             holder.iv_zan.setImageResource(R.drawable.ic_zan_fill);
         } else {
             holder.iv_zan.setImageResource(R.drawable.ic_zan);
@@ -172,16 +171,16 @@ public class PostCommoListAdapter extends BaseAdapter {
                     return;
                 }
                 getLuad(mCommoBeanList.get(i).getId());
-                if (mCommoBeanList.get(i).getLaud_status().equals("1")) {
-                    holder.tv_zan_num.setText(String.valueOf((Integer.parseInt(mCommoBeanList.get(i).getLaud_status()) - 1)));
-                    mCommoBeanList.get(i).setLaud_status(String.valueOf((Integer.parseInt(mCommoBeanList.get(i).getLaud_status()) - 1)));
-                    mCommoBeanList.get(i).setLaud_status("0");
+                if (mCommoBeanList.get(i).getLaud_status()==1) {
+                    holder.tv_zan_num.setText(String.valueOf((mCommoBeanList.get(i).getLaud_status() - 1)));
+                    mCommoBeanList.get(i).setLaud_status(mCommoBeanList.get(i).getLaud_status() - 1);
+                    mCommoBeanList.get(i).setLaud_status(0);
                     Toast.makeText(mActivity, "取消点赞", Toast.LENGTH_SHORT).show();
                     holder.iv_zan.setImageResource(R.drawable.ic_zan);
                 } else {
-                    holder.tv_zan_num.setText(String.valueOf((Integer.parseInt(mCommoBeanList.get(i).getLaud_status()) + 1)));
-                    mCommoBeanList.get(i).setLaud_status(String.valueOf((Integer.parseInt(mCommoBeanList.get(i).getLaud_status()) + 1)));
-                    mCommoBeanList.get(i).setLaud_status("1");
+                    holder.tv_zan_num.setText(String.valueOf((mCommoBeanList.get(i).getLaud_status() + 1)));
+                    mCommoBeanList.get(i).setLaud_status((mCommoBeanList.get(i).getLaud_status() + 1));
+                    mCommoBeanList.get(i).setLaud_status(1);
                     Toast.makeText(mActivity, "点赞", Toast.LENGTH_SHORT).show();
                     holder.iv_zan.setImageResource(R.drawable.ic_zan_fill);
                 }

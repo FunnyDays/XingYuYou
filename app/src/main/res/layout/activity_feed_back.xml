@@ -20,6 +20,7 @@
         android:paddingTop="@dimen/activity_vertical_margin">
 
         <EditText
+            android:visibility="gone"
             android:hint="请输入您的联系方式"
             android:id="@+id/et_contact_way"
             android:textColor="@color/blue"

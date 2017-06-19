@@ -29,6 +29,7 @@ import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
+import com.xingyuyou.xingyuyou.bean.community.PostListBeanTest;
 import com.xingyuyou.xingyuyou.bean.community.TopViewRecommBean;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -52,7 +53,7 @@ public class CommBestFragment extends BaseFragment {
     private boolean IS_FIRST_INIT_DATA = true;
     private int PAGENUMBER = 1;
     private List mPostList = new ArrayList();
-    private List<PostListBean> mPostAdapterList = new ArrayList();
+    private List<PostListBeanTest> mPostAdapterList = new ArrayList();
     boolean isLoading = false;
     private List<TopViewRecommBean> mRecommList;
     private List<TopViewRecommBean> mRecommAdapterList = new ArrayList<>();
@@ -74,7 +75,7 @@ public class CommBestFragment extends BaseFragment {
                     JSONArray ja = jo.getJSONArray("data");
                     Gson gson = new Gson();
                     mPostList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<PostListBean>>() {
+                            new TypeToken<List<PostListBeanTest>>() {
                             }.getType());
                     if (CLEAR_DATA == true) {
                         mPostAdapterList.clear();
@@ -165,8 +166,12 @@ public class CommBestFragment extends BaseFragment {
     public void initData(int PAGENUMBER) {
         OkHttpUtils.post()//
                 .addParams("page", String.valueOf(PAGENUMBER))
-                .addParams("type", getArguments().getString("ARGS"))
+                .addParams("type", "1")
+                .addParams("attribute", getArguments().getString("ARGS"))
                 .addParams("uid", UserUtils.getUserId())
+                .addParams("fid","1")
+                .addParams("keyword", "1")
+                .addParams("bid", "1")
                 .url(XingYuInterface.GET_POSTS_LIST)
                 .tag(this)//
                 .build()//

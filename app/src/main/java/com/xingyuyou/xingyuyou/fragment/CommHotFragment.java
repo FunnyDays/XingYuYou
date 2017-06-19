@@ -12,6 +12,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -29,6 +30,7 @@ import com.xingyuyou.xingyuyou.activity.PostDetailActivity;
 import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
 import com.xingyuyou.xingyuyou.base.BaseFragment;
 import com.xingyuyou.xingyuyou.bean.community.PostListBean;
+import com.xingyuyou.xingyuyou.bean.community.PostListBeanTest;
 import com.xingyuyou.xingyuyou.bean.community.TopViewRecommBean;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -52,7 +54,7 @@ public class CommHotFragment extends BaseFragment {
     private boolean IS_FIRST_INIT_DATA = true;
     private int PAGENUMBER = 1;
     private List mPostList = new ArrayList();
-    private List<PostListBean> mPostAdapterList = new ArrayList();
+    private List<PostListBeanTest> mPostAdapterList = new ArrayList();
     boolean isLoading = false;
     private List<TopViewRecommBean> mRecommList;
     private List<TopViewRecommBean> mRecommAdapterList = new ArrayList<>();
@@ -74,14 +76,13 @@ public class CommHotFragment extends BaseFragment {
                     JSONArray ja = jo.getJSONArray("data");
                     Gson gson = new Gson();
                     mPostList = gson.fromJson(ja.toString(),
-                            new TypeToken<List<PostListBean>>() {
+                            new TypeToken<List<PostListBeanTest>>() {
                             }.getType());
                     if (CLEAR_DATA == true) {
                         mPostAdapterList.clear();
                         CLEAR_DATA = false;
                     }
                     mPostAdapterList.addAll(mPostList);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -165,8 +166,12 @@ public class CommHotFragment extends BaseFragment {
     public void initData(int PAGENUMBER) {
         OkHttpUtils.post()//
                 .addParams("page", String.valueOf(PAGENUMBER))
-                .addParams("type", getArguments().getString("ARGS"))
+                .addParams("type", "1")
+                .addParams("attribute", getArguments().getString("ARGS"))
                 .addParams("uid", UserUtils.getUserId())
+                .addParams("fid","1")
+                .addParams("keyword", "1")
+                .addParams("bid", "1")
                 .url(XingYuInterface.GET_POSTS_LIST)
                 .tag(this)//
                 .build()//
@@ -201,13 +206,13 @@ public class CommHotFragment extends BaseFragment {
     }
 
     private void setValues() {
-        Glide.with(mActivity).load(mRecommAdapterList.get(0).getRe_image())
+        Glide.with(this).load(mRecommAdapterList.get(0).getRe_image())
                 .into(mIvOne);
-        Glide.with(mActivity).load(mRecommAdapterList.get(1).getRe_image())
+        Glide.with(this).load(mRecommAdapterList.get(1).getRe_image())
                 .transform(new GlideRoundTransform(mActivity, 5)).into(mIvTwo);
-        Glide.with(mActivity).load(mRecommAdapterList.get(2).getRe_image())
+        Glide.with(this).load(mRecommAdapterList.get(2).getRe_image())
                 .transform(new GlideRoundTransform(mActivity, 5)).into(mIvThree);
-        Glide.with(mActivity).load(mRecommAdapterList.get(3).getRe_image())
+        Glide.with(this).load(mRecommAdapterList.get(3).getRe_image())
                 .transform(new GlideRoundTransform(mActivity, 5)).into(mIvFour);
         mIvOne.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -278,16 +283,16 @@ public class CommHotFragment extends BaseFragment {
                 switch (newState) {
                     case RecyclerView.SCROLL_STATE_SETTLING:
                         //   Log.i("Main", "用户在手指离开屏幕之前，由于滑了一下，视图仍然依靠惯性继续滑动");
-                        Glide.with(mActivity).pauseRequests();
+                        Glide.with(CommHotFragment.this).pauseRequests();
                         //刷新
                         break;
                     case RecyclerView.SCROLL_STATE_IDLE:
                         //  Log.i("Main", "视图已经停止滑动");
-                        Glide.with(mActivity).resumeRequests();
+                        Glide.with(CommHotFragment.this).resumeRequests();
                         break;
                     case RecyclerView.SCROLL_STATE_DRAGGING:
                         //  Log.i("Main", "手指没有离开屏幕，视图正在滑动");
-                        Glide.with(mActivity).resumeRequests();
+                        Glide.with(CommHotFragment.this).resumeRequests();
                         break;
                 }
 
