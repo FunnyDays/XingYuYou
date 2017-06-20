@@ -106,6 +106,7 @@ public class SelectTagActivity extends AppCompatActivity {
     private void initData() {
         OkHttpUtils.post()//
                 .url(XingYuInterface.POPULAR_TAGS)
+                .addParams("page", String.valueOf(1))
                 .tag(this)//
                 .build()//
                 .execute(new StringCallback() {

@@ -67,10 +67,10 @@ public class ThreeFragment extends BaseFragment {
         mTitles = new ArrayList<String>();
         CommunityFragment hf = new CommunityFragment();
         AllGameFragment hf1 = new AllGameFragment();
-        mFragments.add(hf1);
         mFragments.add(hf);
-        mTitles.add("游戏");
+        mFragments.add(hf1);
         mTitles.add("社区");
+        mTitles.add("游戏");
         mContent.setAdapter(new MainVPAdapter(getChildFragmentManager(), mFragments, mTitles));
         mTab.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorControlNormal));
         mTab.setTabMode(TabLayout.MODE_FIXED);

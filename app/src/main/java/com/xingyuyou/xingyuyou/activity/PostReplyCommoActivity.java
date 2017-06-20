@@ -1,6 +1,8 @@
 package com.xingyuyou.xingyuyou.activity;
 
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +35,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
 import com.xingyuyou.xingyuyou.Utils.KeyboardUtils;
@@ -54,6 +57,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import net.bither.util.NativeUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -63,6 +67,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.Call;
 
 public class PostReplyCommoActivity extends AppCompatActivity {
 
@@ -89,8 +95,31 @@ public class PostReplyCommoActivity extends AppCompatActivity {
     private CustomDialog mDialog;
     private PostCommoBean mPostCommoBean;
     private CommoToCommoAdapter mToCommoAdapter;
+    List<PostCommoBean.ChildBean> mCommoList = new ArrayList();
     List<PostCommoBean.ChildBean> mCommoAdapterList = new ArrayList();
 
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            String response = (String) msg.obj;
+            if (msg.what == 1) {
+                JSONObject jo = null;
+                try {
+                    jo = new JSONObject(response);
+                    JSONArray ja = jo.getJSONArray("data");
+                    Gson gson = new Gson();
+                    mCommoList = gson.fromJson(ja.toString(),
+                            new TypeToken<List<PostCommoBean.ChildBean>>() {
+                            }.getType());
+                    mCommoAdapterList.addAll(mCommoList);
+                    mToCommoAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,12 +137,31 @@ public class PostReplyCommoActivity extends AppCompatActivity {
             JSONObject jo = new JSONObject(itemList);
             Gson gson = new Gson();
             mPostCommoBean = gson.fromJson(jo.toString(), PostCommoBean.class);
-            if (mPostCommoBean.getChild()!=null)
-            mCommoAdapterList.addAll(mPostCommoBean.getChild());
+            /*if (mPostCommoBean.getChild() != null)
+                mCommoAdapterList.addAll(mPostCommoBean.getChild());*/
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        initCommoData(mPostCommoBean.getId());
+    }
 
+    private void initCommoData(String id) {
+        OkHttpUtils.post()//
+                .addParams("forums_id", id)
+                .url(XingYuInterface.GET_FORUMS_INFO)
+                .tag(this)//
+                .build()//
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        // Log.e("hot", e.toString() + ":e");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        handler.obtainMessage(1, response).sendToTarget();
+                    }
+                });
     }
 
     private void initToolBar() {
@@ -143,22 +191,22 @@ public class PostReplyCommoActivity extends AppCompatActivity {
 
     //****************************************楼中楼回复显示********************************************************
     private void initRecyclerView() {
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            mToCommoAdapter = new CommoToCommoAdapter();
-            mRecyclerView.setAdapter(mToCommoAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mToCommoAdapter = new CommoToCommoAdapter();
+        mRecyclerView.setAdapter(mToCommoAdapter);
 
     }
 
     private void setValues() {
-        if (!(mPostCommoBean.getImgarr()==null)&&!mPostCommoBean.getImgarr().get(0).toString().equals("")) {
-            for (int j = 0; j < mPostCommoBean.getImgarr().size(); j++) {
+        if (!(mPostCommoBean.getThumbnail_image()==null)&&!mPostCommoBean.getThumbnail_image().get(0).toString().equals("")) {
+            for (int j = 0; j < mPostCommoBean.getThumbnail_image().size(); j++) {
                 ImageView imageView = new ImageView(PostReplyCommoActivity.this);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 lp.setMargins(ConvertUtils.dp2px(0), ConvertUtils.dp2px(5), ConvertUtils.dp2px(0), ConvertUtils.dp2px(20));
                 imageView.setLayoutParams(lp);
                 imageView.setAdjustViewBounds(true);
                 Glide.with(getApplication())
-                        .load(mPostCommoBean.getImgarr().get(j))
+                        .load(mPostCommoBean.getThumbnail_image().get(j).getThumbnail_image())
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .into(imageView);
                 mLlRootImage.addView(imageView);
@@ -172,7 +220,7 @@ public class PostReplyCommoActivity extends AppCompatActivity {
                 .into(mIvUserPhoto);
         mUserName.setText(mPostCommoBean.getNickname());
         mPostTime.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mPostCommoBean.getDateline() + "000")));
-        mCommoContent.setText(SpanStringUtils.getEmotionContent(getApplication(),mCommoContent,mPostCommoBean.getReplies_content()));
+        mCommoContent.setText(SpanStringUtils.getEmotionContent(getApplication(), mCommoContent, mPostCommoBean.getReplies_content()));
         mFloorNum.setText(mPostCommoBean.getFloor_num() + "楼");
         mIvLove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -390,7 +438,7 @@ public class PostReplyCommoActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
             ((ItemCommoViewHolder) holder).mUser2Name.setText(mCommoAdapterList.get(position).getNickname() + ":");
-            ((ItemCommoViewHolder) holder).mCommo2Content.setText(SpanStringUtils.getEmotionContent(getApplication(),((ItemCommoViewHolder) holder).mCommo2Content,mCommoAdapterList.get(position).getReplies_content()));
+            ((ItemCommoViewHolder) holder).mCommo2Content.setText(SpanStringUtils.getEmotionContent(getApplication(), ((ItemCommoViewHolder) holder).mCommo2Content, mCommoAdapterList.get(position).getReplies_content()));
             ((ItemCommoViewHolder) holder).mCommo2Time.setText(TimeUtils.getFriendlyTimeSpanByNow(Long.parseLong(mCommoAdapterList.get(position).getDateline() + "000")));
             ((ItemCommoViewHolder) holder).mRlItemCommoDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -426,6 +474,7 @@ public class PostReplyCommoActivity extends AppCompatActivity {
             }
         }
     }
+
     @Override
     public void onBackPressed() {
         if (!emotionKeyboard.interceptBackPress()) {

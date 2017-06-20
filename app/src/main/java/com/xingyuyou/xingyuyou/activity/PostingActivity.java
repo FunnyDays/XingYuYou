@@ -246,16 +246,16 @@ public class PostingActivity extends AppCompatActivity {
         params.put("subject", mStTitle.getText().toString().trim());
         params.put("message", StringUtils.isEmpty(mEtContent.getText().toString().trim()) == true ? "" : mEtContent.getText().toString().trim());
         params.put("tags", (String) map.get("PostTags"));
-       // Log.e("weiwei", "dealEditData: "+params.toString() );
+        Log.e("weiwei", "dealEditData: "+params.toString() );
         PostFormBuilder post = OkHttpUtils.post();
         for (int i = 0; i < mImageList.size(); i++) {
             File file = new File(mImageList.get(i));
             if (file.exists()) {
-                File file1 = new File(getExternalCacheDir() + "/tempCompress" + i + ".jpg");
-                NativeUtil.compressBitmap(mImageList.get(i), file1.getAbsolutePath());
+               // File file1 = new File(getExternalCacheDir() + "/tempCompress" + i + ".jpg");
+               // NativeUtil.compressBitmap(mImageList.get(i), file1.getAbsolutePath());
                 //以上是压缩代码
                 String s = "posts_image";
-                post.addFile(s + i, file1.getName(), file1);
+                post.addFile(s + i, file.getName(), file);
             }
 
         }
@@ -266,10 +266,12 @@ public class PostingActivity extends AppCompatActivity {
                     @Override
                     public void onError(okhttp3.Call call, Exception e, int id) {
                         mDialog.dismissDialog();
+                        Log.e("weiwei", "dealEditData: onError"+e.toString() );
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
+                        Log.e("weiwei", "dealEditData: onResponse"+response.toString() );
                         mDialog.dismissDialog();
                         Intent intent = new Intent("updateFragment");
                         LocalBroadcastManager.getInstance(PostingActivity.this)

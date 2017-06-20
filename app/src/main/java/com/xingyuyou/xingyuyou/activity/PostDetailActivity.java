@@ -117,16 +117,17 @@ public class PostDetailActivity extends BaseActivity {
                 setValues();
             }
             if (msg.what == 2) {
-                String response = (String) msg.obj;
-                if (response.contains("\"data\":null")) {
+                mResponse1 = (String) msg.obj;
+                if (mResponse1.contains("\"data\":null")) {
                     mPbNodata.setVisibility(View.GONE);
                     mTvNodata.setText("已经没有更多数据");
                     // isLoading = true;
                     return;
                 }
+                mResponseSend=mResponse1;
                 JSONObject jo = null;
                 try {
-                    jo = new JSONObject(response);
+                    jo = new JSONObject(mResponse1);
                     JSONArray ja = jo.getJSONArray("data");
                     Gson gson = new Gson();
                     mCommoList = gson.fromJson(ja.toString(),
@@ -187,6 +188,8 @@ public class PostDetailActivity extends BaseActivity {
     private TextView mTvTitle;
     private ArrayList<String> mPost_images;
     private String mResponse;
+    private String mResponse1;
+    private String mResponseSend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -462,7 +465,11 @@ public class PostDetailActivity extends BaseActivity {
         mPostCommoListAdapter.setOnItemClickLitener(new PostCommoListAdapter.OnImageItemClickLitener() {
             @Override
             public void onItemClick(View view, int position_i, int position_j) {
-                Toast.makeText(PostDetailActivity.this, "位置i:"+position_i+"位置j:"+position_j, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(PostDetailActivity.this, PhotoViewPostCommoActivity.class);
+                intent.putExtra("position_i",position_i);
+                intent.putExtra("position_j",position_j);
+                intent.putExtra("postDetailCommoBean",mResponseSend);
+                startActivity(intent);
             }
         });
         mCommoListView.setOnScrollListener(new AbsListView.OnScrollListener() {

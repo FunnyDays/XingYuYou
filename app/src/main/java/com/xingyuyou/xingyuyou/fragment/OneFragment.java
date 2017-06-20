@@ -1,14 +1,17 @@
 package com.xingyuyou.xingyuyou.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -56,9 +59,61 @@ public class OneFragment extends BaseFragment {
 
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_one, null);
+    }
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+
+        initToolbar();
+        //tablayout设置
+        tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorControlNormal));
+        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        viewPager.setOffscreenPageLimit(2);
+        //viewpager适配器
+        getFragments();
+        mAdapter.addFragment(fragments.get(0), "推荐");
+        mAdapter.addFragment(fragments.get(1), "精品");
+        mAdapter.addFragment(fragments.get(2), "最新");
+        viewPager.setAdapter(mAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        //登陆账号设置
+        mTvUserAccount = (TextView) view.findViewById(R.id.tv_user_account);
+        mTvUserAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentUtils.startActivity(mActivity, ManagementActivity.class);
+                mActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+        });
+        mIvManage = (ImageView) view.findViewById(R.id.iv_manage);
+        mIvManage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentUtils.startActivity(mActivity, ManagementActivity.class);
+                mActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+        });
+        //设置Nva
+       /* DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                mActivity, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+       // toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) view.findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) mActivity);
+*/
+    }
     @Override
     protected View initView() {
-        View view = View.inflate(mActivity, R.layout.fragment_one, null);
+       /* View view = View.inflate(mActivity, R.layout.fragment_one, null);
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
 
         initToolbar();
@@ -90,7 +145,7 @@ public class OneFragment extends BaseFragment {
                 IntentUtils.startActivity(mActivity, ManagementActivity.class);
                 mActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
-        });
+        });*/
         //设置Nva
        /* DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -102,7 +157,7 @@ public class OneFragment extends BaseFragment {
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) mActivity);
 
 */
-        return view;
+        return null;
     }
 
     private void initToolbar() {

@@ -22,32 +22,36 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xingyuyou.xingyuyou.R;
-import com.xingyuyou.xingyuyou.Utils.ConstUtils;
 import com.xingyuyou.xingyuyou.Utils.ConvertUtils;
 import com.xingyuyou.xingyuyou.Utils.FileUtils;
-import com.xingyuyou.xingyuyou.adapter.CommHotAdapter;
+import com.xingyuyou.xingyuyou.bean.community.PostCommoBean;
 import com.xingyuyou.xingyuyou.bean.community.PostDetailBean;
-import com.xingyuyou.xingyuyou.bean.community.PostsResetImageBean;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
 
-public class PhotoViewPostDetailActivity extends AppCompatActivity {
+public class PhotoViewPostCommoActivity extends AppCompatActivity {
 
     private ViewPager mPager;
     private TextView mTv_image_number;
-
+    private List<PostCommoBean> mCommoList = new ArrayList<>();
+    private List<String> mCommoThumbImageList = new ArrayList<>();
+    private List<String> mCommoImageList = new ArrayList<>();
+    private List<Integer> mCommoImageSizeList = new ArrayList<>();
     private ImageView mIv_save_image;
     private int mPosition = 0;
-    private PostDetailBean mPostDetailBean;
+
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -55,6 +59,7 @@ public class PhotoViewPostDetailActivity extends AppCompatActivity {
 
         }
     };
+    private PostCommoBean.ThumbnailImageBean mPostDetailBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +74,7 @@ public class PhotoViewPostDetailActivity extends AppCompatActivity {
         mIv_save_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                downloadImage();
+                //  downloadImage();
             }
         });
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -86,7 +91,7 @@ public class PhotoViewPostDetailActivity extends AppCompatActivity {
                 mPosition = position;
                 mTv_image_number.setText((position + 1)
                         + "/" +
-                        mPostDetailBean.getThumbnail_image().size());
+                        mCommoThumbImageList.size());
 
             }
 
@@ -102,30 +107,42 @@ public class PhotoViewPostDetailActivity extends AppCompatActivity {
     private void initData() {
         JSONObject jo = null;
         try {
-            jo = new JSONObject(getIntent().getStringExtra("postDetailBean"));
-            JSONObject ja = jo.getJSONObject("data");
+            jo = new JSONObject(getIntent().getStringExtra("postDetailCommoBean"));
+            JSONArray ja = jo.getJSONArray("data");
             Gson gson = new Gson();
-            mPostDetailBean = gson.fromJson(ja.toString(), PostDetailBean.class);
+            mCommoList = gson.fromJson(ja.toString(),
+                    new TypeToken<List<PostCommoBean>>() {
+                    }.getType());
+            for (int i = 0; i < mCommoList.size(); i++) {
+                if (mCommoList.get(i).getThumbnail_image() != null && mCommoList.get(i).getThumbnail_image().size() != 0) {
+                    for (int j = 0; j < mCommoList.get(i).getThumbnail_image().size(); j++) {
+                        mCommoImageList.add(mCommoList.get(i).getImgarr().get(j).getPosts_image());
+                        mCommoImageSizeList.add(mCommoList.get(i).getImgarr().get(j).getPosts_image_size());
+                        mCommoThumbImageList.add(mCommoList.get(i).getThumbnail_image().get(j).getThumbnail_image());
+                    }
+                }
+            }
+            Log.e("postiii", "initData: " + mCommoImageList.size());
+            Log.e("post22", "initData: " + mCommoThumbImageList.size());
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     private void downloadImage() {
-        Toast.makeText(PhotoViewPostDetailActivity.this, "下载开始", Toast.LENGTH_SHORT).show();
+        Toast.makeText(PhotoViewPostCommoActivity.this, "下载开始", Toast.LENGTH_SHORT).show();
         OkHttpUtils//
                 .get()//
-                .url(mPostDetailBean.getThumbnail_image()
-                        .get(mPosition).getThumbnail_image())//
+                .url(mCommoThumbImageList.get(mPosition))//
                 .build()//
-                .execute(new FileCallBack(FileUtils.imageSavePath, mPostDetailBean.getThumbnail_image()
-                        .get(mPosition).getThumbnail_image().substring(
-                                mPostDetailBean.getThumbnail_image().get(mPosition).getThumbnail_image().length() - 15,
-                                mPostDetailBean.getThumbnail_image().get(mPosition).getThumbnail_image().length()))//
+                .execute(new FileCallBack(FileUtils.imageSavePath, mCommoThumbImageList.get(mPosition).substring(
+                        mCommoThumbImageList.get(mPosition).length() - 15,
+                        mCommoThumbImageList.get(mPosition).length()))//
                 {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        Toast.makeText(PhotoViewPostDetailActivity.this, "下载出错", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PhotoViewPostCommoActivity.this, "下载出错", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -142,7 +159,7 @@ public class PhotoViewPostDetailActivity extends AppCompatActivity {
                     @Override
                     public void onAfter(int id) {
                         super.onAfter(id);
-                        Toast.makeText(PhotoViewPostDetailActivity.this, "下载完成，目录:" + FileUtils.imageSavePath, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PhotoViewPostCommoActivity.this, "下载完成，目录:" + FileUtils.imageSavePath, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -150,7 +167,7 @@ public class PhotoViewPostDetailActivity extends AppCompatActivity {
     PagerAdapter pagerAdapter = new PagerAdapter() {
         @Override
         public int getCount() {
-            return mPostDetailBean.getThumbnail_image().size();
+            return mCommoThumbImageList.size();
         }
 
         @Override
@@ -160,9 +177,9 @@ public class PhotoViewPostDetailActivity extends AppCompatActivity {
 
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-            View view = LayoutInflater.from(PhotoViewPostDetailActivity.this).inflate(R.layout.item_photo_view_pager, null);
+            View view = LayoutInflater.from(PhotoViewPostCommoActivity.this).inflate(R.layout.item_photo_view_pager, null);
             final PhotoView photoView = (PhotoView) view.findViewById(R.id.PhotoView);
-            final TextView  mTv_image_real = (TextView) view.findViewById(R.id.tv_image_real);
+            final TextView mTv_image_real = (TextView) view.findViewById(R.id.tv_image_real);
             photoView.enable();
             photoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             ViewTarget<PhotoView, GlideDrawable> viewTarget = new ViewTarget<PhotoView, GlideDrawable>(photoView) {
@@ -171,16 +188,15 @@ public class PhotoViewPostDetailActivity extends AppCompatActivity {
                     this.view.setImageDrawable(resource.getCurrent());
                 }
             };
-            Glide.with(PhotoViewPostDetailActivity.this)
-                    .load(mPostDetailBean.getThumbnail_image().get(position).getThumbnail_image())
+            Glide.with(PhotoViewPostCommoActivity.this)
+                    .load(mCommoThumbImageList.get(position))
                     .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(viewTarget);
 
 
             mTv_image_real.setText("查看原图(" +
-                    ConvertUtils.byte2FitMemorySize(mPostDetailBean.getPosts_reset_image()
-                            .get(position).getPosts_image_size())
+                    ConvertUtils.byte2FitMemorySize(mCommoImageSizeList.get(position))
                     + ")");
             mTv_image_real.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -188,7 +204,6 @@ public class PhotoViewPostDetailActivity extends AppCompatActivity {
                     downloadImage(position,view,photoView);
                 }
             });
-
             container.addView(view);
             return view;
         }
@@ -199,20 +214,18 @@ public class PhotoViewPostDetailActivity extends AppCompatActivity {
         }
     };
 
-    private void downloadImage(final int position, final View view, final PhotoView photoView) {
+   private void downloadImage(final int position, final View view, final PhotoView photoView) {
         OkHttpUtils//
                 .get()//
-                .url(mPostDetailBean.getPosts_reset_image()
-                        .get(position).getPosts_image())//
+                .url(mCommoImageList.get(position))//
                 .build()//
-                .execute(new FileCallBack(FileUtils.imageSavePath, mPostDetailBean.getPosts_reset_image()
-                        .get(position).getPosts_image().substring(
-                                mPostDetailBean.getPosts_reset_image().get(position).getPosts_image().length() - 15,
-                                mPostDetailBean.getPosts_reset_image().get(position).getPosts_image().length()))//
+                .execute(new FileCallBack(FileUtils.imageSavePath, mCommoImageList.get(position).substring(
+                        mCommoImageList.get(position).length() - 15,
+                        mCommoImageList.get(position).length()))//
                 {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        Toast.makeText(PhotoViewPostDetailActivity.this, "下载出错", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PhotoViewPostCommoActivity.this, "下载出错", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -240,11 +253,10 @@ public class PhotoViewPostDetailActivity extends AppCompatActivity {
                                 this.view.setImageDrawable(resource.getCurrent());
                             }
                         };
-                        Glide.with(PhotoViewPostDetailActivity.this)
-                                .load(FileUtils.imageSavePath+ mPostDetailBean.getPosts_reset_image()
-                                        .get(position).getPosts_image().substring(
-                                                mPostDetailBean.getPosts_reset_image().get(position).getPosts_image().length() - 15,
-                                                mPostDetailBean.getPosts_reset_image().get(position).getPosts_image().length()))
+                        Glide.with(PhotoViewPostCommoActivity.this)
+                                .load(FileUtils.imageSavePath+ mCommoImageList.get(position).substring(
+                                        mCommoImageList.get(position).length() - 15,
+                                        mCommoImageList.get(position).length()))
                                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .into(viewTarget);

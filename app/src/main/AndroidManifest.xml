@@ -192,6 +192,7 @@
         <activity android:name=".activity.SearchCommuListActivity">
         </activity>
         <activity android:name=".activity.PhotoViewPostDetailActivity"/>
+        <activity android:name=".activity.PhotoViewPostCommoActivity"/>
     </application>
 
 </manifest>
