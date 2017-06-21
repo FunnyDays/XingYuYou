@@ -22,6 +22,7 @@
             android:layout_alignParentStart="true"/>
 
         <TextView
+            android:id="@+id/tv_one"
             android:layout_width="wrap_content"
             android:layout_height="18dp"
             android:layout_marginLeft="20dp"
@@ -30,7 +31,7 @@
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="游戏"
+            android:text="通告"
             android:textColor="@android:color/white"
             android:textSize="12sp"/>
 
@@ -99,6 +100,7 @@
                     android:src="@drawable/shape_rectangle_cover"/>
 
                 <TextView
+                    android:id="@+id/tv_two"
                     android:layout_width="wrap_content"
                     android:layout_height="16dp"
                     android:layout_marginLeft="10dp"
@@ -131,6 +133,7 @@
                     android:src="@drawable/shape_rectangle_cover"/>
 
                 <TextView
+                    android:id="@+id/tv_three"
                     android:layout_width="wrap_content"
                     android:layout_height="16dp"
                     android:layout_marginLeft="10dp"
@@ -163,6 +166,7 @@
                     android:src="@drawable/shape_rectangle_cover"/>
 
                 <TextView
+                    android:id="@+id/tv_four"
                     android:layout_width="wrap_content"
                     android:layout_height="16dp"
                     android:layout_marginLeft="10dp"

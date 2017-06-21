@@ -1,11 +1,11 @@
 package com.xingyuyou.xingyuyou.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -28,14 +28,10 @@ import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
 import com.xingyuyou.xingyuyou.Utils.net.XingYuInterface;
-import com.xingyuyou.xingyuyou.bean.community.TagBean;
-import com.xingyuyou.xingyuyou.fragment.TwoFragment;
 import com.xingyuyou.xingyuyou.weight.dialog.CustomDialog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
-
-import net.bither.util.NativeUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,7 +42,7 @@ import java.util.Map;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
-public class PostingActivity extends AppCompatActivity {
+public class SortPostingActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE = 2;
     private static final int TYPE_FOOTER = 21;
     private Toolbar mToolbar;
@@ -109,7 +105,7 @@ public class PostingActivity extends AppCompatActivity {
         mRlCommMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(PostingActivity.this, SelectCommTagActivity.class);
+                IntentUtils.startActivity(SortPostingActivity.this, SelectCommTagActivity.class);
             }
         });
     }
@@ -124,7 +120,7 @@ public class PostingActivity extends AppCompatActivity {
         mRlTagMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(PostingActivity.this, SelectTagActivity.class);
+                IntentUtils.startActivity(SortPostingActivity.this, SelectTagActivity.class);
             }
         });
     }
@@ -142,8 +138,8 @@ public class PostingActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.ab_send:
-                        mDialog = new CustomDialog(PostingActivity.this);
-                        mDialog.ProgressDialog(PostingActivity.this,"正在上传，请稍后");
+                        mDialog = new CustomDialog(SortPostingActivity.this);
+                        mDialog.ProgressDialog(SortPostingActivity.this,"正在上传，请稍后");
                         mDialog.showDialog();
                         mHandler.postDelayed(new Runnable() {
                             @Override
@@ -246,6 +242,7 @@ public class PostingActivity extends AppCompatActivity {
         params.put("subject", mStTitle.getText().toString().trim());
         params.put("message", StringUtils.isEmpty(mEtContent.getText().toString().trim()) == true ? "" : mEtContent.getText().toString().trim());
         params.put("tags", (String) map.get("PostTags"));
+        Log.e("weiwei", "dealEditData: "+params.toString() );
         PostFormBuilder post = OkHttpUtils.post();
         for (int i = 0; i < mImageList.size(); i++) {
             File file = new File(mImageList.get(i));
@@ -265,16 +262,18 @@ public class PostingActivity extends AppCompatActivity {
                     @Override
                     public void onError(okhttp3.Call call, Exception e, int id) {
                         mDialog.dismissDialog();
+                        Log.e("weiwei", "dealEditData: onError"+e.toString() );
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
+                        Log.e("weiwei", "dealEditData: onResponse"+response.toString() );
                         mDialog.dismissDialog();
                         Intent intent = new Intent("updateFragment");
-                        LocalBroadcastManager.getInstance(PostingActivity.this)
+                        LocalBroadcastManager.getInstance(SortPostingActivity.this)
                                 .sendBroadcast(intent);
-                        Toast.makeText(PostingActivity.this, "发帖成功", Toast.LENGTH_SHORT).show();
-                        PostingActivity.this.finish();
+                        Toast.makeText(SortPostingActivity.this, "发帖成功", Toast.LENGTH_SHORT).show();
+                        SortPostingActivity.this.finish();
                     }
 
                     @Override
@@ -301,7 +300,7 @@ public class PostingActivity extends AppCompatActivity {
     private class ImageAdapter extends RecyclerView.Adapter {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View layout = LayoutInflater.from(PostingActivity.this).inflate(R.layout.item_post_image, parent, false);
+            View layout = LayoutInflater.from(SortPostingActivity.this).inflate(R.layout.item_post_image, parent, false);
             return new ItemViewHolder(layout);
         }
 
@@ -313,20 +312,20 @@ public class PostingActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         if (mImageList.size() >= 5) {
-                            Toast.makeText(PostingActivity.this, "只能发布五张图片", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SortPostingActivity.this, "只能发布五张图片", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        MultiImageSelector.create(PostingActivity.this)
+                        MultiImageSelector.create(SortPostingActivity.this)
                                 .showCamera(true)
                                 .count(5)
-                                .start(PostingActivity.this, REQUEST_IMAGE);
+                                .start(SortPostingActivity.this, REQUEST_IMAGE);
                     }
                 });
             }
             if (holder instanceof ItemViewHolder) {
                 if (mImageList.size() != 0) {
                     if (getItemViewType(position) != TYPE_FOOTER) {
-                        Glide.with(PostingActivity.this)
+                        Glide.with(SortPostingActivity.this)
                                 .load(mImageList.get(position))
                                 .into(((ItemViewHolder) holder).mPostImage);
                         ((ItemViewHolder) holder).mClosePic.setOnClickListener(new View.OnClickListener() {

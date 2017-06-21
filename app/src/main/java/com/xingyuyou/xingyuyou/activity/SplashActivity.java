@@ -82,11 +82,24 @@ public class SplashActivity extends AppCompatActivity {
             }
         }
     };*/
+
+  Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        IntentUtils.startActivityAndFinish(SplashActivity.this, MainActivity.class);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                IntentUtils.startActivityAndFinish(SplashActivity.this, MainActivity.class);
+            }
+        },3000);
         Button button = (Button) findViewById(R.id.button1);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

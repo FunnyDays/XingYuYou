@@ -21,11 +21,12 @@
             android:layout_below="@+id/line"
             android:id="@+id/ll_edit_parent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:visibility="visible"
             >
 
             <EditText
+                android:layout_gravity="center"
                 android:id="@+id/bottom_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/x28"

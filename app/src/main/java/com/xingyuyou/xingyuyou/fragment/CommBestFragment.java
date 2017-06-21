@@ -47,7 +47,10 @@ import okhttp3.Call;
  * Created by Administrator on 2016/6/28.
  */
 public class CommBestFragment extends BaseFragment {
-
+    private TextView mTv_one;
+    private TextView mTv_two;
+    private TextView mTv_three;
+    private TextView mTv_four;
     private static boolean CLEAR_DATA = false;
     private RecyclerView mRecyclerView;
     private boolean IS_FIRST_INIT_DATA = true;
@@ -270,6 +273,17 @@ public class CommBestFragment extends BaseFragment {
 
         //头布局
         View headerView = View.inflate(mActivity, R.layout.part_comm_header, null);
+        //图片上的字
+        mTv_one = (TextView) headerView.findViewById(R.id.tv_one);
+        mTv_one.setText("游戏");
+        mTv_two = (TextView) headerView.findViewById(R.id.tv_two);
+        mTv_two.setText("日常");
+
+        mTv_three = (TextView) headerView.findViewById(R.id.tv_three);
+        mTv_three.setText("手办");
+
+        mTv_four = (TextView) headerView.findViewById(R.id.tv_four);
+        mTv_four.setText("手绘");
         mIvOne = (ImageView) headerView.findViewById(R.id.iv_one);
         mIvTwo = (ImageView) headerView.findViewById(R.id.iv_two);
         mIvThree = (ImageView) headerView.findViewById(R.id.iv_three);

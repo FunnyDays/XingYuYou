@@ -3,7 +3,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/item_commo_detail"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/x15"
+                android:layout_height="wrap_content"
 
     >
 
@@ -30,7 +30,7 @@
         android:maxLines="10"
         android:layout_centerVertical="true"
         android:textSize="@dimen/x10"
-        tools:text="平路的对方的soils的开发"/>
+        tools:text="平路的大师傅打发士大夫发射点发生发射点大师傅十分士大夫对方的soils的开发"/>
 
     <TextView
         android:id="@+id/tv_commo2_time"

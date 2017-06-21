@@ -1,5 +1,6 @@
 package com.xingyuyou.xingyuyou.bean.community;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -243,7 +244,7 @@ public class PostCommoBean {
             this.thumbnail_height = thumbnail_height;
         }
     }
-    public static class ChildBean {
+    public static class ChildBean implements Serializable {
         /**
          * id : 39
          * pid : 38
@@ -336,6 +337,21 @@ public class PostCommoBean {
 
         public void setNickname(String nickname) {
             this.nickname = nickname;
+        }
+
+        @Override
+        public String toString() {
+            return "ChildBean{" +
+                    "id='" + id + '\'' +
+                    ", pid='" + pid + '\'' +
+                    ", uid='" + uid + '\'' +
+                    ", imgarr='" + imgarr + '\'' +
+                    ", replies_content='" + replies_content + '\'' +
+                    ", dateline='" + dateline + '\'' +
+                    ", tid='" + tid + '\'' +
+                    ", floor_num='" + floor_num + '\'' +
+                    ", nickname='" + nickname + '\'' +
+                    '}';
         }
     }
 }

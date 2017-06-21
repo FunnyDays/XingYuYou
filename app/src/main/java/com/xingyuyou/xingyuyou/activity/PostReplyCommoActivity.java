@@ -1,8 +1,10 @@
 package com.xingyuyou.xingyuyou.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -137,8 +139,7 @@ public class PostReplyCommoActivity extends AppCompatActivity {
             JSONObject jo = new JSONObject(itemList);
             Gson gson = new Gson();
             mPostCommoBean = gson.fromJson(jo.toString(), PostCommoBean.class);
-            /*if (mPostCommoBean.getChild() != null)
-                mCommoAdapterList.addAll(mPostCommoBean.getChild());*/
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -198,7 +199,7 @@ public class PostReplyCommoActivity extends AppCompatActivity {
     }
 
     private void setValues() {
-        if (!(mPostCommoBean.getThumbnail_image()==null)&&!mPostCommoBean.getThumbnail_image().get(0).toString().equals("")) {
+        if (!(mPostCommoBean.getThumbnail_image() == null) && mPostCommoBean.getThumbnail_image().size() != 0) {
             for (int j = 0; j < mPostCommoBean.getThumbnail_image().size(); j++) {
                 ImageView imageView = new ImageView(PostReplyCommoActivity.this);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -424,8 +425,19 @@ public class PostReplyCommoActivity extends AppCompatActivity {
                         mCommoAdapterList.add(childBean);
                         mToCommoAdapter.notifyDataSetChanged();
                         edittext.setText("");
+                        //发送一条广播更新帖子回帖列表的评论
+                        updatePostCommoList(childBean);
                     }
                 });
+    }
+
+    private void updatePostCommoList(PostCommoBean.ChildBean childBean) {
+        Intent intent = new Intent();
+        intent.setAction("updatePostCommoList");
+        intent.putExtra("childBean",childBean);
+        intent.putExtra("position",getIntent().getIntExtra("position",0));
+        LocalBroadcastManager.getInstance(this)
+                .sendBroadcast(intent);
     }
 
     private class CommoToCommoAdapter extends RecyclerView.Adapter {

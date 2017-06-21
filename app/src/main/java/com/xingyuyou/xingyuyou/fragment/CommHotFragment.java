@@ -119,6 +119,10 @@ public class CommHotFragment extends BaseFragment {
     private ImageView mIvTwo;
     private ImageView mIvThree;
     private ImageView mIvFour;
+    private TextView mTv_one;
+    private TextView mTv_two;
+    private TextView mTv_three;
+    private TextView mTv_four;
 
     public static CommHotFragment newInstance(String content) {
         Bundle args = new Bundle();
@@ -169,7 +173,7 @@ public class CommHotFragment extends BaseFragment {
                 .addParams("type", "1")
                 .addParams("attribute", getArguments().getString("ARGS"))
                 .addParams("uid", UserUtils.getUserId())
-                .addParams("fid","1")
+                .addParams("fid", "1")
                 .addParams("keyword", "1")
                 .addParams("bid", "1")
                 .url(XingYuInterface.GET_POSTS_LIST)
@@ -263,13 +267,24 @@ public class CommHotFragment extends BaseFragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mCommHotAdapter = new CommHotAdapter(1,mActivity, mPostAdapterList);
+        mCommHotAdapter = new CommHotAdapter(1, mActivity, mPostAdapterList);
         View loadingData = View.inflate(mActivity, R.layout.default_loading, null);
         mPbNodata = (ProgressBar) loadingData.findViewById(R.id.pb_loading);
         mTvNodata = (TextView) loadingData.findViewById(R.id.loading_text);
 
         //头布局
         View headerView = View.inflate(mActivity, R.layout.part_comm_header, null);
+        //图片上的字
+        mTv_one = (TextView) headerView.findViewById(R.id.tv_one);
+        mTv_one.setText("通告");
+        mTv_two = (TextView) headerView.findViewById(R.id.tv_two);
+        mTv_two.setText("cosplay");
+
+        mTv_three = (TextView) headerView.findViewById(R.id.tv_three);
+        mTv_three.setText("番剧");
+
+        mTv_four = (TextView) headerView.findViewById(R.id.tv_four);
+        mTv_four.setText("鬼畜");
         mIvOne = (ImageView) headerView.findViewById(R.id.iv_one);
         mIvTwo = (ImageView) headerView.findViewById(R.id.iv_two);
         mIvThree = (ImageView) headerView.findViewById(R.id.iv_three);
@@ -361,7 +376,7 @@ public class CommHotFragment extends BaseFragment {
                         mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).setCollect_status(1);
                         mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)
                                 .setPosts_collect(String.valueOf((Integer.parseInt(
-                                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).getPosts_collect())) +1));
+                                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).getPosts_collect())) + 1));
                     }
                 }
                 if (intent.getAction().equals("HotFragmentUpdateZanStatus")) {
@@ -374,7 +389,7 @@ public class CommHotFragment extends BaseFragment {
                         mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).setLaud_status(1);
                         mPostAdapterList.get(intent.getIntExtra("position", 0) - 1)
                                 .setPosts_laud(String.valueOf((Integer.parseInt(
-                                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).getPosts_laud())) +1));
+                                        mPostAdapterList.get(intent.getIntExtra("position", 0) - 1).getPosts_laud())) + 1));
                     }
                 }
                 mCommHotAdapter.notifyItemChanged(intent.getIntExtra("position", 0));

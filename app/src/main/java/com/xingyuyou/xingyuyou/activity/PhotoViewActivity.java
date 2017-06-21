@@ -42,13 +42,13 @@ public class PhotoViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_view);
         mTv_image_number = (TextView) findViewById(R.id.tv_image_number);
-        mTv_image_real = (TextView) findViewById(R.id.tv_image_real);
-        mTv_image_real.setOnClickListener(new View.OnClickListener() {
+       /// mTv_image_real = (TextView) findViewById(R.id.tv_image_real);
+       /* mTv_image_real.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(PhotoViewActivity.this, "已是原图", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
         //保存图片
         mIv_save_image = (ImageView) findViewById(R.id.iv_save_image);
         mIv_save_image.setOnClickListener(new View.OnClickListener() {

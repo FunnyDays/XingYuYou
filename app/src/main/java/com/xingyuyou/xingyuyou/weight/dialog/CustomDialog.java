@@ -87,6 +87,7 @@ public class CustomDialog {
         View view = LayoutInflater.from(activity).inflate(R.layout.dialog_progress_loding, null);
         builder.setView(view);
         mAlertDialog = builder.create();
+        mAlertDialog.setCancelable(false);
         TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         tvTitle.setText(title);

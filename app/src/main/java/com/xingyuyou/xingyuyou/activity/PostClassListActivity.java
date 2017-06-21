@@ -80,6 +80,10 @@ public class PostClassListActivity extends AppCompatActivity {
                     mPostTopWellList = gson.fromJson(ja.toString(),
                             new TypeToken<List<PostTopAndWellBean>>() {
                             }.getType());
+                    if (CLEAR_DATA == true) {
+                        mPostAdapterList.clear();
+                        CLEAR_DATA = false;
+                    }
                     mPostAdapterList.addAll(mPostTopWellList);
                     mPostAdapterList.addAll(mPostList);
                 } catch (JSONException e) {
@@ -97,6 +101,9 @@ public class PostClassListActivity extends AppCompatActivity {
     private SwipeRefreshLayout mRefreshLayout;
     private LinearLayoutManager mLinearLayoutManager;
     private Toolbar mToolbar;
+    private LocalBroadcastManager mLocalBroadcastManager;
+    private BroadcastReceiver mBr;
+    private static boolean CLEAR_DATA = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +114,35 @@ public class PostClassListActivity extends AppCompatActivity {
         initSwipeRefreshLayout();
         initData(1);
         updateStatus();
+        updatePost();
+    }
+    private void updatePost() {
+        mLocalBroadcastManager = LocalBroadcastManager
+                .getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("updateFragment");
+        mBr = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRefreshLayout.setRefreshing(true);
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                PAGENUMBER = 1;
+                                CLEAR_DATA = true;
+                                initData(PAGENUMBER);
+                                mRefreshLayout.setRefreshing(false);
+                            }
+                        }, 200);
+                    }
+                });
+            }
+
+        };
+        mLocalBroadcastManager.registerReceiver(mBr, intentFilter);
     }
     private void initToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -237,6 +273,8 @@ public class PostClassListActivity extends AppCompatActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        mPostAdapterList.clear();
+                        initData(1);
                         mRefreshLayout.setRefreshing(false);
                     }
                 }, 2000);
@@ -316,5 +354,6 @@ public class PostClassListActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(this);
+        mLocalBroadcastManager.unregisterReceiver(mBr);
     }
 }

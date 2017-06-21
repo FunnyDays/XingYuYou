@@ -193,6 +193,7 @@
         </activity>
         <activity android:name=".activity.PhotoViewPostDetailActivity"/>
         <activity android:name=".activity.PhotoViewPostCommoActivity"/>
+        <activity android:name=".activity.SortPostingActivity"/>
     </application>
 
 </manifest>

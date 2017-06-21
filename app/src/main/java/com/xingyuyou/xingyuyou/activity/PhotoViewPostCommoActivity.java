@@ -60,6 +60,7 @@ public class PhotoViewPostCommoActivity extends AppCompatActivity {
         }
     };
     private PostCommoBean.ThumbnailImageBean mPostDetailBean;
+    private int mLastIndexOf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,7 @@ public class PhotoViewPostCommoActivity extends AppCompatActivity {
         mIv_save_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //  downloadImage();
+                  downloadImage();
             }
         });
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -100,7 +101,7 @@ public class PhotoViewPostCommoActivity extends AppCompatActivity {
 
             }
         });
-        mPager.setCurrentItem(getIntent().getIntExtra("position", 0));
+        mPager.setCurrentItem(mLastIndexOf);
 
     }
 
@@ -122,9 +123,9 @@ public class PhotoViewPostCommoActivity extends AppCompatActivity {
                     }
                 }
             }
-            Log.e("postiii", "initData: " + mCommoImageList.size());
-            Log.e("post22", "initData: " + mCommoThumbImageList.size());
-
+           // Log.e("postiii", "position_i:"+getIntent().getIntExtra("position_i",0)+"position_j"+getIntent().getIntExtra("position_j",0));
+            mLastIndexOf = mCommoThumbImageList.lastIndexOf(mCommoList.get(getIntent().getIntExtra("position_i",0))
+                   .getThumbnail_image().get(getIntent().getIntExtra("position_j",0)).getThumbnail_image());
         } catch (JSONException e) {
             e.printStackTrace();
         }

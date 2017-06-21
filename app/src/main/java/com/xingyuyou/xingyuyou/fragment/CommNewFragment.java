@@ -119,6 +119,12 @@ public class CommNewFragment extends BaseFragment {
     private ImageView mIvTwo;
     private ImageView mIvThree;
     private ImageView mIvFour;
+    private LocalBroadcastManager mLocalBroadcastManager;
+    private BroadcastReceiver mBr;
+    private TextView mTv_one;
+    private TextView mTv_two;
+    private TextView mTv_three;
+    private TextView mTv_four;
 
     public static CommNewFragment newInstance(String content) {
         Bundle args = new Bundle();
@@ -160,11 +166,11 @@ public class CommNewFragment extends BaseFragment {
 
     }
     private void updatePost() {
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+        mLocalBroadcastManager = LocalBroadcastManager
                 .getInstance(getActivity());
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("updateFragment");
-        BroadcastReceiver br = new BroadcastReceiver() {
+        mBr = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 mRefreshLayout.post(new Runnable() {
@@ -185,7 +191,7 @@ public class CommNewFragment extends BaseFragment {
             }
 
         };
-        localBroadcastManager.registerReceiver(br, intentFilter);
+        mLocalBroadcastManager.registerReceiver(mBr, intentFilter);
     }
     /**
      * 初始化数据
@@ -233,6 +239,8 @@ public class CommNewFragment extends BaseFragment {
     }
 
     private void setValues() {
+        //图片上的字
+
         Glide.with(mActivity).load(mRecommAdapterList.get(0).getRe_image())
                 .into(mIvOne);
         Glide.with(mActivity).load(mRecommAdapterList.get(1).getRe_image())
@@ -298,6 +306,18 @@ public class CommNewFragment extends BaseFragment {
 
         //头布局
         View headerView = View.inflate(mActivity, R.layout.part_comm_header, null);
+        //图片上的字
+        mTv_one = (TextView) headerView.findViewById(R.id.tv_one);
+        mTv_one.setText("游戏");
+        mTv_two = (TextView) headerView.findViewById(R.id.tv_two);
+        mTv_two.setText("小说");
+
+        mTv_three = (TextView) headerView.findViewById(R.id.tv_three);
+        mTv_three.setText("游戏");
+
+        mTv_four = (TextView) headerView.findViewById(R.id.tv_four);
+        mTv_four.setText("恐怖");
+
         mIvOne = (ImageView) headerView.findViewById(R.id.iv_one);
         mIvTwo = (ImageView) headerView.findViewById(R.id.iv_two);
         mIvThree = (ImageView) headerView.findViewById(R.id.iv_three);
@@ -410,6 +430,13 @@ public class CommNewFragment extends BaseFragment {
         };
         localBroadcastManager.registerReceiver(br1, intentFilter);
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mLocalBroadcastManager.unregisterReceiver(mBr);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

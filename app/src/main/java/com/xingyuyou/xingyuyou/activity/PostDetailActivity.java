@@ -1,6 +1,9 @@
 package com.xingyuyou.xingyuyou.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -124,7 +127,7 @@ public class PostDetailActivity extends BaseActivity {
                     // isLoading = true;
                     return;
                 }
-                mResponseSend=mResponse1;
+                mResponseSend = mResponse1;
                 JSONObject jo = null;
                 try {
                     jo = new JSONObject(mResponse1);
@@ -190,6 +193,8 @@ public class PostDetailActivity extends BaseActivity {
     private String mResponse;
     private String mResponse1;
     private String mResponseSend;
+    private LocalBroadcastManager mLocalBroadcastManager;
+    private BroadcastReceiver mBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,6 +205,30 @@ public class PostDetailActivity extends BaseActivity {
         initView();
         initData();
         initCommoData(PAGENUM);
+        updatePostCommoList();
+    }
+
+    private void updatePostCommoList() {
+        mLocalBroadcastManager = LocalBroadcastManager
+                .getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("updatePostCommoList");
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals("updatePostCommoList")) {
+                    PostCommoBean.ChildBean childBean = (PostCommoBean.ChildBean) intent.getSerializableExtra("childBean");
+                    if (mCommoAdapterList.get(intent.getIntExtra("position", 0)).getChild()==null) {
+                        ArrayList<PostCommoBean.ChildBean> list = new ArrayList<>();
+                        list.add(childBean);
+                        mCommoAdapterList.get(intent.getIntExtra("position", 0)).setChild(list);
+                    }
+                }
+                mPostCommoListAdapter.notifyDataSetChanged();
+            }
+
+        };
+        mLocalBroadcastManager.registerReceiver(mBroadcastReceiver, intentFilter);
     }
 
     //********************************************以下是初始化代码**************************************************
@@ -272,7 +301,6 @@ public class PostDetailActivity extends BaseActivity {
      */
     @Override
     public void initData() {
-        Log.e("post", "initData: " + getIntent().getStringExtra("post_id"));
         OkHttpUtils.post()//
                 .addParams("pid", getIntent().getStringExtra("post_id"))
                 .addParams("uid", UserUtils.getUserId())
@@ -466,9 +494,9 @@ public class PostDetailActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, int position_i, int position_j) {
                 Intent intent = new Intent(PostDetailActivity.this, PhotoViewPostCommoActivity.class);
-                intent.putExtra("position_i",position_i);
-                intent.putExtra("position_j",position_j);
-                intent.putExtra("postDetailCommoBean",mResponseSend);
+                intent.putExtra("position_i", position_i);
+                intent.putExtra("position_j", position_j);
+                intent.putExtra("postDetailCommoBean", mResponseSend);
                 startActivity(intent);
             }
         });
@@ -532,6 +560,7 @@ public class PostDetailActivity extends BaseActivity {
             String json = gson.toJson(mCommoAdapterList.get(position), PostCommoBean.class);
             Intent intent = new Intent(PostDetailActivity.this, PostReplyCommoActivity.class);
             intent.putExtra("item_list", json);
+            intent.putExtra("position", position);
             PostDetailActivity.this.startActivity(intent);
         }
 
@@ -540,7 +569,7 @@ public class PostDetailActivity extends BaseActivity {
     //*********************************************以下是赋值代码***************************************************
     private void setValues() {
         //更新楼主
-      //  mPostCommoListAdapter.setUid(mPostDetailBean.getUid());
+        mPostCommoListAdapter.setUid(mPostDetailBean.getUid());
         mPostCommoListAdapter.notifyDataSetChanged();
         //收藏状态
         if (mPostDetailBean.getCollect_status().equals("1")) {
@@ -596,8 +625,8 @@ public class PostDetailActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(PostDetailActivity.this, PhotoViewPostDetailActivity.class);
-                    intent.putExtra("position",finalI);
-                    intent.putExtra("postDetailBean",mResponse);
+                    intent.putExtra("position", finalI);
+                    intent.putExtra("postDetailBean", mResponse);
                     startActivity(intent);
                 }
             });
@@ -992,5 +1021,11 @@ public class PostDetailActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLocalBroadcastManager.unregisterReceiver(mBroadcastReceiver);
     }
 }

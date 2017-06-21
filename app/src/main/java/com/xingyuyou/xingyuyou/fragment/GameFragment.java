@@ -139,7 +139,7 @@ public class GameFragment extends BaseFragment {
         mFragments.add(hf);
         mFragments.add(hf1);
         mFragments.add(hf2);
-        mTitles.add("热门");
+        mTitles.add("次元专区");
         mTitles.add("精品");
         mTitles.add("最新");
         mContent.setAdapter(new MainVPAdapter(getChildFragmentManager(), mFragments, mTitles));

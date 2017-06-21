@@ -187,8 +187,7 @@ public class PostCommoListAdapter extends BaseAdapter {
             }
         });
         //更多评论
-        if (mCommoBeanList.get(i).getChild() != null) {
-        }
+
         if (mCommoBeanList.get(i).getChild() != null && mCommoBeanList.get(i).getChild().size() > 0) {
             if (mCommoBeanList.get(i).getChild().size() == 1) {
                 holder.tv_commo2_more.setVisibility(View.INVISIBLE);
@@ -211,19 +210,19 @@ public class PostCommoListAdapter extends BaseAdapter {
     /*存放控件 的ViewHolder*/
     public final class ViewHolder {
         public TextView tv_user_name;
-        public TextView tv_commo2_name;
-        public TextView tv_commo2_content;
-        public TextView tv_commo2_time;
-        public TextView tv_louzhu;
-        public TextView tv_zan_num;
-        public TextView tv_reply_content;
-        public TextView tv_commo_time;
-        public ImageView iv_user_photo;
-        public ImageView iv_zan;
-        public TextView tv_floor_num;
-        public TextView tv_commo2_more;
-        public LinearLayout ll_root_image_item;
-        public LinearLayout ll_more_commo_item;
+        private TextView tv_commo2_name;
+        private TextView tv_commo2_content;
+        private TextView tv_commo2_time;
+        private TextView tv_louzhu;
+        private TextView tv_zan_num;
+        private TextView tv_reply_content;
+        private TextView tv_commo_time;
+        private ImageView iv_user_photo;
+        private ImageView iv_zan;
+        private TextView tv_floor_num;
+        private TextView tv_commo2_more;
+        private LinearLayout ll_root_image_item;
+        private LinearLayout ll_more_commo_item;
     }
 
     private void getLuad(String replies_id) {

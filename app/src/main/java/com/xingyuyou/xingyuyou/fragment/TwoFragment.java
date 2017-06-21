@@ -16,13 +16,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.xingyuyou.xingyuyou.R;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
+import com.xingyuyou.xingyuyou.Utils.glide.GlideCircleTransform;
 import com.xingyuyou.xingyuyou.activity.DownLoadActivity;
 import com.xingyuyou.xingyuyou.activity.LoginActivity;
+import com.xingyuyou.xingyuyou.activity.ManagementActivity;
 import com.xingyuyou.xingyuyou.activity.PostingActivity;
 import com.xingyuyou.xingyuyou.activity.SearchActivity;
 import com.xingyuyou.xingyuyou.activity.SearchCommuActivity;
@@ -45,6 +51,8 @@ public class TwoFragment extends BaseFragment {
     public Map<String, Integer> mClasses = new HashMap<String, Integer>();
     private List<String> mTitles;
     private boolean isHide;
+    private TextView mTvUserAccount;
+    private ImageView mIvManage;
 
     public static TwoFragment newInstance(String content) {
         Bundle args = new Bundle();
@@ -73,8 +81,27 @@ public class TwoFragment extends BaseFragment {
         minitView();
         minitData();
         updatePost();
+        initUserData();
     }
-
+    private void initUserData() {
+        //登陆账号设置
+        mTvUserAccount = (TextView) getView().findViewById(R.id.tv_user_account);
+        mTvUserAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentUtils.startActivity(mActivity, ManagementActivity.class);
+                mActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+        });
+        mIvManage = (ImageView) getView().findViewById(R.id.iv_manage);
+        mIvManage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentUtils.startActivity(mActivity, ManagementActivity.class);
+                mActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+        });
+    }
     private void updatePost() {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getActivity());
@@ -110,7 +137,6 @@ public class TwoFragment extends BaseFragment {
     }
 
     private void initToolbar() {
-        mToolbar.setTitle("社区");
         mToolbar.inflateMenu(R.menu.all_tab_fragment_menu);
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -147,6 +173,26 @@ public class TwoFragment extends BaseFragment {
         mTab.setTabMode(TabLayout.MODE_FIXED);
         mTab.setupWithViewPager(mContent);
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (UserUtils.logined()) {
+            mTvUserAccount.setText(UserUtils.getNickName());
+            Glide.with(mActivity)
+                    .load(UserUtils.getUserPhoto())
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .transform(new GlideCircleTransform(mActivity))
+                    .priority(Priority.HIGH)
+                    .into(mIvManage);
+        } else {
+            mTvUserAccount.setText("未登陆");
+            Glide.with(mActivity)
+                    .load(R.drawable.ic_user_defalut)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .transform(new GlideCircleTransform(mActivity))
+                    .priority(Priority.HIGH)
+                    .into(mIvManage);
+        }
+    }
 
 }
