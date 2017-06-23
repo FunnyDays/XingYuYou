@@ -2,6 +2,7 @@ package com.xingyuyou.xingyuyou.Utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -43,6 +45,8 @@ public class FileUtils {
 
     public static final String fileSavePath = "/sdcard/XingYuGame/app/";
     public static final String imageSavePath = "/sdcard/XingYuGame/Image/";
+
+
     /**
      * 将Bitmap 图片保存到本地路径，并返回路径
      * @param c

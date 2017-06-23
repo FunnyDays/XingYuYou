@@ -26,12 +26,14 @@ import okhttp3.OkHttpClient;
  */
 public class InitializeService extends IntentService {
     private static final String ACTION_INIT_WHEN_APP_CREATE = "com.xingyuyou.xingyuyou.service.action.INIT";
+    private static Context mContext;
 
     public InitializeService() {
         super("InitializeService");
     }
 
     public static void start(Context context) {
+        mContext=context;
         Intent intent = new Intent(context, InitializeService.class);
         intent.setAction(ACTION_INIT_WHEN_APP_CREATE);
         context.startService(intent);
@@ -54,7 +56,7 @@ public class InitializeService extends IntentService {
         //下载初始化
         x.Ext.init(getApplication());
         //工具类初始化
-        Utils.init(this);
+        Utils.init(mContext);
         //网络初始化
         initOkhttp();
         //友盟分享
@@ -62,7 +64,7 @@ public class InitializeService extends IntentService {
     }
 
     private void youmeng() {
-        UMShareAPI.get(this);
+        UMShareAPI.get(mContext);
         PlatformConfig.setWeixin("wxadf9a4cba53e3385","c3d35ec95f73765f6453336d923f3041");
         PlatformConfig.setQQZone("1106012303","hgqXkjzu7Mq1USGL");
         PlatformConfig.setSinaWeibo("3073251384","8304b645771ea95644c209ed5e6b9558","http://www.xingyuyou.com");

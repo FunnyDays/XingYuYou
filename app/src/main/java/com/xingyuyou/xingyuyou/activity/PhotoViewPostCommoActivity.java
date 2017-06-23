@@ -61,6 +61,7 @@ public class PhotoViewPostCommoActivity extends AppCompatActivity {
     };
     private PostCommoBean.ThumbnailImageBean mPostDetailBean;
     private int mLastIndexOf;
+    private int mIndexOf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,7 @@ public class PhotoViewPostCommoActivity extends AppCompatActivity {
         mIv_save_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                  downloadImage();
+                downloadImage();
             }
         });
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -101,12 +102,12 @@ public class PhotoViewPostCommoActivity extends AppCompatActivity {
 
             }
         });
-        mPager.setCurrentItem(mLastIndexOf);
+        mPager.setCurrentItem(mIndexOf);
 
     }
 
     private void initData() {
-        JSONObject jo = null;
+        /*JSONObject jo = null;
         try {
             jo = new JSONObject(getIntent().getStringExtra("postDetailCommoBean"));
             JSONArray ja = jo.getJSONArray("data");
@@ -124,11 +125,15 @@ public class PhotoViewPostCommoActivity extends AppCompatActivity {
                 }
             }
            // Log.e("postiii", "position_i:"+getIntent().getIntExtra("position_i",0)+"position_j"+getIntent().getIntExtra("position_j",0));
-            mLastIndexOf = mCommoThumbImageList.lastIndexOf(mCommoList.get(getIntent().getIntExtra("position_i",0))
+            mIndexOf = mCommoThumbImageList.lastIndexOf(mCommoList.get(getIntent().getIntExtra("position_i",0))
                    .getThumbnail_image().get(getIntent().getIntExtra("position_j",0)).getThumbnail_image());
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
+        mIndexOf = getIntent().getIntExtra("indexOf", 0);
+        mCommoImageList = getIntent().getStringArrayListExtra("mCommoImageList");
+        mCommoImageSizeList = getIntent().getIntegerArrayListExtra("mCommoImageSizeList");
+        mCommoThumbImageList = getIntent().getStringArrayListExtra("mCommoThumbImageList");
     }
 
     private void downloadImage() {
@@ -202,7 +207,7 @@ public class PhotoViewPostCommoActivity extends AppCompatActivity {
             mTv_image_real.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    downloadImage(position,view,photoView);
+                    downloadImage(position, view, photoView);
                 }
             });
             container.addView(view);
@@ -215,7 +220,7 @@ public class PhotoViewPostCommoActivity extends AppCompatActivity {
         }
     };
 
-   private void downloadImage(final int position, final View view, final PhotoView photoView) {
+    private void downloadImage(final int position, final View view, final PhotoView photoView) {
         OkHttpUtils//
                 .get()//
                 .url(mCommoImageList.get(position))//
@@ -240,7 +245,7 @@ public class PhotoViewPostCommoActivity extends AppCompatActivity {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                ((TextView)view).setText(((int)(progress*100))+"%");
+                                ((TextView) view).setText(((int) (progress * 100)) + "%");
                             }
                         });
                     }
@@ -255,7 +260,7 @@ public class PhotoViewPostCommoActivity extends AppCompatActivity {
                             }
                         };
                         Glide.with(PhotoViewPostCommoActivity.this)
-                                .load(FileUtils.imageSavePath+ mCommoImageList.get(position).substring(
+                                .load(FileUtils.imageSavePath + mCommoImageList.get(position).substring(
                                         mCommoImageList.get(position).length() - 15,
                                         mCommoImageList.get(position).length()))
                                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)

@@ -1,6 +1,8 @@
 package com.xingyuyou.xingyuyou.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
@@ -24,6 +26,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.xingyuyou.xingyuyou.R;
+import com.xingyuyou.xingyuyou.Utils.FileUtils;
+import com.xingyuyou.xingyuyou.Utils.ImageUtils;
 import com.xingyuyou.xingyuyou.Utils.IntentUtils;
 import com.xingyuyou.xingyuyou.Utils.MCUtils.UserUtils;
 import com.xingyuyou.xingyuyou.Utils.StringUtils;
@@ -36,6 +40,8 @@ import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import net.bither.util.NativeUtil;
+
+import org.xutils.common.util.FileUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -250,14 +256,26 @@ public class PostingActivity extends AppCompatActivity {
         for (int i = 0; i < mImageList.size(); i++) {
             File file = new File(mImageList.get(i));
             if (file.exists()) {
-               // File file1 = new File(getExternalCacheDir() + "/tempCompress" + i + ".jpg");
-               // NativeUtil.compressBitmap(mImageList.get(i), file1.getAbsolutePath());
+                //File file1 = new File(getExternalCacheDir() + "/tempCompress" + i + ".jpg");
+                //NativeUtil.compressBitmap(mImageList.get(i), file1.getAbsolutePath());
                 //以上是压缩代码
-                String s = "posts_image";
-                post.addFile(s + i, file.getName(), file);
-            }
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+                String type = options.outMimeType;
 
+                if (type.equals("image/webp")){
+                   // FileUtils.saveFile(FileUtils.imageSavePath+"/tempCompress" ,i + ".jpg",ImageUtils.getBitmap(file));
+                    ImageUtils.save(ImageUtils.getBitmap(file),FileUtils.imageSavePath+"/tempCompress"+i + ".jpg", Bitmap.CompressFormat.JPEG);
+                    String s = "posts_image";
+                    post.addFile(s + i, file.getName(), new File(FileUtils.imageSavePath+"/tempCompress"+i + ".jpg"));
+                }else {
+                    String s = "posts_image";
+                    post.addFile(s + i, file.getName(), file);
+                }
+            }
         }
+
         post.url(XingYuInterface.POST_POSTS)
                 .params(params)
                 .build()

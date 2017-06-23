@@ -124,7 +124,7 @@ public class PostDetailActivity extends BaseActivity {
                 if (mResponse1.contains("\"data\":null")) {
                     mPbNodata.setVisibility(View.GONE);
                     mTvNodata.setText("已经没有更多数据");
-                    // isLoading = true;
+                    NoData = true;
                     return;
                 }
                 mResponseSend = mResponse1;
@@ -138,6 +138,9 @@ public class PostDetailActivity extends BaseActivity {
                             }.getType());
                     mCommoAdapterList.addAll(mCommoList);
                     mPostCommoListAdapter.notifyDataSetChanged();
+                    isLoading = false;
+                    //图片合集
+                    getAllPics(mCommoList);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -145,6 +148,11 @@ public class PostDetailActivity extends BaseActivity {
 
         }
     };
+    //图片合集
+    private ArrayList<String> mCommoThumbImageList = new ArrayList<>();
+    private ArrayList<String> mCommoImageList = new ArrayList<>();
+    private ArrayList<Integer> mCommoImageSizeList = new ArrayList<>();
+
     private FrameLayout extendView, emotionView;
     private LinearLayout contentView;
     private ImageView extendButton, emotionButton;
@@ -183,6 +191,7 @@ public class PostDetailActivity extends BaseActivity {
     private RadioButton rbPoint;
     private static final int emsNumOfEveryFragment = 20;//每页的表情数量
     boolean isLoading = false;
+    boolean NoData = false;
     private LinearLayoutManager mLayoutManager;
     private RelativeLayout mTopView;
     private PostCommoListAdapter mPostCommoListAdapter;
@@ -494,9 +503,12 @@ public class PostDetailActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, int position_i, int position_j) {
                 Intent intent = new Intent(PostDetailActivity.this, PhotoViewPostCommoActivity.class);
-                intent.putExtra("position_i", position_i);
-                intent.putExtra("position_j", position_j);
-                intent.putExtra("postDetailCommoBean", mResponseSend);
+                int indexOf = mCommoThumbImageList.indexOf(mCommoAdapterList.get(position_i)
+                        .getThumbnail_image().get(position_j).getThumbnail_image());
+                intent.putExtra("indexOf", indexOf);
+                intent.putStringArrayListExtra("mCommoImageList", mCommoImageList);
+                intent.putIntegerArrayListExtra("mCommoImageSizeList", mCommoImageSizeList);
+                intent.putStringArrayListExtra("mCommoThumbImageList", mCommoThumbImageList);
                 startActivity(intent);
             }
         });
@@ -513,7 +525,6 @@ public class PostDetailActivity extends BaseActivity {
                         //view.getLastVisiblePosition()得到当前屏幕可见的第一个item在整个listview中的下标
                         mLvIndext = absListView.getLastVisiblePosition();
                         break;
-
                     //滚动停止
                     case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
                         //记录滚动停止后 记录当前item的位置
@@ -533,7 +544,7 @@ public class PostDetailActivity extends BaseActivity {
 
             @Override
             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                if (i + i1 == i2 && scrollStatus) {
+                if (i + i1 == i2 ) {
                     if (!isLoading) {
                         isLoading = true;
                         handler.postDelayed(new Runnable() {
@@ -541,8 +552,6 @@ public class PostDetailActivity extends BaseActivity {
                             public void run() {
                                 PAGENUM++;
                                 initCommoData(PAGENUM);
-                                isLoading = false;
-                                // Toast.makeText(PostDetailActivity.this, "正在滑动", Toast.LENGTH_SHORT).show();
                             }
                         }, 200);
                     }
@@ -1018,6 +1027,17 @@ public class PostDetailActivity extends BaseActivity {
         }
     }
 
+    private void getAllPics(List<PostCommoBean> mCommoList) {
+        for (int i = 0; i < mCommoList.size(); i++) {
+            if (mCommoList.get(i).getThumbnail_image() != null && mCommoList.get(i).getThumbnail_image().size() != 0) {
+                for (int j = 0; j < mCommoList.get(i).getThumbnail_image().size(); j++) {
+                    mCommoImageList.add(mCommoList.get(i).getImgarr().get(j).getPosts_image());
+                    mCommoImageSizeList.add(mCommoList.get(i).getImgarr().get(j).getPosts_image_size());
+                    mCommoThumbImageList.add(mCommoList.get(i).getThumbnail_image().get(j).getThumbnail_image());
+                }
+            }
+        }
+    }
     @Override
     protected void onStop() {
         super.onStop();
