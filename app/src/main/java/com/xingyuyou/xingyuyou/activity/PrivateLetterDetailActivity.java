@@ -320,6 +320,7 @@ public class PrivateLetterDetailActivity extends AppCompatActivity {
                         PrivateLetterBean privateLetterBean = new PrivateLetterBean(edittext.getText().toString().trim(), UserUtils.getUserPhoto(),"1");
                         mLetterAdapterList.add(privateLetterBean);
                         mLetterAdapter.notifyDataSetChanged();
+                        edittext.setText("");
                         mListView.smoothScrollToPosition(mLetterAdapterList.size());
                     }
                 });

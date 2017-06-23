@@ -4,15 +4,15 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/post"
-            android:icon="@mipmap/ic"
+            android:icon="@mipmap/icon"
             android:title="我的帖子"/>
         <item
             android:id="@+id/see"
-            android:icon="@mipmap/ic"
+            android:icon="@mipmap/icon"
             android:title="最近浏览"/>
         <item
             android:id="@+id/collect"
-            android:icon="@mipmap/ic"
+            android:icon="@mipmap/icon"
             android:title="收藏"/>
 
     </group>
@@ -21,11 +21,11 @@
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@mipmap/ic"
+                android:icon="@mipmap/icon"
                 android:title="分享"/>
             <item
                 android:id="@+id/nav_send"
-                android:icon="@mipmap/ic"
+                android:icon="@mipmap/icon"
                 android:title="版本检测"/>
         </menu>
     </item>

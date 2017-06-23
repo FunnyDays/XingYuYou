@@ -199,7 +199,7 @@ public class UserFragment extends BaseFragment {
     }
 
     private void shareUM() {
-        UMImage thumb =  new UMImage(mActivity, R.mipmap.ic);
+        UMImage thumb =  new UMImage(mActivity, R.mipmap.icon);
         UMWeb web = new UMWeb("http://www.xingyuyou.com");
         web.setTitle("人生如戏，全靠游戏");//标题
         web.setThumb(thumb);  //缩略图

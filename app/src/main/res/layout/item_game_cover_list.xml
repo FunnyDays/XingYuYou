@@ -30,7 +30,7 @@
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_margin="5dp"
-                    android:src="@mipmap/ic"
+                    android:src="@mipmap/icon"
                     />
 
                 <TextView

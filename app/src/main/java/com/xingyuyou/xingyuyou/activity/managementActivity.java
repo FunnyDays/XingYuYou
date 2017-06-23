@@ -369,7 +369,7 @@ public class ManagementActivity extends AppCompatActivity {
     }
 
     private void shareUM() {
-        UMImage thumb =  new UMImage(ManagementActivity.this, R.mipmap.ic);
+        UMImage thumb =  new UMImage(ManagementActivity.this, R.mipmap.icon);
         UMWeb web = new UMWeb("http://www.xingyuyou.com");
         web.setTitle("人生如戏，全靠游戏");//标题
         web.setThumb(thumb);  //缩略图

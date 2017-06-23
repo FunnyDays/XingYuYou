@@ -21,6 +21,6 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:scaleType="fitXY"
-        android:src="@mipmap/ic"/>
+        android:src="@mipmap/icon"/>
 
 </RelativeLayout>
