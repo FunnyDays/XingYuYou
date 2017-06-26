@@ -1,36 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-    >
 
-    <RelativeLayout
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="3dip">
+
+    <TextView
         android:layout_width="wrap_content"
-        android:layout_height="40dp">
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_post_tag"
+        android:background="@drawable/tag_textview_bg"
+        android:layout_marginTop="@dimen/x5"
+        android:layout_marginLeft="@dimen/x5"
+        android:layout_marginRight="@dimen/x5"
+        android:paddingLeft="@dimen/x5"
+        android:paddingRight="@dimen/x5"
+        android:textColor="@color/colorPrimary"
+        android:minHeight="30dp"
+        android:minWidth="45dp"
+        android:textSize="@dimen/x16"
+        android:gravity="center"
+        android:text="tag_text"/>
 
-
-        <TextView
-            android:id="@+id/tv_post_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/app_uninstall_button_bg"
-            android:paddingLeft="5dp"
-            android:paddingRight="10dp"
-            tools:text="CosPqqq"
-            android:textColor="@color/colorAccent"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            />
-
+    <FrameLayout
+        android:layout_gravity="right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/iv_close"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_alignEnd="@+id/tv_post_tag"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/tv_post_tag"
+            android:layout_width="@dimen/x10"
+            android:layout_height="@dimen/x10"
             android:src="@mipmap/ic_action_tag_close"/>
-    </RelativeLayout>
-</RelativeLayout>
+    </FrameLayout>
+
+</FrameLayout>  

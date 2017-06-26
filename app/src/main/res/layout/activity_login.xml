@@ -14,95 +14,130 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="20dp">
-
         <LinearLayout
-            android:id="@+id/email_login_form"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="50dp"
             android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-
-            <EditText
-                android:id="@+id/et_username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_login_user"
-                android:hint="手机号"
-                android:inputType="number"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textColor="@android:color/black"
-                android:textColorHint="@color/colorPrimary"
-                android:textSize="@dimen/x14"
-                android:theme="@style/MyEditText"/>
-
-            <EditText
-                android:id="@+id/et_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_login_password_grey"
-                android:hint="密码"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/x14"
-                android:theme="@style/MyEditText"/>
-
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
             <LinearLayout
+                android:visibility="visible"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/x30"
-                android:orientation="horizontal">
-
+                android:layout_height="wrap_content">
                 <Button
-                    android:id="@+id/bt_register"
-                    style="?android:textAppearanceSmall"
+                    android:id="@+id/bt_login_qq"
+                    android:background="@color/black"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/x30"
-                    android:layout_marginRight="3dp"
                     android:layout_weight="1"
-                    android:background="@drawable/login_button_bg_line"
-                    android:text="注册账号"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/x12"
-                    android:textStyle="bold"/>
-
+                    android:text="qq"
+                    android:layout_margin="@dimen/x10"
+                    android:layout_height="@dimen/x40"/>
                 <Button
-                    android:id="@+id/bt_login_button"
-                    style="?android:textAppearanceSmall"
+                    android:layout_margin="@dimen/x10"
+                    android:id="@+id/bt_login_wx"
+                    android:background="@color/black"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/x30"
-                    android:layout_marginLeft="3dp"
+                    android:text="wx"
                     android:layout_weight="1"
-                    android:background="@drawable/login_button_bg_solid"
-                    android:text="登录"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="@dimen/x12"
-                    android:textStyle="bold"/>
-
+                    android:layout_height="@dimen/x40"/>
                 <Button
-                    android:id="@+id/bt_forgetPassword"
-                    style="?android:textAppearanceSmall"
+                    android:layout_margin="@dimen/x10"
+                    android:id="@+id/bt_login_xl"
+                    android:background="@color/black"
                     android:layout_width="0dp"
+                    android:text="xl"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/x40"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/email_login_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="50dp"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+
+                <EditText
+                    android:id="@+id/et_username"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:text="忘记密码"
-                    android:textColor="@color/light_white"
-                    android:textStyle="bold"
-                    android:visibility="gone"/>
+                    android:drawableLeft="@drawable/ic_login_user"
+                    android:hint="手机号"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@color/colorPrimary"
+                    android:textSize="@dimen/x14"
+                    android:theme="@style/MyEditText"/>
+
+                <EditText
+                    android:id="@+id/et_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_login_password_grey"
+                    android:hint="密码"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/x14"
+                    android:theme="@style/MyEditText"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x30"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/bt_register"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/x30"
+                        android:layout_marginRight="3dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/login_button_bg_line"
+                        android:text="注册账号"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/x12"
+                        android:textStyle="bold"/>
+
+                    <Button
+                        android:id="@+id/bt_login_button"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/x30"
+                        android:layout_marginLeft="3dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/login_button_bg_solid"
+                        android:text="登录"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="@dimen/x12"
+                        android:textStyle="bold"/>
+
+                    <Button
+                        android:id="@+id/bt_forgetPassword"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:text="忘记密码"
+                        android:textColor="@color/light_white"
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
+
+
+                </LinearLayout>
 
 
             </LinearLayout>
-
-
         </LinearLayout>
+
     </ScrollView>
 
     <ProgressBar

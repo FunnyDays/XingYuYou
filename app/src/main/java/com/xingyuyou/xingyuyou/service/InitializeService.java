@@ -63,6 +63,9 @@ public class InitializeService extends IntentService {
         youmeng();
     }
 
+    /**
+     * App Key：3073251384App Secret：8304b645771ea95644c209ed5e6b9558
+     */
     private void youmeng() {
         UMShareAPI.get(mContext);
         PlatformConfig.setWeixin("wxadf9a4cba53e3385","c3d35ec95f73765f6453336d923f3041");
